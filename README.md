@@ -25,7 +25,7 @@
 |---|---|
 | SSD hit가 prefill 재계산보다 빠른가 | 그렇다. opt-2.7b에서 prefix 1024토큰 이상이면 재계산 대비 2배 이상 빠르고, store 비용은 재사용 한두 번이면 회수된다 |
 | 실제 워크로드에서 filesystem hit가 자연 발생하는가 | 그렇다. Bailian production trace 600요청의 unique KV가 약 200GB로 GPU와 CPU를 수십 배 초과해, 인위적 압박 없이 SSD 티어가 강제된다 |
-| GDS 직행이 기존 CPU 경유보다 나은가 | 조건부다. 아래 요약 참조 |
+| GDS 직행이 기존 CPU 경유보다 나은가 | 재현 가능한 우위를 확립하지 못했다. 아래 요약 참조 |
 
 #### 핵심 결과
 
@@ -38,8 +38,10 @@ production trace(Bailian coder, 600요청) end-to-end에서 각 설계의 최선
 | V1 기존 tiering (block 16) | 1.165 / 3.641 / 5.080 | 1140 | 0.94 | 496GiB |
 | V1 GDS expfs (block 256) | 1.880 / 4.133 / 5.828 | 830 | 4.44 | 0 |
 
-기본 러너(V2)에서는 GDS 직행이 이긴다. 중앙값은 동률이지만 tail latency가 1.5~1.8배 좋고 처리량이 15% 높으며 host DRAM 왕복이 사라진다. 대가는 store 쪽 CPU다. cross-layer 러너(V1)에서는 synthetic 벤치의 승자였던 GDS가 실전에서 뒤집혔는데, 거친 chunk가 hit를 깎고 연속 store의 CPU와 GIL 간섭이 전체 분포를 오염시켰기 때문이다. synthetic이 못 보던 것을 production trace가 보여 준 사례다.
+위 표의 V2 GDS 수치는 1차 측정값인데, 이후 재현 시도 세 번(연속 재측정과 빈 디스크 단독 재검증 포함)에서 tail이 두 배 이상 나빠진 값(p95 4.6~4.9)만 나왔고 그 값은 현행 tiering의 tail(p95 3.1)보다 못하다. p50은 전 측정에서 일치하고 tail만 갈리는 이 양상은 아래 GIL 콘보이 진단과 부합하며 원인 레짐은 미규명이다. cross-layer 러너(V1)에서는 synthetic 벤치의 승자였던 GDS가 실전에서 처음부터 뒤집혔다. 거친 chunk가 hit를 깎고 연속 store의 CPU와 GIL 간섭이 분포를 오염시켰기 때문이다.
 
-과정에서 나온 부수 성과: naive per-chunk GDS가 느린 진짜 원인이 transport가 아니라 엔진 busy loop과 IO 스레드 사이의 GIL 콘보이임을 nsys로 규명했고(chunk 확대로 처방), vLLM에서 버그 둘(오프로드 요청 종료 시점 레이스, /dev/shm mmap 누출)을 찾아 후자는 flock 기반 회수로 근본 수정했다.
+그래서 정직한 최종 그림은 이렇다. SSD 티어 자체는 유효하고, 현행 CPU staging 설계가 전 조건에서 가장 안정적이며, GDS 직행이 이기는 순간은 존재하지만(1차 측정) 공학적으로 신뢰할 수 있는 우위로는 확립되지 않았다. 같은 control plane에서 transport만 바꾼 대조(E 대 D)에서 cuFile 단독 효과는 중립이었다는 causal-closure 결과가 이 결론을 뒷받침한다.
+
+과정에서 나온 부수 성과: naive per-chunk GDS가 느린 진짜 원인이 transport가 아니라 엔진 busy loop과 IO 스레드 사이의 GIL 콘보이임을 nsys로 규명했고(chunk 확대로 처방, 다만 위의 레짐 변동도 같은 병인으로 추정), vLLM에서 버그 둘(오프로드 요청 종료 시점 레이스, /dev/shm mmap 누출)을 찾아 후자는 flock 기반 회수로 근본 수정했다.
 
 수치의 근거, 설계 결정의 이유, 실패와 정정의 기록은 전부 `docs/detailed-log.md`에 있다.

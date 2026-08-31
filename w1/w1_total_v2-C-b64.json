@@ -1,0 +1,1 @@
+{"tag": "v2-C-b64", "wall_s": 1022.9613609949593, "cpu_s": 699.22005385, "prompt_tokens": 984096, "fs_load_n": 2896, "fs_load_b": 60733521920, "fs_store_n": 9811, "fs_store_b": 205751582720, "tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0, "matched": 201440, "guard_skips": 1}
