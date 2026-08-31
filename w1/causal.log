@@ -54,3 +54,12 @@ INFO 08-31 15:24:15 [spec.py:228] Created TieringOffloadingManager with primary 
 WARNING 08-31 15:24:15 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
 [v2-C-b64] 0/600 ttft=0.355 free=307G
 [v2-C-b64] 50/600 ttft=1.150 free=291G
+[v2-C-b64] 100/600 ttft=0.927 free=274G
+[v2-C-b64] 150/600 ttft=2.378 free=257G
+WARNING 08-31 15:28:28 [scheduler.py:1010] Request 155-843f3e2f: cannot store chunks
+WARNING 08-31 15:28:29 [scheduler.py:1010] Request 155-843f3e2f: cannot store chunks
+[v2-C-b64] 200/600 ttft=8.310 free=237G
+[v2-C-b64] 250/600 ttft=0.701 free=222G
+[v2-C-b64] 300/600 ttft=0.294 free=208G
+[v2-C-b64] 350/600 ttft=0.248 free=195G
+[v2-C-b64] 400/600 ttft=0.642 free=179G
