@@ -1,0 +1,68 @@
+=== v2 C ===
+[v2-C-b16] 0/600 ttft=0.356 free=307G
+[v2-C-b16] 50/600 ttft=1.159 free=291G
+[v2-C-b16] 100/600 ttft=0.957 free=274G
+[v2-C-b16] 150/600 ttft=2.692 free=254G
+[v2-C-b16] 200/600 ttft=3.218 free=237G
+[v2-C-b16] 250/600 ttft=0.713 free=221G
+[v2-C-b16] 300/600 ttft=2.104 free=206G
+[v2-C-b16] 350/600 ttft=0.235 free=194G
+[v2-C-b16] 400/600 ttft=0.607 free=177G
+[v2-C-b16] 450/600 ttft=1.194 free=162G
+[v2-C-b16] 500/600 ttft=1.174 free=148G
+[v2-C-b16] 550/600 ttft=1.158 free=129G
+[v2-C-b16] TOTAL wall=706.8s cpu=400.6s ssd_read=60,230,205,440B store=207,292,989,440B
+[rank0]:[W831 13:39:52.173785077 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/dev/nvme0n1p2  457G  127G  308G  30% /
+=== v1 C ===
+[v1-C-b16] 0/600 ttft=0.388 free=307G
+[v1-C-b16] 50/600 ttft=2.899 free=294G
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/home/unionxic/experiments/vllm-gds-kv/w1/replay.py", line 180, in <module>
+[rank0]:     main()
+[rank0]:   File "/home/unionxic/experiments/vllm-gds-kv/w1/replay.py", line 140, in main
+[rank0]:     out = llm.generate([{"prompt_token_ids": toks}], sp, use_tqdm=False)
+[rank0]:   File "/home/unionxic/vllm/vllm/entrypoints/llm.py", line 465, in generate
+[rank0]:     return self._run_completion(
+[rank0]:   File "/home/unionxic/vllm/vllm/entrypoints/offline_utils.py", line 349, in _run_completion
+[rank0]:     return self._run_engine(use_tqdm=use_tqdm, output_type=output_type)
+[rank0]:   File "/home/unionxic/vllm/vllm/entrypoints/offline_utils.py", line 595, in _run_engine
+[rank0]:     step_outputs = self.llm_engine.step()
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/llm_engine.py", line 304, in step
+[rank0]:     outputs = self.engine_core.get_output()
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/core_client.py", line 290, in get_output
+[rank0]:     outputs, model_executed = self.engine_core.step_fn()
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/core.py", line 645, in step_with_batch_queue
+[rank0]:     scheduler_output = self.scheduler.schedule(self._should_throttle_prefills())
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/core/sched/scheduler.py", line 1174, in schedule
+[rank0]:     meta = self._build_kv_connector_meta(self.connector, scheduler_output)
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/core/sched/scheduler.py", line 1196, in _build_kv_connector_meta
+[rank0]:     return connector.build_connector_meta(scheduler_output)
+[rank0]:   File "/home/unionxic/vllm/vllm/distributed/kv_transfer/kv_connector/v1/offloading_connector.py", line 157, in build_connector_meta
+[rank0]:     return self.connector_scheduler.build_connector_meta(scheduler_output)
+[rank0]:   File "/home/unionxic/vllm/vllm/distributed/kv_transfer/kv_connector/v1/offloading/scheduler.py", line 1157, in build_connector_meta
+[rank0]:     store_jobs=self._build_store_jobs(scheduler_output),
+[rank0]:   File "/home/unionxic/vllm/vllm/distributed/kv_transfer/kv_connector/v1/offloading/scheduler.py", line 1003, in _build_store_jobs
+[rank0]:     store_output = self.manager.prepare_store(
+[rank0]:   File "/home/unionxic/vllm/vllm/v1/kv_offload/tiering/manager.py", line 542, in prepare_store
+[rank0]:     state = self._req_state[req_context.req_id]
+[rank0]: KeyError: '84-b2ea3a53'
+[rank0]:[W831 13:42:53.589823195 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/dev/nvme0n1p2  457G  127G  308G  30% /
+=== v1 D ===
+[v1-D-b256] 0/600 ttft=0.410 free=307G
+[v1-D-b256] 50/600 ttft=3.048 free=293G
+[v1-D-b256] 100/600 ttft=2.954 free=276G
+[v1-D-b256] 150/600 ttft=1.170 free=258G
+[v1-D-b256] 200/600 ttft=2.265 free=242G
+[v1-D-b256] 250/600 ttft=0.695 free=228G
+[v1-D-b256] 300/600 ttft=0.275 free=215G
+[v1-D-b256] 350/600 ttft=0.366 free=203G
+[v1-D-b256] 400/600 ttft=1.508 free=188G
+[v1-D-b256] 450/600 ttft=1.142 free=174G
+[v1-D-b256] 500/600 ttft=3.274 free=160G
+[v1-D-b256] 550/600 ttft=3.243 free=143G
+[v1-D-b256] TOTAL wall=1185.5s cpu=2661.3s ssd_read=58,195,968,000B store=191,344,148,480B
+[rank0]:[W831 14:02:59.007696720 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+/dev/nvme0n1p2  457G  127G  308G  30% /
+done=0

@@ -1,0 +1,30 @@
+ 31-08-2026 13:22:55:908 [pid=220458 tid=220849] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:908 [pid=220458 tid=220849] ERROR  0:956 write failed at file_offset 65273856 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:908 [pid=220458 tid=220849] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  58982400  file_offset:  64225280  size:  19660800
+ 31-08-2026 13:22:55:915 [pid=220458 tid=220851] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:915 [pid=220458 tid=220851] ERROR  0:956 write failed at file_offset 10485760 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:915 [pid=220458 tid=220851] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  0  file_offset:  10485760  size:  5242880
+ 31-08-2026 13:22:55:915 [pid=220458 tid=220851] ERROR  cufio_core:3392 Setting I/O to failed. Expected I/O Size  5242880  actual:  0
+ 31-08-2026 13:22:55:922 [pid=220458 tid=220856] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:922 [pid=220458 tid=220856] ERROR  0:956 write failed at file_offset 6291456 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:922 [pid=220458 tid=220856] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  0  file_offset:  5242880  size:  5242880
+ 31-08-2026 13:22:55:922 [pid=220458 tid=220856] ERROR  cufio_core:3392 Setting I/O to failed. Expected I/O Size  5242880  actual:  0
+ 31-08-2026 13:22:55:935 [pid=220458 tid=220852] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:935 [pid=220458 tid=220852] ERROR  0:956 write failed at file_offset 6291456 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:935 [pid=220458 tid=220852] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  0  file_offset:  5242880  size:  5242880
+ 31-08-2026 13:22:55:935 [pid=220458 tid=220852] ERROR  cufio_core:3392 Setting I/O to failed. Expected I/O Size  5242880  actual:  0
+ 31-08-2026 13:22:55:948 [pid=220458 tid=220860] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:948 [pid=220458 tid=220860] ERROR  0:956 write failed at file_offset 6291456 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:948 [pid=220458 tid=220863] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:949 [pid=220458 tid=220863] ERROR  0:956 write failed at file_offset 43515904 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:949 [pid=220458 tid=220860] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  0  file_offset:  5242880  size:  5242880
+ 31-08-2026 13:22:55:949 [pid=220458 tid=220860] ERROR  cufio_core:3392 Setting I/O to failed. Expected I/O Size  5242880  actual:  0
+ 31-08-2026 13:22:55:949 [pid=220458 tid=220863] ERROR  cufio_core:3371 Final direct subio failed retval  -28  buf_offset:  39321600  file_offset:  39321600  size:  13107200
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220848] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220848] ERROR  0:956 write failed at file_offset 5242880 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220846] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220846] ERROR  0:956 write failed at file_offset 26214400 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220847] ERROR  0:1719 IOCTL failed io-type 1 ret -28 expected 1048576 gpu_page_offset 0
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220847] ERROR  0:956 write failed at file_offset 13107200 cur_size 1048576 retval -28
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220863] ERROR  cufio_core:3384 Queued subio failed retval  -28  buf_offset:  0  file_offset:  0  size:  13107200
+ 31-08-2026 13:22:55:967 [pid=220458 tid=220863] ERROR  cufio_core:3384 Queued subio failed retva

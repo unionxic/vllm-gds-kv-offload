@@ -1,0 +1,73 @@
+=== v2 none ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=3.326s hit=0.120s
+appended 7 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v2 tiering ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.829s hit=1.431s
+appended 19 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v2 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.758s hit=1.965s
+appended 13 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v2 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.757s hit=1.637s
+appended 13 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v1 none ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.754s hit=0.119s
+appended 7 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v1 tiering ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.849s hit=1.259s
+appended 19 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v1 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.772s hit=3.012s
+appended 13 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+=== v1 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.766s hit=2.114s
+appended 13 rows -> /home/unionxic/experiments/vllm-gds-kv/phase3/results.csv
+matrix_exit=0

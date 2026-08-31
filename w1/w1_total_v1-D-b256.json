@@ -1,0 +1,1 @@
+{"tag": "v1-D-b256", "wall_s": 1185.5323324240162, "cpu_s": 2661.251649216, "prompt_tokens": 984096, "fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0, "tp_read_n": 713, "tp_read_b": 58195968000, "tp_write_n": 2281, "tp_write_b": 191344148480, "matched": 177600}

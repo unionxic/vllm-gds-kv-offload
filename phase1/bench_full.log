@@ -1,0 +1,29 @@
+[    0.1s] opt125m x1 span1 done
+[    0.2s] opt125m x1 spanL done
+[    0.4s] opt125m x1 span2L done
+[    0.5s] opt125m x4 span1 done
+[    0.7s] opt125m x4 spanL done
+[    0.9s] opt125m x4 span2L done
+[    1.3s] opt125m x16 span1 done
+[    1.8s] opt125m x16 spanL done
+[    2.4s] opt125m x16 span2L done
+[    2.5s] llama8b x1 span1 done
+[    2.8s] llama8b x1 spanL done
+[    3.1s] llama8b x1 span2L done
+[    3.4s] llama8b x4 span1 done
+[    4.0s] llama8b x4 spanL done
+[    4.7s] llama8b x4 span2L done
+[    6.0s] llama8b x16 span1 done
+[    7.7s] llama8b x16 spanL done
+[    9.5s] llama8b x16 span2L done
+[    9.8s] opt67b x1 span1 done
+[   10.4s] opt67b x1 spanL done
+[   11.1s] opt67b x1 span2L done
+[   12.5s] opt67b x4 span1 done
+[   14.0s] opt67b x4 spanL done
+[   15.9s] opt67b x4 span2L done
+[   21.2s] opt67b x16 span1 done
+[   26.9s] opt67b x16 spanL done
+[   32.8s] opt67b x16 span2L done
+wrote 216 rows -> results.csv
+exit=0
