@@ -1,0 +1,14 @@
+# 재생성 가능한 대용량 측정 데이터
+kvroot*/
+*/kvroot*/
+w1/trace/
+*.bin
+*.mmap
+phase1/data/
+phase3/data/
+phase3/prof_data/
+phase3/diag/
+w1/w1_partial_*.csv
+__pycache__/
+*.pyc
+*.sqlite

@@ -1,0 +1,77 @@
+=== v1 b64 tiering ===
+=== v1 b64 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.737s hit=0.931s
+appended 13 rows -> results_bpc.csv
+=== v1 b64 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.748s hit=1.324s
+appended 13 rows -> results_bpc.csv
+=== v1 b256 tiering ===
+=== v1 b256 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.758s hit=0.948s
+appended 13 rows -> results_bpc.csv
+=== v1 b256 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.758s hit=1.345s
+appended 13 rows -> results_bpc.csv
+=== v2 b64 tiering ===
+=== v2 b64 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.769s hit=1.698s
+appended 13 rows -> results_bpc.csv
+=== v2 b64 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.771s hit=2.005s
+appended 13 rows -> results_bpc.csv
+=== v2 b256 tiering ===
+=== v2 b256 expfs-cufile ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.779s hit=1.911s
+appended 13 rows -> results_bpc.csv
+=== v2 b256 expfs-posix ===
+P=1024 rep=0 done
+P=1024 rep=1 done
+P=1024 rep=2 done
+P=2032 rep=0 done
+P=2032 rep=1 done
+P=2032 rep=2 done
+conc done: warm=2.781s hit=3.555s
+appended 13 rows -> results_bpc.csv
+done=0
