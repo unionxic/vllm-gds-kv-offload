@@ -1,1 +1,1 @@
-{"tag": "v2-D-b64", "wall_s": 616.554721649969, "cpu_s": 4937.207848712, "prompt_tokens": 984096, "fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0, "tp_read_n": 3191, "tp_read_b": 66007859200, "tp_write_n": 9853, "tp_write_b": 206632386560, "matched": 201440}
+{"tag": "v2-D-b64", "wall_s": 1133.8888379529817, "cpu_s": 4507.026708209, "prompt_tokens": 984096, "fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0, "tp_read_n": 3191, "tp_read_b": 66007859200, "tp_write_n": 9829, "tp_write_b": 206129070080, "matched": 201440, "guard_skips": 0}
