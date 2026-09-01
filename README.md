@@ -43,17 +43,6 @@ load 중심 재사용(라운드 2)의 비교. cuFile 지연 store 대 POSIX 지�
 - 미완: 지연 store의 backlog 안정성은 closed-loop에서만 확인(요청 경계 gap 존재 전제). open-loop 동시 부하에서는 gap이 사라져 굶을 수 있어 동시성 검증이 다음 순서. cuFile Batch API는 standalone 통과·엔진 통합 미해결, 종료 race 버그는 우회만 하고 미수정.
 - 발견 버그 2건: 종료 race(위), /dev/shm mmap 누출(issue #51579 계열, 로컬 브랜치 `offload-shm-leak-fix`에서 flock 회수로 근본 수정).
 
-#### 재현 환경·방법
-
-- 하드웨어: rain 단일 노드. Quadro RTX 5000 16GB(Turing, BAR1 256MB), 로컬 NVMe(ext4), i9-10980XE, RAM 128GB
-- 소프트웨어: Ubuntu 20.04, kernel 5.15.0-97, NVIDIA driver 570.211.01(open), CUDA 12.8, nvidia-fs 2.25.7(GDS 1.14.0.33, libcufile 1.13.1), vLLM commit 568afb3a13(tag v0.26.0) editable, torch 2.11 cu128, 모델 facebook/opt-2.7b fp16
-- 공통 준비: `source env.sh` (conda libstdc++ 선로드, PYTHONHASHSEED 고정)
-- 최소 재현(SSD 정당성 게이트):
-
-```bash
-source env.sh && python phase05/bench.py --model facebook/opt-2.7b --prefixes 1024,2032 --repeats 3
-```
-
 #### Directory
 
 | 경로 | 내용 |
