@@ -1,1 +1,30 @@
 === ol-C-c4-r2 ===
+INFO 09-02 00:35:52 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_07f7c4f0-db19-4153-b824-d97a7b692d96.mmap
+RESULT ol-C-c4-r2 arm=C closed conc=4 rate=- R2 ttft p50=1.669 p95=12.301 tok/s=20.4 wall=225.4s cpu=126.6s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=15 aborted=None
+=== ol-D1-c4-r2 ===
+final drain released=1
+RESULT ol-D1-c4-r2 arm=D1 closed conc=4 rate=- R2 ttft p50=0.852 p95=3.743 tok/s=14.2 wall=323.9s cpu=223.4s backlog_max=4 gaps=0 forced=79 age_max_ms=1266 guard_skips=0 aborted=None
+=== ol-C-p0.3-r2 ===
+INFO 09-02 00:48:15 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_a2cb96de-112b-4c9b-84a8-5a5d701ab6f8.mmap
+RESULT ol-C-p0.3-r2 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.783 p95=5.490 tok/s=12.5 wall=368.3s cpu=184.3s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=0 aborted=None
+=== ol-D1-p0.3-r2 ===
+final drain released=1
+RESULT ol-D1-p0.3-r2 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.820 p95=26.847 tok/s=12.5 wall=368.5s cpu=298.3s backlog_max=9 gaps=22 forced=40 age_max_ms=14051 guard_skips=0 aborted=None
+=== ol-DS4-p0.3-r2 ===
+final drain released=2
+RESULT ol-DS4-p0.3-r2 arm=DS4 poisson conc=1 rate=0.3 R2 ttft p50=0.935 p95=34.896 tok/s=12.5 wall=368.6s cpu=241.5s backlog_max=9 gaps=0 forced=78 age_max_ms=10767 guard_skips=0 aborted=None
+=== ol-C-c4-r3 ===
+INFO 09-02 01:05:42 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_d80c46a6-f6e5-4225-91e1-6dd9b62155b3.mmap
+RESULT ol-C-c4-r3 arm=C closed conc=4 rate=- R2 ttft p50=1.198 p95=8.302 tok/s=19.6 wall=234.8s cpu=138.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=9 aborted=None
+=== ol-D1-c4-r3 ===
+final drain released=1
+RESULT ol-D1-c4-r3 arm=D1 closed conc=4 rate=- R2 ttft p50=0.822 p95=3.966 tok/s=14.1 wall=325.7s cpu=223.2s backlog_max=4 gaps=0 forced=79 age_max_ms=1860 guard_skips=0 aborted=None
+=== ol-C-p0.3-r3 ===
+INFO 09-02 01:18:08 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_1176350f-a8fc-43f3-808e-93002d2f825a.mmap
+RESULT ol-C-p0.3-r3 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.826 p95=8.643 tok/s=12.5 wall=368.3s cpu=193.4s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=0 aborted=None
+=== ol-D1-p0.3-r3 ===
+final drain released=1
+RESULT ol-D1-p0.3-r3 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.870 p95=25.746 tok/s=12.5 wall=368.5s cpu=250.7s backlog_max=9 gaps=20 forced=44 age_max_ms=14204 guard_skips=0 aborted=None
+=== ol-DS4-p0.3-r3 ===
+final drain released=2
+RESULT ol-DS4-p0.3-r3 arm=DS4 poisson conc=1 rate=0.3 R2 ttft p50=1.245 p95=42.007 tok/s=12.5 wall=368.4s cpu=258.3s backlog_max=10 gaps=0 forced=80 age_max_ms=10628 guard_skips=0 aborted=None
