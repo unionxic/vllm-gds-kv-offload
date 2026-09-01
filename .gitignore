@@ -14,3 +14,4 @@ __pycache__/
 *.sqlite
 w2_leval/workload.json
 results/w2_leval/raw/**/kv*
+cufile.log
