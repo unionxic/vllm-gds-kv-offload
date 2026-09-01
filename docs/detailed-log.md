@@ -252,6 +252,8 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 | POSIX 지연 store | 1.669 | 3.365 (0.01) | 4.492 | 11.1 | 1 |
 | cuFile slack-aware+40MB 제한 | 1.249 | 3.119 (0.02) | 7.393 | 11.5 | 5 |
 
+경계 하나를 명시한다. backlog 안정성은 closed-loop 순차 요청에서 확인된 것이다. 이 방식은 요청 경계의 gap이 반드시 존재하지만, 동시 요청이 계속 들어오는 open-loop 서버에서는 전역 foreground gap이 사라져 store가 굶을 수 있다. open-loop/동시성 검증이 다음 우선 실험이다.
+
 판정. decode가 tail을 지배하면서 cuFile 대 POSIX의 e2e p95 격차는 9.3%로 문턱(10%) 아래로 희석됐고 paired 기준 0/3이다. 다만 p50에서는 27% 우위가 유지된다. slack-aware admission(decode 중 배출 허용)은 이 구현에서는 역효과였다. cold 구간 간섭이 재유입되어 cold p95가 최악(7.4초)이고 backlog와 보류 시간도 더 길다. gap 전용 배출이 옳다. 기존 tiering은 처리량(14.8 tok/s)에서 앞서고 tail 안정성(CV 0.28 대 0.01)에서 크게 뒤진다. 종합하면 transport 우위의 실용 가치는 TTFT가 중요한 짧은 출력 서빙에서 크고, 긴 decode에서는 스케줄링 안정성(지연 store의 CV 0.01)이 남는 이득이다.
 
 ### 교훈
