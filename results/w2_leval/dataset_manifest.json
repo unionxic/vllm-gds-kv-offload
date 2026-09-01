@@ -1,0 +1,482 @@
+{
+ "dataset": "L4NLP/LEval",
+ "download_date": "2026-09-01",
+ "revision": "43b9dbf06c239360b183c76cb5d90ebe4f5e3070",
+ "license": "LEval \uc800\uc7a5\uc18c \uba85\uc2dc \ub77c\uc774\uc120\uc2a4 \uc900\uc218(\uc6d0\ubcf8 \ubbf8\ucee4\ubc0b)",
+ "seed": 20260901,
+ "target_docs": 64,
+ "selected_docs": 64,
+ "eligible_docs": 268,
+ "configs_seen": {
+  "codeU": "90 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "coursera": "15 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "gsm100": "100 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "quality": "15 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "sci_fi": "7 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "topic_retrieval_longchat": "50 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "tpo": "15 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "financial_qa": "8 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "gov_report_summ": "14 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "legal_contract_qa": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "meeting_summ": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "multidoc_qa": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "narrative_qa": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "natural_question": "21 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "news_summ": "12 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "paper_assistant": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "patent_summ": "14 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "review_summ": "24 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "scientific_qa": "23 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']",
+  "tv_show_summ": "14 rows, cols=['evaluation', 'input', 'instructions', 'outputs', 'source']"
+ },
+ "selection": [
+  {
+   "subtask": "coursera",
+   "row_index": 12,
+   "doc_sha": "aa9f5427dfa3fd50",
+   "doc_tokens_full": 7514,
+   "n_questions": 4
+  },
+  {
+   "subtask": "financial_qa",
+   "row_index": 1,
+   "doc_sha": "399f6caa50fc99e2",
+   "doc_tokens_full": 4774,
+   "n_questions": 4
+  },
+  {
+   "subtask": "legal_contract_qa",
+   "row_index": 12,
+   "doc_sha": "3d9aff615a747ad4",
+   "doc_tokens_full": 23512,
+   "n_questions": 4
+  },
+  {
+   "subtask": "meeting_summ",
+   "row_index": 18,
+   "doc_sha": "f2b0b6119dfe45e3",
+   "doc_tokens_full": 24285,
+   "n_questions": 4
+  },
+  {
+   "subtask": "multidoc_qa",
+   "row_index": 14,
+   "doc_sha": "67a9321b6b0abb36",
+   "doc_tokens_full": 2754,
+   "n_questions": 4
+  },
+  {
+   "subtask": "narrative_qa",
+   "row_index": 14,
+   "doc_sha": "02a22096a6ad12d1",
+   "doc_tokens_full": 168733,
+   "n_questions": 4
+  },
+  {
+   "subtask": "natural_question",
+   "row_index": 9,
+   "doc_sha": "e934b4314b047dab",
+   "doc_tokens_full": 30630,
+   "n_questions": 4
+  },
+  {
+   "subtask": "paper_assistant",
+   "row_index": 12,
+   "doc_sha": "95e31e61b4092ff0",
+   "doc_tokens_full": 5764,
+   "n_questions": 3
+  },
+  {
+   "subtask": "quality",
+   "row_index": 14,
+   "doc_sha": "1cd59f6d4038bb37",
+   "doc_tokens_full": 7150,
+   "n_questions": 4
+  },
+  {
+   "subtask": "review_summ",
+   "row_index": 0,
+   "doc_sha": "8376f4d9ba90fb1b",
+   "doc_tokens_full": 16455,
+   "n_questions": 4
+  },
+  {
+   "subtask": "sci_fi",
+   "row_index": 6,
+   "doc_sha": "4adda403aeaa7a4f",
+   "doc_tokens_full": 10340,
+   "n_questions": 4
+  },
+  {
+   "subtask": "scientific_qa",
+   "row_index": 3,
+   "doc_sha": "918c227c129f2cb4",
+   "doc_tokens_full": 5837,
+   "n_questions": 4
+  },
+  {
+   "subtask": "topic_retrieval_longchat",
+   "row_index": 17,
+   "doc_sha": "23d76a4547f487f1",
+   "doc_tokens_full": 8505,
+   "n_questions": 3
+  },
+  {
+   "subtask": "tpo",
+   "row_index": 12,
+   "doc_sha": "8a6144e154002360",
+   "doc_tokens_full": 3185,
+   "n_questions": 4
+  },
+  {
+   "subtask": "coursera",
+   "row_index": 7,
+   "doc_sha": "854b65e2cb3e8c01",
+   "doc_tokens_full": 6918,
+   "n_questions": 4
+  },
+  {
+   "subtask": "financial_qa",
+   "row_index": 5,
+   "doc_sha": "351f5626e53b9167",
+   "doc_tokens_full": 6758,
+   "n_questions": 4
+  },
+  {
+   "subtask": "legal_contract_qa",
+   "row_index": 7,
+   "doc_sha": "b5efeb30154741dc",
+   "doc_tokens_full": 24517,
+   "n_questions": 4
+  },
+  {
+   "subtask": "meeting_summ",
+   "row_index": 2,
+   "doc_sha": "240d724190081fb8",
+   "doc_tokens_full": 16864,
+   "n_questions": 4
+  },
+  {
+   "subtask": "multidoc_qa",
+   "row_index": 13,
+   "doc_sha": "d4666240569ac791",
+   "doc_tokens_full": 3304,
+   "n_questions": 4
+  },
+  {
+   "subtask": "narrative_qa",
+   "row_index": 8,
+   "doc_sha": "dc2b3e02554bf8b1",
+   "doc_tokens_full": 90834,
+   "n_questions": 4
+  },
+  {
+   "subtask": "natural_question",
+   "row_index": 7,
+   "doc_sha": "ba1a81f508be9896",
+   "doc_tokens_full": 24383,
+   "n_questions": 4
+  },
+  {
+   "subtask": "paper_assistant",
+   "row_index": 18,
+   "doc_sha": "6198837fbc9bf03c",
+   "doc_tokens_full": 6073,
+   "n_questions": 3
+  },
+  {
+   "subtask": "quality",
+   "row_index": 0,
+   "doc_sha": "f0aeb55e543385f8",
+   "doc_tokens_full": 6691,
+   "n_questions": 4
+  },
+  {
+   "subtask": "review_summ",
+   "row_index": 3,
+   "doc_sha": "02de327f34cb5679",
+   "doc_tokens_full": 17192,
+   "n_questions": 4
+  },
+  {
+   "subtask": "sci_fi",
+   "row_index": 0,
+   "doc_sha": "9fc0bf4e0121df61",
+   "doc_tokens_full": 5098,
+   "n_questions": 4
+  },
+  {
+   "subtask": "scientific_qa",
+   "row_index": 2,
+   "doc_sha": "1200dfbaf212cc5b",
+   "doc_tokens_full": 2529,
+   "n_questions": 4
+  },
+  {
+   "subtask": "topic_retrieval_longchat",
+   "row_index": 42,
+   "doc_sha": "2b86048274fa89fd",
+   "doc_tokens_full": 14117,
+   "n_questions": 3
+  },
+  {
+   "subtask": "tpo",
+   "row_index": 2,
+   "doc_sha": "4d7076f2e8f626a0",
+   "doc_tokens_full": 3618,
+   "n_questions": 4
+  },
+  {
+   "subtask": "coursera",
+   "row_index": 13,
+   "doc_sha": "63451b65fc189354",
+   "doc_tokens_full": 4833,
+   "n_questions": 4
+  },
+  {
+   "subtask": "financial_qa",
+   "row_index": 3,
+   "doc_sha": "570b6b2cbdd2be48",
+   "doc_tokens_full": 5353,
+   "n_questions": 4
+  },
+  {
+   "subtask": "legal_contract_qa",
+   "row_index": 15,
+   "doc_sha": "81556612720164e9",
+   "doc_tokens_full": 12266,
+   "n_questions": 4
+  },
+  {
+   "subtask": "meeting_summ",
+   "row_index": 0,
+   "doc_sha": "a110757871728cd7",
+   "doc_tokens_full": 27923,
+   "n_questions": 4
+  },
+  {
+   "subtask": "multidoc_qa",
+   "row_index": 3,
+   "doc_sha": "81dfd060427e25c8",
+   "doc_tokens_full": 3021,
+   "n_questions": 4
+  },
+  {
+   "subtask": "narrative_qa",
+   "row_index": 3,
+   "doc_sha": "34947f2ce6e7035d",
+   "doc_tokens_full": 109005,
+   "n_questions": 4
+  },
+  {
+   "subtask": "natural_question",
+   "row_index": 5,
+   "doc_sha": "aff2014aef2876d0",
+   "doc_tokens_full": 11787,
+   "n_questions": 4
+  },
+  {
+   "subtask": "paper_assistant",
+   "row_index": 4,
+   "doc_sha": "e2b0beffb403b222",
+   "doc_tokens_full": 16024,
+   "n_questions": 3
+  },
+  {
+   "subtask": "quality",
+   "row_index": 8,
+   "doc_sha": "7655bedcfae2230f",
+   "doc_tokens_full": 2956,
+   "n_questions": 4
+  },
+  {
+   "subtask": "review_summ",
+   "row_index": 2,
+   "doc_sha": "bf66b93baa348539",
+   "doc_tokens_full": 17686,
+   "n_questions": 4
+  },
+  {
+   "subtask": "sci_fi",
+   "row_index": 3,
+   "doc_sha": "8a1f271fe6c85314",
+   "doc_tokens_full": 18840,
+   "n_questions": 4
+  },
+  {
+   "subtask": "scientific_qa",
+   "row_index": 7,
+   "doc_sha": "aa7a6b0b643b45b0",
+   "doc_tokens_full": 5159,
+   "n_questions": 4
+  },
+  {
+   "subtask": "topic_retrieval_longchat",
+   "row_index": 48,
+   "doc_sha": "e21b25462cccf568",
+   "doc_tokens_full": 14028,
+   "n_questions": 3
+  },
+  {
+   "subtask": "tpo",
+   "row_index": 7,
+   "doc_sha": "bbf0530c388ea9b4",
+   "doc_tokens_full": 3330,
+   "n_questions": 4
+  },
+  {
+   "subtask": "coursera",
+   "row_index": 3,
+   "doc_sha": "52d94b44371eab9a",
+   "doc_tokens_full": 7227,
+   "n_questions": 4
+  },
+  {
+   "subtask": "financial_qa",
+   "row_index": 2,
+   "doc_sha": "6c25f52ffa9281bf",
+   "doc_tokens_full": 4640,
+   "n_questions": 4
+  },
+  {
+   "subtask": "legal_contract_qa",
+   "row_index": 5,
+   "doc_sha": "3bcd68919d852aef",
+   "doc_tokens_full": 6997,
+   "n_questions": 4
+  },
+  {
+   "subtask": "meeting_summ",
+   "row_index": 9,
+   "doc_sha": "92bc0a20159f5920",
+   "doc_tokens_full": 24268,
+   "n_questions": 4
+  },
+  {
+   "subtask": "multidoc_qa",
+   "row_index": 4,
+   "doc_sha": "1539aa646c97a06a",
+   "doc_tokens_full": 3969,
+   "n_questions": 4
+  },
+  {
+   "subtask": "narrative_qa",
+   "row_index": 10,
+   "doc_sha": "5503219b3c36f9ce",
+   "doc_tokens_full": 16760,
+   "n_questions": 4
+  },
+  {
+   "subtask": "natural_question",
+   "row_index": 12,
+   "doc_sha": "116dbe34ff0d0bf1",
+   "doc_tokens_full": 9089,
+   "n_questions": 4
+  },
+  {
+   "subtask": "paper_assistant",
+   "row_index": 17,
+   "doc_sha": "7e2d8dae9230aebb",
+   "doc_tokens_full": 4816,
+   "n_questions": 3
+  },
+  {
+   "subtask": "quality",
+   "row_index": 2,
+   "doc_sha": "ecb2007e23c310bf",
+   "doc_tokens_full": 4258,
+   "n_questions": 4
+  },
+  {
+   "subtask": "review_summ",
+   "row_index": 19,
+   "doc_sha": "8a49142823667429",
+   "doc_tokens_full": 19805,
+   "n_questions": 4
+  },
+  {
+   "subtask": "sci_fi",
+   "row_index": 4,
+   "doc_sha": "efc2eb2d0d5ed62e",
+   "doc_tokens_full": 8809,
+   "n_questions": 4
+  },
+  {
+   "subtask": "scientific_qa",
+   "row_index": 15,
+   "doc_sha": "2d7680e5df39dc69",
+   "doc_tokens_full": 6060,
+   "n_questions": 4
+  },
+  {
+   "subtask": "topic_retrieval_longchat",
+   "row_index": 15,
+   "doc_sha": "428422da4bb03e18",
+   "doc_tokens_full": 8352,
+   "n_questions": 3
+  },
+  {
+   "subtask": "tpo",
+   "row_index": 5,
+   "doc_sha": "dc96dbfcf9903fbb",
+   "doc_tokens_full": 3348,
+   "n_questions": 4
+  },
+  {
+   "subtask": "coursera",
+   "row_index": 9,
+   "doc_sha": "0404f59fe6c93b4e",
+   "doc_tokens_full": 6909,
+   "n_questions": 4
+  },
+  {
+   "subtask": "financial_qa",
+   "row_index": 0,
+   "doc_sha": "5dd7b4564cf3d26f",
+   "doc_tokens_full": 4571,
+   "n_questions": 4
+  },
+  {
+   "subtask": "legal_contract_qa",
+   "row_index": 10,
+   "doc_sha": "2fac2af5a9219ca2",
+   "doc_tokens_full": 16081,
+   "n_questions": 4
+  },
+  {
+   "subtask": "meeting_summ",
+   "row_index": 6,
+   "doc_sha": "ddfdcdc0089fa58d",
+   "doc_tokens_full": 19806,
+   "n_questions": 4
+  },
+  {
+   "subtask": "multidoc_qa",
+   "row_index": 19,
+   "doc_sha": "63589d9d74cd735c",
+   "doc_tokens_full": 3536,
+   "n_questions": 4
+  },
+  {
+   "subtask": "narrative_qa",
+   "row_index": 0,
+   "doc_sha": "efc6989c12a120e6",
+   "doc_tokens_full": 31830,
+   "n_questions": 4
+  },
+  {
+   "subtask": "natural_question",
+   "row_index": 17,
+   "doc_sha": "834b5d085adc2f0e",
+   "doc_tokens_full": 6306,
+   "n_questions": 4
+  },
+  {
+   "subtask": "paper_assistant",
+   "row_index": 9,
+   "doc_sha": "e88ad0ca81fd9a42",
+   "doc_tokens_full": 6834,
+   "n_questions": 3
+  }
+ ]
+}

@@ -1,0 +1,7 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+system=25tok delim=5tok q_budget=107tok
+LEval revision=43b9dbf06c23 jsonl files=20
+적격 문서: 268 (절단-prefix 중복 25건 제외, 요구 64)
+선정: 64문서, subtask 분포: {'coursera': 5, 'financial_qa': 5, 'legal_contract_qa': 5, 'meeting_summ': 5, 'multidoc_qa': 5, 'narrative_qa': 5, 'natural_question': 5, 'paper_assistant': 5, 'quality': 4, 'review_summ': 4, 'sci_fi': 4, 'scientific_qa': 4, 'topic_retrieval_longchat': 4, 'tpo': 4}
+완료: workload.json + dataset_manifest.json
+b16 prefix 블록 120, b64 prefix 블록 30

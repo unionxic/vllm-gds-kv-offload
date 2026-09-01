@@ -1,0 +1,2 @@
+ 01-09-2026 14:07:53:784 [pid=511275 tid=511714] ERROR  cufio_batch:1691 Error getting io_mask_index during batch submits, all I/Os pending
+ 01-09-2026 14:07:54:129 [pid=511275 tid=511714] ERROR  cufio_batch:2256 Error while submitting IO events 0 status:  5037

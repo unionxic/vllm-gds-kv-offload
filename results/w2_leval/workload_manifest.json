@@ -1,0 +1,67 @@
+{
+ "kind": "real-text synthetic-interleaving long-document workload",
+ "seed": 20260901,
+ "prefix_tokens": 1920,
+ "max_input": 2032,
+ "docs_total": 64,
+ "blocks_b16": 120,
+ "blocks_b64": 30,
+ "rounds": "R1 cold/store: doc i q1 순차 | R2 reuse/load: seed+1 shuffle, doc i q2",
+ "prefix_kv_gib_per_doc": 0.586,
+ "capacity_math": {
+  "8": {
+   "unique_kv_gib": 4.7,
+   "over_gpu": 0.85,
+   "over_gpu_cpu": 0.35
+  },
+  "16": {
+   "unique_kv_gib": 9.4,
+   "over_gpu": 1.7,
+   "over_gpu_cpu": 0.69
+  },
+  "24": {
+   "unique_kv_gib": 14.1,
+   "over_gpu": 2.56,
+   "over_gpu_cpu": 1.04
+  },
+  "64": {
+   "unique_kv_gib": 37.5,
+   "over_gpu": 6.82,
+   "over_gpu_cpu": 2.78
+  },
+  "28": {
+   "unique_kv_gib": 16.4,
+   "over_gpu": 2.98,
+   "over_gpu_cpu": 1.22
+  }
+ },
+ "gate2_docs": 28,
+ "gate2_rationale": "24문서=14.1GiB는 C군 GPU+CPU(13.5GiB)의 1.04배로 아슬 → 28문서(16.4GiB, 1.22배)로 자연 fs hit 보장",
+ "arbiter_design_v2": "read/write 중재가 아니라 foreground-aware store admission: foreground 활성 → store 보류, idle(gap) → 방출·drain. Batch API는 근본 처방이 아니라 허용된 store 구간의 drain 가속(후속 최적화).",
+ "arms": {
+  "A": "재계산",
+  "C": "tiering b16",
+  "D0": "cufile 동시(현행)",
+  "D1": "cufile deferred",
+  "D2": "cufile deferred+Batch",
+  "E0": "posix 동시",
+  "E1": "posix deferred",
+  "DS1": "cufile read-priority(프로브)",
+  "DS2": "cufile strict-phase(프로브)"
+ },
+ "comparisons": [
+  "D1-D0 시간분리 효과",
+  "E1-E0 transport 무관성",
+  "D2-D1 Batch 추가효과",
+  "D1-E1 간섭 제거 후 순수 transport 차이"
+ ],
+ "no_skip_checklist": [
+  "store job 수 동일",
+  "write bytes/IO 동일",
+  "completion 전량",
+  "종료 backlog 0(assert)",
+  "fs hit 비율 동일",
+  "CPU에 gap store 포함(process_time)",
+  "wall에 최종 drain 포함"
+ ]
+}

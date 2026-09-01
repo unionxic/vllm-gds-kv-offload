@@ -1,0 +1,17 @@
+round,doc,subtask,q,prompt_tokens,ttft_s,cached,matched,ssd_read_ios,ssd_read_b,write_ios,write_b
+1,0,coursera,0,1971,1.098,0,0,0,0,0,0
+1,1,financial_qa,0,1963,1.087,16,0,0,0,0,0
+1,2,legal_contract_qa,0,1964,1.1063,16,0,0,0,0,0
+1,3,meeting_summ,0,1938,1.0719,16,0,0,0,0,0
+1,4,multidoc_qa,0,1952,1.0729,16,0,0,0,0,0
+1,5,narrative_qa,0,1935,1.0841,16,0,0,0,0,0
+1,6,natural_question,0,1940,1.0738,16,0,0,0,0,0
+1,7,paper_assistant,0,1934,1.0479,16,0,0,0,0,0
+2,1,financial_qa,1,1966,0.0684,1936,0,0,0,0,0
+2,3,meeting_summ,1,1937,0.0642,1920,0,0,0,0,0
+2,6,natural_question,1,1936,0.1175,1920,0,0,0,0,0
+2,0,coursera,1,1974,0.0993,1920,0,0,0,0,0
+2,2,legal_contract_qa,1,1976,0.0772,1936,0,0,0,0,0
+2,5,narrative_qa,1,1937,0.0639,1920,0,0,0,0,0
+2,7,paper_assistant,1,2032,0.1438,1920,0,0,0,0,0
+2,4,multidoc_qa,1,1953,0.0768,1920,0,0,0,0,0
