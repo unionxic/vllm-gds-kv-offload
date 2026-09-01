@@ -1,0 +1,113 @@
+INFO 09-01 22:40:00 [api_utils.py:286] non-default args: {'max_model_len': 2048, 'gpu_memory_utilization': 0.7, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='c44259a8-a4c0-4d0b-a359-22e1e1193c05', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'TieringOffloadingSpec', 'cpu_bytes_to_use': 8589934592, 'block_size': 16, 'secondary_tiers': [{'type': 'fs', 'root_dir': '/home/unionxic/experiments/vllm-gds-kv/upstream_check/kvroot-race'}]}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-2.7b'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING 09-01 22:40:00 [arg_utils.py:1764] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-01 22:40:01 [model.py:688] Resolved architecture: OPTForCausalLM
+INFO 09-01 22:40:01 [model.py:2025] Using max model len 2048
+INFO 09-01 22:40:01 [scheduler.py:277] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 09-01 22:40:01 [vllm.py:1371] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-01 22:40:01 [vllm.py:1406] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-01 22:40:01 [kernel.py:372] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-01 22:40:01 [vllm.py:1585] Cudagraph is disabled under eager mode
+INFO 09-01 22:40:01 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-01 22:40:02 [core.py:123] Initializing a V1 LLM engine (v0.26.1rc1.dev1488+g1f1f62885) with config: model='facebook/opt-2.7b', speculative_config=None, tokenizer='facebook/opt-2.7b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=main, tokenizer_revision=main, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-2.7b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+<frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-01 22:40:03 [parallel_state.py:1798] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_a75d8180ef5240cd8335c5a787e2cb21 backend=nccl
+INFO 09-01 22:40:03 [parallel_state.py:2142] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-01 22:40:03 [gpu_worker.py:433] Using V2 Model Runner
+INFO 09-01 22:40:04 [model_runner.py:383] Loading model from scratch...
+ERROR 09-01 22:40:04 [fa_utils.py:212] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-01 22:40:05 [cuda.py:492] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.71s/it]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.71s/it]
+
+INFO 09-01 22:40:08 [default_loader.py:430] Loading weights took 2.71 seconds
+INFO 09-01 22:40:08 [model_runner.py:408] Model loading took 4.96 GiB memory and 4.351296 seconds
+WARNING 09-01 22:40:08 [topk_topp_sampler.py:69] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-01 22:40:08 [utils.py:306] Using LBHNC KV cache layout.
+INFO 09-01 22:40:11 [gpu_worker.py:629] Available KV cache memory: 5.29 GiB
+INFO 09-01 22:40:11 [kv_cache_utils.py:2042] GPU KV cache size: 17,328 tokens, Maximum concurrency for 2,048 tokens per request: 8.46x
+INFO 09-01 22:40:11 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: c44259a8-a4c0-4d0b-a359-22e1e1193c05
+WARNING 09-01 22:40:11 [base.py:203] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 22:40:11 [factory.py:57] Creating offloading spec with name: TieringOffloadingSpec
+INFO 09-01 22:40:11 [shared_offload_region.py:134] Created mmap file /dev/shm/vllm_offload_c44259a8-a4c0-4d0b-a359-22e1e1193c05.mmap (8.59 GB)
+INFO 09-01 22:40:13 [gpu_worker.py:764] Allocating 32 CPU tensors...
+INFO 09-01 22:40:13 [kernel_warmup.py:124] JIT kernel warmup starting.
+INFO 09-01 22:40:13 [kernel_warmup.py:134] JIT kernel warmup finished in 0.00s.
+INFO 09-01 22:40:14 [gpu_worker.py:864] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.7, 10.89 GiB). Actual usage is 5.13 GiB for consumed memory (weights + non-torch), 0.47 GiB for peak activation, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=5525524583` (5.15 GiB) to fit into requested memory, or `--kv-cache-memory=10395707904` (9.68 GiB) to fully utilize gpu memory. Current kv cache memory in use is 5.29 GiB.
+INFO 09-01 22:40:16 [jit_monitor.py:85] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-01 22:40:17 [torch_utils.py:278] Reducing Torch threads from 18 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+INFO 09-01 22:40:17 [core.py:368] init engine (profile, create kv cache, warmup model) took 8.23 s
+INFO 09-01 22:40:17 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: c44259a8-a4c0-4d0b-a359-22e1e1193c05
+WARNING 09-01 22:40:17 [base.py:203] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 22:40:17 [factory.py:57] Creating offloading spec with name: TieringOffloadingSpec
+INFO 09-01 22:40:17 [shared_offload_region.py:120] Opened existing mmap file /dev/shm/vllm_offload_c44259a8-a4c0-4d0b-a359-22e1e1193c05.mmap
+INFO 09-01 22:40:17 [spec.py:326] Created secondary tier #0 (fs)
+INFO 09-01 22:40:17 [spec.py:368] Created TieringOffloadingManager with primary tier (lru, 1638 blocks) and 1 secondary tier(s)
+INFO 09-01 22:40:19 [hf.py:547] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+WARNING 09-01 22:40:19 [jit_monitor.py:141] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 22:40:47 [scheduler.py:1410] Request 24-a1b64fe3: cannot store chunks
+WARNING 09-01 22:40:48 [scheduler.py:1410] Request 24-a1b64fe3: cannot store chunks
+WARNING 09-01 22:40:49 [scheduler.py:1410] Request 25-8092a4bb: cannot store chunks
+WARNING 09-01 22:40:50 [scheduler.py:1410] Request 25-8092a4bb: cannot store chunks
+WARNING 09-01 22:40:50 [scheduler.py:1410] Request 26-8c5ee8ec: cannot store chunks
+WARNING 09-01 22:40:51 [scheduler.py:1410] Request 26-8c5ee8ec: cannot store chunks
+WARNING 09-01 22:40:51 [scheduler.py:1410] Request 27-923e930a: cannot store chunks
+WARNING 09-01 22:40:52 [scheduler.py:1410] Request 27-923e930a: cannot store chunks
+WARNING 09-01 22:40:52 [scheduler.py:1410] Request 28-93b43a54: cannot store chunks
+WARNING 09-01 22:40:53 [scheduler.py:1410] Request 28-93b43a54: cannot store chunks
+WARNING 09-01 22:40:56 [scheduler.py:1410] Request 30-b83d15ac: cannot store chunks
+WARNING 09-01 22:40:57 [scheduler.py:1410] Request 30-b83d15ac: cannot store chunks
+WARNING 09-01 22:40:57 [scheduler.py:1410] Request 31-8d5d218a: cannot store chunks
+WARNING 09-01 22:40:58 [scheduler.py:1410] Request 31-8d5d218a: cannot store chunks
+WARNING 09-01 22:40:59 [scheduler.py:1410] Request 32-bff95139: cannot store chunks
+WARNING 09-01 22:41:01 [scheduler.py:1410] Request 32-bff95139: cannot store chunks
+WARNING 09-01 22:41:01 [scheduler.py:1410] Request 33-8d8789e3: cannot store chunks
+WARNING 09-01 22:41:02 [scheduler.py:1410] Request 34-98498b3c: cannot store chunks
+WARNING 09-01 22:41:03 [scheduler.py:1410] Request 34-98498b3c: cannot store chunks
+WARNING 09-01 22:41:03 [scheduler.py:1410] Request 35-91af31a2: cannot store chunks
+WARNING 09-01 22:41:04 [scheduler.py:1410] Request 35-91af31a2: cannot store chunks
+WARNING 09-01 22:41:06 [scheduler.py:1410] Request 37-b67cc64f: cannot store chunks
+WARNING 09-01 22:41:07 [scheduler.py:1410] Request 37-b67cc64f: cannot store chunks
+WARNING 09-01 22:41:07 [scheduler.py:1410] Request 38-b2ec1448: cannot store chunks
+WARNING 09-01 22:41:08 [scheduler.py:1410] Request 38-b2ec1448: cannot store chunks
+WARNING 09-01 22:41:08 [scheduler.py:1410] Request 39-9fab02bd: cannot store chunks
+WARNING 09-01 22:41:10 [scheduler.py:1410] Request 40-8d95d660: cannot store chunks
+WARNING 09-01 22:41:11 [scheduler.py:1410] Request 40-8d95d660: cannot store chunks
+WARNING 09-01 22:41:11 [scheduler.py:1410] Request 41-a402e829: cannot store chunks
+WARNING 09-01 22:41:13 [scheduler.py:1410] Request 42-a3188105: cannot store chunks
+WARNING 09-01 22:41:14 [scheduler.py:1410] Request 42-a3188105: cannot store chunks
+WARNING 09-01 22:41:14 [scheduler.py:1410] Request 43-b852f036: cannot store chunks
+WARNING 09-01 22:41:15 [scheduler.py:1410] Request 43-b852f036: cannot store chunks
+WARNING 09-01 22:41:15 [scheduler.py:1410] Request 44-9c0efcce: cannot store chunks
+WARNING 09-01 22:41:16 [scheduler.py:1410] Request 45-987d299d: cannot store chunks
+WARNING 09-01 22:41:17 [scheduler.py:1410] Request 45-987d299d: cannot store chunks
+WARNING 09-01 22:41:17 [scheduler.py:1410] Request 46-adaf59d9: cannot store chunks
+WARNING 09-01 22:41:18 [scheduler.py:1410] Request 47-91651f77: cannot store chunks
+WARNING 09-01 22:41:19 [scheduler.py:1410] Request 47-91651f77: cannot store chunks
+WARNING 09-01 22:41:22 [scheduler.py:1410] Request 49-8bdbf0bb: cannot store chunks
+WARNING 09-01 22:41:23 [scheduler.py:1410] Request 49-8bdbf0bb: cannot store chunks
+WARNING 09-01 22:41:23 [scheduler.py:1410] Request 50-b828825d: cannot store chunks
+WARNING 09-01 22:41:24 [scheduler.py:1410] Request 51-bc43912e: cannot store chunks
+WARNING 09-01 22:41:26 [scheduler.py:1410] Request 52-9b95dcbc: cannot store chunks
+WARNING 09-01 22:41:27 [scheduler.py:1410] Request 52-9b95dcbc: cannot store chunks
+WARNING 09-01 22:41:27 [scheduler.py:1410] Request 53-97a12695: cannot store chunks
+WARNING 09-01 22:41:28 [scheduler.py:1410] Request 54-a8a87934: cannot store chunks
+WARNING 09-01 22:41:31 [scheduler.py:1410] Request 56-9da7ed3a: cannot store chunks
+WARNING 09-01 22:41:32 [scheduler.py:1410] Request 56-9da7ed3a: cannot store chunks
+WARNING 09-01 22:41:32 [scheduler.py:1410] Request 57-afcf77a1: cannot store chunks
+WARNING 09-01 22:41:33 [scheduler.py:1410] Request 57-afcf77a1: cannot store chunks
+WARNING 09-01 22:41:33 [scheduler.py:1410] Request 58-a66b1693: cannot store chunks
+WARNING 09-01 22:41:34 [scheduler.py:1410] Request 58-a66b1693: cannot store chunks
+WARNING 09-01 22:41:34 [scheduler.py:1410] Request 59-9645b63a: cannot store chunks
+WARNING 09-01 22:41:35 [scheduler.py:1410] Request 59-9645b63a: cannot store chunks
+WARNING 09-01 22:41:35 [scheduler.py:1410] Request 60-ab255dfa: cannot store chunks
+WARNING 09-01 22:41:36 [scheduler.py:1410] Request 60-ab255dfa: cannot store chunks
+WARNING 09-01 22:41:37 [scheduler.py:1410] Request 61-9c9b9ab6: cannot store chunks
+WARNING 09-01 22:41:38 [scheduler.py:1410] Request 62-ab5d4ea6: cannot store chunks
+WARNING 09-01 22:41:39 [scheduler.py:1410] Request 62-ab5d4ea6: cannot store chunks
+WARNING 09-01 22:41:39 [scheduler.py:1410] Request 63-800fe0b4: cannot store chunks
+WARNING 09-01 22:41:40 [scheduler.py:1410] Request 63-800fe0b4: cannot store chunks
+RACE-REPRO PASS: 128 requests, 218s, KeyError 0
+INFO 09-01 22:43:57 [shared_offload_region.py:344] Removed mmap file /dev/shm/vllm_offload_c44259a8-a4c0-4d0b-a359-22e1e1193c05.mmap

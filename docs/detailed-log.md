@@ -259,3 +259,13 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 ### 교훈
 
 복사를 없앤다고 빨라지지 않는다는 오래된 교훈이 세 번 확인됐다. 소조각 IO에서, control plane 분해(E 대조군)에서, production trace의 store 동시성에서. 표준 프로파일러가 관측 대상을 바꿔 버리는 경우(GIL 콘보이)에는 프로파일러의 개입 자체가 진단 단서가 된다. 그리고 synthetic 벤치의 승자는 production trace 앞에서 겸손해야 한다.
+
+#### upstream 회귀 검증 (최신 main)
+
+우리가 특성화한 두 버그가 upstream에서 이미 처리됐는지, pinned base가 아닌 최신 main에서 재현 시험으로 확인했다. 검증 환경은 별도 worktree(~/vllm-main, commit 1f1f628859, 0.26.1rc1.dev1488)와 별도 venv(python 3.12, precompiled wheel)로, 실험용 pinned 환경(568afb3a13)은 건드리지 않았다.
+
+종료 시점 _req_state race. 수정 PR #49671(Defer request finalization until final store, 2026-07-25 병합)은 우리 base(07-26 커밋)에 포함되지 않은 것으로 git 조상 검사에서 확인됐다 — 우리가 이 race를 맞은 이유가 설명된다. 최신 main에서 pinned base가 가드 없이 3/3 크래시하던 동일 조건(LEval 64문서 2라운드, tiering b16)을 가드 없이 돌린 결과 128요청 완주, KeyError 0. 대신 "cannot store chunks" WARNING이 다수 찍히는데 이것이 #49671이 도입한 우아한 거부 경로다. 판정: race는 upstream에서 해결됐고 회귀가 아니다. 우리 하네스의 prepare_store 가드는 구버전(v0.26.0) workaround로 기록을 유지하며, 새 issue는 내지 않는다.
+
+/dev/shm 누출. #52596(unlink-after-barrier, 2026-08-31 병합) 적용 상태에서 spec별로 엔진 기동 → SIGKILL → 잔재 검사를 수행했다. CPUOffloadingSpec은 실행 중에 이미 파일이 unlink되어 있고(barrier 발동 확인) SIGKILL 후 잔재 없음. TieringOffloadingSpec은 실행 중에도 파일이 링크된 채였고 SIGKILL 후 그대로 남았다 — 누출 재현. 정적 원인도 확인했다. cpu/spec.py는 barrier=_all_workers_barrier를 넘기지만 tiering/spec.py의 SharedOffloadRegion 생성부 두 곳(스케줄러 쪽 rank=None, worker 쪽)은 barrier 인자를 넘기지 않는다. 단순 배선 누락만도 아닌 것이, tiering의 스케줄러 쪽 opener는 worker collective 밖에 있어 worker barrier 후 unlink하면 나중에 경로로 여는 스케줄러가 실패한다. 구조적으로 (a) 스케줄러를 포함한 rendezvous 또는 (b) unlink 순서에 무관한 liveness(flock, #54124 계열 = 우리 로컬 패치와 같은 접근)가 필요하다. 판정: 후속 버그로 성립. issue 초안은 upstream_check/issue_tiering_shm.md에 있고 제출은 사용자 확인 후 진행한다. 우리 flock 패치는 별도 PR로 내지 않고 이 issue와 #54124 논의에 증거로 연결하는 것이 우선이다.
+
+재현 스크립트는 upstream_check/에 보존한다(race_repro.py, shm_repro.py, run_shm_check.py).
