@@ -16,10 +16,12 @@ import time
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
 ap.add_argument("--arm", required=True,
-                choices=["A", "C", "D0", "D1", "D2", "E0", "E1", "DS1", "DS2"])
+                choices=["A", "C", "D0", "D1", "D2", "E0", "E1", "DS1", "DS2", "DS4"])
 ap.add_argument("--docs", type=int, default=24)
 ap.add_argument("--max-w-bytes", type=int, default=None)
 ap.add_argument("--write-quantum", type=int, default=2)
+ap.add_argument("--w2b", action="store_true",
+                help="decode 포함 모드: max_tokens=clamp(ref,16,128), ignore_eos")
 ap.add_argument("--note", default="")
 args = ap.parse_args()
 
@@ -51,7 +53,7 @@ meta["capacity"] = dict(
 )
 print("capacity:", meta["capacity"], flush=True)
 
-ARM_MODE = {"D0": "S0", "D1": "DEF", "D2": "DEFB",
+ARM_MODE = {"D0": "S0", "D1": "DEF", "D2": "DEFB", "DS4": "S4",
             "E0": "S0", "E1": "DEF", "DS1": "S1", "DS2": "S2", "C": None, "A": None}
 mode = ARM_MODE[args.arm]
 transport = ("cufile" if args.arm.startswith("D")
@@ -128,6 +130,13 @@ llm = LLM(model="facebook/opt-2.7b", kv_transfer_config=ktc,
           gpu_memory_utilization=0.7, max_model_len=2048, enforce_eager=True)
 sp = SamplingParams(max_tokens=1, temperature=0.0)
 
+
+def sp_for(q):
+    if not args.w2b:
+        return sp
+    n = min(max(q.get("ref_output_tokens", 16), 16), 128)
+    return SamplingParams(max_tokens=n, temperature=0.0, ignore_eos=True)
+
 # Gate 0 audit: PID/TID 맵
 meta["audit_threads"] = [
     dict(name=t.name, tid=t.native_id) for t in threading.enumerate()]
@@ -158,8 +167,15 @@ for rnd, order, qidx in ((1, order1, 0), (2, order2, 1)):
         q = d["questions"][min(qidx, len(d["questions"]) - 1)]
         toks = request_tokens(d, q)
         before = dict(cnt)
-        ttft, out = gen(toks)
+        t0g = time.perf_counter()
+        out_all = llm.generate([{"prompt_token_ids": toks}], sp_for(q), use_tqdm=False)
+        ttft = time.perf_counter() - t0g  # w2b에서는 e2e
+        out = out_all[0]
         dl = {k: cnt[k] - before[k] for k in cnt}
+        backlog_now = 0
+        if args.arm != "A" and mode:
+            import scheduler as schB
+            backlog_now = schB.summary()["deferred_pending"]
         if args.arm in ("D1", "D2", "E1"):
             import scheduler as sch2
             sch2.release_gap(gap_worker)  # foreground idle 구간에서 store 방출·drain
@@ -169,11 +185,13 @@ for rnd, order, qidx in ((1, order1, 0), (2, order2, 1)):
                          matched=dl["matched"],
                          ssd_read_ios=dl["tp_read_n"] + dl["fs_load_n"],
                          ssd_read_b=dl["tp_read_b"] + dl["fs_load_b"],
-                         write_ios=dl["tp_write_n"], write_b=dl["tp_write_b"]))
+                         write_ios=dl["tp_write_n"], write_b=dl["tp_write_b"],
+                         out_tokens=len(out.outputs[0].token_ids),
+                         backlog=backlog_now))
     print(f"[{args.run_id}] round {rnd} done", flush=True)
 
 # 최종 drain: 남은 보류 store 전부 실행·완료 (wall/CPU에 포함 — 생략 아님 증명)
-if args.arm in ("D1", "D2", "E1"):
+if args.arm in ("D1", "D2", "E1", "DS4"):
     import scheduler as sch3
     n_final = sch3.release_gap(gap_worker)
     print(f"final drain released={n_final}", flush=True)
