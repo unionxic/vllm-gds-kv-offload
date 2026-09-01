@@ -269,3 +269,32 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 /dev/shm 누출. #52596(unlink-after-barrier, 2026-08-31 병합) 적용 상태에서 spec별로 엔진 기동 → SIGKILL → 잔재 검사를 수행했다. CPUOffloadingSpec은 실행 중에 이미 파일이 unlink되어 있고(barrier 발동 확인) SIGKILL 후 잔재 없음. TieringOffloadingSpec은 실행 중에도 파일이 링크된 채였고 SIGKILL 후 그대로 남았다 — 누출 재현. 정적 원인도 확인했다. cpu/spec.py는 barrier=_all_workers_barrier를 넘기지만 tiering/spec.py의 SharedOffloadRegion 생성부 두 곳(스케줄러 쪽 rank=None, worker 쪽)은 barrier 인자를 넘기지 않는다. 단순 배선 누락만도 아닌 것이, tiering의 스케줄러 쪽 opener는 worker collective 밖에 있어 worker barrier 후 unlink하면 나중에 경로로 여는 스케줄러가 실패한다. 구조적으로 (a) 스케줄러를 포함한 rendezvous 또는 (b) unlink 순서에 무관한 liveness(flock, #54124 계열 = 우리 로컬 패치와 같은 접근)가 필요하다. 판정: 후속 버그로 성립. issue 초안은 upstream_check/issue_tiering_shm.md에 있고 제출은 사용자 확인 후 진행한다. 우리 flock 패치는 별도 PR로 내지 않고 이 issue와 #54124 논의에 증거로 연결하는 것이 우선이다.
 
 재현 스크립트는 upstream_check/에 보존한다(race_repro.py, shm_repro.py, run_shm_check.py).
+
+#### W3 open-loop/동시성 검증
+
+W2b의 경계 그대로를 시험했다. closed-loop 순차 요청이 보장하던 요청 경계 gap이 동시성과 지속 도착에서 사라질 때 지연 store가 어떻게 되는가. 하네스는 w2_leval/openloop.py. AsyncLLM은 항상 별도 프로세스(make_async_mp_client)라 계수기·스케줄러 몽키패치가 무효하므로, sync LLMEngine의 add_request와 step을 직접 구동해 continuous batching을 유지한 채 in-process로 쟀다. step 스트리밍 덕에 W2b에서 불가능했던 요청별 실측 TTFT(도착~첫 토큰, 큐 대기 포함)가 나온다. 워크로드는 LEval 64문서 2라운드, 출력 16~128토큰. closed는 동시 스트림 N이 완료 즉시 다음 요청을 넣고, Poisson은 도착률 λ의 지수 간격으로 단일 스트림이 들어온다. λ는 실측 서비스율(D1 약 0.39 req/s, C 약 0.61 req/s) 기준으로 0.3(D1 용량의 약 0.8배)과 0.55(D1 초과·C 근접)를 골랐다.
+
+backlog와 starvation. 전 구성에서 backlog는 유한했다(최대 10, 1Hz 시계열의 최소자승 기울기 분당 ±1 이내, 종료 잔량 0). 무한 굶주림은 없다. 그러나 그 이유가 설계 의도가 아니다. conc≥2에서 전역 gap이 실제로 소멸해(gap 배출 0~1회) 보류 store 전량이 블록 재사용 fence의 강제 배출(76~81회)로 나갔다. 최대 보류 시간은 conc=2에서 10초, Poisson 0.3에서 14초까지 늘었다. 즉 gap 전용 배출 설계는 동시성 2부터 이미 무의미해지고, fence가 안전판이자 사실상의 배출 경로가 된다. 강제 배출은 foreground 실행 중에 일어나므로 deferral의 원 목적(간섭 회피)은 붕괴한다.
+
+closed-loop 동시성 (R2 TTFT 초, 3회 중앙값):
+
+| 구성 | conc 1 p50/p95 | conc 2 p50/p95 | conc 4 p50/p95 (n=3) | conc 8 p50/p95 | conc 4 tok/s |
+|---|---|---|---|---|---|
+| 기존 tiering | 0.63 / 0.70 | 0.81 / 6.78 | 1.67 / 12.26 | 4.66 / 11.80 | 19.6 |
+| cuFile 지연 store | 0.70 / 0.88 | 0.68 / 1.14 | 0.85 / 3.97 | 1.60 / 6.04 | 14.1 |
+
+conc 4는 3회 반복 전 쌍에서 지연 store가 p50·p95 모두 우위(3/3). 기존 tiering은 동시성이 붙는 순간 TTFT tail이 무너지고(0.70→12초), 처리량은 계속 우위(conc 8에서 21.8 대 13.9 tok/s). 주의: 기존 tiering 런은 종료 race 가드가 동시성에서 다발(최대 31/128 요청) — pinned base 한정 caveat.
+
+Poisson open-loop (R2 TTFT 초, 3회 중앙값, λ=0.3):
+
+| 구성 | p50 | p95 | 최대 보류 | gap/강제 배출 |
+|---|---|---|---|---|
+| 기존 tiering | 0.79 | 8.64 | - | - |
+| cuFile 지연 store | 0.87 | 26.85 | 14.2s | 20 / 44 |
+| cuFile slack-aware+40MB | 1.25 | 38.42 | 10.8s | 0 / 80 |
+
+λ=0.55(단일 런, 구조 확인용): 기존 tiering p50 13.6초로 버티는 부하에서 지연 store는 p50 132초로 발산 — 도착률이 서비스율을 넘어선 포화.
+
+판정. open-loop 지속 부하에서 관계가 역전된다. 지연 store 계열의 tail이 기존 tiering보다 3~9배 나쁘고(3/3), 원인은 backlog 폭주가 아니라 서비스율 격차다. tok/s가 낮은 쪽은 버스트가 만든 큐를 느리게 비우고, TTFT에 큐 대기가 편입되어 tail이 증폭된다. closed 동시성에서 지연 store가 이기는 이유(요청별 지연 우위)와 open-loop에서 지는 이유(처리량 열위)가 같은 트레이드오프의 양면이다. slack-aware(S4)는 open-loop에서도 지연 store를 구하지 못했다(p95 오히려 열위). 종합하면 gap 전용 배출은 단일 스트림 closed-loop 전용 설계이고, 서빙 레짐에서 GDS 경로가 서려면 store의 처리량 개선(예: 배출 병렬화, Batch API의 원래 자리) 또는 부하 인지형 admission이 선결이다. W2b의 트레이드오프 결론(중앙 지연·안정성 ↔ 처리량)이 open-loop에서는 처리량 쪽이 지연까지 지배하는 형태로 확장된다.
+
+원자료는 results/w2_openloop/(런별 raw.csv, 1Hz timeseries.csv, meta.json, 집계는 analyze_openloop.py).
