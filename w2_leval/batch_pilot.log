@@ -1,0 +1,10 @@
+--- 미등록 버퍼 ---
+unreg write x1: events=1/1 statuses=['0x10'] rets=[655360] -> OK
+unreg write x4: events=4/4 statuses=['0x10', '0x10', '0x10', '0x10'] rets=[655360, 655360, 655360, 655360] -> OK
+unreg read  x4: events=4/4 statuses=['0x10', '0x10', '0x10', '0x10'] rets=[655360, 655360, 655360, 655360] -> OK
+--- 등록 버퍼 ---
+reg write x4: events=4/4 statuses=['0x10', '0x10', '0x10', '0x10'] rets=[655360, 655360, 655360, 655360] -> OK
+reg read  x4: events=4/4 statuses=['0x10', '0x10', '0x10', '0x10'] rets=[655360, 655360, 655360, 655360] -> OK
+checksum: True
+VERDICT: usable
+exit=0
