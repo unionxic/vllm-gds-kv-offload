@@ -22,29 +22,26 @@ production trace(Bailian coder, 600요청) end-to-end. 각 구현별 최선 구�
 
 #### 측정 2: LEval 실제 텍스트 (W2a, 64문서, 반복 측정)
 
-load-dominated 재사용(라운드 2)의 비교. D1 대 E1은 cuFile transport 효과, D1 대 C는 레이아웃·block size·control plane까지 포함한 시스템 비교.
+load 중심 재사용(라운드 2)의 비교. cuFile 지연 store 대 POSIX 지연 store가 transport 효과, cuFile 지연 store 대 기존 tiering이 시스템 전체 비교.
 
-| 구성 | n | R2 p50 (s) | R2 p95 (s, CV) | R1 cold p95 (s) | CPU (s/런) |
+| 구성 | n | 재사용 p50 (s) | 재사용 p95 (s, CV) | cold p95 (s) | CPU (s/런) |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| A 재계산 | 3 | 1.090 | 1.161 (0.001) | 1.141 | 5 |
-| C 기존 tiering (block 16) | 3 | 0.977 | 4.908 (0.023) | 4.474 | 144 |
-| D0 cuFile 동시 store | 3 | 0.661 | 0.850 (0.044) | 4.380 | 1,180 |
-| E0 POSIX 동시 store | 3 | 0.884 | 1.246 (0.048) | 4.254 | 1,183 |
-| D1 cuFile deferred store | 5 | 0.637 | 0.786 (0.046) | 1.169 | 114 |
-| E1 POSIX deferred store | 5 | 0.920 | 1.206 (0.056) | 1.168 | 123 |
+| 재계산 (오프로드 없음) | 3 | 1.090 | 1.161 (0.001) | 1.141 | 5 |
+| 기존 tiering (block 16) | 3 | 0.977 | 4.908 (0.023) | 4.474 | 144 |
+| cuFile 동시 store | 3 | 0.661 | 0.850 (0.044) | 4.380 | 1,180 |
+| POSIX 동시 store | 3 | 0.884 | 1.246 (0.048) | 4.254 | 1,183 |
+| cuFile 지연 store | 5 | 0.637 | 0.786 (0.046) | 1.169 | 114 |
+| POSIX 지연 store | 5 | 0.920 | 1.206 (0.056) | 1.168 | 123 |
 
 #### 해석과 한계
 
-- 표의 V2 GDS 수치는 최초 측정값이며 재현 시도 3회(연속 재측정, 빈 디스크 단독 재검증 포함)에서 유지되지 않았다(p95가 4.6~4.9초로 악화, 현행 tiering 이하). p50은 전 측정에서 일치하고 tail만 갈렸다.
-- 그 tail 변동의 원인은 후속 스케줄링 실험으로 규명됐다. store 실행과 foreground 엔진 구간의 시간 중첩(엔진 busy loop과 IO 스레드의 GIL 콘보이)이 핵심 변수이며, read/write 제출 순서(read-priority)와 NVMe read/write 동시성(strict phase)은 각각 5회 반복에서 무효였다.
-- CPU 시간은 프로세스 전체 누적 CPU time(process_time, 모든 스레드와 요청 밖 store 구간 포함)을 요청 수로 나눈 값이다. wall time이 아니다.
-- Host DRAM 왕복은 유도치다. CPU 경유 경로는 SSD read/write 바이트가 pinned 스테이징을 왕복하므로 2×(read+store bytes)로 계산했고, 직행 경로는 설계상 0이다.
-- 반복 조건: W1 재현 검증 n=3, 스케줄링 정책 실험은 정책당 D/E 각 n=5(변동계수 = 모표준편차/평균). 단일 빠른 실행은 우위로 인정하지 않았다.
-- W1과 W2의 우열 차이는 워크로드 성격 차이다. Bailian W1은 store가 지속 유입되고 재사용 거리가 길며, LEval W2a는 load 중심 재사용이다. 두 결과는 모순이 아니라 적용 조건의 경계다.
-- W2의 C(tiering) 수치는 vLLM 종료 시점 race 버그를 가드로 우회한 상태의 측정이다(발화 4~14회/런, 해당 요청의 마지막 chunk store만 생략). 가드 없이는 V2 러너에서도 64문서 스케일에서 3런 전부 크래시했다.
-- W2a는 max_tokens=1의 TTFT isolation이다. decode 부하가 있는 조건(W2b)에서 deferred store의 backlog 안정성은 진행 중.
-- 발견한 vLLM 버그 2건: 오프로드 요청 종료 시점 레이스(가드로 우회, 미수정), /dev/shm mmap 누출(upstream issue #51579 계열, 로컬 브랜치 `offload-shm-leak-fix` 커밋 07bb9458eb·77c4033078로 근본 수정 — flock 기반 고아 회수, SIGKILL E2E 검증).
-- 진행 중: LEval 실제 텍스트 워크로드(W2)에서 위 결론의 교차 검증과 I/O 스케줄러 비교(foreground-aware store admission, cuFile Batch API). Batch API는 standalone 검증을 통과했으나 엔진 통합은 미해결 상태.
+- 첫 표의 V2 GDS 수치는 최초 측정값. 재현 3회에서 tail 2배 악화로 미유지. 원인은 store 실행과 foreground의 시간 중첩(GIL 콘보이)으로 규명, read/write 순서와 NVMe 동시성 가설은 기각.
+- CPU 시간 = 프로세스 전체 누적 CPU time(전 스레드, 요청 밖 store 포함) ÷ 요청 수. Host DRAM 왕복 = 2×(read+store bytes) 유도치, 직행 경로는 0.
+- 반복 조건: W1 재현 n=3, 스케줄링·W2 정책당 n=3~5, CV = 모표준편차/평균. 단일 빠른 실행은 불인정.
+- W1(Bailian)과 W2(LEval)의 우열 차이는 워크로드 차이. store 지속 유입 대 load 중심 재사용. 모순이 아니라 적용 조건의 경계.
+- W2의 기존 tiering 수치는 vLLM 종료 시점 race를 가드로 우회한 측정(발화 4~14회/런). 가드 없이는 64문서에서 전 런 크래시.
+- 미완: W2b(decode 포함 시 지연 store의 backlog 안정성) 진행 중, cuFile Batch API는 standalone 통과·엔진 통합 미해결, 종료 race 버그는 우회만 하고 미수정.
+- 발견 버그 2건: 종료 race(위), /dev/shm mmap 누출(issue #51579 계열, 로컬 브랜치 `offload-shm-leak-fix`에서 flock 회수로 근본 수정).
 
 #### 재현 환경·방법
 
