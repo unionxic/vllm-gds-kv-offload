@@ -1,0 +1,48 @@
+INFO 09-01 22:38:59 [api_utils.py:286] non-default args: {'max_model_len': 2048, 'gpu_memory_utilization': 0.5, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='a12b305e-bc3e-43aa-b344-f34685bde01c', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'CPUOffloadingSpec', 'cpu_bytes_to_use': 1073741824, 'block_size': 16}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-125m'}
+WARNING 09-01 22:39:00 [arg_utils.py:1764] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-01 22:39:08 [model.py:688] Resolved architecture: OPTForCausalLM
+INFO 09-01 22:39:08 [model.py:2025] Using max model len 2048
+INFO 09-01 22:39:08 [scheduler.py:277] Chunked prefill is enabled with max_num_batched_tokens=8192.
+WARNING 09-01 22:39:08 [vllm.py:1371] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-01 22:39:08 [vllm.py:1406] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-01 22:39:08 [kernel.py:372] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-01 22:39:08 [vllm.py:1585] Cudagraph is disabled under eager mode
+INFO 09-01 22:39:09 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-01 22:39:09 [core.py:123] Initializing a V1 LLM engine (v0.26.1rc1.dev1488+g1f1f62885) with config: model='facebook/opt-125m', speculative_config=None, tokenizer='facebook/opt-125m', skip_tokenizer_init=False, tokenizer_mode=auto, revision=main, tokenizer_revision=main, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, per_request_spec_decode_metrics='none', kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-125m, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+<frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1301: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-01 22:39:13 [parallel_state.py:1798] world_size=1 rank=0 local_rank=0 distributed_init_method=file:///tmp/vllm_dist_1cc44381d6854b50a5426dc88ba52270 backend=nccl
+INFO 09-01 22:39:13 [parallel_state.py:2142] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-01 22:39:13 [gpu_worker.py:433] Using V2 Model Runner
+INFO 09-01 22:39:14 [model_runner.py:383] Loading model from scratch...
+ERROR 09-01 22:39:14 [fa_utils.py:212] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-01 22:39:14 [cuda.py:492] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  5.94it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:00<00:00,  5.93it/s]
+
+INFO 09-01 22:39:15 [default_loader.py:430] Loading weights took 0.18 seconds
+INFO 09-01 22:39:16 [model_runner.py:408] Model loading took 0.24 GiB memory and 2.016261 seconds
+WARNING 09-01 22:39:16 [topk_topp_sampler.py:69] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-01 22:39:16 [utils.py:306] Using LBHNC KV cache layout.
+INFO 09-01 22:39:19 [gpu_worker.py:629] Available KV cache memory: 7.27 GiB
+INFO 09-01 22:39:19 [kv_cache_utils.py:2042] GPU KV cache size: 211,616 tokens, Maximum concurrency for 2,048 tokens per request: 103.33x
+INFO 09-01 22:39:19 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: a12b305e-bc3e-43aa-b344-f34685bde01c
+WARNING 09-01 22:39:19 [base.py:203] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 22:39:19 [factory.py:57] Creating offloading spec with name: CPUOffloadingSpec
+INFO 09-01 22:39:19 [shared_offload_region.py:134] Created mmap file /dev/shm/vllm_offload_a12b305e-bc3e-43aa-b344-f34685bde01c.mmap (1.07 GB)
+INFO 09-01 22:39:19 [shared_offload_region.py:180] Unlinked mmap file /dev/shm/vllm_offload_a12b305e-bc3e-43aa-b344-f34685bde01c.mmap
+INFO 09-01 22:39:19 [gpu_worker.py:764] Allocating 12 CPU tensors...
+INFO 09-01 22:39:19 [kernel_warmup.py:124] JIT kernel warmup starting.
+INFO 09-01 22:39:19 [kernel_warmup.py:134] JIT kernel warmup finished in 0.00s.
+INFO 09-01 22:39:20 [gpu_worker.py:864] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.5, 7.78 GiB). Actual usage is 0.37 GiB for consumed memory (weights + non-torch), 0.14 GiB for peak activation, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=7644080640` (7.12 GiB) to fit into requested memory, or `--kv-cache-memory=15854594560` (14.77 GiB) to fully utilize gpu memory. Current kv cache memory in use is 7.27 GiB.
+INFO 09-01 22:39:28 [jit_monitor.py:85] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-01 22:39:28 [torch_utils.py:278] Reducing Torch threads from 18 to 1 for serving. Set OMP_NUM_THREADS in the external environment to override.
+INFO 09-01 22:39:28 [core.py:368] init engine (profile, create kv cache, warmup model) took 12.40 s
+INFO 09-01 22:39:28 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: a12b305e-bc3e-43aa-b344-f34685bde01c
+WARNING 09-01 22:39:28 [base.py:203] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 22:39:28 [factory.py:57] Creating offloading spec with name: CPUOffloadingSpec
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO 09-01 22:39:30 [hf.py:547] Detected the chat template content format to be 'string'. You can set `--chat-template-content-format` to override this.
+WARNING 09-01 22:39:30 [jit_monitor.py:141] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+READY files_during_run= []

@@ -41,7 +41,7 @@ load 중심 재사용(라운드 2)의 비교. cuFile 지연 store 대 POSIX 지�
 - W1(Bailian)과 W2(LEval)의 우열 차이는 워크로드 차이. store 지속 유입 대 load 중심 재사용. 모순이 아니라 적용 조건의 경계.
 - W2의 기존 tiering 수치는 vLLM 종료 시점 race를 가드로 우회한 측정(발화 4~14회/런). 가드 없이는 64문서에서 전 런 크래시.
 - 미완: 지연 store의 backlog 안정성은 closed-loop에서만 확인(요청 경계 gap 존재 전제). open-loop 동시 부하에서는 gap이 사라져 굶을 수 있어 동시성 검증이 다음 순서. cuFile Batch API는 standalone 통과·엔진 통합 미해결, 종료 race 버그는 우회만 하고 미수정.
-- 발견 버그 2건: 종료 race(위), /dev/shm mmap 누출(issue #51579 계열, 로컬 브랜치 `offload-shm-leak-fix`에서 flock 회수로 근본 수정).
+- 발견 버그 2건과 upstream 현황: 종료 race는 최신 main의 #49671로 해결 확인(우리 가드는 v0.26.0 한정 workaround). /dev/shm mmap 누출은 #52596(barrier unlink)이 CPUOffloadingSpec만 고쳤고 TieringOffloadingSpec은 최신 main에서도 SIGKILL 시 누출 재현 — barrier 미배선, 후속 보고 대상. 로컬 브랜치 `offload-shm-leak-fix`의 flock 회수는 이 경우까지 처리.
 
 #### Directory
 
