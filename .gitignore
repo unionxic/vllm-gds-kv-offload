@@ -12,3 +12,5 @@ w1/w1_partial_*.csv
 __pycache__/
 *.pyc
 *.sqlite
+w2_leval/workload.json
+results/w2_leval/raw/**/kv*

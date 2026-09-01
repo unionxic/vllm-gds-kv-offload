@@ -197,6 +197,50 @@ vLLM의 SharedOffloadRegion은 정상 종료의 cleanup에서만 파일을 지�
 
 검증: 회귀 포함 34개 테스트가 4연속 통과, 실제 엔진을 SIGKILL한 뒤 8GiB stale이 다음 시작에서 자동 회수되는 E2E 통과. harness는 삭제 대신 관찰만 한다. 런 전 목록과 용량을 기록하고, 회수는 엔진의 Reclaimed 로그로, 정상 종료는 잔재 0으로 확인한다.
 
+### W2: LEval 실제 텍스트 워크로드와 I/O 스케줄링 연구
+
+증거 축을 분리한다. synthetic은 통제된 기전 확인, Bailian coder는 production 유래 KV 접근 위상, LEval W2는 실제 텍스트 content-validity 교차 검증, 스케줄링 연구는 read/write admission과 제출·완료 방식의 인과 분해다. LEval 워크로드의 정확한 명칭은 real-text synthetic-interleaving long-document workload이며 production이라 부르지 않는다.
+
+#### 선행: 축소 윈도 스케줄링 정책 실험
+
+Bailian 앞 150요청 윈도에서 정책 4종을 각 5회, D/E paired로 측정했다. read-priority 제출(무효), read/write 상호배제(무효), /dev/shm 상태(무효)를 기각하고, store를 요청 사이 gap으로 미루는 deferral만이 FAST 레짐을 10/10, 변동계수 0으로 재현했다. storage 동작은 baseline과 완전히 동일했고(read 317건, store 2,737건, matched 19,936 일치) 효과는 cuFile과 POSIX에서 같았다. 결론: 병목은 read 대 write의 중재가 아니라 store 실행과 foreground 엔진 구간의 시간 중첩이며, 필요한 것은 foreground-aware store admission이다. NVMe 온도는 slow 레짐의 일중 악화만 설명하고 fast 레짐과 무관했다.
+
+#### 준비와 감사
+
+LEval(HF L4NLP/LEval, revision 43b9dbf)에서 문서당 질문 2개 이상, OPT 토크나이저 기준 1,920토큰 이상인 실제 문서 64개를 14개 도메인에서 고정 시드로 선정했다. prefix는 고정 system instruction과 문서를 정확히 1,920토큰(블록 16과 64의 공배수)으로 절단해 만들고, 절단 후 중복되는 prefix와 질문은 제외했다. 검증: 같은 문서의 모든 요청은 첫 1,920토큰이 동일, 질문 suffix와 문서 prefix는 서로 다름, 총 입력 2,032토큰 이하.
+
+스택 감사 결과, libcufile은 ctypes.CDLL 단일 로드(PyDLL 아님, errcheck 없음)로 native 구간에서 GIL이 해제되고, 전용 completion 스레드는 없으며 완료 polling의 실체는 엔진 자체의 파이썬 루프다. cuFile Batch API 5심볼은 시스템 libcufile에 존재하고 ABI는 cufile.h에서 확정했다.
+
+#### Batch API
+
+standalone 1-chunk 파일럿은 전 케이스(미등록/등록 버퍼, 단일/다중 entry, read/write) 완료 이벤트와 체크섬이 정상으로 usable 판정. 그러나 엔진 통합에서는 두 번 연속 행이 발생했다(공유 핸들+완료 스레드 구성, 스레드-로컬 핸들 구성 모두). 판정: integration-blocked. 다중 IO 스레드 환경과의 상호작용이 미해결이며 격리 디버그는 별도 과제로 남긴다.
+
+#### Gate 2 (28문서 기능·용량 파일럿)
+
+28문서(unique KV 16.4GiB, C군 GPU+CPU의 1.22배)에서 자연 filesystem hit 확보(R2 26/28). read-priority(DS1)와 strict phase(DS2)는 동시 실행 baseline과 동률로 무효 재확인. store 간섭은 R1(cold+store)에서 극적으로 드러났다(p50 3.8초, deferral 시 1.11초).
+
+#### Gate 3 최종 (64문서, 반복 측정)
+
+D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO는 D/E군 전체에서 동일(생략 없음 검증), backlog 0.
+
+| arm | n | R2 p50 평균 | R2 p95 평균 (CV) | R1 p95 평균 | CPU s/런 |
+|---|---|---|---|---|---|
+| A 재계산 | 3 | 1.090 | 1.161 (0.001) | 1.141 | 5 |
+| C tiering b16 | 3 | 0.977 | 4.908 (0.023) | 4.474 | 144 |
+| D0 cuFile 동시 | 3 | 0.661 | 0.850 (0.044) | 4.380 | 1,180 |
+| E0 posix 동시 | 3 | 0.884 | 1.246 (0.048) | 4.254 | 1,183 |
+| D1 cuFile deferred | 5 | 0.637 | 0.786 (0.046) | 1.169 | 114 |
+| E1 posix deferred | 5 | 0.920 | 1.206 (0.056) | 1.168 | 123 |
+
+판정.
+
+- cuFile transport 우위가 처음으로 반복 확립됐다. 간섭을 제거한 D1 대 E1에서 R2 p95 10% 이상 우세가 5/5회, 평균 격차 35%다. load 지배적인 실텍스트 재사용 경로에서 cuFile 직행 read가 posix bounce의 2-hop을 이긴다. phase1 마이크로벤치의 read 우위와 방향이 일치한다.
+- deferral(foreground-aware store admission)은 R1을 3.7~3.8배, CPU를 10배 개선하며 이 효과는 transport와 무관하다.
+- 시스템 수준에서 D1은 현행 C를 전 지표에서 이긴다(R2 p95 6.2배, R1 p95 3.8배, CPU 유사). C의 R2 tail(약 4.9초)은 promotion 경로의 구조적 문제이고, C는 이 워크로드에서 fs hit 수 자체도 런마다 흔들렸다(48~58/64).
+- 종료-레이스 버그가 V2 러너에서도 재현됐다(64문서에서 C 3런 전부 크래시, 가드로 우회, 발화 4~14회). W1의 V1 한정 관찰을 넘어 일반 버그로 상향.
+
+한계와 남은 것. W1(Bailian)에서는 현행 C-b16이 최선이었다는 결론과 공존하며, 우열은 워크로드 의존적이다(Bailian은 store가 지속 유입되고 재사용 거리가 길다; LEval W2a는 load 지배적 재사용). W2b(decode 포함, slack-aware admission), Batch API 엔진 통합, py-spy GIL 직접 측정은 미완이다.
+
 ### 교훈
 
 복사를 없앤다고 빨라지지 않는다는 오래된 교훈이 세 번 확인됐다. 소조각 IO에서, control plane 분해(E 대조군)에서, production trace의 store 동시성에서. 표준 프로파일러가 관측 대상을 바꿔 버리는 경우(GIL 콘보이)에는 프로파일러의 개입 자체가 진단 단서가 된다. 그리고 synthetic 벤치의 승자는 production trace 앞에서 겸손해야 한다.

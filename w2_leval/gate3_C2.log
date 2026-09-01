@@ -1,0 +1,229 @@
+=== gate3 C-r1 retry ===
+capacity: {'bytes_per_token': 327680, 'prefix_kv_bytes': 629145600, 'unique_prefix_kv_gib': 37.5, 'gpu_kv_est_gib': 5.5, 'cpu_budget_gib': 8.0, 'ws_over_gpu': 6.82, 'ws_over_gpu_cpu': 2.78}
+INFO 09-01 19:47:45 [api_utils.py:273] non-default args: {'max_model_len': 2048, 'gpu_memory_utilization': 0.7, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='0fd023b2-f096-4f0f-938e-d4bffceb0542', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'TieringOffloadingSpec', 'cpu_bytes_to_use': 8589934592, 'block_size': 16, 'secondary_tiers': [{'type': 'fs', 'root_dir': '/home/unionxic/experiments/vllm-gds-kv/w2_leval/kvroot-g3-C-r1'}]}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-2.7b'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING 09-01 19:47:45 [arg_utils.py:1631] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-01 19:47:47 [model.py:623] Resolved architecture: OPTForCausalLM
+INFO 09-01 19:47:47 [model.py:1788] Using max model len 2048
+INFO 09-01 19:47:47 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-01 19:47:47 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-01 19:47:47 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-01 19:47:47 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-01 19:47:47 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-01 19:47:47 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-01 19:47:47 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-01 19:47:49 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-2.7b', speculative_config=None, tokenizer='facebook/opt-2.7b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-2.7b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-01 19:47:50 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:57773 backend=nccl
+INFO 09-01 19:47:50 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-01 19:47:50 [gpu_worker.py:378] Using V2 Model Runner
+INFO 09-01 19:47:51 [model_runner.py:284] Loading model from scratch...
+ERROR 09-01 19:47:51 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-01 19:47:51 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.70s/it]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.70s/it]
+
+INFO 09-01 19:47:55 [default_loader.py:430] Loading weights took 2.71 seconds
+INFO 09-01 19:47:55 [model_runner.py:305] Model loading took 4.96 GiB and 4.978359 seconds
+WARNING 09-01 19:47:55 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-01 19:47:58 [gpu_worker.py:560] Available KV cache memory: 5.41 GiB
+INFO 09-01 19:47:58 [kv_cache_utils.py:2177] GPU KV cache size: 17,712 tokens
+INFO 09-01 19:47:58 [kv_cache_utils.py:2178] Maximum concurrency for 2,048 tokens per request: 8.65x
+INFO 09-01 19:47:58 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 0fd023b2-f096-4f0f-938e-d4bffceb0542
+WARNING 09-01 19:47:58 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:47:58 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:47:58 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:47:58 [shared_offload_region.py:113] Reclaimed orphaned offload mmap file /dev/shm/vllm_offload_0f04c45a-9e95-4830-90c3-9d630b22d77a.mmap
+INFO 09-01 19:47:58 [shared_offload_region.py:314] Created mmap file /dev/shm/vllm_offload_0fd023b2-f096-4f0f-938e-d4bffceb0542.mmap (8.59 GB)
+INFO 09-01 19:48:00 [gpu_worker.py:480] Allocating 32 CPU tensors...
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-01 19:48:01 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-01 19:48:01 [gpu_worker.py:857] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.7, 10.89 GiB). Actual usage is 4.96 GiB for weight, 0.48 GiB for peak activation, 0.05 GiB for non-torch memory, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=5647958631` (5.26 GiB) to fit into requested memory, or `--kv-cache-memory=10518141952` (9.8 GiB) to fully utilize gpu memory. Current kv cache memory in use is 5.41 GiB.
+INFO 09-01 19:48:01 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-01 19:48:02 [core.py:347] init engine (profile, create kv cache, warmup model) took 6.23 s
+INFO 09-01 19:48:02 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 0fd023b2-f096-4f0f-938e-d4bffceb0542
+WARNING 09-01 19:48:02 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:48:02 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:48:02 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:48:02 [shared_offload_region.py:298] Opened existing mmap file /dev/shm/vllm_offload_0fd023b2-f096-4f0f-938e-d4bffceb0542.mmap
+INFO 09-01 19:48:02 [spec.py:202] Created secondary tier #0 (fs)
+INFO 09-01 19:48:02 [spec.py:228] Created TieringOffloadingManager with primary tier (lru, 1638 blocks) and 1 secondary tier(s)
+WARNING 09-01 19:48:02 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 19:49:12 [scheduler.py:1010] Request 44-ac24bc2d: cannot store chunks
+WARNING 09-01 19:49:14 [scheduler.py:1010] Request 44-ac24bc2d: cannot store chunks
+WARNING 09-01 19:49:17 [scheduler.py:1010] Request 47-adfe7631: cannot store chunks
+WARNING 09-01 19:49:18 [scheduler.py:1010] Request 47-adfe7631: cannot store chunks
+WARNING 09-01 19:49:18 [scheduler.py:1010] Request 48-883fac05: cannot store chunks
+WARNING 09-01 19:49:19 [scheduler.py:1010] Request 48-883fac05: cannot store chunks
+WARNING 09-01 19:49:25 [scheduler.py:1010] Request 50-96742dd8: cannot store chunks
+WARNING 09-01 19:49:26 [scheduler.py:1010] Request 50-96742dd8: cannot store chunks
+[g3-C-r1] round 1 done
+[g3-C-r1] round 2 done
+INFO 09-01 19:51:29 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_0fd023b2-f096-4f0f-938e-d4bffceb0542.mmap
+RESULT g3-C-r1 arm=C mode=- docs=64 R2 p50=0.699 p95=4.798 fsHitReqs=58/64 matched=112496 wall=206.3s cpu=143.0s
+=== gate3 C-r2 retry ===
+capacity: {'bytes_per_token': 327680, 'prefix_kv_bytes': 629145600, 'unique_prefix_kv_gib': 37.5, 'gpu_kv_est_gib': 5.5, 'cpu_budget_gib': 8.0, 'ws_over_gpu': 6.82, 'ws_over_gpu_cpu': 2.78}
+INFO 09-01 19:51:39 [api_utils.py:273] non-default args: {'max_model_len': 2048, 'gpu_memory_utilization': 0.7, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='24f9f9e0-2d9f-497d-9792-1683facdf050', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'TieringOffloadingSpec', 'cpu_bytes_to_use': 8589934592, 'block_size': 16, 'secondary_tiers': [{'type': 'fs', 'root_dir': '/home/unionxic/experiments/vllm-gds-kv/w2_leval/kvroot-g3-C-r2'}]}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-2.7b'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING 09-01 19:51:39 [arg_utils.py:1631] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-01 19:51:40 [model.py:623] Resolved architecture: OPTForCausalLM
+INFO 09-01 19:51:40 [model.py:1788] Using max model len 2048
+INFO 09-01 19:51:40 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-01 19:51:40 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-01 19:51:40 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-01 19:51:40 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-01 19:51:40 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-01 19:51:41 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-01 19:51:41 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-01 19:51:43 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-2.7b', speculative_config=None, tokenizer='facebook/opt-2.7b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-2.7b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-01 19:51:43 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:51835 backend=nccl
+INFO 09-01 19:51:44 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-01 19:51:44 [gpu_worker.py:378] Using V2 Model Runner
+INFO 09-01 19:51:44 [model_runner.py:284] Loading model from scratch...
+ERROR 09-01 19:51:44 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-01 19:51:45 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.70s/it]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.70s/it]
+
+INFO 09-01 19:51:48 [default_loader.py:430] Loading weights took 2.71 seconds
+INFO 09-01 19:51:49 [model_runner.py:305] Model loading took 4.96 GiB and 4.968120 seconds
+WARNING 09-01 19:51:49 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-01 19:51:52 [gpu_worker.py:560] Available KV cache memory: 5.41 GiB
+INFO 09-01 19:51:52 [kv_cache_utils.py:2177] GPU KV cache size: 17,712 tokens
+INFO 09-01 19:51:52 [kv_cache_utils.py:2178] Maximum concurrency for 2,048 tokens per request: 8.65x
+INFO 09-01 19:51:52 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 24f9f9e0-2d9f-497d-9792-1683facdf050
+WARNING 09-01 19:51:52 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:51:52 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:51:52 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:51:52 [shared_offload_region.py:314] Created mmap file /dev/shm/vllm_offload_24f9f9e0-2d9f-497d-9792-1683facdf050.mmap (8.59 GB)
+INFO 09-01 19:51:53 [gpu_worker.py:480] Allocating 32 CPU tensors...
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-01 19:51:54 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-01 19:51:54 [gpu_worker.py:857] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.7, 10.89 GiB). Actual usage is 4.96 GiB for weight, 0.48 GiB for peak activation, 0.05 GiB for non-torch memory, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=5647958631` (5.26 GiB) to fit into requested memory, or `--kv-cache-memory=10518141952` (9.8 GiB) to fully utilize gpu memory. Current kv cache memory in use is 5.41 GiB.
+INFO 09-01 19:51:54 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-01 19:51:55 [core.py:347] init engine (profile, create kv cache, warmup model) took 5.70 s
+INFO 09-01 19:51:55 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 24f9f9e0-2d9f-497d-9792-1683facdf050
+WARNING 09-01 19:51:55 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:51:55 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:51:55 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:51:55 [shared_offload_region.py:298] Opened existing mmap file /dev/shm/vllm_offload_24f9f9e0-2d9f-497d-9792-1683facdf050.mmap
+INFO 09-01 19:51:55 [spec.py:202] Created secondary tier #0 (fs)
+INFO 09-01 19:51:55 [spec.py:228] Created TieringOffloadingManager with primary tier (lru, 1638 blocks) and 1 secondary tier(s)
+WARNING 09-01 19:51:56 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 19:52:43 [scheduler.py:1010] Request 35-bd2f8233: cannot store chunks
+WARNING 09-01 19:52:44 [scheduler.py:1010] Request 35-bd2f8233: cannot store chunks
+WARNING 09-01 19:52:44 [scheduler.py:1010] Request 36-8894f1c5: cannot store chunks
+WARNING 09-01 19:52:45 [scheduler.py:1010] Request 36-8894f1c5: cannot store chunks
+WARNING 09-01 19:52:48 [scheduler.py:1010] Request 39-915c0859: cannot store chunks
+WARNING 09-01 19:52:49 [scheduler.py:1010] Request 39-915c0859: cannot store chunks
+WARNING 09-01 19:52:54 [scheduler.py:1010] Request 42-a0136c33: cannot store chunks
+WARNING 09-01 19:52:55 [scheduler.py:1010] Request 42-a0136c33: cannot store chunks
+WARNING 09-01 19:52:55 [scheduler.py:1010] Request 43-aec2df2a: cannot store chunks
+WARNING 09-01 19:52:56 [scheduler.py:1010] Request 43-aec2df2a: cannot store chunks
+WARNING 09-01 19:52:57 [scheduler.py:1010] Request 45-b4fac4d9: cannot store chunks
+WARNING 09-01 19:52:58 [scheduler.py:1010] Request 45-b4fac4d9: cannot store chunks
+WARNING 09-01 19:52:58 [scheduler.py:1010] Request 46-a6a34261: cannot store chunks
+WARNING 09-01 19:52:59 [scheduler.py:1010] Request 46-a6a34261: cannot store chunks
+WARNING 09-01 19:53:01 [scheduler.py:1010] Request 48-8ea78136: cannot store chunks
+WARNING 09-01 19:53:02 [scheduler.py:1010] Request 48-8ea78136: cannot store chunks
+WARNING 09-01 19:53:04 [scheduler.py:1010] Request 50-91e52046: cannot store chunks
+WARNING 09-01 19:53:06 [scheduler.py:1010] Request 50-91e52046: cannot store chunks
+WARNING 09-01 19:53:09 [scheduler.py:1010] Request 53-bd38d551: cannot store chunks
+WARNING 09-01 19:53:10 [scheduler.py:1010] Request 53-bd38d551: cannot store chunks
+WARNING 09-01 19:53:25 [scheduler.py:1010] Request 59-8b65db36: cannot store chunks
+WARNING 09-01 19:53:26 [scheduler.py:1010] Request 59-8b65db36: cannot store chunks
+WARNING 09-01 19:53:28 [scheduler.py:1010] Request 61-92b8f196: cannot store chunks
+WARNING 09-01 19:53:29 [scheduler.py:1010] Request 61-92b8f196: cannot store chunks
+WARNING 09-01 19:53:31 [scheduler.py:1010] Request 63-921cd180: cannot store chunks
+[g3-C-r2] round 1 done
+WARNING 09-01 19:53:32 [scheduler.py:1010] Request 63-921cd180: cannot store chunks
+[g3-C-r2] round 2 done
+INFO 09-01 19:55:27 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_24f9f9e0-2d9f-497d-9792-1683facdf050.mmap
+RESULT g3-C-r2 arm=C mode=- docs=64 R2 p50=1.104 p95=5.065 fsHitReqs=49/64 matched=97264 wall=211.6s cpu=138.7s
+=== gate3 C-r3 retry ===
+capacity: {'bytes_per_token': 327680, 'prefix_kv_bytes': 629145600, 'unique_prefix_kv_gib': 37.5, 'gpu_kv_est_gib': 5.5, 'cpu_budget_gib': 8.0, 'ws_over_gpu': 6.82, 'ws_over_gpu_cpu': 2.78}
+INFO 09-01 19:55:37 [api_utils.py:273] non-default args: {'max_model_len': 2048, 'gpu_memory_utilization': 0.7, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='e78967ff-2a75-490f-a4df-fe1c6ec604c2', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'TieringOffloadingSpec', 'cpu_bytes_to_use': 8589934592, 'block_size': 16, 'secondary_tiers': [{'type': 'fs', 'root_dir': '/home/unionxic/experiments/vllm-gds-kv/w2_leval/kvroot-g3-C-r3'}]}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-2.7b'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING 09-01 19:55:38 [arg_utils.py:1631] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-01 19:55:39 [model.py:623] Resolved architecture: OPTForCausalLM
+INFO 09-01 19:55:39 [model.py:1788] Using max model len 2048
+INFO 09-01 19:55:39 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-01 19:55:39 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-01 19:55:39 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-01 19:55:39 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-01 19:55:39 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-01 19:55:39 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-01 19:55:39 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-01 19:55:41 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-2.7b', speculative_config=None, tokenizer='facebook/opt-2.7b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-2.7b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-01 19:55:42 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:54559 backend=nccl
+INFO 09-01 19:55:42 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-01 19:55:42 [gpu_worker.py:378] Using V2 Model Runner
+INFO 09-01 19:55:43 [model_runner.py:284] Loading model from scratch...
+ERROR 09-01 19:55:43 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-01 19:55:44 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.65s/it]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.65s/it]
+
+INFO 09-01 19:55:47 [default_loader.py:430] Loading weights took 2.67 seconds
+INFO 09-01 19:55:48 [model_runner.py:305] Model loading took 4.96 GiB and 4.914937 seconds
+WARNING 09-01 19:55:48 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-01 19:55:51 [gpu_worker.py:560] Available KV cache memory: 5.41 GiB
+INFO 09-01 19:55:51 [kv_cache_utils.py:2177] GPU KV cache size: 17,712 tokens
+INFO 09-01 19:55:51 [kv_cache_utils.py:2178] Maximum concurrency for 2,048 tokens per request: 8.65x
+INFO 09-01 19:55:51 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: e78967ff-2a75-490f-a4df-fe1c6ec604c2
+WARNING 09-01 19:55:51 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:55:51 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:55:51 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:55:51 [shared_offload_region.py:314] Created mmap file /dev/shm/vllm_offload_e78967ff-2a75-490f-a4df-fe1c6ec604c2.mmap (8.59 GB)
+INFO 09-01 19:55:52 [gpu_worker.py:480] Allocating 32 CPU tensors...
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-01 19:55:53 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-01 19:55:53 [gpu_worker.py:857] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.7, 10.89 GiB). Actual usage is 4.96 GiB for weight, 0.48 GiB for peak activation, 0.05 GiB for non-torch memory, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=5647958631` (5.26 GiB) to fit into requested memory, or `--kv-cache-memory=10518141952` (9.8 GiB) to fully utilize gpu memory. Current kv cache memory in use is 5.41 GiB.
+INFO 09-01 19:55:53 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-01 19:55:54 [core.py:347] init engine (profile, create kv cache, warmup model) took 5.72 s
+INFO 09-01 19:55:54 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: e78967ff-2a75-490f-a4df-fe1c6ec604c2
+WARNING 09-01 19:55:54 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:55:54 [factory.py:47] Creating offloading spec with name: TieringOffloadingSpec
+WARNING 09-01 19:55:54 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-01 19:55:54 [shared_offload_region.py:298] Opened existing mmap file /dev/shm/vllm_offload_e78967ff-2a75-490f-a4df-fe1c6ec604c2.mmap
+INFO 09-01 19:55:54 [spec.py:202] Created secondary tier #0 (fs)
+INFO 09-01 19:55:54 [spec.py:228] Created TieringOffloadingManager with primary tier (lru, 1638 blocks) and 1 secondary tier(s)
+WARNING 09-01 19:55:54 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 19:56:46 [scheduler.py:1010] Request 35-99ba6319: cannot store chunks
+WARNING 09-01 19:56:47 [scheduler.py:1010] Request 35-99ba6319: cannot store chunks
+WARNING 09-01 19:56:48 [scheduler.py:1010] Request 36-9444220b: cannot store chunks
+WARNING 09-01 19:56:49 [scheduler.py:1010] Request 36-9444220b: cannot store chunks
+WARNING 09-01 19:56:50 [scheduler.py:1010] Request 38-a6af0b24: cannot store chunks
+WARNING 09-01 19:56:51 [scheduler.py:1010] Request 38-a6af0b24: cannot store chunks
+WARNING 09-01 19:56:53 [scheduler.py:1010] Request 40-b6ac9201: cannot store chunks
+WARNING 09-01 19:56:55 [scheduler.py:1010] Request 40-b6ac9201: cannot store chunks
+WARNING 09-01 19:56:59 [scheduler.py:1010] Request 43-88f614b0: cannot store chunks
+WARNING 09-01 19:57:00 [scheduler.py:1010] Request 43-88f614b0: cannot store chunks
+WARNING 09-01 19:57:00 [scheduler.py:1010] Request 44-b0030213: cannot store chunks
+WARNING 09-01 19:57:01 [scheduler.py:1010] Request 44-b0030213: cannot store chunks
+WARNING 09-01 19:57:02 [scheduler.py:1010] Request 46-b9598394: cannot store chunks
+WARNING 09-01 19:57:03 [scheduler.py:1010] Request 46-b9598394: cannot store chunks
+WARNING 09-01 19:57:03 [scheduler.py:1010] Request 47-914dd4e7: cannot store chunks
+WARNING 09-01 19:57:05 [scheduler.py:1010] Request 47-914dd4e7: cannot store chunks
+WARNING 09-01 19:57:06 [scheduler.py:1010] Request 49-ab63fdc6: cannot store chunks
+WARNING 09-01 19:57:07 [scheduler.py:1010] Request 49-ab63fdc6: cannot store chunks
+WARNING 09-01 19:57:07 [scheduler.py:1010] Request 50-8c7cf718: cannot store chunks
+WARNING 09-01 19:57:08 [scheduler.py:1010] Request 50-8c7cf718: cannot store chunks
+WARNING 09-01 19:57:16 [scheduler.py:1010] Request 54-956cc469: cannot store chunks
+WARNING 09-01 19:57:17 [scheduler.py:1010] Request 54-956cc469: cannot store chunks
+WARNING 09-01 19:57:19 [scheduler.py:1010] Request 56-9e3c3f8b: cannot store chunks
+WARNING 09-01 19:57:21 [scheduler.py:1010] Request 56-9e3c3f8b: cannot store chunks
+WARNING 09-01 19:57:22 [scheduler.py:1010] Request 58-957f7f47: cannot store chunks
+WARNING 09-01 19:57:23 [scheduler.py:1010] Request 58-957f7f47: cannot store chunks
+WARNING 09-01 19:57:23 [scheduler.py:1010] Request 59-afb52756: cannot store chunks
+WARNING 09-01 19:57:24 [scheduler.py:1010] Request 59-afb52756: cannot store chunks
+[g3-C-r3] round 1 done
+[g3-C-r3] round 2 done
+INFO 09-01 19:59:40 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_e78967ff-2a75-490f-a4df-fe1c6ec604c2.mmap
+RESULT g3-C-r3 arm=C mode=- docs=64 R2 p50=1.132 p95=4.862 fsHitReqs=48/64 matched=93456 wall=225.5s cpu=151.1s
+exit=0

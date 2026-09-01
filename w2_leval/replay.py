@@ -58,7 +58,7 @@ transport = ("cufile" if args.arm.startswith("D")
              else "posix" if args.arm.startswith("E") else None)
 
 cnt = {"tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0,
-       "fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0, "matched": 0}
+       "fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0, "matched": 0, "guard_skips": 0}
 
 if args.arm != "A":
     import expfs  # noqa: E402
@@ -87,6 +87,14 @@ if args.arm != "A":
         cnt["fs_store_b"] += bs
         return _os_(path, buf, off, bs)
     fsm.load_block, fsm.store_block = _cl, _cs
+    import vllm.v1.kv_offload.tiering.manager as tmgr
+    _ps = tmgr.TieringOffloadingManager.prepare_store
+    def _ps_guard(self, keys, req_context):
+        if req_context.req_id not in self._req_state:
+            cnt["guard_skips"] += 1
+            return None
+        return _ps(self, keys, req_context)
+    tmgr.TieringOffloadingManager.prepare_store = _ps_guard
     import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched
     _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
     def _gmw(self, request, nct):
