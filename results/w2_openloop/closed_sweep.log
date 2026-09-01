@@ -1,0 +1,73 @@
+=== ol-C-c1-r1 ===
+WARNING 09-01 22:46:54 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 22:46:54 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 22:46:55 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+INFO 09-01 22:51:57 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_49685b62-5151-4f75-8abd-71a2457bcd1d.mmap
+RESULT ol-C-c1-r1 arm=C closed conc=1 rate=- R2 ttft p50=0.627 p95=0.695 tok/s=15.2 wall=302.6s cpu=261.8s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=0 aborted=None
+=== ol-D1-c1-r1 ===
+WARNING 09-01 22:52:21 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 22:52:21 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 22:52:22 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-D1-c1-r1 arm=D1 closed conc=1 rate=- R2 ttft p50=0.702 p95=0.879 tok/s=11.9 wall=387.1s cpu=260.3s backlog_max=1 gaps=79 forced=0 age_max_ms=4521 guard_skips=0 aborted=None
+=== ol-DS4-c1-r1 ===
+WARNING 09-01 22:59:12 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 22:59:12 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 22:59:13 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=2
+RESULT ol-DS4-c1-r1 arm=DS4 closed conc=1 rate=- R2 ttft p50=0.664 p95=0.894 tok/s=11.9 wall=387.2s cpu=259.1s backlog_max=4 gaps=0 forced=78 age_max_ms=14590 guard_skips=0 aborted=None
+=== ol-C-c2-r1 ===
+WARNING 09-01 23:08:46 [scheduler.py:1010] Request r62-a143245a: cannot store chunks
+WARNING 09-01 23:08:46 [scheduler.py:1010] Request r62-a143245a: cannot store chunks
+WARNING 09-01 23:08:46 [scheduler.py:1010] Request r62-a143245a: cannot store chunks
+INFO 09-01 23:10:29 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_f7c10122-85de-4fcd-a2f1-2366323e36df.mmap
+RESULT ol-C-c2-r1 arm=C closed conc=2 rate=- R2 ttft p50=0.805 p95=6.781 tok/s=17.5 wall=262.8s cpu=202.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=2 aborted=None
+=== ol-D1-c2-r1 ===
+WARNING 09-01 23:10:54 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:10:54 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:10:56 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=2
+RESULT ol-D1-c2-r1 arm=D1 closed conc=2 rate=- R2 ttft p50=0.679 p95=1.141 tok/s=13.0 wall=353.0s cpu=233.5s backlog_max=4 gaps=1 forced=76 age_max_ms=10048 guard_skips=0 aborted=None
+=== ol-DS4-c2-r1 ===
+WARNING 09-01 23:17:12 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:17:12 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:17:14 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=2
+RESULT ol-DS4-c2-r1 arm=DS4 closed conc=2 rate=- R2 ttft p50=0.715 p95=1.291 tok/s=13.1 wall=351.2s cpu=236.6s backlog_max=4 gaps=0 forced=78 age_max_ms=10272 guard_skips=0 aborted=None
+=== ol-C-c4-r1 ===
+WARNING 09-01 23:26:26 [scheduler.py:1010] Request r95-b1859e9e: cannot store chunks
+WARNING 09-01 23:26:26 [scheduler.py:1010] Request r95-b1859e9e: cannot store chunks
+WARNING 09-01 23:26:26 [scheduler.py:1010] Request r95-b1859e9e: cannot store chunks
+INFO 09-01 23:27:24 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_13c1b4af-bde4-4468-9438-aabd4086cdee.mmap
+RESULT ol-C-c4-r1 arm=C closed conc=4 rate=- R2 ttft p50=2.106 p95=12.264 tok/s=19.6 wall=234.2s cpu=132.6s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=24 aborted=None
+=== ol-D1-c4-r1 ===
+WARNING 09-01 23:27:48 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:27:48 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:27:52 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-D1-c4-r1 arm=D1 closed conc=4 rate=- R2 ttft p50=0.866 p95=4.565 tok/s=13.7 wall=334.7s cpu=221.8s backlog_max=4 gaps=0 forced=79 age_max_ms=1149 guard_skips=0 aborted=None
+=== ol-DS4-c4-r1 ===
+WARNING 09-01 23:33:48 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:33:48 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:33:52 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-DS4-c4-r1 arm=DS4 closed conc=4 rate=- R2 ttft p50=0.924 p95=4.385 tok/s=13.9 wall=331.5s cpu=224.2s backlog_max=4 gaps=0 forced=79 age_max_ms=1052 guard_skips=0 aborted=None
+=== ol-C-c8-r1 ===
+WARNING 09-01 23:42:38 [scheduler.py:1010] Request r102-bcabf982: cannot store chunks
+WARNING 09-01 23:42:38 [scheduler.py:1010] Request r103-ae36b3ad: cannot store chunks
+WARNING 09-01 23:42:38 [scheduler.py:1010] Request r104-a35940cb: cannot store chunks
+INFO 09-01 23:43:17 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_0b08f8fa-6f09-41bd-bc07-a350533f9bc7.mmap
+RESULT ol-C-c8-r1 arm=C closed conc=8 rate=- R2 ttft p50=4.659 p95=11.795 tok/s=21.8 wall=210.8s cpu=87.5s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=31 aborted=None
+=== ol-D1-c8-r1 ===
+WARNING 09-01 23:43:41 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:43:41 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:48:22 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-D1-c8-r1 arm=D1 closed conc=8 rate=- R2 ttft p50=1.595 p95=6.037 tok/s=13.9 wall=329.5s cpu=408.4s backlog_max=9 gaps=0 forced=80 age_max_ms=5485 guard_skips=0 aborted=None
+=== ol-DS4-c8-r1 ===
+WARNING 09-01 23:49:36 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-01 23:49:36 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-01 23:54:23 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-DS4-c8-r1 arm=DS4 closed conc=8 rate=- R2 ttft p50=1.557 p95=5.833 tok/s=13.7 wall=335.5s cpu=412.7s backlog_max=9 gaps=0 forced=80 age_max_ms=4919 guard_skips=0 aborted=None
+closed sweep done

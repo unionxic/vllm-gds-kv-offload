@@ -1,0 +1,24 @@
+=== ol-C-p0.3-r1 ===
+WARNING 09-01 23:56:19 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+INFO 09-02 00:02:25 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_a6f1e39b-1d3d-4847-9775-68693ecadb7d.mmap
+RESULT ol-C-p0.3-r1 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.786 p95=9.362 tok/s=12.5 wall=368.4s cpu=190.2s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=0 aborted=None
+=== ol-D1-p0.3-r1 ===
+WARNING 09-02 00:02:53 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-D1-p0.3-r1 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=7.723 p95=49.242 tok/s=12.5 wall=368.4s cpu=203.3s backlog_max=9 gaps=19 forced=46 age_max_ms=13947 guard_skips=0 aborted=None
+=== ol-DS4-p0.3-r1 ===
+WARNING 09-02 00:09:27 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=2
+RESULT ol-DS4-p0.3-r1 arm=DS4 poisson conc=1 rate=0.3 R2 ttft p50=1.433 p95=38.416 tok/s=12.5 wall=368.4s cpu=277.3s backlog_max=10 gaps=0 forced=79 age_max_ms=10868 guard_skips=0 aborted=None
+=== ol-C-p0.55-r1 ===
+WARNING 09-02 00:19:34 [scheduler.py:1010] Request r108-88e8d869: cannot store chunks
+INFO 09-02 00:19:48 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_115bc0bc-3464-497e-949d-728b4ec55b7c.mmap
+RESULT ol-C-p0.55-r1 arm=C poisson conc=1 rate=0.55 R2 ttft p50=13.622 p95=30.752 tok/s=20.0 wall=230.1s cpu=84.3s backlog_max=0 gaps=0 forced=0 age_max_ms=0 guard_skips=21 aborted=None
+=== ol-D1-p0.55-r1 ===
+WARNING 09-02 00:20:22 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-D1-p0.55-r1 arm=D1 poisson conc=1 rate=0.55 R2 ttft p50=132.083 p95=157.571 tok/s=14.1 wall=325.8s cpu=422.6s backlog_max=9 gaps=0 forced=80 age_max_ms=5065 guard_skips=0 aborted=None
+=== ol-DS4-p0.55-r1 ===
+WARNING 09-02 00:26:13 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+final drain released=1
+RESULT ol-DS4-p0.55-r1 arm=DS4 poisson conc=1 rate=0.55 R2 ttft p50=110.180 p95=128.853 tok/s=15.3 wall=299.3s cpu=248.4s backlog_max=9 gaps=0 forced=81 age_max_ms=5205 guard_skips=0 aborted=None
