@@ -239,7 +239,20 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 - 시스템 수준에서 D1은 현행 C를 전 지표에서 이긴다(R2 p95 6.2배, R1 p95 3.8배, CPU 유사). C의 R2 tail(약 4.9초)은 promotion 경로의 구조적 문제이고, C는 이 워크로드에서 fs hit 수 자체도 런마다 흔들렸다(48~58/64).
 - 종료-레이스 버그가 V2 러너에서도 재현됐다(64문서에서 C 3런 전부 크래시, 가드로 우회, 발화 4~14회). W1의 V1 한정 관찰을 넘어 일반 버그로 상향.
 
-한계와 남은 것. W1(Bailian)에서는 현행 C-b16이 최선이었다는 결론과 공존하며, 우열은 워크로드 의존적이다(Bailian은 store가 지속 유입되고 재사용 거리가 길다; LEval W2a는 load 지배적 재사용). W2b(decode 포함, slack-aware admission), Batch API 엔진 통합, py-spy GIL 직접 측정은 미완이다.
+한계와 남은 것. W1(Bailian)에서는 현행 C-b16이 최선이었다는 결론과 공존하며, 우열은 워크로드 의존적이다(Bailian은 store가 지속 유입되고 재사용 거리가 길다; LEval W2a는 load 지배적 재사용). Batch API 엔진 통합, py-spy GIL 직접 측정은 미완이다.
+
+#### W2b (decode 포함, 출력 16~128토큰, ignore_eos, 각 3회)
+
+핵심 질문이었던 backlog 안정성은 확인됐다. deferred store는 decode가 길어져도 요청 사이 gap마다 정상 배출되어 backlog 최대 1, 종료 잔량 0, 최대 보류 시간 약 4.5초(한 요청 길이 이내)로 starvation이 없다.
+
+| 구성 | e2e 재사용 p50 | e2e 재사용 p95 (CV) | cold p95 | out tok/s | backlog 최대 |
+|---|---|---|---|---|---|
+| 기존 tiering | 1.155 | 4.329 (0.28) | 5.654 | 14.8 | 0 |
+| cuFile 지연 store | 1.219 | 3.052 (0.01) | 4.487 | 11.6 | 1 |
+| POSIX 지연 store | 1.669 | 3.365 (0.01) | 4.492 | 11.1 | 1 |
+| cuFile slack-aware+40MB 제한 | 1.249 | 3.119 (0.02) | 7.393 | 11.5 | 5 |
+
+판정. decode가 tail을 지배하면서 cuFile 대 POSIX의 e2e p95 격차는 9.3%로 문턱(10%) 아래로 희석됐고 paired 기준 0/3이다. 다만 p50에서는 27% 우위가 유지된다. slack-aware admission(decode 중 배출 허용)은 이 구현에서는 역효과였다. cold 구간 간섭이 재유입되어 cold p95가 최악(7.4초)이고 backlog와 보류 시간도 더 길다. gap 전용 배출이 옳다. 기존 tiering은 처리량(14.8 tok/s)에서 앞서고 tail 안정성(CV 0.28 대 0.01)에서 크게 뒤진다. 종합하면 transport 우위의 실용 가치는 TTFT가 중요한 짧은 출력 서빙에서 크고, 긴 decode에서는 스케줄링 안정성(지연 store의 CV 0.01)이 남는 이득이다.
 
 ### 교훈
 

@@ -39,7 +39,7 @@ T = defaultdict(int)   # ns 합계
 N = defaultdict(int)   # 호출 수
 _lock = threading.Lock()
 _orig = {}
-_deferred = []            # (worker, job_id, src, dst, bytes)
+_deferred = []            # (worker, job_id, src, dst, bytes, hold_ts)
 _task_enqueue_ts = {}     # id(task closure) 대신 (job_id) -> enqueue ts
 _job_last_task_end = {}
 _kind = {}
@@ -215,15 +215,16 @@ def install(mode, max_w_bytes=None, max_r_bytes=None, write_quantum_chunks=2,
         nb = len(dst.paths) * self.chunk_bytes
         hold = False
         with _lock:
-            if mode in ("S1", "S3") and S["out_r_ios"] > 0:
+            if mode in ("S1", "S3", "S4") and S["out_r_ios"] > 0:
                 hold = True
             if mode in ("DEF", "DEFB"):
                 hold = True  # foreground-aware admission: gap에서만 실행
             if _cfg["max_w_bytes"] and S["out_w_bytes"] + nb > _cfg["max_w_bytes"]:
                 hold = True
             if hold:
-                _deferred.append((self, job_id, src, dst, nb))
+                _deferred.append((self, job_id, src, dst, nb, time.perf_counter_ns()))
                 S["deferred_writes"] += 1
+                S["max_backlog"] = max(S.get("max_backlog", 0), len(_deferred))
                 return True
             _kind[job_id] = "store"
             _acct("store", len(dst.paths), nb)
@@ -236,8 +237,8 @@ def install(mode, max_w_bytes=None, max_r_bytes=None, write_quantum_chunks=2,
         take = []
         with _lock:
             while _deferred:
-                w, j, s, d, nb = _deferred[0]
-                if S["out_r_ios"] > 0 and mode in ("S1", "S3"):
+                w, j, s, d, nb, ts = _deferred[0]
+                if S["out_r_ios"] > 0 and mode in ("S1", "S3", "S4"):
                     break
                 if _cfg["max_w_bytes"] and S["out_w_bytes"] + nb > _cfg["max_w_bytes"]:
                     break
@@ -245,6 +246,8 @@ def install(mode, max_w_bytes=None, max_r_bytes=None, write_quantum_chunks=2,
                 _kind[j] = "store"
                 _acct("store", len(d.paths), nb)
                 _task_enqueue_ts[j] = time.perf_counter_ns()
+                age = (time.perf_counter_ns() - ts) / 1e6
+                S["max_deferred_age_ms"] = max(S.get("max_deferred_age_ms", 0), age)
                 take.append((w, j, s, d))
         for w, j, s, d in take:
             nvtx.range_push("STORE_DEFERRED_RELEASE")
@@ -280,10 +283,10 @@ def install(mode, max_w_bytes=None, max_r_bytes=None, write_quantum_chunks=2,
                 else:
                     keep.append(item)
             _deferred[:] = keep
-            for w, j, s, d, nb in take:
+            for w, j, s, d, nb, ts in take:
                 _kind[j] = "store"
                 _acct("store", len(d.paths), nb)
-        for w, j, s, d, nb in take:
+        for w, j, s, d, nb, ts in take:
             _orig["submit_store"](w, j, s, d)
         return _orig["wait"](self, job_ids)
 
@@ -394,10 +397,12 @@ def release_gap(worker_holder: list):
     take = []
     with _lock:
         while _deferred:
-            w, j, s, d, nb = _deferred.pop(0)
+            w, j, s, d, nb, ts = _deferred.pop(0)
             _kind[j] = "store"
             _acct("store", len(d.paths), nb)
             _task_enqueue_ts[j] = time.perf_counter_ns()
+            age = (time.perf_counter_ns() - ts) / 1e6
+            S["max_deferred_age_ms"] = max(S.get("max_deferred_age_ms", 0), age)
             take.append((w, j, s, d))
         S["deferred_writes_released_gap"] = S.get("deferred_writes_released_gap", 0) + len(take)
     if not take:
