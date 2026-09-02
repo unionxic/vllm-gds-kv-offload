@@ -1,0 +1,4 @@
+=== fg-C-r1 ===
+INFO 09-02 11:06:27 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_716a4de0-985a-4f88-aa10-e924f5ed3b85.mmap
+RESULT fg-C-r1 C pol=baseline n=150 p50=1.138 p95=4.948 p99=7.151 wall=211.9s cpu=126.8s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== fg-Dsync-r1 ===
