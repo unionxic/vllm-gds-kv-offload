@@ -23,7 +23,7 @@ case "$mode" in
     ;;
   pyspy)
     PROF_INSTRUMENT=1 ~/miniconda3/envs/gdsllm/bin/py-spy record \
-      --rate 250 --threads --idle --format speedscope \
+      --rate 25 --threads --format speedscope \
       -o "sched/prof/${id}.speedscope.json" -- \
       python sched/run_bench.py --run-id "${id}" "$@" \
         --note "py-spy 런 — 성능 수치는 참고용"
@@ -31,7 +31,7 @@ case "$mode" in
   pyspy-gil)
     # GIL 보유 시점만 샘플 → 어떤 함수가 GIL을 쥐는지
     PROF_INSTRUMENT=1 ~/miniconda3/envs/gdsllm/bin/py-spy record \
-      --rate 250 --threads --gil --format speedscope \
+      --rate 25 --threads --gil --format speedscope \
       -o "sched/prof/${id}.speedscope.json" -- \
       python sched/run_bench.py --run-id "${id}" "$@" \
         --note "py-spy GIL 런 — 성능 수치는 참고용"
