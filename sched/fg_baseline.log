@@ -2,3 +2,35 @@
 INFO 09-02 11:06:27 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_716a4de0-985a-4f88-aa10-e924f5ed3b85.mmap
 RESULT fg-C-r1 C pol=baseline n=150 p50=1.138 p95=4.948 p99=7.151 wall=211.9s cpu=126.8s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
 === fg-Dsync-r1 ===
+WARNING 09-02 11:06:52 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Dsync-r1 D pol=baseline n=150 p50=1.168 p95=6.477 p99=7.384 wall=339.5s cpu=1070.8s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-Ddef-r1 ===
+WARNING 09-02 11:12:56 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Ddef-r1 D pol=deferred_store n=150 p50=0.949 p95=1.196 p99=1.365 wall=354.3s cpu=91.0s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=122
+=== fg-Esync-r1 ===
+WARNING 09-02 11:19:14 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Esync-r1 E pol=baseline n=150 p50=1.206 p95=5.444 p99=7.104 wall=321.9s cpu=1250.1s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-C-r2 ===
+INFO 09-02 11:29:16 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_805bf005-4a67-43d3-a8d1-52ff32dfd6a3.mmap
+RESULT fg-C-r2 C pol=baseline n=150 p50=1.161 p95=5.166 p99=8.375 wall=253.6s cpu=168.8s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== fg-Dsync-r2 ===
+WARNING 09-02 11:29:41 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Dsync-r2 D pol=baseline n=150 p50=1.171 p95=5.510 p99=6.324 wall=311.4s cpu=1080.8s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-Ddef-r2 ===
+WARNING 09-02 11:35:17 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Ddef-r2 D pol=deferred_store n=150 p50=0.957 p95=1.196 p99=1.313 wall=336.4s cpu=89.8s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=122
+=== fg-Esync-r2 ===
+WARNING 09-02 11:41:18 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Esync-r2 E pol=baseline n=150 p50=1.201 p95=5.054 p99=6.085 wall=299.0s cpu=1270.6s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-C-r3 ===
+INFO 09-02 11:50:33 [shared_offload_region.py:407] Removed mmap file /dev/shm/vllm_offload_ae91d738-9778-4af3-8d91-5f6fa0713bcf.mmap
+RESULT fg-C-r3 C pol=baseline n=150 p50=1.160 p95=5.190 p99=7.081 wall=229.9s cpu=143.8s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== fg-Dsync-r3 ===
+WARNING 09-02 11:50:58 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Dsync-r3 D pol=baseline n=150 p50=1.171 p95=6.037 p99=6.853 wall=323.5s cpu=1069.8s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-Ddef-r3 ===
+WARNING 09-02 11:56:46 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Ddef-r3 D pol=deferred_store n=150 p50=0.956 p95=1.195 p99=1.317 wall=351.6s cpu=90.5s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=122
+=== fg-Esync-r3 ===
+WARNING 09-02 12:03:02 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT fg-Esync-r3 E pol=baseline n=150 p50=1.198 p95=5.218 p99=6.168 wall=310.1s cpu=1288.0s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0

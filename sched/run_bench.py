@@ -58,6 +58,10 @@ if os.environ.get("ISOLATE"):
     import prof_isolate
     prof_isolate.install()
     meta["isolate"] = {"mode": prof_isolate.MODE, "write_ms": prof_isolate.WRITE_MS}
+if os.environ.get("FIX"):
+    import prof_fix
+    prof_fix.install()
+    meta["fix"] = prof_fix.MODE
 worker_holder: list = []
 
 cnt = {"tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0,
@@ -192,3 +196,7 @@ print(f"RESULT {args.run_id} {args.design} pol={args.policy} n={len(rows)} "
       f"maxOutW={ps['max_outstanding_store']} maxOutR={ps['max_outstanding_load']} "
       f"forced={ps['forced_flushes']} gap={ps['gap_flushes']}", flush=True)
 shutil.rmtree(kvroot, ignore_errors=True)
+if PROF:
+    # py-spy 자식 모드에서 인터프리터 teardown이 교착 → 산출물 기록 후 즉시 종료
+    sys.stdout.flush()
+    os._exit(0)

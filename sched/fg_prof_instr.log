@@ -1,0 +1,6 @@
+=== 계측 런 Dsync ===
+PROF {
+RESULT fg-Dsync-prof D pol=baseline n=150 p50=1.176 p95=5.767 p99=6.507 wall=316.3s cpu=1118.3s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== 계측 런 Ddef ===
+PROF {
+RESULT fg-Ddef-prof D pol=deferred_store n=150 p50=0.979 p95=1.199 p99=1.368 wall=360.4s cpu=115.2s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=122
