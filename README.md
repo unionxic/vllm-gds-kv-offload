@@ -35,13 +35,12 @@ load 중심 재사용(라운드 2)의 비교. cuFile 지연 store 대 POSIX 지�
 
 #### 해석과 한계
 
-- 첫 표의 V2 GDS 수치는 최초 측정값. 재현 3회에서 tail 2배 악화로 미유지. 원인은 store 실행과 foreground의 시간 중첩(GIL 콘보이)으로 규명, read/write 순서와 NVMe 동시성 가설은 기각.
-- CPU 시간 = 프로세스 전체 누적 CPU time(전 스레드, 요청 밖 store 포함) ÷ 요청 수. Host DRAM 왕복 = 2×(read+store bytes) 유도치, 직행 경로는 0.
-- 반복 조건: W1 재현 n=3, 스케줄링·W2 정책당 n=3~5, CV = 모표준편차/평균. 단일 빠른 실행은 불인정.
-- W1(Bailian)과 W2(LEval)의 우열 차이는 워크로드 차이. store 지속 유입 대 load 중심 재사용. 모순이 아니라 적용 조건의 경계.
-- W2의 기존 tiering 수치는 vLLM 종료 시점 race를 가드로 우회한 측정(발화 4~14회/런). 가드 없이는 64문서에서 전 런 크래시.
-- open-loop/동시성 검증(W3): backlog는 전 조건 유한(최대 10, fence가 안전판)이나 conc≥2에서 gap 배출이 소멸해 강제 fence 배출로 대체. closed 동시성에서는 cuFile 지연 store가 TTFT p50·p95 모두 우위(conc 4, 3/3)지만, Poisson 지속 부하에서는 처리량 열위가 큐 대기를 증폭해 tail이 기존 tiering 대비 3~9배 열위로 역전 — gap 전용 배출은 단일 스트림 closed-loop 전용 설계. cuFile Batch API는 standalone 통과·엔진 통합 미해결, 종료 race 버그는 우회만 하고 미수정.
-- 발견 버그 2건과 upstream 현황: 종료 race는 최신 main의 #49671로 해결 확인(우리 가드는 v0.26.0 한정 workaround). /dev/shm mmap 누출은 #52596(barrier unlink)이 CPUOffloadingSpec만 고쳤고 TieringOffloadingSpec은 최신 main에서도 SIGKILL 시 누출 재현 — barrier 미배선, 후속 보고 대상. 로컬 브랜치 `offload-shm-leak-fix`의 flock 회수는 이 경우까지 처리.
+- 첫 표의 V2 GDS 수치는 최초 측정값. 재현 3회에서 미유지, 원인은 store와 foreground의 시간 중첩(GIL 콘보이)으로 규명.
+- CPU 시간 = 전 스레드 누적 CPU time ÷ 요청 수. DRAM 왕복 = 2×(read+store bytes) 유도치. 반복은 조건당 n=3~5, 단일 빠른 실행 불인정.
+- W1(store 지속 유입)과 W2(load 중심 재사용)의 우열 차이는 워크로드 경계이지 모순 아님.
+- W3(open-loop): closed 동시성은 cuFile 지연 store 우위, Poisson 지속 부하는 처리량 열위가 큐 대기를 증폭해 3~9배 역전 — gap 전용 배출은 단일 스트림 전용.
+- 기존 tiering 수치는 종료 race를 가드로 우회한 측정. race는 최신 main #49671로 해결 확인. /dev/shm 누출은 #52596 이후에도 Tiering 경로에서 재현(후속 보고 대상), 로컬 `offload-shm-leak-fix`는 이 경우까지 처리.
+- 미해결: cuFile Batch API 엔진 통합.
 
 #### Directory
 
