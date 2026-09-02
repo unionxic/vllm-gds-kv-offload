@@ -298,3 +298,39 @@ Poisson open-loop (R2 TTFT 초, 3회 중앙값, λ=0.3):
 판정. open-loop 지속 부하에서 관계가 역전된다. 지연 store 계열의 tail이 기존 tiering보다 3~9배 나쁘고(3/3), 원인은 backlog 폭주가 아니라 서비스율 격차다. tok/s가 낮은 쪽은 버스트가 만든 큐를 느리게 비우고, TTFT에 큐 대기가 편입되어 tail이 증폭된다. closed 동시성에서 지연 store가 이기는 이유(요청별 지연 우위)와 open-loop에서 지는 이유(처리량 열위)가 같은 트레이드오프의 양면이다. slack-aware(S4)는 open-loop에서도 지연 store를 구하지 못했다(p95 오히려 열위). 종합하면 gap 전용 배출은 단일 스트림 closed-loop 전용 설계이고, 서빙 레짐에서 GDS 경로가 서려면 store의 처리량 개선(예: 배출 병렬화, Batch API의 원래 자리) 또는 부하 인지형 admission이 선결이다. W2b의 트레이드오프 결론(중앙 지연·안정성 ↔ 처리량)이 open-loop에서는 처리량 쪽이 지연까지 지배하는 형태로 확장된다.
 
 원자료는 results/w2_openloop/(런별 raw.csv, 1Hz timeseries.csv, meta.json, 집계는 analyze_openloop.py).
+
+#### foreground-store 간섭의 함수 수준 원인 규명
+
+W2 이래 이 실험의 최대 미해명 사항 — expfs store가 추론과 동시에 실행되면 CPU가 12배 뛰고 tail이 무너지는데 store를 요청 사이로 미루면 정상화되는 이유 — 를 함수·대기 구간 수준까지 내려가 확정했다. 프로토콜은 5단계: 계측 없는 기준 재현, 관찰 전용 계측, nsys와 py-spy, 원인 분해 격리, 원인 제거 검증. 워크로드는 Bailian 앞 150요청(opt-2.7b, V2, b64).
+
+기준 재현(각 3회). GDS-동시저장 SLOW(p95 5.5~6.5초, CPU 약 1,074초), POSIX-동시저장도 SLOW(CPU 약 1,270초) — cuFile 고유 아님이 재확립. GDS-지연저장 FAST(p95 1.196초, CV 0.0004, CPU 약 90초). 기존-tiering은 tail 높고(p95 약 5.1초) CPU 낮음(약 146초).
+
+계측과 프로파일. 관찰 전용 NVTX·ns 계측(store 동작 무수정)에서 store의 CUDA event 대기가 평균 358ms 대 0.7ms(500배), 총합 980초로 CPU 초과분(1,003초)과 산술적으로 일치했다. cuFile write 자체는 양쪽 평균 15.5ms로 동일 — native 쓰기는 느려지지 않는다. nsys python-gil trace에서는 CUDA 동기화 레코드 건수가 동일(254,200)한데 총 시간이 1,021초 대 96초로 10.6배 갈렸고, py-spy CPU-활성 캡처에서 활성 샘플의 87.9%(1,568 스레드-초)가 ev.synchronize 스택이었다 — 대기가 sleep이 아니라 스핀임의 직접 증거.
+
+원인 분해(격리, 각 3회 반복). store 경로에서 한 요소씩만 남겼다. 결과는 이중 해리다.
+
+| 변형 | 남긴 동작 | p95 | CPU |
+|---|---|---|---|
+| 제어부만 | queue·rename·완료 처리 | 1.163~1.168 | 19~20초 |
+| CUDA만 | event sync만, IO 제거 | 1.164~1.165 | 1,504~1,507초 |
+| 네이티브대기 | GIL 놓는 1.28초 sleep | 4.334~4.356 | 31~32초 |
+| POSIX만 | pwrite만 | 4.337 | 57초 |
+| cuFile만 | cuFile write만, event 제거 | 4.312 | 110초 |
+
+CPU 폭증은 CUDA event sync 단독으로 최대 재현되고 그때 tail은 완전히 정상이다. tail은 순수 sleep만으로 완전 재현되고 그때 CPU는 정상이다. 두 증상은 원인이 다르다.
+
+원인 제거 검증(3회). torch.cuda.Event(blocking=True) 한 줄 차이로 전체 GDS-동시저장 경로의 CPU가 1,074초에서 118~123초로 9배 정상화됐고(3/3), tail은 예측대로 잔존했다(p95 5.1~5.5). LEval 8문서 store workload 교차 확인에서도 CPU 119.9→5.0초(24배), tail 잔존 — Bailian 특이 아님.
+
+확정 결론.
+
+첫째, CPU 12배 폭증의 원인은 expfs 구현의 CUDA event 스핀 대기다. torch.cuda.Event() 기본 플래그는 cudaEventSynchronize를 busy-wait로 돌리고, store 스레드 8~16개가 foreground compute가 event 완료를 늦추는 동안 스핀한다. 이것은 Python expfs 구현의 문제이지 GDS 자체의 약점이 아니다 — blocking 플래그 한 줄로 제거된다.
+
+둘째, TTFT tail의 원인은 store 작업의 시간 점유가 요청 경계를 침범하는 것 자체다. transport 종류·CPU 사용량·GIL과 무관하며(순수 sleep으로 재현), store가 진행 중인 동안 블록 delay-free가 길어져 다음 요청 admission이 지연되고 엔진이 빈 step을 공회전한다(요청당 830 step, 정상의 17.7배). 제거 방법이 곧 지연 store다 — gap에서 store를 완결시켜 경계 침범을 없앤다. 이는 구현 언어를 바꿔도 남는 store scheduling 구조 문제다.
+
+셋째, 기각된 가설: cuFile·nvidia-fs 고유 문제(POSIX도 SLOW, cuda_only에서 tail 정상, write 속도 불변), CUDA driver/context 경합(cuda_only에서 tail 정상), Python 제어부·GIL 단독(제어부만 FAST). sudo perf 단계는 rootless 증거로 원인이 분리되어 불필요했다.
+
+과거 서사의 정정. 이전에 "GIL 콘보이"로 불렀던 병명은 이번 분석으로 두 요인으로 분해된다. 과거의 간접 증거(nsys osrt 개입 4.5배, switchinterval 2.3배 가속)는 load-side 단독 측정 레짐의 것이고, store 동시실행 레짐의 병인은 event 스핀과 경계 침범이다. 엔진의 GIL 보유 2.5배와 빈 step 공회전은 실재하지만 격리에서 tail을 단독으로 만들지 못했다.
+
+일반화 범위. event 스핀은 CUDA의 일반 동작이라 rain 한정이 아니며(코어 수와 GPU 세대에 따라 정도 차이는 있을 수 있음, 타 서버 재현은 미실시), store 경계 침범은 vLLM 블록 수명 구조의 일반 성질이다. "vLLM production이 GDS를 기본 경로로 쓰지 않는 이유"에 대한 이 실험의 증거 기반 답: GDS transport 자체는 결격이 아니고(load에서 우위 반복 확립, write 속도 동일), 결격은 worker 쪽 store 실행이 추론과 자원·블록 수명을 공유하는 구조에서 온다. GDS를 서빙에 넣으려면 transport가 아니라 store의 실행 시점(admission)과 event 대기 방식, 블록 수명 분리를 함께 설계해야 한다.
+
+산출물: sched/prof/analysis_notes.md(전체 수치), sched/prof_instrument.py(계측), sched/prof_isolate.py(격리), sched/prof_fix.py(제거 검증), nsys 리포트와 py-spy speedscope는 용량 문제로 로컬 보존(sched/prof/).
