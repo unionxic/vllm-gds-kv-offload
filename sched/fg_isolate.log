@@ -1,1 +1,15 @@
 === iso-ctrl-r1 ===
+WARNING 09-03 05:10:24 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT iso-ctrl-r1 D pol=baseline n=150 p50=0.927 p95=1.168 p99=1.180 wall=105.1s cpu=19.5s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== iso-native_wait-r1 ===
+WARNING 09-03 05:12:33 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT iso-native_wait-r1 D pol=baseline n=150 p50=1.158 p95=4.354 p99=6.069 wall=253.1s cpu=31.9s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== iso-cuda_only-r1 ===
+WARNING 09-03 05:17:10 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT iso-cuda_only-r1 D pol=baseline n=150 p50=0.935 p95=1.165 p99=1.171 wall=103.7s cpu=1506.8s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== iso-posix_only-r1 ===
+WARNING 09-03 05:19:19 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT iso-posix_only-r1 D pol=baseline n=150 p50=1.162 p95=4.337 p99=5.746 wall=242.7s cpu=57.1s matched=19936 maxOutW=3 maxOutR=1 forced=0 gap=0
+=== iso-cufile_only-r1 ===
+WARNING 09-03 05:23:46 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT iso-cufile_only-r1 D pol=baseline n=150 p50=1.161 p95=4.312 p99=5.725 wall=241.1s cpu=109.7s matched=19936 maxOutW=3 maxOutR=1 forced=0 gap=0

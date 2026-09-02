@@ -64,7 +64,39 @@ cuFile 고유 문제 아님(POSIX-동시저장도 SLOW, CPU 더 높음).
   다음 요청 admission 지연·빈 step 공회전. 지연 store가 tail을 고치는 이유는
   gap에서 store를 완결시켜 경계 침범을 없애기 때문.
 
-## 진행 중
+## 4단계 경계 반복 (3/3, 편차 극소)
 
-경계 반복(ctrl/native_wait/cuda_only ×3)과 제거 검증(FIX=blocking_event ×3:
-예상 = CPU만 정상화·tail 유지 → 분리 확증).
+| 변형 | p95 (r1/r2/r3) | CPU (r1/r2/r3) |
+|---|---|---|
+| 제어부만 | 1.168/1.163/1.167 | 19.5/19.2/18.8 |
+| 네이티브대기 | 4.354/4.334/4.356 | 31.9/31.5/32.4 |
+| CUDA만 | 1.165/1.164/1.165 | 1,506.8/1,504.0/1,503.9 |
+
+## 5단계 제거 검증 (FIX=blocking_event, 전체 GDS-동시저장 경로, 3/3)
+
+torch.cuda.Event(blocking=True) 한 줄 차이. 결과: CPU 1,074s → 118.5/122.3/122.8s
+(9배 정상화, 3/3) / tail은 잔존 p95 5.149/5.476/5.271 (예측대로 — tail은 event
+스핀과 무관). 이중 해리 예측이 제거 실험에서 그대로 실현.
+
+## 원인 확정 (판정 3조건 충족)
+
+1. CPU 12배 폭증 = expfs 구현의 CUDA event 스핀 대기.
+   torch.cuda.Event() 기본 플래그의 cudaEventSynchronize busy-wait를 store 스레드
+   8~16개가 수행하고, foreground compute가 event 완료를 늦추는 동안 스핀이 길어진다
+   (동일 건수 sync가 10.6배 장기화). 증거 4중: 계측 산술 일치·nsys·py-spy 활성
+   87.9%·격리 단독 재현. 제거(blocking flag)로 3/3 소멸 → Python expfs 구현 문제,
+   GDS 자체의 약점 아님.
+2. TTFT tail = store 작업의 시간 점유가 요청 경계를 침범하는 것 자체.
+   transport·CPU·GIL 무관(순수 sleep으로 3/3 재현). 블록 delay-free 장기화 →
+   다음 요청 admission 지연·빈 step 공회전. 제거 = store를 요청 밖으로 옮기는 것
+   (지연 store가 1단계에서 3/3 FAST, CV≈0) → store scheduling 구조 문제.
+3. 기각: cuFile·nvidia-fs 고유(1단계 POSIX도 SLOW + cuda_only tail 정상 + write
+   속도 불변), CUDA driver/context 경합(cuda_only tail 정상), Python 제어부·GIL
+   단독(ctrl FAST).
+
+## 과거 서사 정정
+
+이전에 "GIL 콘보이"로 부른 병명은 함수 수준 분석 결과 두 요인으로 분해·정정된다.
+과거 간접 증거(nsys osrt 4.5배·switchinterval 2.3배 가속)는 load-side 단독 측정
+레짐의 것으로, store 동시실행 레짐의 병인과 별개다. 엔진의 GIL 보유 2.5배·빈 step
+공회전은 실재하는 관찰이지만 격리에서 tail을 단독으로 만들지 못했다(ctrl FAST).
