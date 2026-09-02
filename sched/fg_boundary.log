@@ -1,0 +1,18 @@
+=== iso-ctrl-r2 ===
+RESULT iso-ctrl-r2 D pol=baseline n=150 p50=0.933 p95=1.163 p99=1.211 wall=104.8s cpu=19.2s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== iso-native_wait-r2 ===
+RESULT iso-native_wait-r2 D pol=baseline n=150 p50=1.164 p95=4.334 p99=6.058 wall=252.9s cpu=31.5s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== iso-cuda_only-r2 ===
+RESULT iso-cuda_only-r2 D pol=baseline n=150 p50=0.927 p95=1.164 p99=1.175 wall=103.5s cpu=1504.0s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== iso-ctrl-r3 ===
+RESULT iso-ctrl-r3 D pol=baseline n=150 p50=0.935 p95=1.167 p99=1.216 wall=105.1s cpu=18.8s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== iso-native_wait-r3 ===
+RESULT iso-native_wait-r3 D pol=baseline n=150 p50=1.158 p95=4.356 p99=6.054 wall=253.5s cpu=32.4s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== iso-cuda_only-r3 ===
+RESULT iso-cuda_only-r3 D pol=baseline n=150 p50=0.934 p95=1.165 p99=1.213 wall=103.4s cpu=1503.9s matched=19936 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== fix-bev-Dsync-r1 ===
+RESULT fix-bev-Dsync-r1 D pol=baseline n=150 p50=1.169 p95=5.149 p99=5.762 wall=289.6s cpu=118.5s matched=19936 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== fix-bev-Dsync-r2 ===
+RESULT fix-bev-Dsync-r2 D pol=baseline n=150 p50=1.168 p95=5.476 p99=6.586 wall=307.3s cpu=122.3s matched=19936 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== fix-bev-Dsync-r3 ===
+RESULT fix-bev-Dsync-r3 D pol=baseline n=150 p50=1.172 p95=5.271 p99=6.804 wall=305.6s cpu=122.8s matched=19936 maxOutW=0 maxOutR=1 forced=0 gap=0

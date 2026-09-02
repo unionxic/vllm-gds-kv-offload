@@ -65,6 +65,9 @@ cnt = {"tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0,
 if args.arm != "A":
     import expfs  # noqa: E402
     import scheduler as sch  # noqa: E402
+    if os.environ.get("FIX"):  # 원인 분석 교차 확인용 (sched/prof_fix.py)
+        import prof_fix  # noqa: E402
+        prof_fix.install()
     if mode:
         sch.install(mode, max_w_bytes=args.max_w_bytes,
                     write_quantum_chunks=args.write_quantum)
