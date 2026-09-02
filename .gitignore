@@ -15,3 +15,6 @@ __pycache__/
 w2_leval/workload.json
 results/w2_leval/raw/**/kv*
 cufile.log
+sched/prof/*.nsys-rep
+sched/prof/*.sqlite
+sched/prof/*.speedscope.json
