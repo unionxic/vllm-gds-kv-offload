@@ -38,3 +38,33 @@ Dsync p95 5.77 / CPU 1118s, Ddef p95 1.20 / CPU 115s. 단계별 대조(총합은
    (830 step/req) — GIL 보유 2.5×, tail 기여.
 3. NVMe read/write 경합 — load 2.6× 감속, tail 직행 경로.
 cuFile 고유 문제 아님(POSIX-동시저장도 SLOW, CPU 더 높음).
+
+## 3단계 py-spy (25Hz, 패턴 유지)
+
+- GIL 캡처: 엔진 스레드가 GIL 보유 총량의 절반 이상(50s; 최다 함수 vLLM copy_to_uva).
+  IO 스레드 16개는 각 2~3s의 짧은 고빈도 보유(560만 회와 정합).
+- CPU-활성 캡처(idle 제외): 활성 샘플 1,783 스레드-초 중 87.9%가 ev.synchronize 스택
+  — event 대기가 sleep이 아니라 스핀임을 직접 확인. gdslib.write 5.8%, 엔진 4.8%.
+
+## 4단계 격리 (1차, 각 1회 — 경계 반복 진행 중)
+
+| 변형 | 남긴 동작 | p95 | CPU | 판정 |
+|---|---|---|---|---|
+| 제어부만 | queue·rename·완료 | 1.168 | 19.5s | FAST — Python 제어부·GIL 무죄 |
+| CUDA만 | event sync만, IO 제거 | 1.165 | 1,506.8s | CPU 폭증 단독 재현, tail 정상 |
+| 네이티브대기 | GIL 놓는 1.28s sleep | 4.354 | 31.9s | tail 단독 재현, CPU 정상 |
+| POSIX만 | pwrite만 | 4.337 | 57.1s | tail 재현 |
+| cuFile만 | cuFile write만, ev 제거 | 4.312 | 109.7s | tail 재현 (+cuFile CPU 소폭) |
+
+이중 해리: 두 증상의 원인이 분리된다.
+- CPU 폭증 = store 스레드의 CUDA event 스핀 대기 단독 (foreground compute가 event
+  완료를 늦추는 동안 8~16 스레드가 busy-wait).
+- TTFT tail = store 작업의 시간 점유 자체 (transport·CPU·GIL 무관 — 순수 sleep으로
+  완전 재현). 기전: store 점유가 요청 경계를 침범 → 블록 delay-free 장기화 →
+  다음 요청 admission 지연·빈 step 공회전. 지연 store가 tail을 고치는 이유는
+  gap에서 store를 완결시켜 경계 침범을 없애기 때문.
+
+## 진행 중
+
+경계 반복(ctrl/native_wait/cuda_only ×3)과 제거 검증(FIX=blocking_event ×3:
+예상 = CPU만 정상화·tail 유지 → 분리 확증).
