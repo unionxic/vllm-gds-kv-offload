@@ -14,7 +14,7 @@ import time
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
-ap.add_argument("--design", required=True, choices=["D", "E"])
+ap.add_argument("--design", required=True, choices=["D", "E", "C"])
 ap.add_argument("--n", type=int, default=150)
 ap.add_argument("--block", type=int, default=64)
 ap.add_argument("--switch-interval", type=float, default=None, help="초 단위 (예: 0.0005)")
@@ -45,10 +45,23 @@ import random  # noqa: E402
 import expfs  # noqa: E402
 import policies  # noqa: E402
 
-policies.install(args.policy)
+if args.design == "C":
+    assert args.policy == "baseline", "C는 기존 tiering 경로 그대로 — policy 불가"
+else:
+    policies.install(args.policy)
+PROF = os.environ.get("PROF_INSTRUMENT") == "1"
+if PROF:
+    import prof_instrument
+    prof_instrument.install()
+if os.environ.get("ISOLATE"):
+    assert args.design == "D", "원인 분해는 D 계열에서만"
+    import prof_isolate
+    prof_isolate.install()
+    meta["isolate"] = {"mode": prof_isolate.MODE, "write_ms": prof_isolate.WRITE_MS}
 worker_holder: list = []
 
-cnt = {"tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0, "matched": 0}
+cnt = {"tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0,
+       "matched": 0, "guard_skips": 0}
 for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
     _r, _w = cls.read_chunk, cls.write_chunk
     def mk(fn, kn, kb):
@@ -70,21 +83,47 @@ def _gmw(self, request, num_computed_tokens):
     return r
 osched.OffloadingConnectorScheduler.get_num_new_matched_tokens = _gmw
 
+# C(tiering) 대조군용: fs 티어 계수 + 종료 race 가드(v0.26.0 workaround)
+import vllm.v1.kv_offload.tiering.fs.manager as fsm  # noqa: E402
+_ol, _os_ = fsm.load_block, fsm.store_block
+def _cl(path, view, off, bs):
+    cnt["tp_read_n"] += 1
+    cnt["tp_read_b"] += bs
+    return _ol(path, view, off, bs)
+def _cs(path, buf, off, bs):
+    cnt["tp_write_n"] += 1
+    cnt["tp_write_b"] += bs
+    return _os_(path, buf, off, bs)
+fsm.load_block, fsm.store_block = _cl, _cs
+import vllm.v1.kv_offload.tiering.manager as tmgr  # noqa: E402
+_ps = tmgr.TieringOffloadingManager.prepare_store
+def _ps_guard(self, keys, req_context):
+    if req_context.req_id not in self._req_state:
+        cnt["guard_skips"] += 1
+        return None
+    return _ps(self, keys, req_context)
+tmgr.TieringOffloadingManager.prepare_store = _ps_guard
+
 from vllm import LLM, SamplingParams  # noqa: E402
 from vllm.config import KVTransferConfig  # noqa: E402
 
 kvroot = os.path.join(HERE, f"kvroot-{args.run_id}")
 shutil.rmtree(kvroot, ignore_errors=True)
+if args.design == "C":
+    extra = {"spec_name": "TieringOffloadingSpec",
+             "cpu_bytes_to_use": 8 << 30, "block_size": 16,
+             "secondary_tiers": [{"type": "fs", "root_dir": kvroot}]}
+else:
+    extra = {"spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
+             "expfs_root_dir": kvroot,
+             "expfs_transport": "cufile" if args.design == "D" else "posix",
+             "expfs_read_threads": args.read_threads,
+             "expfs_write_threads": args.write_threads,
+             "block_size": args.block}
 llm = LLM(model="facebook/opt-2.7b",
           kv_transfer_config=KVTransferConfig(
               kv_connector="OffloadingConnector", kv_role="kv_both",
-              kv_connector_extra_config={
-                  "spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
-                  "expfs_root_dir": kvroot,
-                  "expfs_transport": "cufile" if args.design == "D" else "posix",
-                  "expfs_read_threads": args.read_threads,
-                  "expfs_write_threads": args.write_threads,
-                  "block_size": args.block}),
+              kv_connector_extra_config=extra),
           gpu_memory_utilization=0.7, max_model_len=2048, enforce_eager=True)
 
 tok = llm.get_tokenizer()
@@ -127,6 +166,7 @@ for i, r in enumerate(reqs):
 
 wall = time.perf_counter() - t0_all
 cpu = time.process_time() - c0_all
+meta["io_threads_schedstat"] = snapshot.thread_schedstat()  # 스레드 생존 중 캡처
 try:
     llm.llm_engine.engine_core.shutdown()
 except Exception as e:
@@ -134,6 +174,9 @@ except Exception as e:
 
 meta["end"] = snapshot.collect("end")
 meta["policy_state"] = policies.summary()
+if PROF:
+    meta["prof"] = prof_instrument.summary()
+    print("PROF", json.dumps(meta["prof"], indent=1), flush=True)
 meta["totals"] = dict(wall_s=round(wall, 2), cpu_s=round(cpu, 2), **cnt)
 with open(os.path.join(OUT, "raw.csv"), "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
