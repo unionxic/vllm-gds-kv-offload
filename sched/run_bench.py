@@ -14,7 +14,8 @@ import time
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
-ap.add_argument("--design", required=True, choices=["D", "E", "C"])
+ap.add_argument("--design", required=True, choices=["D", "E", "C", "S"],
+                help="D=cufile E=posix C=tiering S=cufile_staged")
 ap.add_argument("--n", type=int, default=150)
 ap.add_argument("--block", type=int, default=64)
 ap.add_argument("--switch-interval", type=float, default=None, help="초 단위 (예: 0.0005)")
@@ -76,6 +77,12 @@ for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
         return inner
     cls.read_chunk = mk(_r, "tp_read_n", "tp_read_b")
     cls.write_chunk = mk(_w, "tp_write_n", "tp_write_b")
+_ws0 = expfs.StagedCuFileTransport.write_slot
+def _ws_cnt(self, slot, path):
+    cnt["tp_write_n"] += 1
+    cnt["tp_write_b"] += self.chunk_bytes
+    return _ws0(self, slot, path)
+expfs.StagedCuFileTransport.write_slot = _ws_cnt
 
 import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched  # noqa: E402
 
@@ -118,9 +125,10 @@ if args.design == "C":
              "cpu_bytes_to_use": 8 << 30, "block_size": 16,
              "secondary_tiers": [{"type": "fs", "root_dir": kvroot}]}
 else:
+    tname = {"D": "cufile", "E": "posix", "S": "cufile_staged"}[args.design]
     extra = {"spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
              "expfs_root_dir": kvroot,
-             "expfs_transport": "cufile" if args.design == "D" else "posix",
+             "expfs_transport": tname,
              "expfs_read_threads": args.read_threads,
              "expfs_write_threads": args.write_threads,
              "block_size": args.block}
@@ -168,6 +176,10 @@ for i, r in enumerate(reqs):
                      write_ios=d["tp_write_n"], write_b=d["tp_write_b"]))
     policies.on_request_gap(worker_holder)
 
+_w = getattr(expfs, "LAST_WORKER", None)
+if _w is not None and hasattr(_w.transport, "flush"):
+    _w.transport.flush()  # staged 잔여 비동기 쓰기를 wall/CPU에 포함 (생략 아님 증명)
+    meta["staged_write_errors"] = getattr(_w.transport, "write_errors", 0)
 wall = time.perf_counter() - t0_all
 cpu = time.process_time() - c0_all
 meta["io_threads_schedstat"] = snapshot.thread_schedstat()  # 스레드 생존 중 캡처
