@@ -183,3 +183,26 @@ skip은 matched 20,960→8,416(hit 60% 손실, 실제 write 7GB), cpu_fallback�
 한계: 우선순위 4(긴 prefix·재사용 이력 우선 저장)는 worker가 블록만 보고 prefix
 재사용 이력을 못 봐 미구현 — 어느 store를 drop할지가 무작위(도착 순). 재사용 가치
 기반 admission은 스케줄러 계층 정보 필요.
+
+## V1 b256 재검증 (수정된 expfs, Bailian 150, 3회) — 과거 패배 원인 분리
+
+과거 V1+b256에서 cuFile이 tiering에 p50 1.6배 뒤졌다. 원인이 cuFile 자체인지
+event spin·블록 수명 결합인지 분리. V1 chunk=80MiB라 ring 2슬롯(BAR1 제약).
+
+| arm | p95 중앙 | CPU | JOB_HOLD | hit | drop/fb |
+|---|---|---|---|---|---|
+| 기존 tiering | 3.51 | 90s | - | 20,960 | - |
+| cuFile+blocking event | 3.83 | 68s | - | 16,976 | - |
+| cuFile 지연+blocking | 3.84 | 62s | - | 16,976 | - |
+| staging block | 3.85 | 55s | 2,796ms | 16,976 | 0/0 |
+| staging skip | 1.17 | 19s | 517ms | 7,808 | 579/0 |
+| staging cpu_fallback | 2.33 | 44s | 986ms | 13,904 | 218/340 |
+| posix staging(skip) | 1.17 | 17s | - | 8,768 | 575/0 |
+
+판정: 과거 V1+b256 패배는 cuFile transport 탓이 아니다.
+- blocking event만으로 cuFile이 CPU 90→68s, tail은 tiering과 대등(3.5 vs 3.8) —
+  과거 패배 주범 = event spin. 비차단 정책까지 얹으면 tail 1.17s로 tiering 3배 앞섬.
+- 2슬롯 가혹 조건에서도 JOB_HOLD가 block 2,796ms → skip 517/cpufb 986ms(3~5배).
+- posix staging도 skip과 tail 동급(1.17) → 비차단 하에선 transport(cuFile vs posix)
+  차이가 tail에 안 나타남. tail을 만든 건 transport가 아니라 블록 수명 결합.
+- V2 b64 비차단 결과와 정합(skip 최선, cpu_fallback 균형점, hit 트레이드오프 동일).
