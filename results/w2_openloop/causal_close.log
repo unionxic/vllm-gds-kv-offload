@@ -1,0 +1,48 @@
+=== cl-C-c4-r1 ===
+RESULT cl-C-c4-r1 arm=C closed conc=4 rate=- R2 ttft p50=1.312 p95=12.616 tok/s=20.9 wall=219.3s cpu=113.3s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=16501/14646빈 svc=0.584req/s fence=0회/0.0s guard_skips=24 aborted=None
+=== cl-C-p0.3-r1 ===
+RESULT cl-C-p0.3-r1 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.788 p95=5.062 tok/s=12.5 wall=368.3s cpu=180.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=53298/50021빈 svc=0.348req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== cl-D0-c4-r1 ===
+RESULT cl-D0-c4-r1 arm=D0 closed conc=4 rate=- R2 ttft p50=0.825 p95=1.480 tok/s=19.3 wall=238.5s cpu=355.2s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=1845/400빈 svc=0.537req/s fence=33회/73.7s guard_skips=0 aborted=None
+=== cl-D0-p0.3-r1 ===
+RESULT cl-D0-p0.3-r1 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.732 p95=3.892 tok/s=12.5 wall=368.3s cpu=658.7s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=29671/26980빈 svc=0.348req/s fence=23회/31.5s guard_skips=0 aborted=None
+=== cl-D0bev-c4-r1 ===
+RESULT cl-D0bev-c4-r1 arm=D0 closed conc=4 rate=- R2 ttft p50=0.821 p95=1.496 tok/s=19.1 wall=239.9s cpu=153.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=1420/1빈 svc=0.534req/s fence=34회/75.7s guard_skips=0 aborted=None
+=== cl-D0bev-p0.3-r1 ===
+RESULT cl-D0bev-p0.3-r1 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.788 p95=7.308 tok/s=12.5 wall=368.2s cpu=196.2s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=26120/23508빈 svc=0.348req/s fence=20회/37.6s guard_skips=0 aborted=None
+=== cl-D1bev-c4-r1 ===
+RESULT cl-D1bev-c4-r1 arm=D1 closed conc=4 rate=- R2 ttft p50=0.844 p95=1.580 tok/s=19.7 wall=233.2s cpu=155.6s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=2443/1020빈 svc=0.549req/s fence=34회/67.5s guard_skips=0 aborted=None
+=== cl-D1bev-p0.3-r1 ===
+RESULT cl-D1bev-p0.3-r1 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.703 p95=2.658 tok/s=12.5 wall=368.5s cpu=203.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=30230/27268빈 svc=0.347req/s fence=19회/18.8s guard_skips=0 aborted=None
+=== cl-C-c4-r2 ===
+RESULT cl-C-c4-r2 arm=C closed conc=4 rate=- R2 ttft p50=1.240 p95=11.551 tok/s=20.5 wall=223.9s cpu=119.4s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=16101/14122빈 svc=0.572req/s fence=0회/0.0s guard_skips=18 aborted=None
+=== cl-C-p0.3-r2 ===
+RESULT cl-C-p0.3-r2 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.792 p95=4.971 tok/s=12.5 wall=368.3s cpu=183.9s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=63122/60040빈 svc=0.348req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== cl-D0-c4-r2 ===
+RESULT cl-D0-c4-r2 arm=D0 closed conc=4 rate=- R2 ttft p50=0.825 p95=1.715 tok/s=18.6 wall=246.7s cpu=374.5s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=1430/1빈 svc=0.519req/s fence=34회/81.3s guard_skips=0 aborted=None
+=== cl-D0-p0.3-r2 ===
+RESULT cl-D0-p0.3-r2 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.793 p95=21.084 tok/s=12.5 wall=368.3s cpu=751.8s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=29867/27277빈 svc=0.348req/s fence=22회/46.9s guard_skips=0 aborted=None
+=== cl-D0bev-c4-r2 ===
+RESULT cl-D0bev-c4-r2 arm=D0 closed conc=4 rate=- R2 ttft p50=0.826 p95=1.590 tok/s=19.2 wall=238.9s cpu=155.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=2237/808빈 svc=0.536req/s fence=34회/73.6s guard_skips=0 aborted=None
+=== cl-D0bev-p0.3-r2 ===
+RESULT cl-D0bev-p0.3-r2 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.768 p95=20.114 tok/s=12.5 wall=368.2s cpu=198.7s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=31022/28426빈 svc=0.348req/s fence=21회/50.6s guard_skips=0 aborted=None
+=== cl-D1bev-c4-r2 ===
+RESULT cl-D1bev-c4-r2 arm=D1 closed conc=4 rate=- R2 ttft p50=0.846 p95=1.518 tok/s=18.3 wall=250.8s cpu=157.9s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=2283/850빈 svc=0.510req/s fence=33회/84.7s guard_skips=0 aborted=None
+=== cl-D1bev-p0.3-r2 ===
+RESULT cl-D1bev-p0.3-r2 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.721 p95=4.246 tok/s=12.5 wall=368.4s cpu=196.9s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=30207/27491빈 svc=0.347req/s fence=22회/30.6s guard_skips=0 aborted=None
+=== cl-C-c4-r3 ===
+RESULT cl-C-c4-r3 arm=C closed conc=4 rate=- R2 ttft p50=2.287 p95=11.157 tok/s=20.6 wall=223.4s cpu=117.4s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=17007/14993빈 svc=0.573req/s fence=0회/0.0s guard_skips=24 aborted=None
+=== cl-C-p0.3-r3 ===
+RESULT cl-C-p0.3-r3 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.799 p95=9.842 tok/s=12.5 wall=368.4s cpu=193.4s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=70481/67413빈 svc=0.347req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== cl-D0-c4-r3 ===
+RESULT cl-D0-c4-r3 arm=D0 closed conc=4 rate=- R2 ttft p50=0.852 p95=1.732 tok/s=17.9 wall=256.0s cpu=346.6s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=3488/2028빈 svc=0.500req/s fence=34회/90.1s guard_skips=0 aborted=None
+=== cl-D0-p0.3-r3 ===
+RESULT cl-D0-p0.3-r3 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.734 p95=3.938 tok/s=12.5 wall=368.4s cpu=705.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=29440/26764빈 svc=0.347req/s fence=25회/33.6s guard_skips=0 aborted=None
+=== cl-D0bev-c4-r3 ===
+RESULT cl-D0bev-c4-r3 arm=D0 closed conc=4 rate=- R2 ttft p50=0.842 p95=1.658 tok/s=19.1 wall=240.1s cpu=155.6s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=1961/519빈 svc=0.533req/s fence=35회/74.8s guard_skips=0 aborted=None
+=== cl-D0bev-p0.3-r3 ===
+RESULT cl-D0bev-p0.3-r3 arm=D0 poisson conc=1 rate=0.3 R2 ttft p50=0.804 p95=7.790 tok/s=12.5 wall=368.5s cpu=195.7s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=36487/33933빈 svc=0.347req/s fence=25회/43.9s guard_skips=0 aborted=None
+=== cl-D1bev-c4-r3 ===
+RESULT cl-D1bev-c4-r3 arm=D1 closed conc=4 rate=- R2 ttft p50=0.841 p95=1.711 tok/s=18.9 wall=243.0s cpu=155.2s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=2604/1149빈 svc=0.527req/s fence=34회/77.6s guard_skips=0 aborted=None
+=== cl-D1bev-p0.3-r3 ===
+RESULT cl-D1bev-p0.3-r3 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.758 p95=20.269 tok/s=12.5 wall=368.2s cpu=199.2s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=27704/25084빈 svc=0.348req/s fence=25회/49.7s guard_skips=0 aborted=None
