@@ -213,9 +213,19 @@ class StagedCuFileTransport(CuFileTransport):
 
     def __init__(self, flat_tensors: list[torch.Tensor], chunk_bytes: int,
                  n_slots: int, n_writers: int, register_ring: bool,
-                 io_kind: str = "cufile"):
+                 io_kind: str = "cufile", policy: str = "block",
+                 max_outstanding_write_bytes: int | None = None,
+                 cpu_fallback_slots: int = 0):
         super().__init__(flat_tensors, "unregistered")
         self.io_kind = io_kind  # "cufile" | "posix" (호스트 pinned 링 + pwrite)
+        # policy: "block"(v3.1, 슬롯 대기) | "skip"(포화 시 저장 생략)
+        #         | "cpu_fallback"(포화 시 D2H 후 CPU에서 write)
+        self.policy = policy
+        self.max_ob = max_outstanding_write_bytes
+        self._ob = 0  # outstanding write bytes (in-flight SSD write)
+        self.stats = dict(ring_used=0, fallback=0, dropped=0, slot_full=0,
+                          ob_full=0, read_deferred=0)
+        self._read_active = 0  # SSD read in-flight (read-priority용)
         if io_kind == "posix":
             self.name = "posix_staged"
         self.flat1d = [t.view(-1) for t in flat_tensors]
@@ -245,7 +255,20 @@ class StagedCuFileTransport(CuFileTransport):
         self._free: queue.Queue[int] = queue.Queue()
         for i in range(n_slots):
             self._free.put(i)
+        # CPU fallback 풀: 포화 시 D2H 복사 대상 (호스트 pinned, 4KiB 정렬)
+        self.n_cpu = cpu_fallback_slots
+        self._cpu_free: queue.Queue[int] = queue.Queue()
+        if cpu_fallback_slots > 0:
+            craw = torch.zeros(cpu_fallback_slots * chunk_bytes + ALIGN,
+                               dtype=torch.uint8, pin_memory=True)
+            cali = (-craw.data_ptr()) % ALIGN
+            self._craw = craw
+            self.cpu_ring = craw[cali: cali + cpu_fallback_slots * chunk_bytes].view(
+                cpu_fallback_slots, chunk_bytes)
+            for i in range(cpu_fallback_slots):
+                self._cpu_free.put(i)
         self._wq: queue.Queue = queue.Queue()
+        self._lock = threading.Lock()
         self.write_errors = 0
         self._writers = [
             threading.Thread(target=self._writer_loop, daemon=True,
@@ -273,9 +296,14 @@ class StagedCuFileTransport(CuFileTransport):
         except queue.Empty:
             return None
 
-    def launch_copy(self, ev: torch.cuda.Event, slot: int, spans):
-        """복사를 side stream에 비동기 인큐하고 완료 event를 반환 (대기 없음)."""
-        dst = self.ring[slot]
+    def try_acquire_cpu(self):
+        try:
+            return self._cpu_free.get_nowait()
+        except queue.Empty:
+            return None
+
+    def _launch_into(self, dst, ev, spans):
+        """dst(ring slot 또는 cpu buffer)로 span들을 비동기 복사, 완료 event 반환."""
         side = self._side_stream()
         with torch.cuda.stream(side):
             side.wait_event(ev)  # compute 의존은 GPU 안에서
@@ -287,8 +315,35 @@ class StagedCuFileTransport(CuFileTransport):
             done.record(side)
         return done
 
-    def writer_submit(self, slot: int, path: str):
-        self._wq.put((slot, path))
+    def launch_copy(self, ev: torch.cuda.Event, slot: int, spans):
+        """ring slot으로 D2D 복사 (source_released = 이 event fire)."""
+        return self._launch_into(self.ring[slot], ev, spans)
+
+    def launch_cpu_copy(self, ev: torch.cuda.Event, cslot: int, spans):
+        """CPU fallback buffer로 D2H 복사 (source_released = 이 event fire)."""
+        return self._launch_into(self.cpu_ring[cslot], ev, spans)
+
+    def writer_submit(self, slot: int, path: str, kind: str = "ring"):
+        # store_committed = writer가 SSD write+rename 완료 시점 (D2D/D2H 완료 ≠ commit)
+        with self._lock:
+            self._ob += self.chunk_bytes
+        self._wq.put((kind, slot, path))
+
+    def outstanding_write_bytes(self):
+        with self._lock:
+            return self._ob
+
+    def note_read_begin(self):
+        with self._lock:
+            self._read_active += 1
+
+    def note_read_end(self):
+        with self._lock:
+            self._read_active = max(0, self._read_active - 1)
+
+    def reads_active(self):
+        with self._lock:
+            return self._read_active > 0
 
     def stage_chunk(self, ev: torch.cuda.Event, path: str, spans):
         """(v3 경로, 참조용 보존) IO 스레드에서 실행. 반환 = 복사 완료."""
@@ -314,34 +369,43 @@ class StagedCuFileTransport(CuFileTransport):
                 pass
             self._free.put(slot)
             raise
-        self._wq.put((slot, path))
+        self.writer_submit(slot, path, "ring")
 
     def _writer_loop(self):
         while True:
             item = self._wq.get()
             if item is None:
                 return
-            slot, path = item
+            kind, slot, path = item
             try:
                 with torch.cuda.nvtx.range("STAGE_WRITE"):
-                    self.write_slot(slot, path)
+                    self.write_slot(slot, path, kind)
             except Exception as e:
                 # 파일 부재 = 이후 lookup miss = 재계산 폴백이라 안전. 계수만.
                 self.write_errors += 1
                 logger.error("expfs staged write failed for %s: %s", path, e)
             finally:
-                self._free.put(slot)
+                with self._lock:
+                    self._ob -= self.chunk_bytes
+                if kind == "cpu":
+                    self._cpu_free.put(slot)
+                else:
+                    self._free.put(slot)
 
-    def write_slot(self, slot: int, path: str):
+    def write_slot(self, slot: int, path: str, kind: str = "ring"):
+        # kind="cpu"면 호스트 pinned buffer에서 pwrite (GPU-direct 불가)
+        src_ptr = (self.cpu_ring[slot].data_ptr() if kind == "cpu"
+                   else self.ring[slot].data_ptr())
+        use_cufile = (self.io_kind == "cufile" and kind == "ring")
         tmp = f"{path}.{os.getpid()}.{threading.get_ident()}.tmp"
         os.makedirs(os.path.dirname(path), exist_ok=True)
         fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_RDWR
                      | getattr(os, "O_DIRECT", 0), 0o644)
         try:
-            if self.io_kind == "posix":
+            if not use_cufile:
                 import ctypes
                 mv = memoryview((ctypes.c_char * self.chunk_bytes).from_address(
-                    self.ring[slot].data_ptr()))
+                    src_ptr))
                 off = 0
                 while off < self.chunk_bytes:
                     off += os.pwrite(fd, mv[off:], off)
@@ -370,10 +434,12 @@ class StagedCuFileTransport(CuFileTransport):
     def flush(self, timeout: float = 60.0) -> bool:
         """잔여 쓰기 완료 대기 — 종료·검증·wall 확정용. True = 전량 배출."""
         deadline = time.monotonic() + timeout
-        while (not self._wq.empty() or self._free.qsize() < self.n_slots):
+        while (not self._wq.empty() or self._free.qsize() < self.n_slots
+               or self._cpu_free.qsize() < self.n_cpu):
             if time.monotonic() > deadline:
-                logger.warning("expfs staged flush timeout: wq=%d free=%d/%d",
-                               self._wq.qsize(), self._free.qsize(), self.n_slots)
+                logger.warning("expfs staged flush timeout: wq=%d free=%d/%d cpu=%d/%d",
+                               self._wq.qsize(), self._free.qsize(), self.n_slots,
+                               self._cpu_free.qsize(), self.n_cpu)
                 return False
             time.sleep(0.002)
         return True
@@ -507,10 +573,14 @@ class FilesystemWorker(OffloadingWorker):
         n_write_threads: int,
         staging_slots: int = 6,
         staging_writers: int = 2,
+        staging_policy: str = "block",
+        max_outstanding_write_bytes: int | None = None,
+        cpu_fallback_slots: int = 0,
     ):
         assert len(kv_caches.group_data_refs) == 1, (
             "expfs prototype: single KV cache group only")
         self.bpc = blocks_per_chunk
+        self.staging_policy = staging_policy
 
         self.flat: list[torch.Tensor] = []
         self.page_sizes: list[int] = []
@@ -533,7 +603,10 @@ class FilesystemWorker(OffloadingWorker):
             self.transport = StagedCuFileTransport(
                 self.flat, self.chunk_bytes, staging_slots, staging_writers,
                 register_ring=(cufile_mode != "unregistered_ring"),
-                io_kind=("posix" if transport_name == "posix_staged" else "cufile"))
+                io_kind=("posix" if transport_name == "posix_staged" else "cufile"),
+                policy=staging_policy,
+                max_outstanding_write_bytes=max_outstanding_write_bytes,
+                cpu_fallback_slots=cpu_fallback_slots)
         elif transport_name == "posix":
             self.transport = PosixBounceTransport(self.flat, self.chunk_bytes)
         else:
@@ -545,6 +618,7 @@ class FilesystemWorker(OffloadingWorker):
         self._drained: list[TransferResult] = []
         # v3.1 staged: job_id -> [entry], entry = {ev, path, spans, slot, done, committed}
         self._staged_jobs: dict[int, list[dict]] = {}
+        self._load_jobs: set[int] = set()
         global LAST_WORKER
         LAST_WORKER = self
         logger.info(
@@ -612,7 +686,7 @@ class FilesystemWorker(OffloadingWorker):
             # 폴링으로 보고. 블록 점유 = 실제 복사 완료 시점.
             self._staged_jobs[job_id] = [
                 dict(ev=ev, path=path, spans=self._chunk_spans(bids, j0),
-                     slot=None, done=None, committed=False)
+                     slot=None, done=None, committed=False, mode=None)
                 for path, bids, j0 in parts]
             self._pending.add(job_id)
             self._advance_staged()
@@ -623,6 +697,47 @@ class FilesystemWorker(OffloadingWorker):
         self.pool.enqueue_store(job_id, len(tasks), tasks)
         return True
 
+    def _admit(self, e):
+        """한 chunk entry의 복사를 시작(비차단). ring→cpu fallback→skip 순.
+        어느 경로든 원본 블록은 이 복사(D2D/D2H) 완료로 해제 — 슬롯 대기 없음.
+        반환 False = 아직 시작 못함(block 정책에서 슬롯 대기 재시도)."""
+        tr = self.transport
+        pol = self.staging_policy
+        # (6) outstanding write bytes 상한 + (5) read-priority
+        # 주의: _admit/_advance_staged/submit_store는 엔진 단일 스레드에서만 호출됨.
+        # 아래 cap 검사와 writer_submit의 _ob 증가가 별도 lock이라도 admission이
+        # 단일 스레드라 오버슛 없음. 멀티워커 포팅 시 이 전제가 깨지니 유의.
+        ob_full = (tr.max_ob is not None
+                   and tr.outstanding_write_bytes() + self.chunk_bytes > tr.max_ob)
+        read_hold = (pol != "block" and tr.reads_active())
+        if not ob_full and not read_hold:
+            s = tr.try_acquire_slot()
+            if s is not None:
+                e["slot"], e["mode"] = s, "ring"
+                e["done"] = tr.launch_copy(e["ev"], s, e["spans"])
+                tr.stats["ring_used"] += 1
+                return True
+            tr.stats["slot_full"] += 1
+        elif ob_full:
+            tr.stats["ob_full"] += 1
+        elif read_hold:
+            tr.stats["read_deferred"] += 1
+        # 포화/보류 상태. block 정책이면 대기(재시도), 아니면 비차단 처리:
+        if pol == "block":
+            return False
+        if pol == "cpu_fallback" and tr.n_cpu > 0:
+            c = tr.try_acquire_cpu()
+            if c is not None:
+                e["slot"], e["mode"] = c, "cpu"
+                e["done"] = tr.launch_cpu_copy(e["ev"], c, e["spans"])
+                tr.stats["fallback"] += 1
+                return True
+        # skip 정책 또는 cpu 버퍼도 없음 → 저장 생략(원본 즉시 해제, 파일 없음=miss)
+        e["mode"] = "drop"
+        e["committed"] = True
+        tr.stats["dropped"] += 1
+        return True
+
     def _advance_staged(self):
         """슬롯 획득·복사 인큐·완료 폴링을 한 바퀴 진행 (비차단, 엔진 스레드)."""
         tr = self.transport
@@ -631,14 +746,13 @@ class FilesystemWorker(OffloadingWorker):
             for e in entries:
                 if e["committed"]:
                     continue
-                if e["slot"] is None:
-                    s = tr.try_acquire_slot()
-                    if s is None:
-                        continue  # ring 포화 — 다음 폴링에서 재시도 (backpressure)
-                    e["slot"] = s
-                    e["done"] = tr.launch_copy(e["ev"], e["slot"], e["spans"])
+                if e["slot"] is None and e["mode"] != "drop":
+                    if not self._admit(e):
+                        continue  # block 정책: 슬롯 없음 — 다음 폴링 재시도
+                    if e["mode"] == "drop":
+                        continue
                 if e["done"].query():  # 비차단
-                    tr.writer_submit(e["slot"], e["path"])
+                    tr.writer_submit(e["slot"], e["path"], e["mode"])
                     e["committed"] = True
             if all(e["committed"] for e in entries):
                 done_jobs.append(job_id)
@@ -653,6 +767,9 @@ class FilesystemWorker(OffloadingWorker):
         tasks = [partial(self._load_task, path, self._chunk_spans(bids, j0))
                  for path, bids, j0 in parts]
         self._pending.add(job_id)
+        if isinstance(self.transport, StagedCuFileTransport):
+            self._load_jobs.add(job_id)
+            self.transport.note_read_begin()  # (5) read-priority: write 보류 신호
         self.pool.enqueue_load(job_id, len(tasks), tasks)
         return True
 
@@ -661,6 +778,9 @@ class FilesystemWorker(OffloadingWorker):
             self._advance_staged()
         for job_id, success in self.pool.get_finished():
             self._pending.discard(job_id)
+            if job_id in self._load_jobs:
+                self._load_jobs.discard(job_id)
+                self.transport.note_read_end()
             self._drained.append(TransferResult(job_id=job_id, success=success))
 
     def get_finished(self) -> list[TransferResult]:
@@ -675,6 +795,14 @@ class FilesystemWorker(OffloadingWorker):
                 time.sleep(0.0005)
 
     def shutdown(self) -> None:
+        # block 정책에서 슬롯을 못 받고 남은 staged job을 강제 완주 (QA 결함 2:
+        # 미admit entry가 flush 조건에 안 걸려 영구 미완료되는 것 방지)
+        if self._staged_jobs:
+            deadline = time.monotonic() + 60.0
+            while self._staged_jobs and time.monotonic() < deadline:
+                self._advance_staged()
+                if self._staged_jobs:
+                    time.sleep(0.001)
         self.pool.shutdown(wait=True)
         self.transport.close()
 
@@ -695,6 +823,11 @@ class ExperimentalFilesystemSpec(OffloadingSpec):
         self.n_write_threads = int(self.extra_config.get("expfs_write_threads", 8))
         self.staging_slots = int(self.extra_config.get("expfs_staging_slots", 6))
         self.staging_writers = int(self.extra_config.get("expfs_staging_writers", 2))
+        self.staging_policy = self.extra_config.get("expfs_staging_policy", "block")
+        mob = self.extra_config.get("expfs_max_outstanding_write_bytes")
+        self.max_ob = int(mob) if mob else None
+        self.cpu_fallback_slots = int(
+            self.extra_config.get("expfs_cpu_fallback_slots", 0))
         self._manager: FilesystemManager | None = None
         self._worker: FilesystemWorker | None = None
 
@@ -720,5 +853,6 @@ class ExperimentalFilesystemSpec(OffloadingSpec):
             self._worker = FilesystemWorker(
                 kv_caches, self.blocks_per_chunk, self.transport_name, self.cufile_mode,
                 self.n_read_threads, self.n_write_threads,
-                self.staging_slots, self.staging_writers)
+                self.staging_slots, self.staging_writers,
+                self.staging_policy, self.max_ob, self.cpu_fallback_slots)
         return self._worker

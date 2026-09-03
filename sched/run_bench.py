@@ -18,6 +18,11 @@ ap.add_argument("--design", required=True, choices=["D", "E", "C", "S", "P"],
                 help="D=cufile E=posix C=tiering S=cufile_staged P=posix_staged")
 ap.add_argument("--staging-slots", type=int, default=6,
                 help="staged ring 슬롯 수 (V1 b256은 chunk 80MiB라 2 권장)")
+ap.add_argument("--staging-policy", default="block",
+                choices=["block", "skip", "cpu_fallback"])
+ap.add_argument("--cpu-fallback-slots", type=int, default=0)
+ap.add_argument("--max-ob-bytes", type=int, default=None,
+                help="outstanding write bytes 상한")
 ap.add_argument("--n", type=int, default=150)
 ap.add_argument("--block", type=int, default=64)
 ap.add_argument("--switch-interval", type=float, default=None, help="초 단위 (예: 0.0005)")
@@ -80,10 +85,10 @@ for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
     cls.read_chunk = mk(_r, "tp_read_n", "tp_read_b")
     cls.write_chunk = mk(_w, "tp_write_n", "tp_write_b")
 _ws0 = expfs.StagedCuFileTransport.write_slot
-def _ws_cnt(self, slot, path):
+def _ws_cnt(self, slot, path, kind="ring"):
     cnt["tp_write_n"] += 1
     cnt["tp_write_b"] += self.chunk_bytes
-    return _ws0(self, slot, path)
+    return _ws0(self, slot, path, kind)
 expfs.StagedCuFileTransport.write_slot = _ws_cnt
 
 import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched  # noqa: E402
@@ -135,6 +140,9 @@ else:
              "expfs_read_threads": args.read_threads,
              "expfs_write_threads": args.write_threads,
              "expfs_staging_slots": args.staging_slots,
+             "expfs_staging_policy": args.staging_policy,
+             "expfs_cpu_fallback_slots": args.cpu_fallback_slots,
+             "expfs_max_outstanding_write_bytes": args.max_ob_bytes,
              "block_size": args.block}
 llm = LLM(model="facebook/opt-2.7b",
           kv_transfer_config=KVTransferConfig(
@@ -184,6 +192,7 @@ _w = getattr(expfs, "LAST_WORKER", None)
 if _w is not None and hasattr(_w.transport, "flush"):
     _w.transport.flush()  # staged 잔여 비동기 쓰기를 wall/CPU에 포함 (생략 아님 증명)
     meta["staged_write_errors"] = getattr(_w.transport, "write_errors", 0)
+    meta["staged_stats"] = dict(getattr(_w.transport, "stats", {}))
 wall = time.perf_counter() - t0_all
 cpu = time.process_time() - c0_all
 meta["io_threads_schedstat"] = snapshot.thread_schedstat()  # 스레드 생존 중 캡처

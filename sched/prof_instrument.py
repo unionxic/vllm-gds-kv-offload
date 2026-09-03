@@ -126,17 +126,17 @@ def install():
     ST = expfs.StagedCuFileTransport
     _stage_end = {}
     _wsub = ST.writer_submit
-    def writer_submit_t(self, slot, path):
+    def writer_submit_t(self, slot, path, kind="ring"):
         with _lock:
             _stage_end[path] = time.perf_counter_ns()
         if not os.path.exists(path):
             _acc("staged.completed_before_file", 0)  # 분리 증거 계수
-        return _wsub(self, slot, path)
+        return _wsub(self, slot, path, kind)
     ST.writer_submit = writer_submit_t
     _wsl = ST.write_slot
-    def write_slot_t(self, slot, path):
+    def write_slot_t(self, slot, path, kind="ring"):
         with _timed("store.WRITE_SLOT"):
-            r = _wsl(self, slot, path)
+            r = _wsl(self, slot, path, kind)
         with _lock:
             ts = _stage_end.pop(path, None)
         if ts:

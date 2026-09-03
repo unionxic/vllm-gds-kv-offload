@@ -26,9 +26,9 @@ def child(role, transport, kvroot, out_path):
         return _rc(self, path, spans, cb)
     expfs.CuFileTransport.read_chunk = rc
     _ws = expfs.StagedCuFileTransport.write_slot
-    def ws(self, slot, path):
+    def ws(self, slot, path, kind="ring"):
         cnt["w"] += 1
-        return _ws(self, slot, path)
+        return _ws(self, slot, path, kind)
     expfs.StagedCuFileTransport.write_slot = ws
     _wc = expfs.CuFileTransport.write_chunk
     def wc(self, path, spans, cb):

@@ -76,10 +76,10 @@ for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
     cls.read_chunk = mk(_r, "tp_read_n", "tp_read_b")
     cls.write_chunk = mk(_w, "tp_write_n", "tp_write_b")
 _ws0 = expfs.StagedCuFileTransport.write_slot
-def _ws_cnt(self, slot, path):
+def _ws_cnt(self, slot, path, kind="ring"):
     cnt["tp_write_n"] += 1
     cnt["tp_write_b"] += self.chunk_bytes
-    return _ws0(self, slot, path)
+    return _ws0(self, slot, path, kind)
 expfs.StagedCuFileTransport.write_slot = _ws_cnt
 import vllm.v1.kv_offload.tiering.fs.manager as fsm  # noqa: E402
 _ol, _os_ = fsm.load_block, fsm.store_block
