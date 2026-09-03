@@ -1,0 +1,5 @@
+RESULT fg-Sstag-sl12 S pol=baseline n=150 p50=1.272 p95=5.380 p99=7.563 wall=291.7s cpu=105.5s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+  File "<string>", line 5
+    print(f'  slots=12 JOB_HOLD mean={jh.get("mean_us",0)/1e3:.0f}ms n={jh.get("n")} write_mean={p.get("cufile.CUFILE_WRITE",{}).get("mean_us",0)/1e3:.0f}ms ring_reg={m.get("staged_write_errors")==0}'
+         ^
+SyntaxError: '(' was never closed
