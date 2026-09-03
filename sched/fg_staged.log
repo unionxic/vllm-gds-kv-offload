@@ -1,0 +1,6 @@
+=== fg-Sstag-r1 ===
+RESULT fg-Sstag-r1 S pol=baseline n=150 p50=1.168 p95=5.434 p99=7.075 wall=309.9s cpu=98.7s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-Sstag-r2 ===
+RESULT fg-Sstag-r2 S pol=baseline n=150 p50=1.171 p95=5.672 p99=7.097 wall=308.2s cpu=98.8s matched=19936 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== fg-Sstag-r3 ===
+RESULT fg-Sstag-r3 S pol=baseline n=150 p50=1.165 p95=4.795 p99=6.639 wall=294.6s cpu=96.3s matched=19936 maxOutW=3 maxOutR=1 forced=0 gap=0
