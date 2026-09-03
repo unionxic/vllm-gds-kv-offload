@@ -334,3 +334,29 @@ CPU 폭증은 CUDA event sync 단독으로 최대 재현되고 그때 tail은 �
 일반화 범위. event 스핀은 CUDA의 일반 동작이라 rain 한정이 아니며(코어 수와 GPU 세대에 따라 정도 차이는 있을 수 있음, 타 서버 재현은 미실시), store 경계 침범은 vLLM 블록 수명 구조의 일반 성질이다. "vLLM production이 GDS를 기본 경로로 쓰지 않는 이유"에 대한 이 실험의 증거 기반 답: GDS transport 자체는 결격이 아니고(load에서 우위 반복 확립, write 속도 동일), 결격은 worker 쪽 store 실행이 추론과 자원·블록 수명을 공유하는 구조에서 온다. GDS를 서빙에 넣으려면 transport가 아니라 store의 실행 시점(admission)과 event 대기 방식, 블록 수명 분리를 함께 설계해야 한다.
 
 산출물: sched/prof/analysis_notes.md(전체 수치), sched/prof_instrument.py(계측), sched/prof_isolate.py(격리), sched/prof_fix.py(제거 검증), nsys 리포트와 py-spy speedscope는 용량 문제로 로컬 보존(sched/prof/).
+
+#### GPU staging ring과 비차단 저장 정책
+
+원인 규명이 지목한 tail 원인(store의 GPU 블록 수명이 SSD 쓰기에 결합)에 대한 설계 응답. KV 블록을 GPU staging ring으로 D2D 복사한 뒤 그 슬롯에서 cuFile로 쓴다. store job 완료를 복사 완료 시점으로 정의해 원본 블록을 즉시 반환하고, SSD 쓰기는 writer 스레드가 비동기로 수행한다. tiering이 CPU 복사로 얻던 수명 분리를 GPU 안에서 재현하는 셈이다.
+
+기능 검증: 저장 파일이 기존 cuFile 산출과 바이트 동일, 새 프로세스 재로드에서 토큰 일치, ring 등록 direct 경로(TRACE에서 bounce 0), 원본 블록 반환 후 즉시 덮어써도 checksum 유지. 완료 보고와 SSD commit이 분리됨을 계측으로 확인(completed_before_file = 전 chunk).
+
+Bailian 150(V2 b64, 3회)에서 CPU는 동시저장 1,074초에서 staging 97초로 완전히 정상화됐으나 tail은 p95 5.4초로 남았다. 계측이 원인을 규명했다. JOB_HOLD(GPU 블록 점유)가 4.8초로 여전히 컸고, 원인은 ring slot 고갈이다. 동시 실행 중 cuFile write가 chunk당 177밀리초(마이크로벤치의 30배, foreground와 경합)이고 슬롯이 유한하니, 블록이 복사 완료가 아니라 슬롯이 빌 때까지(=이전 SSD write까지) 잡힌다. slot을 6에서 12로 늘려도 JOB_HOLD가 4.8초에서 4.2초로 거의 안 줄어 slot-depth가 아니라 write-throughput 병목임이 확인됐다.
+
+해결은 비차단 admission이다. 포화 시 원본 블록을 붙잡지 않고 즉시 처리한다. skip은 저장을 생략(원본 즉시 해제, 파일 없음=miss), cpu_fallback은 D2H로 CPU pinned 버퍼에 복사(원본 해제)한 뒤 CPU에서 쓴다. 어느 경로든 블록은 유한 복사로만 해제되고 슬롯을 기다리지 않는다.
+
+Bailian 150·600, 양 러너에서 3회씩. skip과 cpu_fallback이 JOB_HOLD를 block의 5,312밀리초에서 517~986밀리초로 낮췄고(7~10배), 슬롯 대기 재폴링이 843만 회에서 2.5천 회로 사라졌다. tail은 block·tiering의 5~6.6초에서 1.3초로, CPU는 최저로 떨어졌다. 대가는 storage hit 손실(skip 47~60%, cpu_fallback 34~35%)로, cpu_fallback이 tail은 skip과 동급이면서 hit를 더 지키는 균형점이다.
+
+정확성 요건은 QA 에이전트 적대적 리뷰로 검증했다. 발견된 ship-blocker 2건(하네스 계수 래퍼의 인자 불일치로 write가 조용히 실패, block 정책 종료 시 미admit job 누수)을 수정 후 재검증했다. 600요청 확장과 V1 b256에서도 결론이 재현됐다. V1 b256 재검증은 과거 V1+b256 패배가 cuFile transport가 아니라 event spin과 블록 수명 결합 탓임을 분리 확인했다(blocking event만으로 tiering과 대등, 비차단으로 3배 우위). posix staging도 cuFile staging과 tail이 동일해, 이득의 원천이 transport가 아님을 재확증했다.
+
+#### Prefix Value Admission — 무엇을 저장할지
+
+비차단 정책의 admission이 도착 순서(random skip)라, 버리는 저장이 어떤 KV인지 고려하지 않는다. 저장 가치가 높은 KV를 골라 저장하면 같은 tail에서 hit 손실을 줄일 수 있다. scheduler가 store 후보 chunk의 관측 이력(빈도, 재사용 거리)으로 value를 산출해 worker에 admission hint(GDS_RING/CPU_FALLBACK/DROP + priority)를 내리고, worker가 압박과 결합하는 구조를 구현했다.
+
+오프라인 시뮬레이션 게이트: Bailian 600 trace에서 value/reuse-distance 신호가 arrival-order random 대비 useful hit/GiB 효율 2배(V1 633→1,183, V2 477→1,174), wasted write 84%→53%. future-reuse oracle이 상한을 형성. 신호 예측력이 확인돼 구현으로 진행했다.
+
+Bailian 150·600, 양 러너: seen-twice 빈도 필터가 random을 이겼다. 150 V2에서 hit +29%(10,976 대 8,480)를 write 63% 절감(2.7 대 7.3GiB)으로 달성, 같은 tail. hit/GiB 4,014로 오프라인 oracle 효율에 근접. random이 일회성 chunk에 슬롯을 낭비하고 포화 시 재사용 chunk를 맹목 drop하는 반면 seen-twice는 재등장 chunk만 저장하기 때문이다. 600에서는 hit 격차가 좁혀지고(+5~10%) write 효율 격차가 넓어졌다(2배). reuse-distance 정교화(value_density)는 Bailian에서 seen-twice와 동일했다. 워킹셋 200GiB가 GPU+CPU 13.5GiB를 크게 넘어 짧은 거리 재사용도 evict되므로, 요청-거리 기반 evict 예측이 변별력을 못 가졌다.
+
+혼합 workload가 이 결론을 조건부화했다. real-text synthetic-interleaving admission workload를 만들어(one_shot·near_reuse·far_reuse·repeated를 의도적으로 섞음) 카테고리별 useful hit을 쟀다. seen-twice는 far_reuse(먼 거리 1회 재사용)에서 useful hit이 0이었다. 2번째 등장에서 저장하는데 far_reuse는 2회만 등장해 저장이 도움될 3번째가 없기 때문이다. 이 far_reuse가 Mooncake가 SSD의 표적으로 지목한 10.3% cold 재사용에 해당한다. 반면 1번째 등장에서 저장하는 random은 far_reuse의 2번째를 잡았고(V1 far_hit 2,928, V2 2,880), 총 useful hit도 random이 seen-twice를 앞섰다. Bailian과 정반대다. 양 러너에서 동일하게 재현됐다.
+
+결론: 최적 admission 정책은 재사용 구조에 의존한다. 반복형 재사용에서는 빈도 필터가 낭비를 최소화하며 이기고, cold-tail 재사용에서는 1번째 등장 저장에 one_shot만 예측 drop하는 정책이 필요하다(빈도 필터와 정반대 방향). 재사용 구조를 감지해 전환하는 하이브리드가 이상적이며, 1번째 등장에서 cold-tail을 예측하는 신호(재사용 거리는 사후에만 알 수 있어 못 씀) 설계가 향후 과제다. 이로써 이 실험의 결정 축이 하나 더 확장된다. transport(무관) → store 실행 구조(수명 분리·비차단) → admission(무엇을 저장, workload 의존).

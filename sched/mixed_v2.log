@@ -1,0 +1,24 @@
+=== mix-v2-C-r1 ===
+RESULT mix-v2-C-r1 arm=C p95=5.175 matched=110320 write=0.00GB far_hit=28576 near_hit=26656 rep_hit=55072 wall=230s cpu=170s
+=== mix-v2-Sskip-r1 ===
+RESULT mix-v2-Sskip-r1 arm=Sskip p95=1.712 matched=11584 write=7.99GB far_hit=2944 near_hit=1776 rep_hit=6864 wall=203s cpu=31s
+=== mix-v2-Sseen-r1 ===
+RESULT mix-v2-Sseen-r1 arm=Sseen p95=1.512 matched=10800 write=12.73GB far_hit=0 near_hit=0 rep_hit=10800 wall=202s cpu=54s
+=== mix-v2-Svalue-r1 ===
+RESULT mix-v2-Svalue-r1 arm=Svalue p95=1.746 matched=10224 write=12.73GB far_hit=0 near_hit=0 rep_hit=10224 wall=203s cpu=53s
+=== mix-v2-C-r2 ===
+RESULT mix-v2-C-r2 arm=C p95=5.118 matched=110320 write=0.00GB far_hit=28576 near_hit=26656 rep_hit=55072 wall=224s cpu=164s
+=== mix-v2-Sskip-r2 ===
+RESULT mix-v2-Sskip-r2 arm=Sskip p95=1.653 matched=11824 write=8.20GB far_hit=2880 near_hit=1840 rep_hit=7104 wall=202s cpu=31s
+=== mix-v2-Sseen-r2 ===
+RESULT mix-v2-Sseen-r2 arm=Sseen p95=1.358 matched=10528 write=13.03GB far_hit=0 near_hit=0 rep_hit=10528 wall=202s cpu=54s
+=== mix-v2-Svalue-r2 ===
+RESULT mix-v2-Svalue-r2 arm=Svalue p95=1.253 matched=11104 write=12.89GB far_hit=0 near_hit=0 rep_hit=11104 wall=201s cpu=54s
+=== mix-v2-C-r3 ===
+RESULT mix-v2-C-r3 arm=C p95=5.635 matched=110320 write=0.00GB far_hit=28576 near_hit=26656 rep_hit=55072 wall=219s cpu=160s
+=== mix-v2-Sskip-r3 ===
+RESULT mix-v2-Sskip-r3 arm=Sskip p95=1.701 matched=11568 write=7.99GB far_hit=2688 near_hit=1840 rep_hit=7040 wall=203s cpu=32s
+=== mix-v2-Sseen-r3 ===
+RESULT mix-v2-Sseen-r3 arm=Sseen p95=1.800 matched=10544 write=12.70GB far_hit=0 near_hit=0 rep_hit=10544 wall=202s cpu=55s
+=== mix-v2-Svalue-r3 ===
+RESULT mix-v2-Svalue-r3 arm=Svalue p95=1.963 matched=10272 write=13.03GB far_hit=0 near_hit=0 rep_hit=10272 wall=204s cpu=55s

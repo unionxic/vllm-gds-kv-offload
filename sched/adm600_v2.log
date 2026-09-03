@@ -1,0 +1,25 @@
+=== adm600-v2b-C-r1 ===
+RESULT adm600-v2b-C-r1 C pol=baseline n=600 p50=1.164 p95=4.989 p99=6.598 wall=1047.1s cpu=743.5s matched=206656 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm600-v2b-Sskip-r1 ===
+RESULT adm600-v2b-Sskip-r1 S pol=baseline n=600 p50=1.146 p95=1.501 p99=1.696 wall=506.5s cpu=154.3s matched=108912 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Sseen-r1 ===
+RESULT adm600-v2b-Sseen-r1 S pol=baseline n=600 p50=1.141 p95=1.305 p99=1.899 wall=491.3s cpu=176.3s matched=114432 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Pseen-r1 ===
+RESULT adm600-v2b-Pseen-r1 P pol=baseline n=600 p50=1.121 p95=1.267 p99=2.145 wall=491.9s cpu=172.2s matched=114944 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-C-r2 ===
+RESULT adm600-v2b-C-r2 C pol=baseline n=600 p50=1.173 p95=5.574 p99=7.925 wall=1094.6s cpu=791.1s matched=207072 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm600-v2b-Sskip-r2 ===
+RESULT adm600-v2b-Sskip-r2 S pol=baseline n=600 p50=1.147 p95=1.517 p99=1.712 wall=508.9s cpu=154.8s matched=106704 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Sseen-r2 ===
+RESULT adm600-v2b-Sseen-r2 S pol=baseline n=600 p50=1.142 p95=1.321 p99=2.060 wall=495.5s cpu=181.6s matched=114432 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Pseen-r2 ===
+RESULT adm600-v2b-Pseen-r2 P pol=baseline n=600 p50=1.137 p95=1.255 p99=1.931 wall=491.3s cpu=172.7s matched=114432 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-C-r3 ===
+RESULT adm600-v2b-C-r3 C pol=baseline n=600 p50=1.171 p95=5.184 p99=7.569 wall=1072.2s cpu=767.6s matched=200496 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm600-v2b-Sskip-r3 ===
+RESULT adm600-v2b-Sskip-r3 S pol=baseline n=600 p50=1.148 p95=1.555 p99=1.706 wall=510.2s cpu=158.6s matched=109888 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Sseen-r3 ===
+RESULT adm600-v2b-Sseen-r3 S pol=baseline n=600 p50=1.142 p95=1.321 p99=2.108 wall=496.9s cpu=184.2s matched=115328 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm600-v2b-Pseen-r3 ===
+RESULT adm600-v2b-Pseen-r3 P pol=baseline n=600 p50=1.137 p95=1.297 p99=2.192 wall=492.9s cpu=174.0s matched=114944 maxOutW=2 maxOutR=1 forced=0 gap=0
+adm600 v2 done
