@@ -124,3 +124,34 @@ torch.cuda.Event(blocking=True) 한 줄 차이. 결과: CPU 1,074s → 118.5/122
    악화) 대비 지연저장+blocking event는 2.7/4.2/20.3으로 크게 개선 — blocking
    event가 gap drain의 스핀을 제거한 효과일 가능성. 동일 하네스에서 지연저장
    단독(bev 없음) 재측정으로 닫을 것.
+
+## GPU staging ring (v3 → v3.1) 검증
+
+설계 응답: tail=블록 점유 규명에 대해 GPU staging ring으로 수명 분리를 재현.
+KV 블록 → (D2D, side stream) → ring slot → cuFile 대형 write. store job 완료 =
+복사 완료(블록 반환), SSD write는 슬롯에서 비동기.
+
+기능 게이트 통과: opt-125m 왕복 토큰 일치, 파일이 cufile 산출과 바이트 동일(9/9),
+TRACE에서 ring 등록 direct(bounce 0), posix_staged 대조군도 동일 통과.
+
+v3 결함과 v3.1 수정: v3는 IO 스레드가 compute event를 동기 대기하며 스레드를
+점유해 store queue 대기(1.13초)가 블록 점유에 가산됐다. v3.1은 엔진 스레드가
+복사를 side stream에 비동기 인큐만 하고, 완료를 get_finished의 event.query()
+비차단 폴링으로 보고(추가 폴링 루프 없음 — 엔진이 매 step 호출).
+
+Bailian 150 (opt-2.7b, V2, b64) 결과: CPU는 완전 해결(동시저장 1,074초 → staged
+97~104초, 지연저장 90초와 동급). store 바이트·토큰 동일, write 오류 0.
+
+그러나 tail 미해결(p95 5.1~6.3, 지연저장 1.20에 못 미침). 계측이 기전을 규명:
+- 수명 분리는 실증됨: completed_before_file = 2737/2737(완료 보고가 파일 출현보다
+  선행), COMMIT_GAP 평균 502ms(store committed와 SSD write 완료 분리).
+- 그런데 JOB_HOLD(제출→완료 보고 = GPU 블록 점유) 평균 4.8초로 tail과 일치.
+- 원인 = ring slot 고갈. 동시 실행 중 cuFile write가 chunk당 177ms(마이크로벤치
+  6ms의 30배 — write가 foreground와 경합)이고 슬롯 6개라, 한 job의 ~22 chunk가
+  슬롯을 여러 바퀴 돌며 각 바퀴가 이전 SSD write 완료를 기다린다. 블록이 "복사
+  완료"가 아니라 "슬롯 빌 때까지=이전 write까지" 잡혀 수명 분리가 무력화됨.
+
+즉 staging ring은 복사만 놓고 보면 수명을 분리하지만, ring 깊이 × write 처리량이
+버스트를 못 흡수하면 블록 점유가 다시 write 지연에 묶인다. 병목이 "블록↔복사"에서
+"블록↔슬롯↔write"로 한 칸 이동했을 뿐. 근본은 동시 실행 시 write 처리량 저하.
+slot-depth 테스트(12/24 슬롯)로 slot-bound 확인 중.

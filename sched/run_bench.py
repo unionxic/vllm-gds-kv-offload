@@ -14,8 +14,10 @@ import time
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
-ap.add_argument("--design", required=True, choices=["D", "E", "C", "S"],
-                help="D=cufile E=posix C=tiering S=cufile_staged")
+ap.add_argument("--design", required=True, choices=["D", "E", "C", "S", "P"],
+                help="D=cufile E=posix C=tiering S=cufile_staged P=posix_staged")
+ap.add_argument("--staging-slots", type=int, default=6,
+                help="staged ring 슬롯 수 (V1 b256은 chunk 80MiB라 2 권장)")
 ap.add_argument("--n", type=int, default=150)
 ap.add_argument("--block", type=int, default=64)
 ap.add_argument("--switch-interval", type=float, default=None, help="초 단위 (예: 0.0005)")
@@ -125,12 +127,14 @@ if args.design == "C":
              "cpu_bytes_to_use": 8 << 30, "block_size": 16,
              "secondary_tiers": [{"type": "fs", "root_dir": kvroot}]}
 else:
-    tname = {"D": "cufile", "E": "posix", "S": "cufile_staged"}[args.design]
+    tname = {"D": "cufile", "E": "posix", "S": "cufile_staged",
+             "P": "posix_staged"}[args.design]
     extra = {"spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
              "expfs_root_dir": kvroot,
              "expfs_transport": tname,
              "expfs_read_threads": args.read_threads,
              "expfs_write_threads": args.write_threads,
+             "expfs_staging_slots": args.staging_slots,
              "block_size": args.block}
 llm = LLM(model="facebook/opt-2.7b",
           kv_transfer_config=KVTransferConfig(

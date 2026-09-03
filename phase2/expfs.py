@@ -212,19 +212,27 @@ class StagedCuFileTransport(CuFileTransport):
     name = "cufile_staged"
 
     def __init__(self, flat_tensors: list[torch.Tensor], chunk_bytes: int,
-                 n_slots: int, n_writers: int, register_ring: bool):
+                 n_slots: int, n_writers: int, register_ring: bool,
+                 io_kind: str = "cufile"):
         super().__init__(flat_tensors, "unregistered")
+        self.io_kind = io_kind  # "cufile" | "posix" (호스트 pinned 링 + pwrite)
+        if io_kind == "posix":
+            self.name = "posix_staged"
         self.flat1d = [t.view(-1) for t in flat_tensors]
         self.chunk_bytes = chunk_bytes
         self.n_slots = n_slots
         # cuFile·O_DIRECT용 4KiB 정렬 링 (chunk_bytes는 page 합이라 ALIGN 배수)
-        raw = torch.zeros(n_slots * chunk_bytes + ALIGN, dtype=torch.uint8,
-                          device="cuda")
+        if io_kind == "posix":
+            raw = torch.zeros(n_slots * chunk_bytes + ALIGN, dtype=torch.uint8,
+                              pin_memory=True)
+        else:
+            raw = torch.zeros(n_slots * chunk_bytes + ALIGN, dtype=torch.uint8,
+                              device="cuda")
         ali = (-raw.data_ptr()) % ALIGN
         self._raw = raw
         self.ring = raw[ali: ali + n_slots * chunk_bytes].view(n_slots, chunk_bytes)
         self.ring_registered = False
-        if register_ring:
+        if register_ring and io_kind == "cufile":
             try:
                 self.g.buf_register(self.ring.data_ptr(), self.ring.numel())
                 self.ring_registered = True
@@ -253,8 +261,37 @@ class StagedCuFileTransport(CuFileTransport):
             self._tls.stream = s
         return s
 
+    # ---- v3.1: 스레드 점유 없는 staging 프리미티브 ----
+    # v3의 stage_chunk는 IO 스레드가 compute event를 기다리며 스레드를 점유해
+    # 큐 대기가 블록 점유 시간에 더해지는 결함이 있었다(계측: queue_wait 1.13s).
+    # v3.1은 제출 스레드가 복사를 비동기 인큐만 하고, 완료는 worker의 _drain이
+    # event.query() 비차단 폴링으로 보고한다. IO 스레드 관여 0.
+
+    def try_acquire_slot(self):
+        try:
+            return self._free.get_nowait()
+        except queue.Empty:
+            return None
+
+    def launch_copy(self, ev: torch.cuda.Event, slot: int, spans):
+        """복사를 side stream에 비동기 인큐하고 완료 event를 반환 (대기 없음)."""
+        dst = self.ring[slot]
+        side = self._side_stream()
+        with torch.cuda.stream(side):
+            side.wait_event(ev)  # compute 의존은 GPU 안에서
+            with torch.cuda.nvtx.range("STAGE_COPY"):
+                for t, boff, size, foff in spans:
+                    dst[foff:foff + size].copy_(
+                        self.flat1d[t][boff:boff + size], non_blocking=True)
+            done = torch.cuda.Event()
+            done.record(side)
+        return done
+
+    def writer_submit(self, slot: int, path: str):
+        self._wq.put((slot, path))
+
     def stage_chunk(self, ev: torch.cuda.Event, path: str, spans):
-        """IO 스레드에서 실행. 반환 = 복사 완료 = KV 블록 재사용 가능."""
+        """(v3 경로, 참조용 보존) IO 스레드에서 실행. 반환 = 복사 완료."""
         slot = self._free.get()  # ring 포화 시 여기서 대기 (blocking, GIL 해제)
         try:
             dst = self.ring[slot]
@@ -301,13 +338,23 @@ class StagedCuFileTransport(CuFileTransport):
         fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_RDWR
                      | getattr(os, "O_DIRECT", 0), 0o644)
         try:
-            fh = self.g.handle_register(fd)
-            try:
-                n = self.g.write(fh, self.ring[slot].data_ptr(), self.chunk_bytes, 0)
-                if n != self.chunk_bytes:
-                    raise OSError(f"short cuFileWrite {n}/{self.chunk_bytes} @{path}")
-            finally:
-                self.g.handle_deregister(fh)
+            if self.io_kind == "posix":
+                import ctypes
+                mv = memoryview((ctypes.c_char * self.chunk_bytes).from_address(
+                    self.ring[slot].data_ptr()))
+                off = 0
+                while off < self.chunk_bytes:
+                    off += os.pwrite(fd, mv[off:], off)
+            else:
+                fh = self.g.handle_register(fd)
+                try:
+                    n = self.g.write(fh, self.ring[slot].data_ptr(),
+                                     self.chunk_bytes, 0)
+                    if n != self.chunk_bytes:
+                        raise OSError(
+                            f"short cuFileWrite {n}/{self.chunk_bytes} @{path}")
+                finally:
+                    self.g.handle_deregister(fh)
             os.close(fd)
             fd = None
             os.replace(tmp, path)
@@ -482,10 +529,11 @@ class FilesystemWorker(OffloadingWorker):
 
         if transport_name == "cufile":
             self.transport = CuFileTransport(self.flat, cufile_mode)
-        elif transport_name == "cufile_staged":
+        elif transport_name in ("cufile_staged", "posix_staged"):
             self.transport = StagedCuFileTransport(
                 self.flat, self.chunk_bytes, staging_slots, staging_writers,
-                register_ring=(cufile_mode != "unregistered_ring"))
+                register_ring=(cufile_mode != "unregistered_ring"),
+                io_kind=("posix" if transport_name == "posix_staged" else "cufile"))
         elif transport_name == "posix":
             self.transport = PosixBounceTransport(self.flat, self.chunk_bytes)
         else:
@@ -495,6 +543,8 @@ class FilesystemWorker(OffloadingWorker):
                                         thread_name_prefix="expfs")
         self._pending: set[int] = set()
         self._drained: list[TransferResult] = []
+        # v3.1 staged: job_id -> [entry], entry = {ev, path, spans, slot, done, committed}
+        self._staged_jobs: dict[int, list[dict]] = {}
         global LAST_WORKER
         LAST_WORKER = self
         logger.info(
@@ -557,14 +607,45 @@ class FilesystemWorker(OffloadingWorker):
         parts = self._partition(src_spec, dst_spec, is_store=True)
         ev = torch.cuda.Event()
         ev.record(torch.cuda.current_stream())
-        task_fn = (self._staged_store_task
-                   if isinstance(self.transport, StagedCuFileTransport)
-                   else self._store_task)
-        tasks = [partial(task_fn, ev, path, self._chunk_spans(bids, j0))
+        if isinstance(self.transport, StagedCuFileTransport):
+            # v3.1: IO 스레드 미사용. 복사 비동기 인큐 → 완료는 _drain의 event
+            # 폴링으로 보고. 블록 점유 = 실제 복사 완료 시점.
+            self._staged_jobs[job_id] = [
+                dict(ev=ev, path=path, spans=self._chunk_spans(bids, j0),
+                     slot=None, done=None, committed=False)
+                for path, bids, j0 in parts]
+            self._pending.add(job_id)
+            self._advance_staged()
+            return True
+        tasks = [partial(self._store_task, ev, path, self._chunk_spans(bids, j0))
                  for path, bids, j0 in parts]
         self._pending.add(job_id)
         self.pool.enqueue_store(job_id, len(tasks), tasks)
         return True
+
+    def _advance_staged(self):
+        """슬롯 획득·복사 인큐·완료 폴링을 한 바퀴 진행 (비차단, 엔진 스레드)."""
+        tr = self.transport
+        done_jobs = []
+        for job_id, entries in self._staged_jobs.items():
+            for e in entries:
+                if e["committed"]:
+                    continue
+                if e["slot"] is None:
+                    s = tr.try_acquire_slot()
+                    if s is None:
+                        continue  # ring 포화 — 다음 폴링에서 재시도 (backpressure)
+                    e["slot"] = s
+                    e["done"] = tr.launch_copy(e["ev"], e["slot"], e["spans"])
+                if e["done"].query():  # 비차단
+                    tr.writer_submit(e["slot"], e["path"])
+                    e["committed"] = True
+            if all(e["committed"] for e in entries):
+                done_jobs.append(job_id)
+        for j in done_jobs:
+            del self._staged_jobs[j]
+            self._pending.discard(j)
+            self._drained.append(TransferResult(job_id=j, success=True))
 
     def submit_load(self, job_id: int, src_spec: LoadStoreSpec,
                     dst_spec: GPULoadStoreSpec) -> bool:
@@ -576,6 +657,8 @@ class FilesystemWorker(OffloadingWorker):
         return True
 
     def _drain(self):
+        if self._staged_jobs:
+            self._advance_staged()
         for job_id, success in self.pool.get_finished():
             self._pending.discard(job_id)
             self._drained.append(TransferResult(job_id=job_id, success=success))

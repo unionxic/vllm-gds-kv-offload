@@ -4,6 +4,7 @@
 #                 CUFILE_WRITE(또는 TRANSPORT_WRITE) / COMMIT_RENAME(잔여로 추정) /
 #                 COMPLETION_REPORT(get_finished 지연)
 # ENGINE 하위: SCHEDULE / MODEL_EXECUTE / OUTPUT_PROCESS
+import os
 import threading
 import time
 
@@ -97,8 +98,15 @@ def install():
     G.handle_register, G.write, G.read = handle_register, write, read
     # COMMIT_RENAME ≈ store.TRANSPORT_WRITE − (FILE_OPEN_REGISTER+CUFILE_WRITE) 로 사후 추정
 
-    # --- COMPLETION_REPORT: 마지막 task 종료 → get_finished 보고 지연 ---
+    # --- COMPLETION_REPORT + JOB_HOLD(제출→완료 보고 = GPU 블록 점유 시간) ---
     W = expfs.FilesystemWorker
+    _job_submit = {}
+    _ss = W.submit_store
+    def submit_store_t(self, job_id, src, dst):
+        with _lock:
+            _job_submit[job_id] = time.perf_counter_ns()
+        return _ss(self, job_id, src, dst)
+    W.submit_store = submit_store_t
     _gf = W.get_finished
     def get_finished(self):
         res = _gf(self)
@@ -106,10 +114,35 @@ def install():
         for r in (res or []):
             with _lock:
                 ts = _task_end.pop(r.job_id, None)
+                ts0 = _job_submit.pop(r.job_id, None)
             if ts:
                 _acc("store.COMPLETION_REPORT", now - ts)
+            if ts0:
+                _acc("store.JOB_HOLD", now - ts0)
         return res
     W.get_finished = get_finished
+
+    # --- staged: 완료 보고와 SSD commit의 분리 검증 (v3.1: writer_submit 시점) ---
+    ST = expfs.StagedCuFileTransport
+    _stage_end = {}
+    _wsub = ST.writer_submit
+    def writer_submit_t(self, slot, path):
+        with _lock:
+            _stage_end[path] = time.perf_counter_ns()
+        if not os.path.exists(path):
+            _acc("staged.completed_before_file", 0)  # 분리 증거 계수
+        return _wsub(self, slot, path)
+    ST.writer_submit = writer_submit_t
+    _wsl = ST.write_slot
+    def write_slot_t(self, slot, path):
+        with _timed("store.WRITE_SLOT"):
+            r = _wsl(self, slot, path)
+        with _lock:
+            ts = _stage_end.pop(path, None)
+        if ts:
+            _acc("staged.COMMIT_GAP", time.perf_counter_ns() - ts)
+        return r
+    ST.write_slot = write_slot_t
 
     # --- 엔진 3단계 ---
     from vllm.v1.core.sched.scheduler import Scheduler
@@ -127,7 +160,11 @@ def install():
     _st = EngineCore.step
     def step(self, *a, **k):
         with _timed("engine.STEP"):
-            return _st(self, *a, **k)
+            out = _st(self, *a, **k)
+        executed = isinstance(out, tuple) and len(out) == 2 and out[1]
+        if not executed:
+            _acc("engine.STEP_empty", 0)
+        return out
     EngineCore.step = step
     # MODEL_EXECUTE(GPU 실행 대기) ≈ STEP − SCHEDULE − UPDATE_FROM_OUTPUT (사후 추정);
     # 커널 제출 공백은 nsys CUDA trace에서 직접 본다.
