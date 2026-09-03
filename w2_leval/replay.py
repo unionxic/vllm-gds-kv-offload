@@ -81,6 +81,12 @@ if args.arm != "A":
             return inner
         cls.read_chunk = mk(_r, "tp_read_n", "tp_read_b")
         cls.write_chunk = mk(_w, "tp_write_n", "tp_write_b")
+    _ws0 = expfs.StagedCuFileTransport.write_slot
+    def _ws_cnt(self, slot, path):
+        cnt["tp_write_n"] += 1
+        cnt["tp_write_b"] += self.chunk_bytes
+        return _ws0(self, slot, path)
+    expfs.StagedCuFileTransport.write_slot = _ws_cnt
     import vllm.v1.kv_offload.tiering.fs.manager as fsm
     _ol, _os_ = fsm.load_block, fsm.store_block
     def _cl(path, view, off, bs):
@@ -198,6 +204,12 @@ if args.arm in ("D1", "D2", "E1", "DS4"):
     import scheduler as sch3
     n_final = sch3.release_gap(gap_worker)
     print(f"final drain released={n_final}", flush=True)
+if args.arm != "A":
+    import expfs as _e
+    _w = getattr(_e, "LAST_WORKER", None)
+    if _w is not None and hasattr(_w.transport, "flush"):
+        _w.transport.flush()  # staged 잔여 비동기 쓰기를 wall/CPU에 포함
+        meta["staged_write_errors"] = getattr(_w.transport, "write_errors", 0)
 wall = time.perf_counter() - t_all0
 cpu = time.process_time() - c_all0
 # IO 스레드 생존 중에 schedstat 캡처 (shutdown 후엔 스레드 소멸 — Gate 2 교훈)

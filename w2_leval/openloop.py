@@ -18,7 +18,8 @@ import time
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
-ap.add_argument("--arm", required=True, choices=["C", "D1", "E1", "DS4"])
+ap.add_argument("--arm", required=True,
+                choices=["C", "D0", "D1", "E1", "DS4", "ST"])
 ap.add_argument("--docs", type=int, default=64)
 ap.add_argument("--conc", type=int, default=1, help="closed-loop 동시 스트림 수")
 ap.add_argument("--arrival", choices=["closed", "poisson"], default="closed")
@@ -43,9 +44,11 @@ W = json.load(open(os.path.join(HERE, "workload.json")))
 docs = W["docs"][:args.docs]
 delim = W["delim_tokens"]
 
-ARM_MODE = {"D1": "DEF", "E1": "DEF", "DS4": "S4", "C": None}
+ARM_MODE = {"D0": "S0", "D1": "DEF", "E1": "DEF", "DS4": "S4",
+            "ST": "S0", "C": None}
 mode = ARM_MODE[args.arm]
-transport = ("cufile" if args.arm in ("D1", "DS4")
+transport = ("cufile_staged" if args.arm == "ST"
+             else "cufile" if args.arm in ("D0", "D1", "DS4")
              else "posix" if args.arm == "E1" else None)
 if args.arm == "DS4" and args.max_w_bytes is None:
     args.max_w_bytes = 40 << 20
@@ -59,6 +62,9 @@ import scheduler as sch  # noqa: E402
 if mode:
     sch.install(mode, max_w_bytes=args.max_w_bytes,
                 write_quantum_chunks=args.write_quantum)
+if os.environ.get("FIX"):  # 인과 폐쇄 재검증용 (sched/prof_fix.py)
+    import prof_fix  # noqa: E402
+    prof_fix.install()
 for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
     _r, _w = cls.read_chunk, cls.write_chunk
     def mk(fn, kn, kb):
@@ -69,6 +75,12 @@ for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
         return inner
     cls.read_chunk = mk(_r, "tp_read_n", "tp_read_b")
     cls.write_chunk = mk(_w, "tp_write_n", "tp_write_b")
+_ws0 = expfs.StagedCuFileTransport.write_slot
+def _ws_cnt(self, slot, path):
+    cnt["tp_write_n"] += 1
+    cnt["tp_write_b"] += self.chunk_bytes
+    return _ws0(self, slot, path)
+expfs.StagedCuFileTransport.write_slot = _ws_cnt
 import vllm.v1.kv_offload.tiering.fs.manager as fsm  # noqa: E402
 _ol, _os_ = fsm.load_block, fsm.store_block
 def _cl(path, view, off, bs):
@@ -189,6 +201,8 @@ gap_worker: list = []
 gaps = 0
 next_idx = 0
 need_gap = False
+steps_total = 0
+steps_empty = 0
 t_all0, c_all0 = time.perf_counter(), time.process_time()
 
 
@@ -219,7 +233,11 @@ while (next_idx < len(reqs) or active) and not abort[0]:
             submit(next_idx)
             next_idx += 1
     if active:
-        for out in eng.step():
+        outs = eng.step()
+        steps_total += 1
+        if not outs:
+            steps_empty += 1  # 요청은 있으나 아무것도 진행 못한 step (블록 대기 등)
+        for out in outs:
             st = active.get(out.request_id)
             if st is None:
                 continue
@@ -249,6 +267,10 @@ while (next_idx < len(reqs) or active) and not abort[0]:
 if mode:
     n_final = sch.release_gap(gap_worker)
     print(f"final drain released={n_final}", flush=True)
+_w = getattr(expfs, "LAST_WORKER", None)
+if _w is not None and hasattr(_w.transport, "flush"):
+    _w.transport.flush()  # staged 잔여 비동기 쓰기를 wall/CPU에 포함
+    meta["staged_write_errors"] = getattr(_w.transport, "write_errors", 0)
 wall = time.perf_counter() - t_all0
 cpu = time.process_time() - c_all0
 stop_sampler.set()
@@ -263,7 +285,9 @@ out_tok = sum(r["out_tokens"] for r in rows)
 meta["totals"] = dict(wall_s=round(wall, 2), cpu_s=round(cpu, 2),
                       gaps=gaps, out_tokens=out_tok,
                       out_tok_per_s=round(out_tok / wall, 2),
-                      completed=len(rows), aborted=abort[0], **cnt)
+                      completed=len(rows), aborted=abort[0],
+                      steps_total=steps_total, steps_empty=steps_empty,
+                      service_rate=round(len(rows) / wall, 3), **cnt)
 if mode:
     meta["sched"] = sch.summary()
     assert abort[0] or meta["sched"]["deferred_pending"] == 0, "잔여 backlog"
@@ -289,5 +313,8 @@ print(f"RESULT {args.run_id} arm={args.arm} {args.arrival} "
       f"backlog_max={mb} gaps={gaps} "
       f"forced={s.get('forced_flushes', 0)} "
       f"age_max_ms={round(s.get('max_deferred_age_ms', 0))} "
+      f"steps={steps_total}/{steps_empty}빈 "
+      f"svc={len(rows)/wall:.3f}req/s "
+      f"fence={s.get('fence_wait_n', 0)}회/{round(s.get('fence_wait_ns', 0)/1e9, 1)}s "
       f"guard_skips={cnt['guard_skips']} aborted={abort[0]}", flush=True)
 shutil.rmtree(kvroot, ignore_errors=True)
