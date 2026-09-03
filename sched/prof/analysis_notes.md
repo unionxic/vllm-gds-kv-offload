@@ -155,3 +155,31 @@ Bailian 150 (opt-2.7b, V2, b64) 결과: CPU는 완전 해결(동시저장 1,074�
 버스트를 못 흡수하면 블록 점유가 다시 write 지연에 묶인다. 병목이 "블록↔복사"에서
 "블록↔슬롯↔write"로 한 칸 이동했을 뿐. 근본은 동시 실행 시 write 처리량 저하.
 slot-depth 테스트(12/24 슬롯)로 slot-bound 확인 중.
+
+## 비차단 staging 저장 정책 (Bailian 150, V2 b64, 3회)
+
+포화 시 원본 블록을 붙잡지 않는 정책. block(슬롯 대기)/skip(저장 생략)/cpu_fallback(D2H 후 CPU write).
+
+| 정책 | p95 중앙 | CPU | JOB_HOLD | matched(hit) | 실제 write | drop/fb |
+|---|---|---|---|---|---|---|
+| 기존 tiering | 5.20 | 139s | - | 20,960 | 43GB | - |
+| staging block | 6.63 | 118s | 5,312ms | 19,936 | 53GB | 0/0 |
+| staging skip | 1.26 | 22s | 556ms | 8,416 | 7GB | 2682/0 |
+| staging cpu_fallback | 1.34 | 48s | 753ms | 12,688 | 16GB | 2078/446 |
+
+판정(3/3): 최우선 두 조건 모두 충족.
+1. 블록 점유가 복사 시간으로 제한: JOB_HOLD가 block 5,312ms → skip 556ms/cpufb 753ms
+   (7~10배). 원본 블록이 SSD write가 아니라 D2D/D2H 복사 완료로 해제됨을 실증.
+2. foreground가 슬롯 대기 안 함: slot_full 재폴링이 block 843만 회 → skip/cpufb 2.5천 회.
+   포화 시 대기 대신 즉시 drop/fallback 처리.
+결과: tail이 block/tiering 5~6.6초에서 1.26~1.34초로 붕괴, CPU 최저(22~48s).
+
+트레이드오프(공짜 아님): 저장 처리량 벽을 우회한 대가로 storage hit 손실.
+skip은 matched 20,960→8,416(hit 60% 손실, 실제 write 7GB), cpu_fallback은 12,688
+(hit 34% 손실, write 16GB)로 hit를 더 보존하되 CPU를 더 씀. cpu_fallback이 균형점
+(tail은 skip과 동급, hit 손실 절반). 저장 throughput이 진짜 병목이고, 비차단 정책은
+"무엇을 저장할지"를 선택해 tail을 산다.
+
+한계: 우선순위 4(긴 prefix·재사용 이력 우선 저장)는 worker가 블록만 보고 prefix
+재사용 이력을 못 봐 미구현 — 어느 store를 drop할지가 무작위(도착 순). 재사용 가치
+기반 admission은 스케줄러 계층 정보 필요.
