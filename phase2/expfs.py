@@ -226,6 +226,8 @@ class StagedCuFileTransport(CuFileTransport):
         self.stats = dict(ring_used=0, fallback=0, dropped=0, slot_full=0,
                           ob_full=0, read_deferred=0)
         self._read_active = 0  # SSD read in-flight (read-priority용)
+        # value 정책 hint: path -> (intent, priority). 하네스가 주입, 기본은 RING 허용.
+        self._hint_fn = None
         if io_kind == "posix":
             self.name = "posix_staged"
         self.flat1d = [t.view(-1) for t in flat_tensors]
@@ -344,6 +346,15 @@ class StagedCuFileTransport(CuFileTransport):
     def reads_active(self):
         with self._lock:
             return self._read_active > 0
+
+    def set_hint_fn(self, fn):
+        self._hint_fn = fn
+
+    def admission_hint(self, path):
+        """value 정책용. 반환 (intent, priority). hint 없으면 RING 허용 기본값."""
+        if self._hint_fn is None:
+            return ("GDS_RING", 1)
+        return self._hint_fn(path)
 
     def stage_chunk(self, ev: torch.cuda.Event, path: str, spans):
         """(v3 경로, 참조용 보존) IO 스레드에서 실행. 반환 = 복사 완료."""
@@ -703,6 +714,16 @@ class FilesystemWorker(OffloadingWorker):
         반환 False = 아직 시작 못함(block 정책에서 슬롯 대기 재시도)."""
         tr = self.transport
         pol = self.staging_policy
+        # value 정책: scheduler가 내린 admission hint로 intent·priority 결정.
+        #   intent DROP → 즉시 생략. intent CPU_FALLBACK → ring 건너뛰고 CPU.
+        #   intent GDS_RING → ring 시도, 포화 시 priority로 CPU/drop 선택.
+        intent, prio = "GDS_RING", 0
+        if pol == "value":
+            intent, prio = tr.admission_hint(e["path"])
+            if intent == "DROP":
+                e["mode"] = "drop"; e["committed"] = True
+                tr.stats["dropped"] += 1
+                return True
         # (6) outstanding write bytes 상한 + (5) read-priority
         # 주의: _admit/_advance_staged/submit_store는 엔진 단일 스레드에서만 호출됨.
         # 아래 cap 검사와 writer_submit의 _ob 증가가 별도 lock이라도 admission이
@@ -710,7 +731,9 @@ class FilesystemWorker(OffloadingWorker):
         ob_full = (tr.max_ob is not None
                    and tr.outstanding_write_bytes() + self.chunk_bytes > tr.max_ob)
         read_hold = (pol != "block" and tr.reads_active())
-        if not ob_full and not read_hold:
+        # value·CPU_FALLBACK intent면 ring 건너뛰고 곧장 CPU (고가치 확실 보존)
+        skip_ring = (pol == "value" and intent == "CPU_FALLBACK")
+        if not ob_full and not read_hold and not skip_ring:
             s = tr.try_acquire_slot()
             if s is not None:
                 e["slot"], e["mode"] = s, "ring"
@@ -725,6 +748,18 @@ class FilesystemWorker(OffloadingWorker):
         # 포화/보류 상태. block 정책이면 대기(재시도), 아니면 비차단 처리:
         if pol == "block":
             return False
+        # value 정책: 포화 시 priority>=1(고가치)만 CPU fallback으로 살리고 나머지 drop
+        if pol == "value":
+            if prio >= 1 and tr.n_cpu > 0:
+                c = tr.try_acquire_cpu()
+                if c is not None:
+                    e["slot"], e["mode"] = c, "cpu"
+                    e["done"] = tr.launch_cpu_copy(e["ev"], c, e["spans"])
+                    tr.stats["fallback"] += 1
+                    return True
+            e["mode"] = "drop"; e["committed"] = True
+            tr.stats["dropped"] += 1
+            return True
         if pol == "cpu_fallback" and tr.n_cpu > 0:
             c = tr.try_acquire_cpu()
             if c is not None:

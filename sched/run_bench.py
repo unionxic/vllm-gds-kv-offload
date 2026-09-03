@@ -19,7 +19,9 @@ ap.add_argument("--design", required=True, choices=["D", "E", "C", "S", "P"],
 ap.add_argument("--staging-slots", type=int, default=6,
                 help="staged ring 슬롯 수 (V1 b256은 chunk 80MiB라 2 권장)")
 ap.add_argument("--staging-policy", default="block",
-                choices=["block", "skip", "cpu_fallback"])
+                choices=["block", "skip", "cpu_fallback", "value"])
+ap.add_argument("--value-mode", default="value_density",
+                choices=["random_skip", "seen_twice", "value_density", "oracle"])
 ap.add_argument("--cpu-fallback-slots", type=int, default=0)
 ap.add_argument("--max-ob-bytes", type=int, default=None,
                 help="outstanding write bytes 상한")
@@ -150,6 +152,12 @@ llm = LLM(model="facebook/opt-2.7b",
               kv_connector_extra_config=extra),
           gpu_memory_utilization=0.7, max_model_len=2048, enforce_eager=True)
 
+if args.staging_policy == "value":
+    sys.path.insert(0, os.path.join(HERE, "..", "admission"))
+    import value_admission  # noqa: E402
+    _vw = expfs.LAST_WORKER
+    value_admission.install(_vw.transport, args.value_mode)
+
 tok = llm.get_tokenizer()
 vocab, bos = tok.vocab_size, tok.bos_token_id or 2
 sp = SamplingParams(max_tokens=1, temperature=0.0)
@@ -193,6 +201,8 @@ if _w is not None and hasattr(_w.transport, "flush"):
     _w.transport.flush()  # staged 잔여 비동기 쓰기를 wall/CPU에 포함 (생략 아님 증명)
     meta["staged_write_errors"] = getattr(_w.transport, "write_errors", 0)
     meta["staged_stats"] = dict(getattr(_w.transport, "stats", {}))
+    if args.staging_policy == "value":
+        meta["value_mode"] = args.value_mode
 wall = time.perf_counter() - t0_all
 cpu = time.process_time() - c0_all
 meta["io_threads_schedstat"] = snapshot.thread_schedstat()  # 스레드 생존 중 캡처
