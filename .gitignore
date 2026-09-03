@@ -18,3 +18,4 @@ cufile.log
 sched/prof/*.nsys-rep
 sched/prof/*.sqlite
 sched/prof/*.speedscope.json
+w2_leval/mixed_workload.json
