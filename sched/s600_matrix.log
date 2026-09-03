@@ -1,0 +1,25 @@
+=== s600-C-r1 ===
+RESULT s600-C-r1 C pol=baseline n=600 p50=1.170 p95=4.663 p99=5.870 wall=972.5s cpu=667.9s matched=206240 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== s600-Sblock-r1 ===
+RESULT s600-Sblock-r1 S pol=baseline n=600 p50=1.252 p95=5.332 p99=7.502 wall=1258.7s cpu=557.8s matched=201440 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== s600-Sskip-r1 ===
+RESULT s600-Sskip-r1 S pol=baseline n=600 p50=1.139 p95=1.498 p99=1.688 wall=502.3s cpu=152.9s matched=110768 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== s600-Scpufb-r1 ===
+RESULT s600-Scpufb-r1 S pol=baseline n=600 p50=1.146 p95=2.136 p99=2.677 wall=625.0s cpu=360.3s matched=136464 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== s600-C-r2 ===
+RESULT s600-C-r2 C pol=baseline n=600 p50=1.166 p95=5.407 p99=7.686 wall=1080.5s cpu=782.0s matched=208160 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== s600-Sblock-r2 ===
+RESULT s600-Sblock-r2 S pol=baseline n=600 p50=1.250 p95=5.292 p99=6.835 wall=1260.1s cpu=559.8s matched=201440 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== s600-Sskip-r2 ===
+RESULT s600-Sskip-r2 S pol=baseline n=600 p50=1.143 p95=1.436 p99=1.670 wall=502.4s cpu=151.2s matched=111552 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== s600-Scpufb-r2 ===
+RESULT s600-Scpufb-r2 S pol=baseline n=600 p50=1.150 p95=2.202 p99=2.724 wall=629.7s cpu=369.6s matched=134912 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== s600-C-r3 ===
+RESULT s600-C-r3 C pol=baseline n=600 p50=1.164 p95=5.057 p99=6.520 wall=1075.6s cpu=776.1s matched=208560 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== s600-Sblock-r3 ===
+RESULT s600-Sblock-r3 S pol=baseline n=600 p50=1.282 p95=5.384 p99=7.404 wall=1270.2s cpu=566.1s matched=201440 maxOutW=4 maxOutR=1 forced=0 gap=0
+=== s600-Sskip-r3 ===
+RESULT s600-Sskip-r3 S pol=baseline n=600 p50=1.141 p95=1.439 p99=1.677 wall=503.5s cpu=153.5s matched=110400 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== s600-Scpufb-r3 ===
+RESULT s600-Scpufb-r3 S pol=baseline n=600 p50=1.143 p95=2.185 p99=2.724 wall=626.5s cpu=368.3s matched=136592 maxOutW=2 maxOutR=1 forced=0 gap=0
+s600 matrix done
