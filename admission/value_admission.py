@@ -63,14 +63,15 @@ def hint(path):
         return ("GDS_RING", 0)          # 압박 시 비차단 drop (priority 0)
     if mode == "seen_twice":
         return ("GDS_RING", 1) if st["freq"] >= 2 else ("DROP", 0)
-    # value_density
+    # value_density: seen-twice가 주 필터. evict 예측은 하드게이트가 아니라
+    #   priority(압박 시 CPU 보존 우선순위)로만 사용 — Bailian은 워킹셋≫GPU+CPU라
+    #   짧은 재사용 거리도 evict되므로 거리 하드컷은 유효 저장까지 버림(실측 확인).
     if st["freq"] < 2:
-        return ("DROP", 0)              # seen-twice 필터
-    resident = max(1, GPUCPU_BLOCKS // 64)   # chunk 단위 상주 근사
-    if st["avg_rd"] <= resident:
-        return ("DROP", 0)             # 가까운 재사용 = GPU/CPU가 잡음
-    # 고가치: 압박 시에도 CPU fallback으로 보존 (priority 1)
-    return ("GDS_RING", 1)
+        return ("DROP", 0)              # seen-twice 필터 (미재사용 배제)
+    # 재사용 거리가 클수록(=cold tail, SSD가 유일 hit원) 압박 시 보존 우선순위↑
+    resident = max(1, GPUCPU_BLOCKS // 150)   # ≈18요청이면 캐시 1회전
+    prio = 2 if st["avg_rd"] > resident else 1
+    return ("GDS_RING", prio)
 
 
 def install(worker_transport, mode):

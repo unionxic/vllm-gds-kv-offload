@@ -1,0 +1,25 @@
+=== adm-v2b-C-r1 ===
+RESULT adm-v2b-C-r1 C pol=baseline n=150 p50=1.139 p95=5.278 p99=6.588 wall=218.7s cpu=132.5s matched=18928 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v2b-Sskip-r1 ===
+RESULT adm-v2b-Sskip-r1 S pol=baseline n=150 p50=1.093 p95=1.211 p99=1.505 wall=115.1s cpu=22.2s matched=8480 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Sseen-r1 ===
+RESULT adm-v2b-Sseen-r1 S pol=baseline n=150 p50=1.035 p95=1.165 p99=1.176 wall=110.9s cpu=21.3s matched=10976 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Svalue-r1 ===
+RESULT adm-v2b-Svalue-r1 S pol=baseline n=150 p50=1.092 p95=1.165 p99=1.168 wall=112.6s cpu=12.6s matched=0 maxOutW=1 maxOutR=0 forced=0 gap=0
+=== adm-v2b-C-r2 ===
+RESULT adm-v2b-C-r2 C pol=baseline n=150 p50=1.157 p95=6.077 p99=10.602 wall=248.9s cpu=163.8s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v2b-Sskip-r2 ===
+RESULT adm-v2b-Sskip-r2 S pol=baseline n=150 p50=1.038 p95=1.169 p99=1.522 wall=114.2s cpu=21.1s matched=8608 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Sseen-r2 ===
+RESULT adm-v2b-Sseen-r2 S pol=baseline n=150 p50=1.032 p95=1.168 p99=1.525 wall=112.5s cpu=22.8s matched=11472 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Svalue-r2 ===
+RESULT adm-v2b-Svalue-r2 S pol=baseline n=150 p50=1.091 p95=1.167 p99=1.169 wall=112.8s cpu=12.8s matched=0 maxOutW=1 maxOutR=0 forced=0 gap=0
+=== adm-v2b-C-r3 ===
+RESULT adm-v2b-C-r3 C pol=baseline n=150 p50=1.156 p95=4.953 p99=5.489 wall=224.2s cpu=138.3s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v2b-Sskip-r3 ===
+RESULT adm-v2b-Sskip-r3 S pol=baseline n=150 p50=1.046 p95=1.242 p99=1.517 wall=114.9s cpu=22.3s matched=8432 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Sseen-r3 ===
+RESULT adm-v2b-Sseen-r3 S pol=baseline n=150 p50=1.033 p95=1.165 p99=1.641 wall=112.0s cpu=22.1s matched=10976 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v2b-Svalue-r3 ===
+RESULT adm-v2b-Svalue-r3 S pol=baseline n=150 p50=1.089 p95=1.168 p99=1.170 wall=112.7s cpu=12.6s matched=0 maxOutW=1 maxOutR=0 forced=0 gap=0
+admission v2 matrix done

@@ -1,0 +1,1470 @@
+{
+ "args": {
+  "run_id": "vmech-smoke",
+  "design": "S",
+  "staging_slots": 4,
+  "staging_policy": "value",
+  "value_mode": "value_density",
+  "cpu_fallback_slots": 8,
+  "max_ob_bytes": null,
+  "n": 40,
+  "block": 64,
+  "switch_interval": null,
+  "write_threads": 8,
+  "read_threads": 8,
+  "policy": "baseline",
+  "note": "value \uae30\uc804 \uc2a4\ubaa8\ud06c"
+ },
+ "start": {
+  "phase": "start",
+  "ts": 1788451161.1629682,
+  "switch_interval": 0.005,
+  "pid": 1481388,
+  "affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35
+  ],
+  "loadavg": [
+   0.06,
+   0.05,
+   0.01
+  ],
+  "ctxt_total": 2044139538,
+  "self_ctx": {
+   "voluntary_ctxt_switches": 2,
+   "nonvoluntary_ctxt_switches": 3
+  },
+  "cpu_governor": "powersave",
+  "cpu_freq_khz": [
+   1200108,
+   1200699,
+   1200311,
+   1200390
+  ],
+  "temps_c": {
+   "nvme": 27.85
+  },
+  "shm_files": [],
+  "shm_used_gib": 0.0,
+  "root_free_gib": 290.8,
+  "meminfo_kb": {
+   "MemTotal": 131568144,
+   "MemFree": 97783692,
+   "MemAvailable": 127536968,
+   "Cached": 28084612,
+   "Shmem": 4740
+  },
+  "gpu": "300 MHz, 0 %, 30, 15 MiB",
+  "thread_schedstat": {
+   "1481388": {
+    "name": "python",
+    "cpu_ns": 66706912,
+    "wait_ns": 72267
+   }
+  },
+  "diskstats_nvme0n1": {
+   "reads": 16411005,
+   "read_sectors": 10320210352,
+   "writes": 33399953,
+   "write_sectors": 25000766834,
+   "inflight": 0,
+   "io_ms": 56132100,
+   "weighted_io_ms": 490193466
+  },
+  "python": "3.10.20",
+  "torch": "2.11.0+cu129",
+  "cuda": "12.9",
+  "git_vllm": "v0.26.0rc1-9-g77c4033078",
+  "git_exp": "69d3426-dirty",
+  "libcufile": "libcufile.so.1.13.1",
+  "pythonhashseed": "0",
+  "vllm_env": {
+   "VLLM_ENABLE_V1_MULTIPROCESSING": "0"
+  },
+  "cpu_model": "Model name:                         Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz",
+  "cores": "CPU(s):                             36\nCore(s) per socket:                 18\nSocket(s):                          1\nNUMA node(s):                       1\nNUMA node0 CPU(s):                  0-35"
+ },
+ "staged_write_errors": 0,
+ "staged_stats": {
+  "ring_used": 0,
+  "fallback": 0,
+  "dropped": 807,
+  "slot_full": 0,
+  "ob_full": 0,
+  "read_deferred": 0
+ },
+ "value_mode": "value_density",
+ "io_threads_schedstat": {
+  "1481388": {
+   "name": "python",
+   "cpu_ns": 18421277237,
+   "wait_ns": 2294018
+  },
+  "1481396": {
+   "name": "python",
+   "cpu_ns": 89567104,
+   "wait_ns": 0
+  },
+  "1481397": {
+   "name": "python",
+   "cpu_ns": 89592861,
+   "wait_ns": 0
+  },
+  "1481398": {
+   "name": "python",
+   "cpu_ns": 89551018,
+   "wait_ns": 9811
+  },
+  "1481399": {
+   "name": "python",
+   "cpu_ns": 89320845,
+   "wait_ns": 283827
+  },
+  "1481400": {
+   "name": "python",
+   "cpu_ns": 89532713,
+   "wait_ns": 49703
+  },
+  "1481401": {
+   "name": "python",
+   "cpu_ns": 89410569,
+   "wait_ns": 147866
+  },
+  "1481402": {
+   "name": "python",
+   "cpu_ns": 89606104,
+   "wait_ns": 0
+  },
+  "1481403": {
+   "name": "python",
+   "cpu_ns": 89562558,
+   "wait_ns": 13060
+  },
+  "1481404": {
+   "name": "python",
+   "cpu_ns": 89449346,
+   "wait_ns": 171968
+  },
+  "1481405": {
+   "name": "python",
+   "cpu_ns": 89586091,
+   "wait_ns": 12813
+  },
+  "1481406": {
+   "name": "python",
+   "cpu_ns": 89576077,
+   "wait_ns": 0
+  },
+  "1481407": {
+   "name": "python",
+   "cpu_ns": 89543270,
+   "wait_ns": 14600
+  },
+  "1481408": {
+   "name": "python",
+   "cpu_ns": 89609058,
+   "wait_ns": 0
+  },
+  "1481409": {
+   "name": "python",
+   "cpu_ns": 89586409,
+   "wait_ns": 0
+  },
+  "1481410": {
+   "name": "python",
+   "cpu_ns": 89567791,
+   "wait_ns": 0
+  },
+  "1481411": {
+   "name": "python",
+   "cpu_ns": 88808515,
+   "wait_ns": 775598
+  },
+  "1481412": {
+   "name": "python",
+   "cpu_ns": 89406785,
+   "wait_ns": 153035
+  },
+  "1481413": {
+   "name": "python",
+   "cpu_ns": 89428804,
+   "wait_ns": 64076
+  },
+  "1481414": {
+   "name": "python",
+   "cpu_ns": 89488969,
+   "wait_ns": 3796
+  },
+  "1481415": {
+   "name": "python",
+   "cpu_ns": 89494162,
+   "wait_ns": 0
+  },
+  "1481416": {
+   "name": "python",
+   "cpu_ns": 89478630,
+   "wait_ns": 15690
+  },
+  "1481417": {
+   "name": "python",
+   "cpu_ns": 89494491,
+   "wait_ns": 0
+  },
+  "1481418": {
+   "name": "python",
+   "cpu_ns": 89492852,
+   "wait_ns": 0
+  },
+  "1481419": {
+   "name": "python",
+   "cpu_ns": 89493922,
+   "wait_ns": 0
+  },
+  "1481420": {
+   "name": "python",
+   "cpu_ns": 89492672,
+   "wait_ns": 0
+  },
+  "1481421": {
+   "name": "python",
+   "cpu_ns": 89480328,
+   "wait_ns": 13157
+  },
+  "1481422": {
+   "name": "python",
+   "cpu_ns": 89493585,
+   "wait_ns": 0
+  },
+  "1481423": {
+   "name": "python",
+   "cpu_ns": 89479614,
+   "wait_ns": 14218
+  },
+  "1481424": {
+   "name": "python",
+   "cpu_ns": 89494160,
+   "wait_ns": 0
+  },
+  "1481425": {
+   "name": "python",
+   "cpu_ns": 89493740,
+   "wait_ns": 0
+  },
+  "1481426": {
+   "name": "python",
+   "cpu_ns": 89493957,
+   "wait_ns": 0
+  },
+  "1481427": {
+   "name": "python",
+   "cpu_ns": 89493864,
+   "wait_ns": 0
+  },
+  "1481428": {
+   "name": "python",
+   "cpu_ns": 89493816,
+   "wait_ns": 0
+  },
+  "1481429": {
+   "name": "python",
+   "cpu_ns": 89409686,
+   "wait_ns": 84188
+  },
+  "1481430": {
+   "name": "python",
+   "cpu_ns": 89494008,
+   "wait_ns": 0
+  },
+  "1481455": {
+   "name": "cuda00001800007",
+   "cpu_ns": 199027,
+   "wait_ns": 0
+  },
+  "1481489": {
+   "name": "python",
+   "cpu_ns": 89606762,
+   "wait_ns": 11625
+  },
+  "1481490": {
+   "name": "python",
+   "cpu_ns": 89627397,
+   "wait_ns": 16518
+  },
+  "1481491": {
+   "name": "python",
+   "cpu_ns": 89010826,
+   "wait_ns": 638708
+  },
+  "1481492": {
+   "name": "python",
+   "cpu_ns": 89478793,
+   "wait_ns": 133812
+  },
+  "1481493": {
+   "name": "python",
+   "cpu_ns": 89627202,
+   "wait_ns": 22230
+  },
+  "1481494": {
+   "name": "python",
+   "cpu_ns": 89431726,
+   "wait_ns": 118827
+  },
+  "1481495": {
+   "name": "python",
+   "cpu_ns": 89521390,
+   "wait_ns": 58631
+  },
+  "1481496": {
+   "name": "python",
+   "cpu_ns": 89519803,
+   "wait_ns": 53467
+  },
+  "1481497": {
+   "name": "python",
+   "cpu_ns": 89617885,
+   "wait_ns": 11634
+  },
+  "1481498": {
+   "name": "python",
+   "cpu_ns": 89523979,
+   "wait_ns": 103178
+  },
+  "1481499": {
+   "name": "python",
+   "cpu_ns": 89590006,
+   "wait_ns": 0
+  },
+  "1481500": {
+   "name": "python",
+   "cpu_ns": 88731537,
+   "wait_ns": 967807
+  },
+  "1481501": {
+   "name": "python",
+   "cpu_ns": 89672798,
+   "wait_ns": 0
+  },
+  "1481502": {
+   "name": "python",
+   "cpu_ns": 89411863,
+   "wait_ns": 245875
+  },
+  "1481503": {
+   "name": "python",
+   "cpu_ns": 89600252,
+   "wait_ns": 23907
+  },
+  "1481504": {
+   "name": "python",
+   "cpu_ns": 89626879,
+   "wait_ns": 32537
+  },
+  "1481505": {
+   "name": "python",
+   "cpu_ns": 77060979,
+   "wait_ns": 12544327
+  },
+  "1481506": {
+   "name": "python",
+   "cpu_ns": 89397277,
+   "wait_ns": 158040
+  },
+  "1481507": {
+   "name": "python",
+   "cpu_ns": 89517358,
+   "wait_ns": 4610
+  },
+  "1481508": {
+   "name": "python",
+   "cpu_ns": 89525282,
+   "wait_ns": 14086
+  },
+  "1481509": {
+   "name": "python",
+   "cpu_ns": 89482897,
+   "wait_ns": 40327
+  },
+  "1481510": {
+   "name": "python",
+   "cpu_ns": 89516062,
+   "wait_ns": 2374
+  },
+  "1481511": {
+   "name": "python",
+   "cpu_ns": 89494606,
+   "wait_ns": 17182
+  },
+  "1481512": {
+   "name": "python",
+   "cpu_ns": 89489221,
+   "wait_ns": 20916
+  },
+  "1481513": {
+   "name": "python",
+   "cpu_ns": 89503009,
+   "wait_ns": 8821
+  },
+  "1481514": {
+   "name": "python",
+   "cpu_ns": 89491127,
+   "wait_ns": 18206
+  },
+  "1481515": {
+   "name": "python",
+   "cpu_ns": 89501297,
+   "wait_ns": 3144
+  },
+  "1481516": {
+   "name": "python",
+   "cpu_ns": 89507057,
+   "wait_ns": 9353
+  },
+  "1481517": {
+   "name": "python",
+   "cpu_ns": 89491062,
+   "wait_ns": 16842
+  },
+  "1481518": {
+   "name": "python",
+   "cpu_ns": 89504236,
+   "wait_ns": 3049
+  },
+  "1481519": {
+   "name": "python",
+   "cpu_ns": 89509956,
+   "wait_ns": 2910
+  },
+  "1481520": {
+   "name": "python",
+   "cpu_ns": 89495394,
+   "wait_ns": 15862
+  },
+  "1481521": {
+   "name": "python",
+   "cpu_ns": 89495547,
+   "wait_ns": 19150
+  },
+  "1481522": {
+   "name": "python",
+   "cpu_ns": 89499043,
+   "wait_ns": 11763
+  },
+  "1481523": {
+   "name": "python",
+   "cpu_ns": 89519788,
+   "wait_ns": 9506
+  },
+  "1481553": {
+   "name": "jemalloc_bg_thd",
+   "cpu_ns": 115003,
+   "wait_ns": 0
+  },
+  "1481658": {
+   "name": "pt_tcpstore_uv",
+   "cpu_ns": 6322497,
+   "wait_ns": 0
+  },
+  "1481659": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 10156722,
+   "wait_ns": 9576
+  },
+  "1481660": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 4422653,
+   "wait_ns": 33468
+  },
+  "1481661": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9476516,
+   "wait_ns": 7854
+  },
+  "1481662": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 109980,
+   "wait_ns": 0
+  },
+  "1481663": {
+   "name": "python",
+   "cpu_ns": 83850520,
+   "wait_ns": 88500
+  },
+  "1481664": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 84987,
+   "wait_ns": 0
+  },
+  "1481665": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 84483,
+   "wait_ns": 0
+  },
+  "1481666": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9310754,
+   "wait_ns": 16425
+  },
+  "1481667": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 88428,
+   "wait_ns": 0
+  },
+  "1481668": {
+   "name": "python",
+   "cpu_ns": 76840439,
+   "wait_ns": 188139
+  },
+  "1481669": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 81273,
+   "wait_ns": 0
+  },
+  "1481670": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 117644,
+   "wait_ns": 0
+  },
+  "1481671": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9133229,
+   "wait_ns": 32302
+  },
+  "1481672": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 14562,
+   "wait_ns": 0
+  },
+  "1481673": {
+   "name": "python",
+   "cpu_ns": 81383662,
+   "wait_ns": 300045
+  },
+  "1481674": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 81001,
+   "wait_ns": 0
+  },
+  "1481675": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 82011,
+   "wait_ns": 0
+  },
+  "1481676": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9192090,
+   "wait_ns": 43144
+  },
+  "1481677": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 97786,
+   "wait_ns": 0
+  },
+  "1481678": {
+   "name": "python",
+   "cpu_ns": 81503456,
+   "wait_ns": 216788
+  },
+  "1481679": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 78720,
+   "wait_ns": 0
+  },
+  "1481680": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 112362,
+   "wait_ns": 0
+  },
+  "1481681": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9413220,
+   "wait_ns": 66762
+  },
+  "1481682": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 23691,
+   "wait_ns": 30763
+  },
+  "1481683": {
+   "name": "python",
+   "cpu_ns": 83069794,
+   "wait_ns": 180801
+  },
+  "1481684": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 16488,
+   "wait_ns": 0
+  },
+  "1481685": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 89011,
+   "wait_ns": 0
+  },
+  "1481686": {
+   "name": "pt_nccl_watchdg",
+   "cpu_ns": 9531636,
+   "wait_ns": 16762
+  },
+  "1481687": {
+   "name": "pt_nccl_heartbt",
+   "cpu_ns": 95708,
+   "wait_ns": 0
+  },
+  "1481688": {
+   "name": "python",
+   "cpu_ns": 79571971,
+   "wait_ns": 123331
+  },
+  "1481689": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 80496,
+   "wait_ns": 0
+  },
+  "1481690": {
+   "name": "pt_gloo_runloop",
+   "cpu_ns": 149494,
+   "wait_ns": 0
+  },
+  "1481699": {
+   "name": "python",
+   "cpu_ns": 2071289,
+   "wait_ns": 14780
+  },
+  "1481700": {
+   "name": "cuda-EvtHandlr",
+   "cpu_ns": 23725489,
+   "wait_ns": 75732
+  },
+  "1481701": {
+   "name": "python",
+   "cpu_ns": 43036129,
+   "wait_ns": 0
+  },
+  "1481702": {
+   "name": "python",
+   "cpu_ns": 42985109,
+   "wait_ns": 0
+  },
+  "1481703": {
+   "name": "python",
+   "cpu_ns": 42978213,
+   "wait_ns": 21535
+  },
+  "1481704": {
+   "name": "python",
+   "cpu_ns": 43122975,
+   "wait_ns": 0
+  },
+  "1481705": {
+   "name": "python",
+   "cpu_ns": 43038888,
+   "wait_ns": 0
+  },
+  "1481706": {
+   "name": "python",
+   "cpu_ns": 43208470,
+   "wait_ns": 0
+  },
+  "1481707": {
+   "name": "python",
+   "cpu_ns": 42943062,
+   "wait_ns": 8721
+  },
+  "1481708": {
+   "name": "python",
+   "cpu_ns": 43067879,
+   "wait_ns": 0
+  },
+  "1481709": {
+   "name": "python",
+   "cpu_ns": 43006493,
+   "wait_ns": 0
+  },
+  "1481710": {
+   "name": "python",
+   "cpu_ns": 42762328,
+   "wait_ns": 122784
+  },
+  "1481711": {
+   "name": "python",
+   "cpu_ns": 42942820,
+   "wait_ns": 0
+  },
+  "1481712": {
+   "name": "python",
+   "cpu_ns": 38287616,
+   "wait_ns": 0
+  },
+  "1481713": {
+   "name": "python",
+   "cpu_ns": 42088796,
+   "wait_ns": 0
+  },
+  "1481714": {
+   "name": "python",
+   "cpu_ns": 45312957,
+   "wait_ns": 56264
+  },
+  "1481715": {
+   "name": "python",
+   "cpu_ns": 33666702,
+   "wait_ns": 110316
+  },
+  "1481716": {
+   "name": "python",
+   "cpu_ns": 42691972,
+   "wait_ns": 0
+  },
+  "1481717": {
+   "name": "python",
+   "cpu_ns": 42978285,
+   "wait_ns": 81012
+  },
+  "1481719": {
+   "name": "python",
+   "cpu_ns": 30535909,
+   "wait_ns": 0
+  },
+  "1481752": {
+   "name": "python",
+   "cpu_ns": 894177,
+   "wait_ns": 8395
+  },
+  "1481754": {
+   "name": "python",
+   "cpu_ns": 628893,
+   "wait_ns": 0
+  },
+  "1481818": {
+   "name": "python",
+   "cpu_ns": 481512053,
+   "wait_ns": 2609332
+  },
+  "1481819": {
+   "name": "python",
+   "cpu_ns": 217108,
+   "wait_ns": 0
+  },
+  "1481820": {
+   "name": "python",
+   "cpu_ns": 242571,
+   "wait_ns": 0
+  },
+  "1481821": {
+   "name": "python",
+   "cpu_ns": 253547,
+   "wait_ns": 0
+  },
+  "1481822": {
+   "name": "python",
+   "cpu_ns": 226445,
+   "wait_ns": 0
+  },
+  "1481823": {
+   "name": "python",
+   "cpu_ns": 64019,
+   "wait_ns": 0
+  },
+  "1481824": {
+   "name": "python",
+   "cpu_ns": 26549,
+   "wait_ns": 0
+  },
+  "1481825": {
+   "name": "python",
+   "cpu_ns": 31880,
+   "wait_ns": 0
+  },
+  "1481826": {
+   "name": "python",
+   "cpu_ns": 24658,
+   "wait_ns": 0
+  },
+  "1481827": {
+   "name": "python",
+   "cpu_ns": 26061,
+   "wait_ns": 0
+  },
+  "1481828": {
+   "name": "python",
+   "cpu_ns": 22200,
+   "wait_ns": 0
+  },
+  "1481829": {
+   "name": "python",
+   "cpu_ns": 23435,
+   "wait_ns": 0
+  },
+  "1481830": {
+   "name": "python",
+   "cpu_ns": 20536,
+   "wait_ns": 0
+  },
+  "1481831": {
+   "name": "python",
+   "cpu_ns": 27683,
+   "wait_ns": 0
+  },
+  "1481832": {
+   "name": "python",
+   "cpu_ns": 20377,
+   "wait_ns": 0
+  },
+  "1481833": {
+   "name": "python",
+   "cpu_ns": 25026,
+   "wait_ns": 0
+  },
+  "1481834": {
+   "name": "python",
+   "cpu_ns": 21506,
+   "wait_ns": 0
+  },
+  "1481835": {
+   "name": "python",
+   "cpu_ns": 22024,
+   "wait_ns": 0
+  },
+  "1481836": {
+   "name": "python",
+   "cpu_ns": 22633,
+   "wait_ns": 0
+  },
+  "1481837": {
+   "name": "python",
+   "cpu_ns": 96569,
+   "wait_ns": 0
+  },
+  "1481838": {
+   "name": "python",
+   "cpu_ns": 23292,
+   "wait_ns": 0
+  },
+  "1481839": {
+   "name": "python",
+   "cpu_ns": 23914,
+   "wait_ns": 0
+  },
+  "1481840": {
+   "name": "python",
+   "cpu_ns": 23366,
+   "wait_ns": 0
+  }
+ },
+ "end": {
+  "phase": "end",
+  "ts": 1788451208.8861728,
+  "switch_interval": 0.005,
+  "pid": 1481388,
+  "affinity": [
+   0,
+   1,
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31,
+   32,
+   33,
+   34,
+   35
+  ],
+  "loadavg": [
+   0.64,
+   0.24,
+   0.07
+  ],
+  "ctxt_total": 2044479307,
+  "self_ctx": {
+   "voluntary_ctxt_switches": 585,
+   "nonvoluntary_ctxt_switches": 137
+  },
+  "cpu_governor": "powersave",
+  "cpu_freq_khz": [
+   1200289,
+   1200437,
+   1200137,
+   1200168
+  ],
+  "temps_c": {
+   "nvme": 27.85
+  },
+  "shm_files": [],
+  "shm_used_gib": 0.0,
+  "root_free_gib": 290.8,
+  "meminfo_kb": {
+   "MemTotal": 131568144,
+   "MemFree": 96184360,
+   "MemAvailable": 125938240,
+   "Cached": 28363188,
+   "Shmem": 283304
+  },
+  "gpu": "1620 MHz, 0 %, 45, 11034 MiB",
+  "thread_schedstat": {
+   "1481388": {
+    "name": "python",
+    "cpu_ns": 19175121405,
+    "wait_ns": 2339612
+   },
+   "1481396": {
+    "name": "python",
+    "cpu_ns": 89567104,
+    "wait_ns": 0
+   },
+   "1481397": {
+    "name": "python",
+    "cpu_ns": 89592861,
+    "wait_ns": 0
+   },
+   "1481398": {
+    "name": "python",
+    "cpu_ns": 89551018,
+    "wait_ns": 9811
+   },
+   "1481399": {
+    "name": "python",
+    "cpu_ns": 89320845,
+    "wait_ns": 283827
+   },
+   "1481400": {
+    "name": "python",
+    "cpu_ns": 89532713,
+    "wait_ns": 49703
+   },
+   "1481401": {
+    "name": "python",
+    "cpu_ns": 89410569,
+    "wait_ns": 147866
+   },
+   "1481402": {
+    "name": "python",
+    "cpu_ns": 89606104,
+    "wait_ns": 0
+   },
+   "1481403": {
+    "name": "python",
+    "cpu_ns": 89562558,
+    "wait_ns": 13060
+   },
+   "1481404": {
+    "name": "python",
+    "cpu_ns": 89449346,
+    "wait_ns": 171968
+   },
+   "1481405": {
+    "name": "python",
+    "cpu_ns": 89586091,
+    "wait_ns": 12813
+   },
+   "1481406": {
+    "name": "python",
+    "cpu_ns": 89576077,
+    "wait_ns": 0
+   },
+   "1481407": {
+    "name": "python",
+    "cpu_ns": 89543270,
+    "wait_ns": 14600
+   },
+   "1481408": {
+    "name": "python",
+    "cpu_ns": 89609058,
+    "wait_ns": 0
+   },
+   "1481409": {
+    "name": "python",
+    "cpu_ns": 89586409,
+    "wait_ns": 0
+   },
+   "1481410": {
+    "name": "python",
+    "cpu_ns": 89567791,
+    "wait_ns": 0
+   },
+   "1481411": {
+    "name": "python",
+    "cpu_ns": 88808515,
+    "wait_ns": 775598
+   },
+   "1481412": {
+    "name": "python",
+    "cpu_ns": 89406785,
+    "wait_ns": 153035
+   },
+   "1481413": {
+    "name": "python",
+    "cpu_ns": 89428804,
+    "wait_ns": 64076
+   },
+   "1481414": {
+    "name": "python",
+    "cpu_ns": 89488969,
+    "wait_ns": 3796
+   },
+   "1481415": {
+    "name": "python",
+    "cpu_ns": 89494162,
+    "wait_ns": 0
+   },
+   "1481416": {
+    "name": "python",
+    "cpu_ns": 89478630,
+    "wait_ns": 15690
+   },
+   "1481417": {
+    "name": "python",
+    "cpu_ns": 89494491,
+    "wait_ns": 0
+   },
+   "1481418": {
+    "name": "python",
+    "cpu_ns": 89492852,
+    "wait_ns": 0
+   },
+   "1481419": {
+    "name": "python",
+    "cpu_ns": 89493922,
+    "wait_ns": 0
+   },
+   "1481420": {
+    "name": "python",
+    "cpu_ns": 89492672,
+    "wait_ns": 0
+   },
+   "1481421": {
+    "name": "python",
+    "cpu_ns": 89480328,
+    "wait_ns": 13157
+   },
+   "1481422": {
+    "name": "python",
+    "cpu_ns": 89493585,
+    "wait_ns": 0
+   },
+   "1481423": {
+    "name": "python",
+    "cpu_ns": 89479614,
+    "wait_ns": 14218
+   },
+   "1481424": {
+    "name": "python",
+    "cpu_ns": 89494160,
+    "wait_ns": 0
+   },
+   "1481425": {
+    "name": "python",
+    "cpu_ns": 89493740,
+    "wait_ns": 0
+   },
+   "1481426": {
+    "name": "python",
+    "cpu_ns": 89493957,
+    "wait_ns": 0
+   },
+   "1481427": {
+    "name": "python",
+    "cpu_ns": 89493864,
+    "wait_ns": 0
+   },
+   "1481428": {
+    "name": "python",
+    "cpu_ns": 89493816,
+    "wait_ns": 0
+   },
+   "1481429": {
+    "name": "python",
+    "cpu_ns": 89409686,
+    "wait_ns": 84188
+   },
+   "1481430": {
+    "name": "python",
+    "cpu_ns": 89494008,
+    "wait_ns": 0
+   },
+   "1481455": {
+    "name": "cuda00001800007",
+    "cpu_ns": 199027,
+    "wait_ns": 0
+   },
+   "1481489": {
+    "name": "python",
+    "cpu_ns": 89606762,
+    "wait_ns": 11625
+   },
+   "1481490": {
+    "name": "python",
+    "cpu_ns": 89627397,
+    "wait_ns": 16518
+   },
+   "1481491": {
+    "name": "python",
+    "cpu_ns": 89010826,
+    "wait_ns": 638708
+   },
+   "1481492": {
+    "name": "python",
+    "cpu_ns": 89478793,
+    "wait_ns": 133812
+   },
+   "1481493": {
+    "name": "python",
+    "cpu_ns": 89627202,
+    "wait_ns": 22230
+   },
+   "1481494": {
+    "name": "python",
+    "cpu_ns": 89431726,
+    "wait_ns": 118827
+   },
+   "1481495": {
+    "name": "python",
+    "cpu_ns": 89521390,
+    "wait_ns": 58631
+   },
+   "1481496": {
+    "name": "python",
+    "cpu_ns": 89519803,
+    "wait_ns": 53467
+   },
+   "1481497": {
+    "name": "python",
+    "cpu_ns": 89617885,
+    "wait_ns": 11634
+   },
+   "1481498": {
+    "name": "python",
+    "cpu_ns": 89523979,
+    "wait_ns": 103178
+   },
+   "1481499": {
+    "name": "python",
+    "cpu_ns": 89590006,
+    "wait_ns": 0
+   },
+   "1481500": {
+    "name": "python",
+    "cpu_ns": 88731537,
+    "wait_ns": 967807
+   },
+   "1481501": {
+    "name": "python",
+    "cpu_ns": 89672798,
+    "wait_ns": 0
+   },
+   "1481502": {
+    "name": "python",
+    "cpu_ns": 89411863,
+    "wait_ns": 245875
+   },
+   "1481503": {
+    "name": "python",
+    "cpu_ns": 89600252,
+    "wait_ns": 23907
+   },
+   "1481504": {
+    "name": "python",
+    "cpu_ns": 89626879,
+    "wait_ns": 32537
+   },
+   "1481505": {
+    "name": "python",
+    "cpu_ns": 77060979,
+    "wait_ns": 12544327
+   },
+   "1481506": {
+    "name": "python",
+    "cpu_ns": 89397277,
+    "wait_ns": 158040
+   },
+   "1481507": {
+    "name": "python",
+    "cpu_ns": 89517358,
+    "wait_ns": 4610
+   },
+   "1481508": {
+    "name": "python",
+    "cpu_ns": 89525282,
+    "wait_ns": 14086
+   },
+   "1481509": {
+    "name": "python",
+    "cpu_ns": 89482897,
+    "wait_ns": 40327
+   },
+   "1481510": {
+    "name": "python",
+    "cpu_ns": 89516062,
+    "wait_ns": 2374
+   },
+   "1481511": {
+    "name": "python",
+    "cpu_ns": 89494606,
+    "wait_ns": 17182
+   },
+   "1481512": {
+    "name": "python",
+    "cpu_ns": 89489221,
+    "wait_ns": 20916
+   },
+   "1481513": {
+    "name": "python",
+    "cpu_ns": 89503009,
+    "wait_ns": 8821
+   },
+   "1481514": {
+    "name": "python",
+    "cpu_ns": 89491127,
+    "wait_ns": 18206
+   },
+   "1481515": {
+    "name": "python",
+    "cpu_ns": 89501297,
+    "wait_ns": 3144
+   },
+   "1481516": {
+    "name": "python",
+    "cpu_ns": 89507057,
+    "wait_ns": 9353
+   },
+   "1481517": {
+    "name": "python",
+    "cpu_ns": 89491062,
+    "wait_ns": 16842
+   },
+   "1481518": {
+    "name": "python",
+    "cpu_ns": 89504236,
+    "wait_ns": 3049
+   },
+   "1481519": {
+    "name": "python",
+    "cpu_ns": 89509956,
+    "wait_ns": 2910
+   },
+   "1481520": {
+    "name": "python",
+    "cpu_ns": 89495394,
+    "wait_ns": 15862
+   },
+   "1481521": {
+    "name": "python",
+    "cpu_ns": 89495547,
+    "wait_ns": 19150
+   },
+   "1481522": {
+    "name": "python",
+    "cpu_ns": 89499043,
+    "wait_ns": 11763
+   },
+   "1481523": {
+    "name": "python",
+    "cpu_ns": 89519788,
+    "wait_ns": 9506
+   },
+   "1481553": {
+    "name": "jemalloc_bg_thd",
+    "cpu_ns": 115003,
+    "wait_ns": 0
+   },
+   "1481699": {
+    "name": "python",
+    "cpu_ns": 2179313,
+    "wait_ns": 14780
+   },
+   "1481700": {
+    "name": "cuda-EvtHandlr",
+    "cpu_ns": 24774208,
+    "wait_ns": 75732
+   },
+   "1481701": {
+    "name": "python",
+    "cpu_ns": 43036129,
+    "wait_ns": 0
+   },
+   "1481702": {
+    "name": "python",
+    "cpu_ns": 42985109,
+    "wait_ns": 0
+   },
+   "1481703": {
+    "name": "python",
+    "cpu_ns": 42978213,
+    "wait_ns": 21535
+   },
+   "1481704": {
+    "name": "python",
+    "cpu_ns": 43122975,
+    "wait_ns": 0
+   },
+   "1481705": {
+    "name": "python",
+    "cpu_ns": 43038888,
+    "wait_ns": 0
+   },
+   "1481706": {
+    "name": "python",
+    "cpu_ns": 43208470,
+    "wait_ns": 0
+   },
+   "1481707": {
+    "name": "python",
+    "cpu_ns": 42943062,
+    "wait_ns": 8721
+   },
+   "1481708": {
+    "name": "python",
+    "cpu_ns": 43067879,
+    "wait_ns": 0
+   },
+   "1481709": {
+    "name": "python",
+    "cpu_ns": 43006493,
+    "wait_ns": 0
+   },
+   "1481710": {
+    "name": "python",
+    "cpu_ns": 42762328,
+    "wait_ns": 122784
+   },
+   "1481711": {
+    "name": "python",
+    "cpu_ns": 42942820,
+    "wait_ns": 0
+   },
+   "1481712": {
+    "name": "python",
+    "cpu_ns": 38287616,
+    "wait_ns": 0
+   },
+   "1481713": {
+    "name": "python",
+    "cpu_ns": 42088796,
+    "wait_ns": 0
+   },
+   "1481714": {
+    "name": "python",
+    "cpu_ns": 45312957,
+    "wait_ns": 56264
+   },
+   "1481715": {
+    "name": "python",
+    "cpu_ns": 33666702,
+    "wait_ns": 110316
+   },
+   "1481716": {
+    "name": "python",
+    "cpu_ns": 42691972,
+    "wait_ns": 0
+   },
+   "1481717": {
+    "name": "python",
+    "cpu_ns": 42978285,
+    "wait_ns": 81012
+   },
+   "1481719": {
+    "name": "python",
+    "cpu_ns": 30535909,
+    "wait_ns": 0
+   },
+   "1481752": {
+    "name": "python",
+    "cpu_ns": 894177,
+    "wait_ns": 8395
+   },
+   "1481754": {
+    "name": "python",
+    "cpu_ns": 628893,
+    "wait_ns": 0
+   }
+  },
+  "diskstats_nvme0n1": {
+   "reads": 16411005,
+   "read_sectors": 10320210352,
+   "writes": 33400103,
+   "write_sectors": 25000769482,
+   "inflight": 0,
+   "io_ms": 56132308,
+   "weighted_io_ms": 490194294
+  }
+ },
+ "policy_state": {
+  "policy": "baseline",
+  "loads_pending": 0,
+  "outstanding_store": 0,
+  "max_outstanding_store": 1,
+  "outstanding_load": 0,
+  "max_outstanding_load": 0,
+  "deferred_jobs": 0,
+  "forced_flushes": 0,
+  "gap_flushes": 0
+ },
+ "totals": {
+  "wall_s": 25.41,
+  "cpu_s": 3.09,
+  "tp_read_n": 0,
+  "tp_read_b": 0,
+  "tp_write_n": 0,
+  "tp_write_b": 0,
+  "matched": 0,
+  "guard_skips": 0
+ }
+}

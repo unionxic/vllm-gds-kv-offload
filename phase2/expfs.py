@@ -748,7 +748,8 @@ class FilesystemWorker(OffloadingWorker):
         # 포화/보류 상태. block 정책이면 대기(재시도), 아니면 비차단 처리:
         if pol == "block":
             return False
-        # value 정책: 포화 시 priority>=1(고가치)만 CPU fallback으로 살리고 나머지 drop
+        # value 정책: 포화 시 priority>=1(seen-twice 통과 chunk)을 CPU fallback으로
+        #   보존. priority는 CPU 슬롯 경합 시 cold-tail 우선용(현재 미경합).
         if pol == "value":
             if prio >= 1 and tr.n_cpu > 0:
                 c = tr.try_acquire_cpu()
