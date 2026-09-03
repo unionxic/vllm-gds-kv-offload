@@ -72,6 +72,16 @@ if args.arm != "C":
     fsm.store_block = lambda p, bf, o, b: (cnt.__setitem__("tp_write_n", cnt["tp_write_n"] + 1),
                                            cnt.__setitem__("tp_write_b", cnt["tp_write_b"] + b),
                                            _os_(p, bf, o, b))[-1]
+if args.arm == "C":
+    # tiering 종료 시점 race 가드 (v0.26.0 workaround, README에 한계 명시됨)
+    import vllm.v1.kv_offload.tiering.manager as tmgr  # noqa: E402
+    _ps = tmgr.TieringOffloadingManager.prepare_store
+    def _ps_guard(self, keys, req_context):
+        if req_context.req_id not in self._req_state:
+            cnt["guard_skips"] += 1
+            return None
+        return _ps(self, keys, req_context)
+    tmgr.TieringOffloadingManager.prepare_store = _ps_guard
 import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched  # noqa: E402
 _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
 def _gmw(self, request, nct):

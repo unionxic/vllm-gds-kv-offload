@@ -273,6 +273,16 @@ def install(mode, max_w_bytes=None, max_r_bytes=None, write_quantum_chunks=2,
         return res
 
     def wait(self, job_ids):
+        # 블록 반환 대기(fence) 계측 — connector가 블록 재사용 전 store 완료를 기다리는 시간
+        _fw0 = time.perf_counter_ns()
+        try:
+            return _wait_inner(self, job_ids)
+        finally:
+            with _lock:
+                S["fence_wait_ns"] = S.get("fence_wait_ns", 0) + (time.perf_counter_ns() - _fw0)
+                S["fence_wait_n"] = S.get("fence_wait_n", 0) + 1
+
+    def _wait_inner(self, job_ids):
         take = []
         with _lock:
             keep = []

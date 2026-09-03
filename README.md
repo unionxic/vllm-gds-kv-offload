@@ -6,6 +6,9 @@
 - GDS 직행 자체의 재현 가능한 성능 우위는 확인하지 못했다. 같은 control plane에서 transport만 바꾼 대조(cuFile 대 POSIX bounce)에서 cuFile 단독 효과는 중립이었다.
 - 실제 병목은 SSD→GPU 전송 방식보다 store 작업의 스케줄링이었다. store를 요청 사이 gap으로 미루자 tail latency 5배, CPU 사용량 12배 개선이 변동계수 0으로 재현됐고, 이 효과는 cuFile과 POSIX에서 동일했다.
 - 간섭을 제거한 뒤에는 cuFile의 transport 우위가 나타났다. LEval 실제 텍스트 기반, load-dominated prefix 재사용 워크로드에서 deferred store를 적용한 cuFile 경로가 동일 control plane의 POSIX 경로를 5/5회 안정적으로 이겼다(R2 p95 평균 35% 격차). 다만 store가 지속 유입되는 Bailian W1에서는 기존 Tiering이 우세했으므로 GDS의 효과는 workload-dependent하다.
+- tail latency의 함수 수준 원인을 규명했다. store 동시 실행의 CPU 폭증은 store 스레드의 CUDA event spin wait(구현 문제, blocking event로 9배 감소)였고, tail은 store 작업이 GPU 원본 KV 블록을 SSD 쓰기 완료까지 붙잡아 요청 경계를 침범하는 것이었다. GDS는 홉이 하나라 원본 블록을 느린 쓰기 끝까지 보존해야 하는데, 이 수명 결합이 tail의 원인이고 transport와 무관했다(순수 sleep으로 재현).
+- CPU staging의 수명 분리를 GPU staging ring으로 재현하고, 포화 시 원본을 붙잡지 않는 비차단 admission(skip·CPU fallback)을 붙이자 tail이 5초에서 1.3초로, CPU가 1/5로 떨어졌다. 이때 cuFile과 POSIX staging은 전 지표가 동일했다. 즉 이득의 원천은 transport가 아니라 store 실행 구조(수명 분리와 비차단 admission)다.
+- 무엇을 저장할지(admission)의 최적해는 workload의 재사용 구조에 의존한다. 반복형 재사용(Bailian coding)에서는 빈도 필터(seen-twice)가 arrival-order random 대비 같은 tail에서 useful hit을 늘리며 write를 절반으로 줄였다. 그러나 먼 거리 1회 재사용(cold tail, Mooncake가 SSD의 표적으로 지목한 구간)에서는 seen-twice가 구조적으로 실패했고(2번째 등장에서 저장하므로 2회 재사용을 못 잡음, useful hit 0), 1번째 등장에서 저장하는 정책만 cold tail을 잡았다. 단일 최적 정책은 없다.
 
 한 줄 목적: 재사용 prefix가 GPU·CPU 메모리를 넘는 워크로드에서 SSD KV 오프로드의 유효 구간과, vLLM 기존 경로(SSD→CPU→GPU) 대비 GPUDirect Storage 직행(SSD→GPU)의 손익을 단일 노드에서 실측.
 
@@ -32,6 +35,29 @@ load 중심 재사용(라운드 2)의 비교. cuFile 지연 store 대 POSIX 지�
 | POSIX 동시 store | 3 | 0.884 | 1.246 (0.048) | 4.254 | 1,183 |
 | cuFile 지연 store | 5 | 0.637 | 0.786 (0.046) | 1.169 | 114 |
 | POSIX 지연 store | 5 | 0.920 | 1.206 (0.056) | 1.168 | 123 |
+
+#### 측정 3: GPU staging ring과 비차단 admission (Bailian 150, V2 b64, 3회)
+
+원본 GPU 블록 수명을 SSD 쓰기에서 분리하고, ring 포화 시 원본을 붙잡지 않는 정책. JOB_HOLD는 store 제출부터 완료 보고까지의 GPU 블록 점유 시간.
+
+| 구성 | p95 (s) | CPU (s) | JOB_HOLD (ms) | useful hit | write (GiB) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 기존 tiering | 5.28 | 138 | — | 20,960 | 43.5 |
+| staging block (슬롯 대기) | 6.63 | 118 | 5,312 | 19,936 | 53 |
+| staging skip (비차단) | 1.17 | 22 | 556 | 8,480 | 7.3 |
+| staging cpu_fallback | 1.34 | 48 | 753 | 12,688 | 16 |
+
+#### 측정 4: Prefix Value Admission (real-text 혼합 workload, 카테고리별 useful hit)
+
+one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. far_reuse가 SSD의 표적인 cold tail(먼 거리 1회 재사용).
+
+| 구성 | p95 (s) | far_hit | near_hit | rep_hit | 총 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 기존 tiering | 5.17 | 28,576 | 26,656 | 55,072 | 110,304 |
+| random skip (1번째 저장) | 1.70 | 2,880 | 1,840 | 7,040 | 11,760 |
+| seen-twice (2번째 저장) | 1.51 | 0 | 0 | 10,544 | 10,544 |
+
+반복형 Bailian에서는 seen-twice가 random을 이기지만(hit +29%, write 절반), cold-tail 혼합에서는 seen-twice가 far_reuse를 구조적으로 못 잡아(2회 재사용을 2번째에 저장) random에 진다. 양 러너 동일.
 
 #### 해석과 한계
 

@@ -1,0 +1,12 @@
+RESULT mix-v1-C-r1 arm=C p95=4.901 matched=110320 write=0.00GB far_hit=28576 near_hit=26656 rep_hit=55072 wall=216s cpu=158s
+RESULT mix-v1-Sskip-r1 arm=Sskip p95=2.503 matched=12048 write=7.75GB far_hit=3056 near_hit=1888 rep_hit=7104 wall=217s cpu=46s
+RESULT mix-v1-Sseen-r1 arm=Sseen p95=1.224 matched=10224 write=11.82GB far_hit=0 near_hit=0 rep_hit=10224 wall=198s cpu=25s
+RESULT mix-v1-Svalue-r1 arm=Svalue p95=1.294 matched=10416 write=11.64GB far_hit=0 near_hit=0 rep_hit=10416 wall=203s cpu=30s
+NO RESULT mix-v1-C-r2: [rank0]: KeyError: '70-949ab3ec'
+RESULT mix-v1-Sskip-r2 arm=Sskip p95=2.699 matched=12800 write=7.95GB far_hit=2784 near_hit=1888 rep_hit=8128 wall=227s cpu=57s
+RESULT mix-v1-Sseen-r2 arm=Sseen p95=1.585 matched=10416 write=11.86GB far_hit=0 near_hit=0 rep_hit=10416 wall=203s cpu=30s
+RESULT mix-v1-Svalue-r2 arm=Svalue p95=1.740 matched=10672 write=11.84GB far_hit=0 near_hit=0 rep_hit=10672 wall=205s cpu=32s
+RESULT mix-v1-C-r3 arm=C p95=3.983 matched=110320 write=0.00GB far_hit=28576 near_hit=26656 rep_hit=55072 wall=206s cpu=150s
+RESULT mix-v1-Sskip-r3 arm=Sskip p95=3.629 matched=12352 write=7.75GB far_hit=2928 near_hit=1776 rep_hit=7648 wall=251s cpu=83s
+RESULT mix-v1-Sseen-r3 arm=Sseen p95=1.692 matched=10544 write=11.82GB far_hit=0 near_hit=0 rep_hit=10544 wall=203s cpu=30s
+RESULT mix-v1-Svalue-r3 arm=Svalue p95=1.698 matched=10544 write=11.80GB far_hit=0 near_hit=0 rep_hit=10544 wall=204s cpu=31s

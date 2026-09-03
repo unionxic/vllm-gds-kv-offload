@@ -1,0 +1,25 @@
+=== adm-v1b-C-r1 ===
+RESULT adm-v1b-C-r1 C pol=baseline n=150 p50=1.151 p95=3.732 p99=4.408 wall=179.3s cpu=94.1s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v1b-Sskip-r1 ===
+RESULT adm-v1b-Sskip-r1 S pol=baseline n=150 p50=1.044 p95=1.169 p99=1.574 wall=114.7s cpu=19.9s matched=8256 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Sseen-r1 ===
+RESULT adm-v1b-Sseen-r1 S pol=baseline n=150 p50=1.035 p95=1.169 p99=1.450 wall=113.0s cpu=17.9s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Svalue-r1 ===
+RESULT adm-v1b-Svalue-r1 S pol=baseline n=150 p50=1.038 p95=1.169 p99=2.722 wall=114.4s cpu=19.6s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v1b-C-r2 ===
+RESULT adm-v1b-C-r2 C pol=baseline n=150 p50=1.152 p95=3.657 p99=4.924 wall=183.8s cpu=97.3s matched=19216 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v1b-Sskip-r2 ===
+RESULT adm-v1b-Sskip-r2 S pol=baseline n=150 p50=1.052 p95=1.169 p99=1.685 wall=116.7s cpu=21.9s matched=8768 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Sseen-r2 ===
+RESULT adm-v1b-Sseen-r2 S pol=baseline n=150 p50=1.033 p95=1.168 p99=1.170 wall=112.5s cpu=17.4s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Svalue-r2 ===
+RESULT adm-v1b-Svalue-r2 S pol=baseline n=150 p50=1.036 p95=1.167 p99=1.168 wall=110.9s cpu=15.8s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v1b-C-r3 ===
+RESULT adm-v1b-C-r3 C pol=baseline n=150 p50=1.145 p95=5.014 p99=6.487 wall=199.0s cpu=113.9s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== adm-v1b-Sskip-r3 ===
+RESULT adm-v1b-Sskip-r3 S pol=baseline n=150 p50=1.045 p95=1.171 p99=2.601 wall=117.8s cpu=24.1s matched=9280 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Sseen-r3 ===
+RESULT adm-v1b-Sseen-r3 S pol=baseline n=150 p50=1.035 p95=1.164 p99=1.561 wall=110.6s cpu=15.8s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== adm-v1b-Svalue-r3 ===
+RESULT adm-v1b-Svalue-r3 S pol=baseline n=150 p50=1.033 p95=1.164 p99=1.169 wall=110.5s cpu=15.6s matched=10560 maxOutW=2 maxOutR=1 forced=0 gap=0
+admission v1 matrix done
