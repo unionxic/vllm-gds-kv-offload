@@ -1,0 +1,43 @@
+=== v1b-C-r1 ===
+RESULT v1b-C-r1 C pol=baseline n=150 p50=1.145 p95=3.689 p99=6.076 wall=194.4s cpu=109.2s matched=20656 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== v1b-Dbev-r1 ===
+RESULT v1b-Dbev-r1 D pol=baseline n=150 p50=2.121 p95=4.289 p99=5.089 wall=315.1s cpu=65.7s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Ddefbev-r1 ===
+RESULT v1b-Ddefbev-r1 D pol=deferred_store n=150 p50=1.927 p95=4.098 p99=4.877 wall=298.3s cpu=66.0s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Sblock-r1 ===
+RESULT v1b-Sblock-r1 S pol=baseline n=150 p50=1.688 p95=4.377 p99=5.582 wall=279.4s cpu=65.4s matched=16976 maxOutW=3 maxOutR=1 forced=0 gap=0
+=== v1b-Sskip-r1 ===
+RESULT v1b-Sskip-r1 S pol=baseline n=150 p50=1.042 p95=1.166 p99=1.792 wall=114.3s cpu=19.5s matched=7808 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== v1b-Scpufb-r1 ===
+RESULT v1b-Scpufb-r1 S pol=baseline n=150 p50=1.139 p95=2.329 p99=4.244 wall=141.8s cpu=47.7s matched=13248 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== v1b-P-r1 ===
+RESULT v1b-P-r1 P pol=baseline n=150 p50=1.038 p95=1.168 p99=1.577 wall=114.2s cpu=17.1s matched=8768 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== v1b-C-r2 ===
+RESULT v1b-C-r2 C pol=baseline n=150 p50=1.148 p95=3.510 p99=4.805 wall=175.7s cpu=89.9s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== v1b-Dbev-r2 ===
+RESULT v1b-Dbev-r2 D pol=baseline n=150 p50=2.065 p95=3.832 p99=4.759 wall=307.8s cpu=68.0s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Ddefbev-r2 ===
+RESULT v1b-Ddefbev-r2 D pol=deferred_store n=150 p50=1.684 p95=3.836 p99=4.490 wall=274.2s cpu=59.6s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Sblock-r2 ===
+RESULT v1b-Sblock-r2 S pol=baseline n=150 p50=1.498 p95=3.853 p99=4.690 wall=250.8s cpu=54.9s matched=16976 maxOutW=3 maxOutR=1 forced=0 gap=0
+=== v1b-Sskip-r2 ===
+RESULT v1b-Sskip-r2 S pol=baseline n=150 p50=1.073 p95=1.171 p99=1.555 wall=115.1s cpu=20.8s matched=8288 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== v1b-Scpufb-r2 ===
+RESULT v1b-Scpufb-r2 S pol=baseline n=150 p50=1.141 p95=2.223 p99=3.172 wall=133.0s cpu=39.3s matched=13904 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== v1b-P-r2 ===
+RESULT v1b-P-r2 P pol=baseline n=150 p50=1.092 p95=1.188 p99=1.697 wall=115.6s cpu=18.4s matched=8288 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== v1b-C-r3 ===
+RESULT v1b-C-r3 C pol=baseline n=150 p50=1.150 p95=2.945 p99=3.984 wall=161.7s cpu=76.0s matched=20960 maxOutW=0 maxOutR=0 forced=0 gap=0
+=== v1b-Dbev-r3 ===
+RESULT v1b-Dbev-r3 D pol=baseline n=150 p50=1.866 p95=3.719 p99=6.361 wall=288.5s cpu=71.6s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Ddefbev-r3 ===
+RESULT v1b-Ddefbev-r3 D pol=deferred_store n=150 p50=1.890 p95=3.805 p99=4.688 wall=281.4s cpu=62.2s matched=16976 maxOutW=0 maxOutR=1 forced=0 gap=0
+=== v1b-Sblock-r3 ===
+RESULT v1b-Sblock-r3 S pol=baseline n=150 p50=1.589 p95=3.621 p99=4.592 wall=252.7s cpu=55.2s matched=16976 maxOutW=3 maxOutR=1 forced=0 gap=0
+=== v1b-Sskip-r3 ===
+RESULT v1b-Sskip-r3 S pol=baseline n=150 p50=1.034 p95=1.164 p99=1.484 wall=112.2s cpu=17.1s matched=7104 maxOutW=1 maxOutR=1 forced=0 gap=0
+=== v1b-Scpufb-r3 ===
+RESULT v1b-Scpufb-r3 S pol=baseline n=150 p50=1.109 p95=2.466 p99=3.339 wall=137.1s cpu=44.2s matched=15184 maxOutW=2 maxOutR=1 forced=0 gap=0
+=== v1b-P-r3 ===
+RESULT v1b-P-r3 P pol=baseline n=150 p50=1.058 p95=1.168 p99=1.423 wall=114.1s cpu=17.5s matched=9280 maxOutW=1 maxOutR=1 forced=0 gap=0
+v1b256 matrix done
