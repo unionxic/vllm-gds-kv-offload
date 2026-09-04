@@ -19,7 +19,8 @@ import time
 ap = argparse.ArgumentParser()
 ap.add_argument("--run-id", required=True)
 ap.add_argument("--arm", required=True,
-                choices=["C", "D0", "D1", "E1", "DS4", "ST"])
+                choices=["C", "D0", "D1", "E1", "DS4", "ST",
+                         "SVseen", "SVskip", "SVcpu"])
 ap.add_argument("--docs", type=int, default=64)
 ap.add_argument("--conc", type=int, default=1, help="closed-loop 동시 스트림 수")
 ap.add_argument("--arrival", choices=["closed", "poisson"], default="closed")
@@ -43,12 +44,19 @@ W = json.load(open(os.path.join(HERE, "workload.json")))
 docs = W["docs"][:args.docs]
 delim = W["delim_tokens"]
 
-ARM_MODE = {"D0": "S0", "D1": "DEF", "E1": "DEF", "DS4": "S4",
-            "ST": "S0", "C": None}
+# SV* = staging + 비차단 admission (open-loop admission 검증). mode=None(스케줄러
+#   레짐 미개입, expfs 자체 정책이 admission 담당).
+STAGING_ARMS = {"ST": ("skip", None), "SVskip": ("skip", None),
+                "SVcpu": ("cpu_fallback", None),
+                "SVseen": ("value", "seen_twice")}
+ARM_MODE = {"D0": "S0", "D1": "DEF", "E1": "DEF", "DS4": "S4", "C": None,
+            "ST": None, "SVseen": None, "SVskip": None, "SVcpu": None}
 mode = ARM_MODE[args.arm]
-transport = ("cufile_staged" if args.arm == "ST"
+transport = ("cufile_staged" if args.arm in STAGING_ARMS
              else "cufile" if args.arm in ("D0", "D1", "DS4")
              else "posix" if args.arm == "E1" else None)
+staging_policy = STAGING_ARMS.get(args.arm, (None, None))[0]
+value_mode = STAGING_ARMS.get(args.arm, (None, None))[1]
 if args.arm == "DS4" and args.max_w_bytes is None:
     args.max_w_bytes = 40 << 20
 
@@ -121,16 +129,21 @@ if args.arm == "C":
                                "cpu_bytes_to_use": 8 << 30, "block_size": 16,
                                "secondary_tiers": [{"type": "fs", "root_dir": kvroot}]})
 else:
+    ec = {"spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
+          "expfs_root_dir": kvroot, "expfs_transport": transport, "block_size": 64}
+    if args.arm in STAGING_ARMS:
+        ec.update(expfs_staging_slots=6, expfs_staging_writers=2,
+                  expfs_staging_policy=staging_policy, expfs_cpu_fallback_slots=8)
     ktc = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both",
-                           kv_connector_extra_config={
-                               "spec_name": "ExperimentalFilesystemSpec",
-                               "spec_module_path": "expfs",
-                               "expfs_root_dir": kvroot,
-                               "expfs_transport": transport, "block_size": 64})
+                           kv_connector_extra_config=ec)
 
 llm = LLM(model="facebook/opt-2.7b", kv_transfer_config=ktc,
           gpu_memory_utilization=0.7, max_model_len=2048, enforce_eager=True)
 eng = llm.llm_engine
+if value_mode:
+    sys.path.insert(0, os.path.join(HERE, "..", "..", "lib"))
+    import value_admission  # noqa: E402
+    value_admission.install(expfs.LAST_WORKER.transport, value_mode)
 
 
 def sp_for(q):
