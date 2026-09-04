@@ -9,6 +9,6 @@ export PYTHONHASHSEED=0
 # 재사용 모듈은 lib/, 공유 하네스는 harness/. spec_module_path="expfs" 등
 # import 이름 로딩이 이 경로에 의존.
 _GDSKV_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export PYTHONPATH="$_GDSKV_ROOT/lib:$_GDSKV_ROOT/harness:$PYTHONPATH"
+export PYTHONPATH="$_GDSKV_ROOT/lib:$_GDSKV_ROOT/harness:${PYTHONPATH:-}"
 
 nvfs_stats() { grep -E '^(Reads|Writes)' /proc/driver/nvidia-fs/stats; }
