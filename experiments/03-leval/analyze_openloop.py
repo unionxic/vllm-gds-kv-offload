@@ -7,7 +7,7 @@ import os
 import sys
 
 BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                    "..", "results", "w2_openloop", "raw")
+                    "..", "..", "results", "leval-openloop", "raw")
 
 
 def pct(xs, q):

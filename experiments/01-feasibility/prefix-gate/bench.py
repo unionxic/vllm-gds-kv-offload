@@ -11,7 +11,7 @@
 #   기대: A: fs_load=0, cpu_load=0 / B: fs_load=0, cpu_load>0 / C: fs_load>0
 #
 # TTFT 프록시: max_tokens=1 요청의 wall time (모든 arm 동일 조건).
-# 출력: CSV (phase05/results.csv에 append)
+# 출력: CSV (experiments/01-feasibility/prefix-gate/results.csv에 append)
 import argparse
 import csv
 import json

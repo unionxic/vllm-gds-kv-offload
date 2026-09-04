@@ -9,7 +9,7 @@ import torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "lib"))
 from cufile_batch import CUFILE_COMPLETE, CUFILE_READ, CUFILE_WRITE, CuFileBatch
 from gdslib import Gds
 

@@ -8,7 +8,7 @@
 #  - 총 입력 2032 토큰 이하: 질문 예산 = 2032 - 1920 = 112 (delimiter 포함)
 #  - random padding 금지, 문서 조각 이어붙이기 금지, 짧은 문서는 제외
 #  - prompt_token_ids 직접 전달 전제 → 여기서 토큰 배열까지 확정
-# 산출: results/w2_leval/dataset_manifest.json, w2_leval/workload.json
+# 산출: results/leval/dataset_manifest.json, experiments/03-leval/workload.json
 import hashlib
 import json
 import os
@@ -19,7 +19,7 @@ from huggingface_hub import HfApi, hf_hub_download
 from transformers import AutoTokenizer
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RESULTS = os.path.join(HERE, "..", "results", "w2_leval")
+RESULTS = os.path.join(HERE, "..", "..", "results", "leval")
 os.makedirs(RESULTS, exist_ok=True)
 
 SEED = 20260901

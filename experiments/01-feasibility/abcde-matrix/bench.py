@@ -20,8 +20,7 @@ import time
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "phase2"))
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
 
 # ---- 경로 계수 패치 (엔진 생성 전) ----
 counters = {"fs_load": 0, "fs_store": [], "cpu_load": 0, "tp_read": 0, "tp_write": []}

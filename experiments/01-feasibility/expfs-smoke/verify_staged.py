@@ -17,7 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def child(role, transport, kvroot, out_path):
     os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
     sys.path.insert(0, HERE)
-    sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+    sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
     import expfs
     cnt = {"r": 0, "w": 0}
     _rc = expfs.CuFileTransport.read_chunk

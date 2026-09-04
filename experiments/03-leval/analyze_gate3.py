@@ -6,7 +6,7 @@ import os
 import statistics
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RAW = os.path.join(HERE, "..", "results", "w2_leval", "raw")
+RAW = os.path.join(HERE, "..", "..", "results", "leval", "raw")
 med = statistics.median
 
 

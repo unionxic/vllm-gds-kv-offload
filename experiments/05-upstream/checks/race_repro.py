@@ -13,7 +13,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 from vllm import LLM, SamplingParams
 from vllm.config import KVTransferConfig
 
-W = json.load(open(os.path.join(HERE, "..", "w2_leval", "workload.json")))
+W = json.load(open(os.path.join(HERE, "..", "..", "03-leval", "workload.json")))
 docs = W["docs"][:64]
 delim = W["delim_tokens"]
 

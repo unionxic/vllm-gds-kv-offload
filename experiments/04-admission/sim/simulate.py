@@ -12,7 +12,8 @@ import random as rnd
 from collections import OrderedDict, defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TRACE = os.path.join(HERE, "..", "..", "w1", "trace", "qwen_coder.jsonl")
+TRACE = os.path.join(HERE, "..", "..", "..", "experiments", "02-bailian",
+                     "replay600", "trace", "qwen_coder.jsonl")
 BYTES_PER_BLOCK = 16 * 327_680
 GPUCPU_BLOCKS = int(13.5 * 2**30 // BYTES_PER_BLOCK)
 MS_PER_TOKEN = 0.5

@@ -6,7 +6,7 @@
 set -u
 cd "$(dirname "$0")"
 source ../env.sh
-export PYTHONPATH=$PWD/../phase2:$PWD/../phase1:${PYTHONPATH:-}
+export PYTHONPATH=$PWD/../../../lib:${PYTHONPATH:-}
 
 for spec in "C 64" "E 64" "D 64"; do
   set -- $spec

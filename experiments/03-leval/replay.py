@@ -27,12 +27,11 @@ args = ap.parse_args()
 
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
 HERE = os.path.dirname(os.path.abspath(__file__))
-for p in (HERE, os.path.join(HERE, "..", "sched"),
-          os.path.join(HERE, "..", "phase2"), os.path.join(HERE, "..", "phase1")):
+for p in (HERE, os.path.join(HERE, "..", "..", "lib")):
     sys.path.insert(0, p)
 import snapshot  # noqa: E402
 
-OUT = os.path.join(HERE, "..", "results", "w2_leval", "raw", args.run_id)
+OUT = os.path.join(HERE, "..", "..", "results", "leval", "raw", args.run_id)
 os.makedirs(OUT, exist_ok=True)
 meta = {"args": vars(args), "start": snapshot.collect("start")}
 

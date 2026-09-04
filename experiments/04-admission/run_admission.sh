@@ -4,7 +4,7 @@
 #   arms: C(tiering) / Sskip(random_skip) / Sseen(seen_twice) / Svalue(value_density)
 #   value가 random보다 개선되면 최선 정책에 posix-staging(Pvalue) 추가는 별도.
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../.."
 source env.sh
 export PROF_INSTRUMENT=1
 RUNNER=${1:-v2}
@@ -21,11 +21,11 @@ for r in 1 2 3; do
   for spec in "${SPECS[@]}"; do
     IFS=':' read -r name design pol extra <<< "$spec"
     id="adm-${TAG}-${name}-r${r}"
-    [ -f "sched/runs/${id}/meta.json" ] && { echo "skip $id"; continue; }
+    [ -f "results/bailian/window150-runs/${id}/meta.json" ] && { echo "skip $id"; continue; }
     free_gb=$(df --output=avail -BG / | tail -1 | tr -dc 0-9)
     [ "$free_gb" -lt 25 ] && { echo "DISK GUARD ${free_gb}G"; exit 1; }
     echo "=== $id ==="
-    python sched/run_bench.py --run-id "$id" --design "$design" \
+    python harness/run_bench.py --run-id "$id" --design "$design" \
       --policy "$pol" --block "$BLK" --n "$N" $extra --note "admission ${RUNNER}" 2>&1 | tail -1
   done
 done
