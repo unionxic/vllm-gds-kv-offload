@@ -1,6 +1,6 @@
 # scheduling 레짐 실험용 축소 윈도 벤치.
 #   Bailian coder trace 앞 N요청(기본 150)을 W1과 동일하게 재생. 최소 계측.
-#   run별 산출물: sched/runs/<run_id>/{raw.csv, meta.json}
+#   run별 산출물: results/bailian/window150-runs/<run_id>/{raw.csv, meta.json}
 # usage:
 #   python run_bench.py --run-id <id> --design D|E [--n 150] [--switch-interval s]
 #                       [--write-threads n] [--read-threads n] [--note "..."]
@@ -41,12 +41,12 @@ if args.switch_interval is not None:
 
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
 HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.join(HERE, "..")
 sys.path.insert(0, HERE)
-sys.path.insert(0, os.path.join(HERE, "..", "phase2"))
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(ROOT, "lib"))  # expfs·snapshot·policies 등 재사용 모듈
 import snapshot  # noqa: E402
 
-OUT = os.path.join(HERE, "runs", args.run_id)
+OUT = os.path.join(ROOT, "results", "bailian", "window150-runs", args.run_id)
 os.makedirs(OUT, exist_ok=True)
 meta = {"args": vars(args), "start": snapshot.collect("start")}
 
@@ -127,7 +127,7 @@ tmgr.TieringOffloadingManager.prepare_store = _ps_guard
 from vllm import LLM, SamplingParams  # noqa: E402
 from vllm.config import KVTransferConfig  # noqa: E402
 
-kvroot = os.path.join(HERE, f"kvroot-{args.run_id}")
+kvroot = os.path.join(ROOT, "results", "bailian", f"kvroot-{args.run_id}")
 shutil.rmtree(kvroot, ignore_errors=True)
 if args.design == "C":
     extra = {"spec_name": "TieringOffloadingSpec",
@@ -153,8 +153,7 @@ llm = LLM(model="facebook/opt-2.7b",
           gpu_memory_utilization=0.7, max_model_len=2048, enforce_eager=True)
 
 if args.staging_policy == "value":
-    sys.path.insert(0, os.path.join(HERE, "..", "admission"))
-    import value_admission  # noqa: E402
+    import value_admission  # noqa: E402  (lib/, PYTHONPATH·lib insert로 로드)
     _vw = expfs.LAST_WORKER
     value_admission.install(_vw.transport, args.value_mode)
 
@@ -163,7 +162,8 @@ vocab, bos = tok.vocab_size, tok.bos_token_id or 2
 sp = SamplingParams(max_tokens=1, temperature=0.0)
 
 reqs = []
-with open(os.path.join(HERE, "..", "w1", "trace", "qwen_coder.jsonl")) as f:
+with open(os.path.join(ROOT, "experiments", "02-bailian", "replay600",
+                        "trace", "qwen_coder.jsonl")) as f:
     for line in f:
         reqs.append(json.loads(line))
         if len(reqs) >= args.n:

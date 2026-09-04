@@ -8,8 +8,7 @@ import time
 
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "phase2"))
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
 
 CONFIG = sys.argv[1]
 

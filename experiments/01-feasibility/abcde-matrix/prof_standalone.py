@@ -8,7 +8,7 @@ import time
 import torch
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
 from gdslib import Gds
 
 from vllm.v1.kv_offload.tiering.fs.thread_pool import DualQueueThreadPool

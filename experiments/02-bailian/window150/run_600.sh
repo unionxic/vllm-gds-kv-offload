@@ -3,7 +3,7 @@
 # V2 b64. 대조군(tiering, staging block) + 최선(skip, cpu_fallback). 각 3회.
 # kvroot가 런당 최대 ~200GB라 매 런 후 삭제(run_bench가 처리) + 디스크 가드.
 set -u
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")/../../.."
 source env.sh
 export PROF_INSTRUMENT=1
 SPECS=(
@@ -20,7 +20,7 @@ for r in 1 2 3; do
     free_gb=$(df --output=avail -BG / | tail -1 | tr -dc 0-9)
     [ "$free_gb" -lt 30 ] && { echo "DISK GUARD ${free_gb}G"; exit 1; }
     echo "=== $id ==="
-    python sched/run_bench.py --run-id "$id" --design "$design" \
+    python harness/run_bench.py --run-id "$id" --design "$design" \
       --policy "$pol" --block 64 --n 600 $extra --note "600요청 확장" 2>&1 | tail -1
   done
 done

@@ -1,4 +1,4 @@
-# read/write 스케줄링 정책 레이어 — phase2/expfs.py를 수정하지 않고 몽키패치로 주입.
+# read/write 스케줄링 정책 레이어 — lib/expfs.py를 수정하지 않고 몽키패치로 주입.
 #
 # 정책:
 #   baseline        현행 동시 실행 (계측만 추가)

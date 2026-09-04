@@ -6,7 +6,7 @@
 #     far_reuse  : 긴 거리 재사용 → 재사용 시 evict됨 (SSD가 유일 hit원, 저장해야 함)
 #     repeated   : 여러 번 등장 (high frequency, seen-twice가 잘 잡음)
 #   near/far 거리는 GPU+CPU 용량(문서 수 기준) 기준으로 설정.
-# 산출: w2_leval/mixed_workload.json (요청 스케줄 = [(doc_idx, q_idx, category)...])
+# 산출: experiments/03-leval/mixed_workload.json (요청 스케줄 = [(doc_idx, q_idx, category)...])
 import json
 import os
 import random
@@ -82,7 +82,7 @@ out = dict(
     prefix_tokens=W["prefix_tokens"], delim_tokens=W["delim_tokens"],
     schedule=schedule, n_requests=len(schedule),
     category_counts=dict(cat_count), cat_docs=cat_docs,
-    doc_ref=os.path.join("w2_leval", "workload.json"))
+    doc_ref=os.path.join("experiments", "03-leval", "workload.json"))
 json.dump(out, open(os.path.join(HERE, "mixed_workload.json"), "w"))
 print(f"혼합 스케줄 {len(schedule)}요청: {dict(cat_count)}")
 print(f"카테고리 문서수: { {k: len(v) for k, v in cat_docs.items()} }")

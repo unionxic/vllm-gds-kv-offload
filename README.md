@@ -70,19 +70,21 @@ one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. 
 
 #### Directory
 
+네 개 대분류로 정리했다. lib는 재사용 구현, harness는 여러 실험이 공유하는 실행기, experiments는 주제별 실험, results는 원자료.
+
 | 경로 | 내용 |
 | --- | --- |
-| `env.sh` | 공통 실행 환경 |
-| `phase0/` | 기능 개통: fs 티어 스모크, FS-hit 분리 증명, GPU 레이아웃 판정 |
-| `phase05/` | SSD KV 정당성 게이트: 재계산 / CPU hit / SSD hit 벤치 |
-| `phase1/` | vLLM 밖 cuFile 마이크로벤치와 경로 분류기 |
-| `phase2/` | out-of-tree GDS filesystem 스펙 expfs.py |
-| `phase3/` | 비교군 벤치, nsys 프로파일, GIL 진단 |
-| `w1/` | Bailian coder trace 리플레이와 causal-closure 하네스 |
-| `sched/` | 스케줄링 레짐 실험 (store 시간 분리 발견) |
-| `w2_leval/` | LEval 실제 텍스트 워크로드와 I/O 스케줄러 비교 (W2a 완료, W2b 진행 중) |
+| `env.sh` | 공통 실행 환경. PYTHONPATH에 lib·harness 등록 |
+| `lib/` | 재사용 구현: expfs.py(GDS filesystem 스펙), gdslib.py(cuFile ctypes), scheduler.py·policies.py·prof_*.py·value_admission.py·snapshot.py·cufile_batch.py |
+| `harness/` | 여러 실험이 공유하는 실행 하네스 run_bench.py |
+| `experiments/01-feasibility/` | 기능 개통(bringup)·SSD 정당성 게이트(prefix-gate)·cuFile 마이크로벤치·expfs 스모크·A~E 비교군 매트릭스 |
+| `experiments/02-bailian/` | Bailian coder trace 리플레이(replay600)와 축소 윈도 실험(window150): 원인 규명·staging·비차단·V1 b256 |
+| `experiments/03-leval/` | LEval 실제 텍스트 워크로드, I/O 스케줄러 비교, open-loop, 혼합 admission 워크로드 |
+| `experiments/04-admission/` | Prefix Value Admission: 오프라인 시뮬레이션(sim)과 단계별 게이트 기록 |
+| `experiments/05-upstream/` | 종료 race·/dev/shm 누출 upstream 회귀 검증 |
+| `results/` | 실험별 원자료(bailian·leval·leval-openloop·admission) |
 | `docs/detailed-log.md` | 설계 근거, 전체 측정표, 실패와 정정의 상세 기록 |
 
-대용량 재생성 데이터(trace 원본, kvroot, 벤치 바이너리)는 .gitignore로 제외.
+대용량 재생성 데이터(trace 원본, kvroot, 프로파일러 산출물)는 .gitignore로 제외.
 
 수치의 근거와 전체 기록: [docs/detailed-log.md](docs/detailed-log.md)

@@ -14,6 +14,7 @@ KVROOT = os.path.join(HERE, f"kvroot-{TRANSPORT}-b{BLOCK}")
 TOKENS_JSON = os.path.join(HERE, f"smoke_tokens_{TRANSPORT}_b{BLOCK}.json")
 
 # transport 호출 계수 (엔진 생성 전 패치) — 경로 사용의 직접 증거
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
 import expfs
 
 calls = {"write": 0, "read": 0}

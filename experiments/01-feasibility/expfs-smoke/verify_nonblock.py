@@ -18,7 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 def child(policy, cpu_slots, kvroot, out_path):
     os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
     sys.path.insert(0, HERE)
-    sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+    sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))
     import expfs
     from vllm import LLM, SamplingParams
     from vllm.config import KVTransferConfig

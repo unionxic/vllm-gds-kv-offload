@@ -2,6 +2,23 @@
 
 README의 요약을 뒷받침하는 설계 근거, 전체 측정표, 발견과 정정의 기록이다. 진행 순서대로 쓴다.
 
+이 문서 본문은 구 디렉터리 이름(phase0~3, sched, w1, w2_leval, admission)으로 쓰였다. 저장소는 이후 대분류로 재구성됐다. 아래 대응표로 읽으면 된다.
+
+| 구 경로 | 신 경로 |
+| --- | --- |
+| phase0 | experiments/01-feasibility/bringup |
+| phase05 | experiments/01-feasibility/prefix-gate |
+| phase1 | experiments/01-feasibility/cufile-microbench (gdslib·path_classify는 lib) |
+| phase2 | experiments/01-feasibility/expfs-smoke (expfs.py는 lib) |
+| phase3 | experiments/01-feasibility/abcde-matrix |
+| w1 | experiments/02-bailian/replay600 |
+| sched | experiments/02-bailian/window150 (run_bench.py는 harness, 공유 모듈은 lib, runs·prof는 results/bailian) |
+| w2_leval | experiments/03-leval (scheduler·cufile_batch는 lib) |
+| admission | experiments/04-admission (value_admission.py는 lib) |
+| upstream_check | experiments/05-upstream/checks |
+| results/w2_leval | results/leval |
+| results/w2_openloop | results/leval-openloop |
+
 ### 연구 질문의 구조
 
 질문은 셋으로 분리해 각각 따로 답한다. transport feasibility(SSD hit가 재계산보다 빠른가), workload legitimacy(실제 워크로드에서 filesystem hit가 자연 발생하는가), GDS benefit(SSD→CPU→GPU보다 SSD→GPU가 낫는가). 세 번째는 기존 경로 C와 GDS 경로 D의 직접 비교로만 답할 수 있다. C와 B(CPU hit)의 차이를 GDS 개선 상한으로 읽으면 안 되는데, 그 차이에는 NVMe read가 포함되고 그 비용은 GDS도 지불하기 때문이다.

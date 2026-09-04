@@ -26,8 +26,7 @@ import time
 
 os.environ["VLLM_ENABLE_V1_MULTIPROCESSING"] = "0"
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "phase2"))
-sys.path.insert(0, os.path.join(HERE, "..", "phase1"))
+sys.path.insert(0, os.path.join(HERE, "..", "..", "..", "lib"))  # expfs·gdslib 등
 
 cnt = {"fs_load_n": 0, "fs_load_b": 0, "fs_store_n": 0, "fs_store_b": 0,
        "tp_read_n": 0, "tp_read_b": 0, "tp_write_n": 0, "tp_write_b": 0,

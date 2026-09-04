@@ -19,7 +19,7 @@
 #   lookup은 miss로 안전(재계산 폴백). 쓰기 실패도 파일 부재 = miss로 안전.
 #
 # 사용:
-#   PYTHONPATH+=:~/experiments/vllm-gds-kv/phase2:~/experiments/vllm-gds-kv/phase1
+#   PYTHONPATH+=:~/experiments/vllm-gds-kv/lib  (source env.sh가 설정)
 #   kv_connector_extra_config = {
 #     "spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
 #     "expfs_root_dir": ..., "expfs_transport": "cufile"|"posix",
@@ -37,7 +37,7 @@ from functools import partial
 
 import torch
 
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "phase1"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))  # lib/ (gdslib 동거)
 from gdslib import Gds, GdsError  # noqa: E402
 
 from vllm.logger import init_logger  # noqa: E402
