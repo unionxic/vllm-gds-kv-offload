@@ -1,0 +1,14 @@
+=== ola-C-p0.3-r1 ===
+RESULT ola-C-p0.3-r1 arm=C poisson conc=1 rate=0.3 R2 ttft p50=0.808 p95=4.983 tok/s=12.5 wall=368.3s cpu=184.0s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=59127/55891빈 svc=0.347req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== ola-C-p0.55-r1 ===
+RESULT ola-C-p0.55-r1 arm=C poisson conc=1 rate=0.55 R2 ttft p50=6.772 p95=32.293 tok/s=22.0 wall=209.0s cpu=77.1s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=5045/3852빈 svc=0.613req/s fence=0회/0.0s guard_skips=16 aborted=None
+=== ola-D1-p0.3-r1 ===
+RESULT ola-D1-p0.3-r1 arm=D1 poisson conc=1 rate=0.3 R2 ttft p50=0.868 p95=30.734 tok/s=12.5 wall=368.4s cpu=222.2s backlog_max=9 gaps=21 forced=44 age_max_ms=14237 steps=21927/19688빈 svc=0.347req/s fence=67회/124.4s guard_skips=0 aborted=None
+=== ola-D1-p0.55-r1 ===
+RESULT ola-D1-p0.55-r1 arm=D1 poisson conc=1 rate=0.55 R2 ttft p50=131.321 p95=150.637 tok/s=14.4 wall=319.9s cpu=316.4s backlog_max=9 gaps=0 forced=79 age_max_ms=5503 steps=879/3빈 svc=0.400req/s fence=53회/172.4s guard_skips=0 aborted=None
+=== ola-SVseen-p0.3-r1 ===
+RESULT ola-SVseen-p0.3-r1 arm=SVseen poisson conc=1 rate=0.3 R2 ttft p50=1.337 p95=4.549 tok/s=12.2 wall=377.8s cpu=119.7s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=2471/35빈 svc=0.339req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== ola-SVseen-p0.55-r1 ===
+RESULT ola-SVseen-p0.55-r1 arm=SVseen poisson conc=1 rate=0.55 R2 ttft p50=14.505 p95=30.908 tok/s=19.2 wall=239.0s cpu=80.8s backlog_max=0 gaps=0 forced=0 age_max_ms=0 steps=1125/9빈 svc=0.536req/s fence=0회/0.0s guard_skips=0 aborted=None
+=== ola-SVcpu-p0.3-r1 ===
+WARNING 09-04 14:45:39 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
