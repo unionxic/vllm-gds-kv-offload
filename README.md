@@ -1,16 +1,15 @@
 ### vLLM + GDS KV 오프로드 실험
 
+한 줄 목적: 재사용 prefix가 GPU·CPU 메모리를 넘는 워크로드에서 SSD KV 오프로드의 유효 구간과, vLLM 기존 경로(SSD→CPU→GPU) 대비 GPUDirect Storage 직행(SSD→GPU)의 손익을 단일 노드에서 실측.
+
 ## 핵심 결론
 
-- SSD KV 오프로드는 유효하다. opt-2.7b에서는 prefix 1,024토큰 이상부터 재계산보다 2배 이상 빨랐다.
-- GDS 직행 자체의 재현 가능한 성능 우위는 확인하지 못했다. 같은 control plane에서 transport만 바꾼 대조(cuFile 대 POSIX bounce)에서 cuFile 단독 효과는 중립이었다.
-- 실제 병목은 SSD→GPU 전송 방식보다 store 작업의 스케줄링이었다. store를 요청 사이 gap으로 미루자 tail latency 5배, CPU 사용량 12배 개선이 변동계수 0으로 재현됐고, 이 효과는 cuFile과 POSIX에서 동일했다.
-- 간섭을 제거한 뒤에는 cuFile의 transport 우위가 나타났다. LEval 실제 텍스트 기반, load-dominated prefix 재사용 워크로드에서 deferred store를 적용한 cuFile 경로가 동일 control plane의 POSIX 경로를 5/5회 안정적으로 이겼다(R2 p95 평균 35% 격차). 다만 store가 지속 유입되는 Bailian W1에서는 기존 Tiering이 우세했으므로 GDS의 효과는 workload-dependent하다.
-- tail latency의 함수 수준 원인을 규명했다. store 동시 실행의 CPU 폭증은 store 스레드의 CUDA event spin wait(구현 문제, blocking event로 9배 감소)였고, tail은 store 작업이 GPU 원본 KV 블록을 SSD 쓰기 완료까지 붙잡아 요청 경계를 침범하는 것이었다. GDS는 홉이 하나라 원본 블록을 느린 쓰기 끝까지 보존해야 하는데, 이 수명 결합이 tail의 원인이고 transport와 무관했다(순수 sleep으로 재현).
-- CPU staging의 수명 분리를 GPU staging ring으로 재현하고, 포화 시 원본을 붙잡지 않는 비차단 admission(skip·CPU fallback)을 붙이자 tail이 5초에서 1.3초로, CPU가 1/5로 떨어졌다. 이때 cuFile과 POSIX staging은 전 지표가 동일했다. 즉 이득의 원천은 transport가 아니라 store 실행 구조(수명 분리와 비차단 admission)다.
-- 무엇을 저장할지(admission)의 최적해는 workload의 재사용 구조에 의존한다. 반복형 재사용(Bailian coding)에서는 빈도 필터(seen-twice)가 arrival-order random 대비 같은 tail에서 useful hit을 늘리며 write를 절반으로 줄였다. 그러나 먼 거리 1회 재사용(cold tail, Mooncake가 SSD의 표적으로 지목한 구간)에서는 seen-twice가 구조적으로 실패했고(2번째 등장에서 저장하므로 2회 재사용을 못 잡음, useful hit 0), 1번째 등장에서 저장하는 정책만 cold tail을 잡았다. 단일 최적 정책은 없다.
+- SSD KV 오프로드는 유효하다. opt-2.7b에서 prefix 1,024토큰 이상부터 재계산보다 2배 이상 빨랐다.
+- GDS 직행 transport 자체는 결정 요인이 아니다. 같은 control plane에서 cuFile과 POSIX bounce를 교체한 대조에서 두 경로의 foreground 성능은 동일했다.
+- tail latency의 원인은 전송 방식이 아니라 store 실행 구조다. store 스레드의 CUDA event spin wait가 CPU를 태웠고(blocking event로 9배 감소), store 작업이 GPU 원본 블록을 SSD 쓰기 완료까지 붙잡아 요청 경계를 침범한 것이 tail을 만들었다(순수 sleep으로 재현). CPU staging의 수명 분리를 GPU staging ring으로 재현하고 포화 시 원본을 붙잡지 않는 비차단 admission을 붙이자 tail이 5초에서 1.3초로, CPU가 1/5로 떨어졌다.
+- 무엇을 저장할지(admission)의 최적해는 workload의 재사용 구조에 의존한다. 반복형 재사용에서는 빈도 필터(seen-twice)가 random 대비 같은 tail에서 write를 절반으로 줄이며 이겼으나, 먼 거리 1회 재사용(cold tail)에서는 seen-twice가 구조적으로 실패했고(2번째에 저장하므로 2회 재사용을 못 잡음) 1번째에 저장하는 정책만 cold tail을 잡았다. 단일 최적 정책은 없다.
 
-한 줄 목적: 재사용 prefix가 GPU·CPU 메모리를 넘는 워크로드에서 SSD KV 오프로드의 유효 구간과, vLLM 기존 경로(SSD→CPU→GPU) 대비 GPUDirect Storage 직행(SSD→GPU)의 손익을 단일 노드에서 실측.
+즉 vLLM에서 GDS의 실용성은 전송 API가 아니라 KV 블록 수명 분리, 저장 admission, 캐시 적중률을 함께 설계하느냐로 결정된다.
 
 #### 대표 측정표
 
