@@ -14,7 +14,7 @@ claude --resume 529f68a0-167c-4c2c-bb29-8fd362cb59ae
   V1 러너(VLLM_USE_V2_MODEL_RUNNER=0) + enforce_eager 필수.
 - GDS: 9/7 MOFED 재설치·재부팅으로 복구 완료. QA(`./run_qa.sh`, opt-2.7b) 4 arm 토큰 일치 + cufile DIRECT. ring QA(`smoke_ring.py 16 1 4`) PASS.
 - OPT-66B: 다운로드 완료(~/.cache/huggingface/hub/models--facebook--opt-66b).
-- **캠페인 실행 중**: `./relaunch.sh`(step1 회귀 QA → `./campaign.sh`) → phase A·B 완료, C(ring8+step2+thr8, gpu_util 0.75)부터 재개, 이후 D·E·F·ring16 r4.
+- **캠페인 완료(2026-09-08 06:41)**: phase A~F + 보강 2런 전부 완료. 결과 표 `python3 summarize_66b.py`, 정리본 **`FINAL-REPORT.md`**(이 디렉터리). 다음 후보: upstream PR(prefetch 경계 버그, vllm 3fc4433b62) 초안, POSIX 경로의 bounce 직렬화 개선(스레드별 더블버퍼)로 공정 비교 강화, 디스크 정리(ssd-66b 80GiB는 `rm -rf results/weight-offload/ssd-66b`).
 - 2026-09-08 01:45 발견: upstream prefetch 버그(모듈 수 61이 step 2로 안 나뉘면 패스 경계에서 슬롯 충돌 → garbage). vllm 3fc4433b62로 수정, `repro_wrap.sh`(31모듈×step2)로 전/후 검증. 상세는 메모리 vllm-gds-kv-experiment.md. 로그 `results/weight-offload/opt66b/campaign.log`, 런당 14~20분.
   - 죽었으면 재개: `cd experiments/06-weight-offload && nohup ./campaign.sh > ../../results/weight-offload/opt66b/campaign.log 2>&1 &` (기존 json은 건너뜀).
   - 표: `python3 summarize_66b.py`

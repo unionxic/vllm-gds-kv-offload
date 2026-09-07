@@ -1,6 +1,6 @@
 # 06 최종 보고서 — vLLM 가중치 3단 오프로드(GPU → pinned CPU → SSD)와 GDS 경로 비교
 
-날짜: 2026-09-07 ~ 09-08 · 환경: rain(Quadro RTX 5000 16 GB, DRAM 125 GiB, NVMe 로컬, MOFED 23.10 + nvidia-fs 2.25.7, 드라이버 570) · 모델: **facebook/opt-66b fp16 132 GB**
+날짜: 2026-09-07 ~ 09-08(캠페인 24런 + 보강 2런, 06:41 완료) · 환경: rain(Quadro RTX 5000 16 GB, DRAM 125 GiB, NVMe 로컬, MOFED 23.10 + nvidia-fs 2.25.7, 드라이버 570) · 모델: **facebook/opt-66b fp16 132 GB**
 
 ---
 
@@ -54,14 +54,14 @@ OPT-66B 배치(group 64 / num_in_group 61): GPU 상주 3층, 오프로드 61 모
 | arm | n | load s | prefill s | decode step s | tok/s | CPU s | nvfs reads | 평균 IO |
 |---|---|---|---|---|---|---|---|---|
 | cuFile step1 thr4 | 3 | 508 | 31.1 | **28.5** | 0.14 | 159 | 826,056 | 1.1 MiB |
-| cuFile step1 thr4 ring16 | 3 | 514 | 31.6 | 29.5 | 0.13 | 133 | 112,728 | 8.2 MiB |
+| cuFile step1 thr4 ring16 | 3 | 516 | 31.4 | 29.8 | 0.13 | 133 | 112,728 | 8.2 MiB |
 | cuFile step2 thr8 | 2 | 503 | 29.9 | 29.7 | 0.14 | 158 | 863,016 | 1.1 MiB |
-| cuFile step2 thr8 ring8 | 2 | 510 | 27.4 | **26.7** | 0.15 | 140 | 112,728 | 8.2 MiB |
+| cuFile step2 thr8 ring8 | 3 | 517 | 27.4 | **26.7** | 0.15 | 137 | 112,728 | 8.2 MiB |
 | POSIX step1 thr4 | 3 | 582 | 72.0 | **68.0** | 0.06 | 146 | 0 | – |
 | POSIX step2 thr8 | 3 | 574 | 70.0 | 68.2 | 0.06 | 142 | 0 | – |
 
 - 반복 편차: cuFile 28.1/29.1/28.5, POSIX 68.0/68.0/69.0 → 3 % 이내.
-- ring16 r4·step2 ring8 r1 재실행은 캠페인 끝에 보강(표는 갱신 예정).
+- step2 ring8 3반복: 26.7/26.7/26.7 s(prefill 27.3/27.5/27.4) — 가장 안정.
 
 ### 4.2 host fraction 스윕(step1 thr4, 1회)
 
