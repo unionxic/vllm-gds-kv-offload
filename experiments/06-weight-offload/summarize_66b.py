@@ -7,7 +7,7 @@ ref_ids = None; mism = []
 for f in sorted(glob.glob(os.path.join(root, "*.json"))):
     d = json.load(open(f)); tag = os.path.basename(f)[:-5]
     a = d.get("args", {})
-    arm = f"{a.get('transport')} h{a.get('host_fraction')} step{a.get('prefetch_step')} thr{a.get('io_threads')} ring{a.get('ring_mb') or 0}" + (" nsys" if a.get("nsys") else "")
+    arm = f"{a.get('transport')} h{a.get('host_fraction')} step{a.get('prefetch_step')} thr{a.get('io_threads')} ring{a.get('ring_mb') or 0}" + (" nsys" if "nsys" in tag else "")
     rows.setdefault(arm, []).append(d)
     ids = d.get("ids")
     if ref_ids is None or tag == "c-h0.3-r1": ref_ids = ids; ref_tag = tag
