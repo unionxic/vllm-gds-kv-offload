@@ -23,6 +23,7 @@ ap.add_argument("--group-size", type=int, default=64)
 ap.add_argument("--num-in-group", type=int, default=61)
 ap.add_argument("--prefetch-step", type=int, default=1)
 ap.add_argument("--io-threads", type=int, default=4)
+ap.add_argument("--ring-mb", type=int, default=0)
 ap.add_argument("--gpu-util", type=float, default=0.9)
 ap.add_argument("--max-model-len", type=int, default=1024)
 ap.add_argument("--prompt-tokens", type=int, default=256)
@@ -75,10 +76,11 @@ if args.transport in ("cufile", "posix", "cpu"):
     kw.update(offload_backend="prefetch", offload_group_size=args.group_size,
               offload_num_in_group=args.num_in_group, offload_prefetch_step=args.prefetch_step)
 if args.transport in ("cufile", "posix"):
-    kw.update(offload_ssd_path=os.path.join(args.ssd_root, args.transport),
+    kw.update(offload_ssd_path=args.ssd_root,  # 두 transport가 같은 파일 사용(매 런 재생성, 디스크 절약)
               offload_host_fraction=args.host_fraction,
               offload_ssd_transport=args.transport,
-              offload_ssd_io_threads=args.io_threads)
+              offload_ssd_io_threads=args.io_threads,
+              offload_ssd_ring_mb=args.ring_mb)
 
 res = dict(args=vars(args), sysmem_start=sysmem(), nvfs_start=nvfs())
 t0 = time.time()
