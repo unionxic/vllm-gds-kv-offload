@@ -1,0 +1,21 @@
+[01:19:04] GPU free
+== qa_ssd cpu ssd-cufile --prefetch-step 2
+   native-GDS proof = cuFile TRACE log classification (/home/unionxic/experiments/vllm-gds-kv/experiments/01-feasibility/cufile-microbench/cufile_trace.json); nvidia_fs rw_stats_enabled=1 (Reads.n/Ops
+   [cpu] ok load=18.7s gpu_max=7.77GiB rss=6.63GiB(+5.82GiB) lck=0.00GiB torch_pinned=4.94GiB nvfs[Bar1-map.n]=+0 nvfs[Mmap.n]=+0 files=0/0.00GiB decode4x32=9.92s(13tok/s) cufile.log=ABSENT(px_io=0 bo
+   [ssd-cufile] ok load=20.5s gpu_max=7.77GiB rss=2.89GiB(+2.06GiB) lck=0.00GiB torch_pinned=0.88GiB nvfs[Bar1-map.n]=+28 nvfs[Mmap.n]=+28 files=80/2.93GiB decode4x32=42.56s(3tok/s) cufile.log=DIRECT(
+   (baseline token ids loaded from previous run: /home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/baseline.json)
+   PASS  cpu: token ids == baseline
+   PASS  ssd-cufile: token ids == baseline
+   PASS  ssd-cufile: native GDS path (cufile.log class INTERNAL-BOUNCE or DIRECT)  -- class=DIRECT px_io=0 (read=0 write=0) bounce_read=0 bounce_write=0 Bar1-map.n=+28 Mmap.n=+28 compat_notices=0 log=
+   PASS  ssd-cufile: files created >= offloaded - cpu layers  -- files=80 (2.93GiB) need>=20 [layers=32, layer=150MiB, offloaded=24, cpu_budget=4; offloader reported {'host_layers': 4, 'ssd_layers': 2
+== ALL PASS  (results in /home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd)
+== smoke_ring 16 2 4 01:21:34
+RESULT {"ring": 16, "step": 2, "threads": 4, "decode_4x32_s": 31.39, "nvfs_reads": 24360, "cls": "DIRECT", "px": 0, "bounce": 0, "token_match": true}
+QA PASS
+== smoke_ring 16 1 8 01:22:56
+RESULT {"ring": 16, "step": 1, "threads": 8, "decode_4x32_s": 37.52, "nvfs_reads": 49056, "cls": "DIRECT", "px": 0, "bounce": 0, "token_match": true}
+QA PASS
+== smoke_ring 8 2 8 01:24:30
+RESULT {"ring": 8, "step": 2, "threads": 8, "decode_4x32_s": 30.78, "nvfs_reads": 24360, "cls": "DIRECT", "px": 0, "bounce": 0, "token_match": true}
+QA PASS
+[01:25:51] done
