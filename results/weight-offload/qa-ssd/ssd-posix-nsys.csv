@@ -1,0 +1,46 @@
+Generating SQLite file /home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-posix.sqlite from /home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-posix.nsys-rep
+Processing [/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-posix.sqlite] with [/opt/nvidia/nsight-systems/2024.6.2/host-linux-x64/reports/cuda_gpu_mem_time_sum.py]... 
+Time (%),Total Time (ns),Count,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Operation
+91.9,18507788405,17730,1043868.5,1728.0,320,33664847,1710864.3,[CUDA memcpy Host-to-Device]
+8.1,1620762489,456,3554303.7,2112.0,992,24192983,7365182.9,[CUDA memcpy Device-to-Host]
+0.0,1943731,3520,552.2,384.0,288,3680,545.5,[CUDA memset]
+0.0,199221,166,1200.1,1152.0,927,1760,200.2,[CUDA memcpy Device-to-Device]
+
+Processing [/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-posix.sqlite] with [/opt/nvidia/nsight-systems/2024.6.2/host-linux-x64/reports/cuda_gpu_mem_size_sum.py]... 
+Total (MB),Count,Avg (MB),Med (MB),Min (MB),Max (MB),StdDev (MB),Operation
+224495.488,17730,12.662,0.005,0.000,257.393,20.565,[CUDA memcpy Host-to-Device]
+4406.723,456,9.664,0.005,0.000,52.429,18.720,[CUDA memcpy Device-to-Host]
+4.426,3520,0.001,0.001,0.000,0.002,0.001,[CUDA memset]
+0.004,166,0.000,0.000,0.000,0.000,0.000,[CUDA memcpy Device-to-Device]
+
+Processing [/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-posix.sqlite] with [/opt/nvidia/nsight-systems/2024.6.2/host-linux-x64/reports/cuda_api_sum.py]... 
+Time (%),Total Time (ns),Num Calls,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+71.1,15689617353,5656,2773977.6,3175197.5,1124,8381309,1917036.2,cudaStreamSynchronize
+11.8,2598091276,18352,141569.9,10712.0,2645,33806343,1440939.8,cudaMemcpyAsync
+11.1,2445523238,1275,1918057.4,11711.0,5026,138500360,8286809.1,cudaEventSynchronize
+1.7,373257316,11140,33506.0,15930.0,3023,53955835,685429.2,cudaLaunchKernel
+1.6,351360556,247,1422512.4,7878.0,2817,31893617,5042656.1,cudaHostAlloc
+0.6,141942833,3,47314277.7,57781.0,20571,141864481,81882880.1,cudaMemGetInfo
+0.5,118235792,7096,16662.3,15938.5,4234,62879,3923.6,cuLaunchKernel
+0.5,111711193,5406,20664.3,23690.5,4234,67428,5987.2,cuLaunchKernelEx
+0.3,56273521,27179,2070.5,1260.0,247,31012,1523.7,cudaStreamIsCapturing_v10000
+0.3,56081271,7104,7894.3,1388.5,225,33110,7293.7,cudaMemsetAsync
+0.2,37808329,3017,12531.8,11184.0,2719,125101,4742.1,cudaEventRecordWithFlags_v11010
+0.1,20437369,4,5109342.3,6355738.0,33810,7692083,3443999.1,cudaDeviceSynchronize
+0.1,15823482,2841,5569.7,4902.0,1556,21640,1676.0,cudaStreamWaitEvent
+0.1,13701959,7096,1930.9,1621.0,418,880694,10547.9,cuKernelGetFunction
+0.1,13120015,96,136666.8,90927.0,3217,922616,137567.0,cudaMalloc
+0.1,12341993,14,881570.9,961462.5,213472,1441443,354425.6,cudaFree
+0.0,7517583,1550,4850.1,5061.0,253,21622,1330.1,cudaEventCreateWithFlags
+0.0,6166476,1505,4097.3,4381.0,786,21379,1209.9,cudaEventDestroy
+0.0,5170177,2,2585088.5,2585088.5,2445861,2724316,196897.4,cudaGetDeviceProperties_v2_v12000
+0.0,3158836,12,263236.3,230291.5,153369,574000,113985.0,cuLibraryLoadData
+0.0,2792484,7,398926.3,65032.0,33347,2388880,877950.9,cuModuleLoadData
+0.0,1277169,128,9977.9,1477.5,1299,277587,37124.4,cudaStreamCreateWithPriority
+0.0,400633,57,7028.6,7116.0,2316,10178,945.7,cudaEventQuery
+0.0,244923,1311,186.8,118.0,66,15853,521.8,cuGetProcAddress_v2
+0.0,42104,14,3007.4,1618.0,369,15016,3901.6,cuLibraryGetKernel
+0.0,6767,6,1127.8,903.5,606,2223,597.8,cuInit
+0.0,2249,3,749.7,137.0,120,1992,1075.9,cuModuleGetLoadingMode
+0.0,1071,2,535.5,535.5,353,718,258.1,cudaGetDriverEntryPoint_v11030
+

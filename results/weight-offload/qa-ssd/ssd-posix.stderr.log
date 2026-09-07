@@ -1,0 +1,18 @@
+WARNING: CPU IP/backtrace sampling not supported, disabling.
+Try the 'nsys status --environment' command to learn more.
+
+WARNING: CPU context switch tracing not supported, disabling.
+Try the 'nsys status --environment' command to learn more.
+
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.31s/it]
+Loading pt checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.31s/it]
+
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 319.37it/s]
+Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:  25%|██▌       | 1/4 [00:30<01:32, 30.81s/it, est. speed input: 0.19 toks/s, output: 0.78 toks/s]Processed prompts: 100%|██████████| 4/4 [00:30<00:00, 30.81s/it, est. speed input: 1.04 toks/s, output: 3.12 toks/s]Processed prompts: 100%|██████████| 4/4 [00:30<00:00,  7.70s/it, est. speed input: 1.04 toks/s, output: 3.12 toks/s]
+Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 1700.16it/s]
+Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:  25%|██▌       | 1/4 [00:41<02:03, 41.16s/it, est. speed input: 0.15 toks/s, output: 0.78 toks/s]Processed prompts: 100%|██████████| 4/4 [00:41<00:00, 41.16s/it, est. speed input: 0.51 toks/s, output: 3.11 toks/s]Processed prompts: 100%|██████████| 4/4 [00:41<00:00, 10.29s/it, est. speed input: 0.51 toks/s, output: 3.11 toks/s]
+[rank0]:[W907 16:33:39.088310492 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
