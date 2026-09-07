@@ -10,7 +10,7 @@ for f in sorted(glob.glob(os.path.join(root, "*.json"))):
     arm = f"{a.get('transport')} h{a.get('host_fraction')} step{a.get('prefetch_step')} thr{a.get('io_threads')} ring{a.get('ring_mb') or 0}" + (" nsys" if a.get("nsys") else "")
     rows.setdefault(arm, []).append(d)
     ids = d.get("ids")
-    if ref_ids is None: ref_ids = ids; ref_tag = tag
+    if ref_ids is None or tag == "c-h0.3-r1": ref_ids = ids; ref_tag = tag
     elif ids != ref_ids: mism.append(tag)
 def med(rs, k): 
     v = [r[k] for r in rs if k in r and r[k] is not None]; return f"{st.median(v):.2f}" if v else "-"
