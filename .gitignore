@@ -27,3 +27,9 @@ experiments/01-feasibility/expfs-smoke/nb_*.json
 experiments/01-feasibility/expfs-smoke/nb_*.log
 experiments/01-feasibility/expfs-smoke/pstaged_smoke.log
 .claude/worktrees/
+# 06-weight-offload 산출물(대용량)
+results/weight-offload/**/*.nsys-rep
+results/weight-offload/**/*-cufile.log
+results/weight-offload/smoke-ssd/
+results/weight-offload/qa-ssd/*/
+experiments/06-weight-offload/*.log
