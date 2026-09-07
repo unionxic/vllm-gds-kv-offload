@@ -16,6 +16,11 @@ claude --resume 529f68a0-167c-4c2c-bb29-8fd362cb59ae
 - 원인: 9/4 서버 정비로 MOFED 패치 nvme 제거 → cuFile compat(POSIX) 폴백. 복구 절차가 이 문서의 핵심.
 - OPT-66B 다운로드: ~/.cache/huggingface/hub/models--facebook--opt-66b (132 GB 중 진행 중). 재부팅 시 중단됨 → 아래 명령으로 재개(이어받기 됨).
 
+## 진행 기록
+- 2026-09-07 17:20 MOFED 23.10 재설치 완료(mlnx-ofed-kernel-modules·mlnx-nvme-modules 5.15.0-97 ii, mlnx-en 24.10 제거됨).
+  ucx-cuda만 실패(libnvidia-compute-535 의존, 드라이버 570이라 정상) → `sudo dpkg -P ucx-cuda`로 정리.
+  /lib/modules/5.15.0-97-generic/updates/host/nvme-core.ko depends=mlx_compat 확인. 남은 것 = initramfs 재생성 + 재부팅.
+
 ## 재부팅 후 체크리스트 (순서대로)
 1. GDS 스택 확인
    ```
