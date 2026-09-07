@@ -14,6 +14,7 @@ OUT=../../results/weight-offload/opt66b; mkdir -p $OUT
 for f in $FRACS; do for a in $ARMS; do for r in $REPS; do
   tag="${a:0:1}-h${f}${SUF}-r${r}"; [ "$NSYS" = 1 ] && tag="${tag}-nsys"
   [ -f $OUT/$tag.json ] && { echo "skip $tag (exists)"; continue; }
+  rm -rf ../../results/weight-offload/ssd-66b   # 런마다 재생성되는 공유 SSD 티어(80GiB) 정리 후 여유 확인
   free_gb=$(df --output=avail -BG / | tail -1 | tr -dc 0-9); [ "$free_gb" -lt 90 ] && { echo "disk free ${free_gb}G < 90G, abort"; exit 1; }
   echo "== $tag $(date +%H:%M:%S)"
   if [ "$NSYS" = 1 ]; then
