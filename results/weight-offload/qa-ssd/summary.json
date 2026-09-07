@@ -1,10 +1,10 @@
 {
  "arms": [
-  "ssd-posix",
+  "cpu",
   "ssd-cufile"
  ],
- "fails": 1,
- "nsys": true,
+ "fails": 0,
+ "nsys": false,
  "env": {
   "MemTotal": 134724620288,
   "nvfs_stats_head": [
@@ -12,21 +12,21 @@
    "NVFS statistics(ver: 4.0)",
    "NVFS Driver(version: 2.25.7)",
    "Mellanox PeerDirect Supported: False",
-   "IO stats: Disabled, peer IO stats: Disabled",
+   "IO stats: Enabled, peer IO stats: Disabled",
    "Logging level: info"
   ],
-  "rw_stats_enabled": "0",
-  "nvme_module": "/lib/modules/5.15.0-97-generic/kernel/drivers/nvme/host/nvme.ko",
+  "rw_stats_enabled": "1",
+  "nvme_module": "/lib/modules/5.15.0-97-generic/updates/host/nvme.ko",
   "gdscheck": [
    "GDS release version: 1.13.1.3",
    "nvidia_fs version:  2.25 libcufile version: 2.12",
-   "NVMe               : Unsupported",
+   "NVMe               : Supported",
    "properties.use_compat_mode : true",
    "properties.force_compat_mode : false",
    "GPU index 0 Quadro RTX 5000 bar:1 bar size (MiB):256 supports GDS, IOMMU State: Disabled"
   ],
-  "gds_nvme_supported": false,
+  "gds_nvme_supported": true,
   "gpu": "Quadro RTX 5000, 16384 MiB"
  },
- "checks_at": "2026-09-07 16:36:47"
+ "checks_at": "2026-09-07 19:05:40"
 }

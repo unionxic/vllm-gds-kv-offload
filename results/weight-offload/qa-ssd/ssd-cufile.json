@@ -12,11 +12,11 @@
   "offload_ssd_transport": "cufile",
   "offload_ssd_io_threads": 4
  },
- "pid": 203736,
+ "pid": 11216,
  "env": {
   "VLLM_USE_V2_MODEL_RUNNER": "0",
   "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
-  "QA_NSYS": "1"
+  "QA_NSYS": "0"
  },
  "offloader_log": [
   "vllm.entrypoints.serve.utils.api_utils: non-default args: {'max_model_len': 512, 'offload_backend': 'prefetch', 'offload_group_size': 4, 'offload_num_in_group': 3, 'offload_ssd_path': '/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-cufile', 'offload_host_fraction': 0.005, 'gpu_memory_utilization': 0.5, 'disable_log_stats': True, 'enforce_eager': True, 'model': 'facebook/opt-2.7b'}",
@@ -28,19 +28,19 @@
   "vllm.model_executor.offloader.prefetch: [PrefetchOffloader] tiers: host 4 layers / 0.59 GiB (budget 0.63 GiB), ssd 20 layers / 2.93 GiB in 80 files"
  ],
  "proc_before": {
-  "VmPeak": 20220428288,
-  "VmSize": 20184313856,
+  "VmPeak": 12871585792,
+  "VmSize": 12871585792,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 931762176,
-  "VmRSS": 931762176,
-  "VmData": 9268342784,
-  "VmStk": 155648,
+  "VmHWM": 898228224,
+  "VmRSS": 898228224,
+  "VmData": 7523868672,
+  "VmStk": 151552,
   "VmExe": 2109440,
-  "VmLib": 2851586048,
-  "VmPTE": 4341760,
+  "VmLib": 2835951616,
+  "VmPTE": 3477504,
   "VmSwap": 0,
-  "Threads": 75
+  "Threads": 72
  },
  "nvfs_before": {
   "GDS Version": {
@@ -56,7 +56,7 @@
    "value": "False"
   },
   "IO stats": {
-   "value": "Disabled, peer IO stats: Disabled"
+   "value": "Enabled, peer IO stats: Disabled"
   },
   "Logging level": {
    "value": "info"
@@ -67,9 +67,13 @@
   "Active Process": {
    "value": 0
   },
+  "Batches": {
+   "n": 0,
+   "ok": 0,
+   "err": 0
+  },
   "Reads": {
-   "err": 0,
-   "io_state_err": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Sparse Reads": {
    "n": 0,
@@ -78,23 +82,19 @@
    "pages": 0
   },
   "Writes": {
-   "err": 0,
-   "io_state_err": 0,
-   "pg-cache": 0,
-   "pg-cache-fail": 0,
-   "pg-cache-eio": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 30,
-   "ok": 30,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "munmap": 30
+   "munmap": 14
   },
   "Bar1-map": {
-   "n": 30,
-   "ok": 30,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "free": 30,
+   "free": 14,
    "callbacks": 0,
    "active": 0,
    "delay-frees": 0
@@ -116,23 +116,23 @@
    "max_pinned_MiB": 575
   }
  },
- "load_s": 47.61521249398356,
+ "load_s": 20.873992046000012,
  "gpu_alloc_after_load": 8001515008,
  "gpu_max_after_load": 8189287936,
  "proc_after_load": {
-  "VmPeak": 45881466880,
-  "VmSize": 45847744512,
+  "VmPeak": 33665892352,
+  "VmSize": 33107668992,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 11417759744,
-  "VmRSS": 3906449408,
-  "VmData": 13533110272,
-  "VmStk": 155648,
+  "VmHWM": 10794074112,
+  "VmRSS": 2920620032,
+  "VmData": 8678797312,
+  "VmStk": 151552,
   "VmExe": 2109440,
-  "VmLib": 3298390016,
-  "VmPTE": 12386304,
+  "VmLib": 3279134720,
+  "VmPTE": 8880128,
   "VmSwap": 0,
-  "Threads": 144
+  "Threads": 138
  },
  "ssd_files_after_load": {
   "count": 80,
@@ -535,37 +535,37 @@
  "decode": {
   "batch": 4,
   "max_tokens": 32,
-  "wall_s": 34.85424554400379,
+  "wall_s": 33.656762867,
   "gen_tokens": 128,
-  "tok_s": 3.672436399129595
+  "tok_s": 3.803098964264988
  },
  "gpu_max_alloc_bytes": 8189287936,
  "gpu_alloc_bytes": 8001515520,
  "torch_pinned_host": {
-  "active_bytes.allocated": 2690154624,
-  "active_bytes.current": 2690154678,
+  "active_bytes.allocated": 942178432,
+  "active_bytes.current": 942178486,
   "active_bytes.freed": -54,
-  "active_bytes.peak": 2690154678,
-  "allocated_bytes.allocated": 1026120992,
-  "allocated_bytes.current": 1026120992,
+  "active_bytes.peak": 942178486,
+  "allocated_bytes.allocated": 942177568,
+  "allocated_bytes.current": 942177568,
   "allocated_bytes.freed": 0,
-  "allocated_bytes.peak": 1026120992
+  "allocated_bytes.peak": 942177568
  },
- "pinned_est_bytes": 1026120992,
+ "pinned_est_bytes": 942177568,
  "proc_after": {
-  "VmPeak": 50491305984,
-  "VmSize": 50491305984,
+  "VmPeak": 35811287040,
+  "VmSize": 35811287040,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 11417759744,
-  "VmRSS": 4113760256,
-  "VmData": 15414116352,
-  "VmStk": 155648,
+  "VmHWM": 10794074112,
+  "VmRSS": 3020279808,
+  "VmData": 8904159232,
+  "VmStk": 151552,
   "VmExe": 2109440,
-  "VmLib": 3298430976,
-  "VmPTE": 13512704,
+  "VmLib": 3279175680,
+  "VmPTE": 9523200,
   "VmSwap": 0,
-  "Threads": 181
+  "Threads": 175
  },
  "nvfs_after": {
   "GDS Version": {
@@ -581,7 +581,7 @@
    "value": "False"
   },
   "IO stats": {
-   "value": "Disabled, peer IO stats: Disabled"
+   "value": "Enabled, peer IO stats: Disabled"
   },
   "Logging level": {
    "value": "info"
@@ -592,9 +592,13 @@
   "Active Process": {
    "value": 1
   },
+  "Batches": {
+   "n": 0,
+   "ok": 0,
+   "err": 0
+  },
   "Reads": {
-   "err": 0,
-   "io_state_err": 0
+   "value": "Bandwidth(MiB/s)=2879 Avg-Latency(usec)=14828"
   },
   "Sparse Reads": {
    "n": 0,
@@ -603,23 +607,19 @@
    "pages": 0
   },
   "Writes": {
-   "err": 0,
-   "io_state_err": 0,
-   "pg-cache": 0,
-   "pg-cache-fail": 0,
-   "pg-cache-eio": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 44,
-   "ok": 44,
+   "n": 28,
+   "ok": 28,
    "err": 0,
-   "munmap": 30
+   "munmap": 14
   },
   "Bar1-map": {
-   "n": 44,
-   "ok": 44,
+   "n": 28,
+   "ok": 28,
    "err": 0,
-   "free": 30,
+   "free": 14,
    "callbacks": 0,
    "active": 14,
    "delay-frees": 0
@@ -926,21 +926,12 @@
  },
  "exit_code": 0,
  "timed_out": false,
- "driver_wall_s": 153.85035061836243,
+ "driver_wall_s": 86.89561820030212,
  "cmd": [
   "timeout",
   "-k",
   "30",
   "900",
-  "/usr/local/cuda/bin/nsys",
-  "profile",
-  "-t",
-  "cuda,nvtx,osrt",
-  "--cuda-memory-usage=false",
-  "-o",
-  "/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-cufile",
-  "--force-overwrite",
-  "true",
   "/home/unionxic/miniconda3/envs/gdsllm/bin/python",
   "/home/unionxic/experiments/vllm-gds-kv/experiments/06-weight-offload/qa_ssd.py",
   "--worker",
@@ -962,40 +953,20 @@
   "--max-tokens",
   "24"
  ],
- "nsys": {
-  "h2d_mb": 224495.488,
-  "h2d_count": 29330,
-  "api": {
-   "cudaMemcpyAsync": {
-    "count": 13712,
-    "total_ms": 2452.01174
-   },
-   "cuMemcpyHtoDAsync_v2": {
-    "count": 16240,
-    "total_ms": 601.352574
-   },
-   "cudaMemsetAsync": {
-    "count": 7104,
-    "total_ms": 55.647142
-   }
-  },
-  "report": "/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-cufile.nsys-rep",
-  "csv": "/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-cufile-nsys.csv",
-  "stats_rc": 0
- },
+ "nsys": null,
  "crashed": false,
  "cufile_log": {
   "path": "/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/qa-ssd/ssd-cufile-cufile.log",
   "exists": true,
-  "bytes": 22749672,
-  "lines": 186697,
-  "px_io": 19767,
-  "px_read": 19767,
+  "bytes": 20901453,
+  "lines": 158131,
+  "px_io": 0,
+  "px_read": 0,
   "px_write": 0,
   "bounce_read": 0,
   "bounce_write": 0,
   "compat_notices": 0,
   "bar1_delta": 14,
-  "class": "COMPAT-POSIX"
+  "class": "DIRECT"
  }
 }
