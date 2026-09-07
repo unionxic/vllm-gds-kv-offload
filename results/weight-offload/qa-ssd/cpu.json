@@ -8,7 +8,7 @@
   "offload_num_in_group": 3,
   "offload_prefetch_step": 1
  },
- "pid": 198017,
+ "pid": 10537,
  "env": {
   "VLLM_USE_V2_MODEL_RUNNER": "0",
   "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
@@ -20,17 +20,17 @@
   "vllm.model_executor.offloader.prefetch: [PrefetchOffloader] Initialized 24 modules. Total GPU memory saved: 3.7765 GB, Static buffer pool: 0.1574 GB (group_size=4, num_in_group=3, prefetch_step=1, mode=cpu)"
  ],
  "proc_before": {
-  "VmPeak": 12947038208,
-  "VmSize": 12947038208,
+  "VmPeak": 12871593984,
+  "VmSize": 12871593984,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 897953792,
-  "VmRSS": 897953792,
-  "VmData": 7532343296,
+  "VmHWM": 891678720,
+  "VmRSS": 891678720,
+  "VmData": 7523876864,
   "VmStk": 151552,
   "VmExe": 2109440,
   "VmLib": 2835951616,
-  "VmPTE": 3444736,
+  "VmPTE": 3403776,
   "VmSwap": 0,
   "Threads": 72
  },
@@ -48,7 +48,7 @@
    "value": "False"
   },
   "IO stats": {
-   "value": "Disabled, peer IO stats: Disabled"
+   "value": "Enabled, peer IO stats: Disabled"
   },
   "Logging level": {
    "value": "info"
@@ -59,9 +59,13 @@
   "Active Process": {
    "value": 0
   },
+  "Batches": {
+   "n": 0,
+   "ok": 0,
+   "err": 0
+  },
   "Reads": {
-   "err": 0,
-   "io_state_err": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Sparse Reads": {
    "n": 0,
@@ -70,23 +74,19 @@
    "pages": 0
   },
   "Writes": {
-   "err": 0,
-   "io_state_err": 0,
-   "pg-cache": 0,
-   "pg-cache-fail": 0,
-   "pg-cache-eio": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 16,
-   "ok": 16,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "munmap": 16
+   "munmap": 14
   },
   "Bar1-map": {
-   "n": 16,
-   "ok": 16,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "free": 16,
+   "free": 14,
    "callbacks": 0,
    "active": 0,
    "delay-frees": 0
@@ -108,21 +108,21 @@
    "max_pinned_MiB": 575
   }
  },
- "load_s": 30.036312985990662,
+ "load_s": 18.253169630000002,
  "gpu_alloc_after_load": 7993126400,
  "gpu_max_after_load": 8180899328,
  "proc_after_load": {
-  "VmPeak": 36513841152,
-  "VmSize": 36513841152,
+  "VmPeak": 36514590720,
+  "VmSize": 36514590720,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 12000436224,
-  "VmRSS": 7199703040,
-  "VmData": 8590925824,
+  "VmHWM": 11990937600,
+  "VmRSS": 7035957248,
+  "VmData": 8592134144,
   "VmStk": 151552,
   "VmExe": 2109440,
-  "VmLib": 3276152832,
-  "VmPTE": 16994304,
+  "VmLib": 3275939840,
+  "VmPTE": 16797696,
   "VmSwap": 0,
   "Threads": 128
  },
@@ -132,12 +132,29 @@
   "entries": []
  },
  "model_info": {
-  "source": "opt-formula",
+  "source": "engine",
+  "model_cls": "OPTForCausalLM",
+  "layers_attr": "model.decoder.layers",
   "num_layers": 32,
-  "layer_bytes": 157352960,
-  "note": "model not found"
+  "layer_bytes": 157352960
  },
- "offloader_attrs": {},
+ "offloader_attrs": {
+  "PrefetchOffloader": {
+   "group_size": 4,
+   "num_in_group": 3,
+   "prefetch_step": 1,
+   "offload_params": "<set len=0>",
+   "mode": "cpu",
+   "copy_stream": "<Stream>",
+   "ssd_tier": null,
+   "host_budget_bytes": 0,
+   "host_tier_bytes": 0,
+   "ssd_tier_bytes": 0,
+   "module_offloaders": "<list len=24>",
+   "buffer_pool": "<StaticBufferPool>",
+   "total_offloaded_bytes": 3776471040
+  }
+ },
  "token_ids": [
   [
    2201,
@@ -253,27 +270,35 @@
  "decode": {
   "batch": 4,
   "max_tokens": 32,
-  "wall_s": 10.27627474698238,
+  "wall_s": 10.308956168999998,
   "gen_tokens": 128,
-  "tok_s": 12.455875611693536
+  "tok_s": 12.41638803207914
  },
  "gpu_max_alloc_bytes": 8180899328,
  "gpu_alloc_bytes": 7993126912,
  "torch_pinned_host": {
-  "allocated_bytes.allocated": 5388197168
+  "active_bytes.allocated": 5304254592,
+  "active_bytes.current": 5304254645,
+  "active_bytes.freed": -53,
+  "active_bytes.peak": 5304254645,
+  "allocated_bytes.allocated": 5304253744,
+  "allocated_bytes.current": 5304253744,
+  "allocated_bytes.freed": 0,
+  "allocated_bytes.peak": 5304253744
  },
+ "pinned_est_bytes": 5304253744,
  "proc_after": {
-  "VmPeak": 39217451008,
-  "VmSize": 39217451008,
+  "VmPeak": 39218196480,
+  "VmSize": 39218196480,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 12000436224,
-  "VmRSS": 7299358720,
-  "VmData": 8816279552,
+  "VmHWM": 11990937600,
+  "VmRSS": 7135531008,
+  "VmData": 8817483776,
   "VmStk": 151552,
   "VmExe": 2109440,
-  "VmLib": 3276193792,
-  "VmPTE": 17637376,
+  "VmLib": 3275980800,
+  "VmPTE": 17432576,
   "VmSwap": 0,
   "Threads": 165
  },
@@ -291,7 +316,7 @@
    "value": "False"
   },
   "IO stats": {
-   "value": "Disabled, peer IO stats: Disabled"
+   "value": "Enabled, peer IO stats: Disabled"
   },
   "Logging level": {
    "value": "info"
@@ -302,9 +327,13 @@
   "Active Process": {
    "value": 0
   },
+  "Batches": {
+   "n": 0,
+   "ok": 0,
+   "err": 0
+  },
   "Reads": {
-   "err": 0,
-   "io_state_err": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Sparse Reads": {
    "n": 0,
@@ -313,23 +342,19 @@
    "pages": 0
   },
   "Writes": {
-   "err": 0,
-   "io_state_err": 0,
-   "pg-cache": 0,
-   "pg-cache-fail": 0,
-   "pg-cache-eio": 0
+   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 16,
-   "ok": 16,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "munmap": 16
+   "munmap": 14
   },
   "Bar1-map": {
-   "n": 16,
-   "ok": 16,
+   "n": 14,
+   "ok": 14,
    "err": 0,
-   "free": 16,
+   "free": 14,
    "callbacks": 0,
    "active": 0,
    "delay-frees": 0
@@ -366,7 +391,7 @@
  },
  "exit_code": 0,
  "timed_out": false,
- "driver_wall_s": 54.83927297592163,
+ "driver_wall_s": 45.83221125602722,
  "cmd": [
   "timeout",
   "-k",
