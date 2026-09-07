@@ -9,12 +9,13 @@ claude --resume 529f68a0-167c-4c2c-bb29-8fd362cb59ae
 메모리(~/.claude/projects/-home-unionxic/memory/)에도 상태가 기록돼 있다.
 
 ## 현재 상태 (2026-09-08 00:05 갱신)
-- vLLM: `~/vllm` 브랜치 `weight-ssd-offload`, 커밋 fbfc637cb0 — 가중치 3단(GPU → pinned CPU 30% → SSD) 오프로드 + 등록 GPU ring 모드(`offload_ssd_ring_mb`).
+- vLLM: `~/vllm` 브랜치 `weight-ssd-offload`, 커밋 3fc4433b62(경계 슬롯 충돌 수정 포함) — 가중치 3단(GPU → pinned CPU 30% → SSD) 오프로드 + 등록 GPU ring 모드(`offload_ssd_ring_mb`).
   새 인자: offload_ssd_path / offload_host_fraction(0.3) / offload_ssd_transport(cufile|posix) / offload_ssd_io_threads / offload_ssd_ring_mb.
   V1 러너(VLLM_USE_V2_MODEL_RUNNER=0) + enforce_eager 필수.
 - GDS: 9/7 MOFED 재설치·재부팅으로 복구 완료. QA(`./run_qa.sh`, opt-2.7b) 4 arm 토큰 일치 + cufile DIRECT. ring QA(`smoke_ring.py 16 1 4`) PASS.
 - OPT-66B: 다운로드 완료(~/.cache/huggingface/hub/models--facebook--opt-66b).
-- **캠페인 실행 중**: `./campaign.sh`(tmux, 백그라운드) → phase A 완료, B(ring16) 진행 중, 이후 C·D·E·F. 로그 `results/weight-offload/opt66b/campaign.log`, 런당 14~20분.
+- **캠페인 실행 중**: `./relaunch.sh`(step1 회귀 QA → `./campaign.sh`) → phase A·B 완료, C(ring8+step2+thr8, gpu_util 0.75)부터 재개, 이후 D·E·F·ring16 r4.
+- 2026-09-08 01:45 발견: upstream prefetch 버그(모듈 수 61이 step 2로 안 나뉘면 패스 경계에서 슬롯 충돌 → garbage). vllm 3fc4433b62로 수정, `repro_wrap.sh`(31모듈×step2)로 전/후 검증. 상세는 메모리 vllm-gds-kv-experiment.md. 로그 `results/weight-offload/opt66b/campaign.log`, 런당 14~20분.
   - 죽었으면 재개: `cd experiments/06-weight-offload && nohup ./campaign.sh > ../../results/weight-offload/opt66b/campaign.log 2>&1 &` (기존 json은 건너뜀).
   - 표: `python3 summarize_66b.py`
 - phase A 결과(h0.3, step1, thr4, 3반복 중앙값): cuFile decode step 28.5s / prefill 31.1s, POSIX 68.0s / 72.0s → **cuFile 2.4배**. 둘 다 SSD 읽기 877GiB, 토큰 동일.
