@@ -55,7 +55,7 @@ def sysmem():
     d = {}
     for line in open("/proc/meminfo"):
         k, v = line.split(":")
-        if k in ("MemTotal", "MemAvailable", "Cached", "Dirty"): d[k] = int(v.split()[0]) * 1024
+        if k in ("MemTotal", "MemAvailable", "MemFree", "Cached", "Dirty", "AnonPages", "Mapped", "Shmem", "Unevictable", "Mlocked", "Slab"): d[k] = int(v.split()[0]) * 1024
     return d
 
 kw = dict(offload_backend="prefetch", offload_group_size=args.group_size, offload_num_in_group=args.num_in_group,
