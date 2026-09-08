@@ -1,0 +1,19 @@
+[22:36:37] 이전 런 종료 확인
+[22:36:37] == ring QA (opt-2.7b)
+RESULT {"ring": 16, "step": 1, "threads": 4, "decode_4x32_s": 33.54, "nvfs_reads": 24360, "cls": "DIRECT", "px": 0, "bounce": 0, "token_match": true}
+QA PASS
+[22:38:07] == phase A: cufile/posix × h0.3 × r1-3 (기본)
+skip c-h0.3-r1 (exists)
+skip c-h0.3-r2 (exists)
+disk free 80G < 90G, abort
+[22:38:07] == phase B: cufile ring16 × h0.3 × r1-3
+disk free 80G < 90G, abort
+[22:38:07] == phase C: cufile ring16 + step2 + threads8 × h0.3 × r1-3
+disk free 80G < 90G, abort
+[22:38:07] == phase D: step2 + threads8 (ring 없음) cufile/posix × h0.3 × r1-3
+disk free 80G < 90G, abort
+[22:38:07] == phase E: host fraction 스윕 0.1/0.5 × cufile/posix × r1
+disk free 80G < 90G, abort
+[22:38:07] == phase F: nsys 런 cufile/posix × h0.3 × r1
+disk free 80G < 90G, abort
+[22:38:07] 캠페인 완료

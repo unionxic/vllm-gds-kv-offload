@@ -1,0 +1,58 @@
+INFO 09-07 22:56:32 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 1024, 'offload_backend': 'prefetch', 'offload_group_size': 64, 'offload_num_in_group': 61, 'offload_ssd_path': '/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/ssd-66b', 'offload_ssd_transport': 'posix', 'gpu_memory_utilization': 0.9, 'disable_log_stats': True, 'enforce_eager': True, 'model': 'facebook/opt-66b'}
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING 09-07 22:56:32 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-07 22:56:34 [model.py:623] Resolved architecture: OPTForCausalLM
+INFO 09-07 22:56:34 [model.py:1788] Using max model len 1024
+INFO 09-07 22:56:34 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-07 22:56:34 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-07 22:56:34 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-07 22:56:34 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-07 22:56:34 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-07 22:56:34 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-07 22:56:34 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-07 22:56:36 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-66b', speculative_config=None, tokenizer='facebook/opt-66b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=1024, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-66b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-07 22:56:37 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:33797 backend=nccl
+INFO 09-07 22:56:37 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+WARNING 09-07 22:56:38 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-07 22:56:38 [prefetch.py:192] [PrefetchOffloader] SSD tier at /home/unionxic/experiments/vllm-gds-kv/results/weight-offload/ssd-66b/rank0 (transport=posix, io_threads=4), host budget 37.64 GiB (30% of DRAM)
+INFO 09-07 22:56:38 [base.py:123] Offloader set to PrefetchOffloader
+INFO 09-07 22:56:38 [gpu_model_runner.py:5250] Starting to load model facebook/opt-66b...
+ERROR 09-07 22:56:39 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-07 22:56:39 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+Loading pt checkpoint shards:   0% Completed | 0/14 [00:00<?, ?it/s]
+Loading pt checkpoint shards:   7% Completed | 1/14 [00:08<01:45,  8.12s/it]
+Loading pt checkpoint shards:  14% Completed | 2/14 [00:20<02:05, 10.45s/it]
+Loading pt checkpoint shards:  21% Completed | 3/14 [00:33<02:08, 11.69s/it]
+Loading pt checkpoint shards:  29% Completed | 4/14 [00:52<02:25, 14.56s/it]
+Loading pt checkpoint shards:  36% Completed | 5/14 [01:02<01:56, 12.98s/it]
+Loading pt checkpoint shards:  43% Completed | 6/14 [01:30<02:23, 17.96s/it]
+Loading pt checkpoint shards:  50% Completed | 7/14 [01:50<02:10, 18.63s/it]
+Loading pt checkpoint shards:  57% Completed | 8/14 [02:02<01:38, 16.49s/it]
+Loading pt checkpoint shards:  64% Completed | 9/14 [02:19<01:23, 16.80s/it]
+Loading pt checkpoint shards:  71% Completed | 10/14 [02:28<00:57, 14.26s/it]
+Loading pt checkpoint shards:  79% Completed | 11/14 [02:36<00:37, 12.55s/it]
+Loading pt checkpoint shards:  86% Completed | 12/14 [02:51<00:26, 13.25s/it]
+Loading pt checkpoint shards:  93% Completed | 13/14 [03:06<00:13, 13.87s/it]
+Loading pt checkpoint shards: 100% Completed | 14/14 [03:32<00:00, 17.41s/it]
+Loading pt checkpoint shards: 100% Completed | 14/14 [03:32<00:00, 15.18s/it]
+
+INFO 09-07 23:00:27 [default_loader.py:430] Loading weights took 212.51 seconds
+INFO 09-07 23:03:31 [gpu_model_runner.py:5347] Model loading took 6.6 GiB memory and 411.485123 seconds
+INFO 09-07 23:03:44 [prefetch.py:429] [PrefetchOffloader] Initialized 61 modules. Total GPU memory saved: 124.3590 GB, Static buffer pool: 2.0387 GB (group_size=64, num_in_group=61, prefetch_step=1, mode=cpu)
+INFO 09-07 23:03:44 [prefetch.py:438] [PrefetchOffloader] tiers: host 19 layers / 36.07 GiB (budget 37.64 GiB), ssd 42 layers / 79.74 GiB in 168 files
+INFO 09-07 23:05:10 [gpu_worker.py:560] Available KV cache memory: 5.54 GiB
+INFO 09-07 23:05:10 [kv_cache_utils.py:2177] GPU KV cache size: 2,512 tokens
+INFO 09-07 23:05:10 [kv_cache_utils.py:2178] Maximum concurrency for 1,024 tokens per request: 2.45x
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-07 23:05:10 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-07 23:05:10 [gpu_worker.py:857] Free memory on device (15.42/15.55 GiB) on startup. Desired GPU memory utilization is (0.9, 14.0 GiB). Actual usage is 6.6 GiB for weight, 1.7 GiB for peak activation, 0.16 GiB for non-torch memory, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=5793563853` (5.4 GiB) to fit into requested memory, or `--kv-cache-memory=7323416576` (6.82 GiB) to fully utilize gpu memory. Current kv cache memory in use is 5.54 GiB.
+INFO 09-07 23:06:19 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-07 23:06:19 [core.py:347] init engine (profile, create kv cache, warmup model) took 155.31 s
+Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 98.21it/s]
+Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]WARNING 09-07 23:06:19 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+Processed prompts:  25%|██▌       | 1/4 [01:12<03:38, 72.82s/it, est. speed input: 3.52 toks/s, output: 0.01 toks/s]Processed prompts: 100%|██████████| 4/4 [01:12<00:00, 72.82s/it, est. speed input: 14.06 toks/s, output: 0.05 toks/s]Processed prompts: 100%|██████████| 4/4 [01:12<00:00, 18.21s/it, est. speed input: 14.06 toks/s, output: 0.05 toks/s]
+Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 4084.04it/s]
+Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:  25%|██▌       | 1/4 [09:08<27:25, 548.63s/it, est. speed input: 0.47 toks/s, output: 0.01 toks/s]Processed prompts: 100%|██████████| 4/4 [09:08<00:00, 548.63s/it, est. speed input: 1.87 toks/s, output: 0.06 toks/s]Processed prompts: 100%|██████████| 4/4 [09:08<00:00, 137.16s/it, est. speed input: 1.87 toks/s, output: 0.06 toks/s]
+RESULT p-h0.3-r1 {"load_s": 587.5, "prefill_batch_s": 72.87, "decode_step_s": 67.97, "out_tok_per_s": 0.058, "cpu_s": 145.6, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 59.21, "ssd_read_gib": 877.08}
+[rank0]:[W907 23:16:41.933477622 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())

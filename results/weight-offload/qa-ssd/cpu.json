@@ -4,33 +4,34 @@
  "stage": "done",
  "kwargs": {
   "offload_backend": "prefetch",
-  "offload_group_size": 4,
-  "offload_num_in_group": 3,
-  "offload_prefetch_step": 1
+  "offload_group_size": 32,
+  "offload_num_in_group": 31,
+  "offload_prefetch_step": 2
  },
- "pid": 10537,
+ "pid": 163319,
  "env": {
   "VLLM_USE_V2_MODEL_RUNNER": "0",
   "VLLM_ENABLE_V1_MULTIPROCESSING": "0",
   "QA_NSYS": "0"
  },
  "offloader_log": [
-  "vllm.entrypoints.serve.utils.api_utils: non-default args: {'max_model_len': 512, 'offload_backend': 'prefetch', 'offload_group_size': 4, 'offload_num_in_group': 3, 'gpu_memory_utilization': 0.5, 'disable_log_stats': True, 'enforce_eager': True, 'model': 'facebook/opt-2.7b'}",
+  "vllm.entrypoints.serve.utils.api_utils: non-default args: {'max_model_len': 512, 'offload_backend': 'prefetch', 'offload_group_size': 32, 'offload_num_in_group': 31, 'offload_prefetch_step': 2, 'gpu_memory_utilization': 0.5, 'disable_log_stats': True, 'enforce_eager': True, 'model': 'facebook/opt-2.7b'}",
   "vllm.model_executor.offloader.base: Offloader set to PrefetchOffloader",
-  "vllm.model_executor.offloader.prefetch: [PrefetchOffloader] Initialized 24 modules. Total GPU memory saved: 3.7765 GB, Static buffer pool: 0.1574 GB (group_size=4, num_in_group=3, prefetch_step=1, mode=cpu)"
+  "vllm.model_executor.offloader.prefetch: [PrefetchOffloader] 31 modules not divisible by prefetch_step=2: wrapped prefetch of layers [0] deferred to the last layer (slot collision at the pass boundary)",
+  "vllm.model_executor.offloader.prefetch: [PrefetchOffloader] Initialized 31 modules. Total GPU memory saved: 4.8779 GB, Static buffer pool: 0.3147 GB (group_size=32, num_in_group=31, prefetch_step=2, mode=cpu)"
  ],
  "proc_before": {
-  "VmPeak": 12871593984,
-  "VmSize": 12871593984,
+  "VmPeak": 12946046976,
+  "VmSize": 12946046976,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 891678720,
-  "VmRSS": 891678720,
-  "VmData": 7523876864,
+  "VmHWM": 886476800,
+  "VmRSS": 886476800,
+  "VmData": 7531352064,
   "VmStk": 151552,
   "VmExe": 2109440,
   "VmLib": 2835951616,
-  "VmPTE": 3403776,
+  "VmPTE": 3424256,
   "VmSwap": 0,
   "Threads": 72
  },
@@ -65,7 +66,7 @@
    "err": 0
   },
   "Reads": {
-   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
+   "value": "Bandwidth(MiB/s)=2959 Avg-Latency(usec)=3516"
   },
   "Sparse Reads": {
    "n": 0,
@@ -77,16 +78,16 @@
    "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 14,
-   "ok": 14,
+   "n": 315,
+   "ok": 315,
    "err": 0,
-   "munmap": 14
+   "munmap": 315
   },
   "Bar1-map": {
-   "n": 14,
-   "ok": 14,
-   "err": 0,
-   "free": 14,
+   "n": 315,
+   "ok": 305,
+   "err": 10,
+   "free": 305,
    "callbacks": 0,
    "active": 0,
    "delay-frees": 0
@@ -105,24 +106,24 @@
   "GPU 0000": {
    "Registered_MiB": 0,
    "Cache_MiB": 0,
-   "max_pinned_MiB": 575
+   "max_pinned_MiB": 750
   }
  },
- "load_s": 18.253169630000002,
- "gpu_alloc_after_load": 7993126400,
- "gpu_max_after_load": 8180899328,
+ "load_s": 16.162024264998763,
+ "gpu_alloc_after_load": 8150013440,
+ "gpu_max_after_load": 8338300416,
  "proc_after_load": {
-  "VmPeak": 36514590720,
-  "VmSize": 36514590720,
+  "VmPeak": 37822275584,
+  "VmSize": 37822275584,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 11990937600,
-  "VmRSS": 7035957248,
-  "VmData": 8592134144,
+  "VmHWM": 13513564160,
+  "VmRSS": 8560623616,
+  "VmData": 8591060992,
   "VmStk": 151552,
   "VmExe": 2109440,
   "VmLib": 3275939840,
-  "VmPTE": 16797696,
+  "VmPTE": 19783680,
   "VmSwap": 0,
   "Threads": 128
  },
@@ -140,9 +141,10 @@
  },
  "offloader_attrs": {
   "PrefetchOffloader": {
-   "group_size": 4,
-   "num_in_group": 3,
-   "prefetch_step": 1,
+   "group_size": 32,
+   "num_in_group": 31,
+   "prefetch_step": 2,
+   "_prefetch_plan": "<list len=31>",
    "offload_params": "<set len=0>",
    "mode": "cpu",
    "copy_stream": "<Stream>",
@@ -150,9 +152,9 @@
    "host_budget_bytes": 0,
    "host_tier_bytes": 0,
    "ssd_tier_bytes": 0,
-   "module_offloaders": "<list len=24>",
+   "module_offloaders": "<list len=31>",
    "buffer_pool": "<StaticBufferPool>",
-   "total_offloaded_bytes": 3776471040
+   "total_offloaded_bytes": 4877941760
   }
  },
  "token_ids": [
@@ -270,35 +272,35 @@
  "decode": {
   "batch": 4,
   "max_tokens": 32,
-  "wall_s": 10.308956168999998,
+  "wall_s": 12.829712205999385,
   "gen_tokens": 128,
-  "tok_s": 12.41638803207914
+  "tok_s": 9.976841097039191
  },
- "gpu_max_alloc_bytes": 8180899328,
- "gpu_alloc_bytes": 7993126912,
+ "gpu_max_alloc_bytes": 8338300416,
+ "gpu_alloc_bytes": 8150013952,
  "torch_pinned_host": {
-  "active_bytes.allocated": 5304254592,
-  "active_bytes.current": 5304254645,
+  "active_bytes.allocated": 6831669376,
+  "active_bytes.current": 6831669429,
   "active_bytes.freed": -53,
-  "active_bytes.peak": 5304254645,
-  "allocated_bytes.allocated": 5304253744,
-  "allocated_bytes.current": 5304253744,
+  "active_bytes.peak": 6831669429,
+  "allocated_bytes.allocated": 6831668528,
+  "allocated_bytes.current": 6831668528,
   "allocated_bytes.freed": 0,
-  "allocated_bytes.peak": 5304253744
+  "allocated_bytes.peak": 6831668528
  },
- "pinned_est_bytes": 5304253744,
+ "pinned_est_bytes": 6831668528,
  "proc_after": {
-  "VmPeak": 39218196480,
-  "VmSize": 39218196480,
+  "VmPeak": 40525877248,
+  "VmSize": 40525877248,
   "VmLck": 0,
   "VmPin": 0,
-  "VmHWM": 11990937600,
-  "VmRSS": 7135531008,
-  "VmData": 8817483776,
+  "VmHWM": 13513564160,
+  "VmRSS": 8660008960,
+  "VmData": 8816406528,
   "VmStk": 151552,
   "VmExe": 2109440,
   "VmLib": 3275980800,
-  "VmPTE": 17432576,
+  "VmPTE": 20422656,
   "VmSwap": 0,
   "Threads": 165
  },
@@ -333,7 +335,7 @@
    "err": 0
   },
   "Reads": {
-   "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
+   "value": "Bandwidth(MiB/s)=2959 Avg-Latency(usec)=3516"
   },
   "Sparse Reads": {
    "n": 0,
@@ -345,16 +347,16 @@
    "value": "Bandwidth(MiB/s)=0 Avg-Latency(usec)=0"
   },
   "Mmap": {
-   "n": 14,
-   "ok": 14,
+   "n": 315,
+   "ok": 315,
    "err": 0,
-   "munmap": 14
+   "munmap": 315
   },
   "Bar1-map": {
-   "n": 14,
-   "ok": 14,
-   "err": 0,
-   "free": 14,
+   "n": 315,
+   "ok": 305,
+   "err": 10,
+   "free": 305,
    "callbacks": 0,
    "active": 0,
    "delay-frees": 0
@@ -373,7 +375,7 @@
   "GPU 0000": {
    "Registered_MiB": 0,
    "Cache_MiB": 0,
-   "max_pinned_MiB": 575
+   "max_pinned_MiB": 750
   }
  },
  "nvfs_delta": {},
@@ -391,7 +393,7 @@
  },
  "exit_code": 0,
  "timed_out": false,
- "driver_wall_s": 45.83221125602722,
+ "driver_wall_s": 45.24411487579346,
  "cmd": [
   "timeout",
   "-k",
@@ -408,11 +410,11 @@
   "--host-fraction",
   "0.005",
   "--group-size",
-  "4",
+  "32",
   "--num-in-group",
-  "3",
+  "31",
   "--prefetch-step",
-  "1",
+  "2",
   "--io-threads",
   "4",
   "--max-tokens",
