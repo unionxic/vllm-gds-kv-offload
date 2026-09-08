@@ -33,3 +33,8 @@ results/weight-offload/**/*-cufile.log
 results/weight-offload/smoke-ssd/
 results/weight-offload/qa-ssd/*/
 experiments/06-weight-offload/*.log
+# 07-combined 산출물(대용량: 가중치 SSD 티어·KV 파일)
+results/combined/smoke/*/
+results/combined/smoke/wssd-*/
+results/combined/smoke/kv-*/
+results/combined/kv-66b/
