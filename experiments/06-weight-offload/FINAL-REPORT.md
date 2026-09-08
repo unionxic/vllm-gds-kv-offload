@@ -72,6 +72,8 @@ nvidia-fs: nvfs_pin_gpu_pages: Error ret -12 invoking nvidia_p2p_get_pages_persi
 - **UVA**(`uva.py`): `cpu_offload_gb`만큼 파라미터를 pinned CPU에 두고 GPU가 zero-copy로 읽는다. 매 커널이 PCIe를 건너므로 느리고 디스크 개념이 없다.
 - **Prefetch**(`prefetch.py`, SGLang의 `offloader.py`를 가져온 것): `offload_group_size` / `offload_num_in_group`으로 층을 골라 pinned CPU에 두고, 정적 GPU 버퍼 풀(§2.1)에 `copy_stream`으로 H2D prefetch한다. 각 층 forward를 감싸 `torch.ops.vllm.wait_prefetch(idx)` → forward → `start_prefetch(idx+step)` 순서로 호출한다(`prefetch_ops.py`의 custom op, torch.compile 호환용).
 
+**수정의 성격.** 별도 스크립트를 얹은 것이 아니라 `~/vllm`에 editable 설치된 vLLM 소스 트리 자체를 고쳤다(브랜치 `weight-ssd-offload`, 커밋 4개). 그래서 사용자 쪽에서는 공식 진입점을 그대로 쓴다: `LLM(model=..., offload_ssd_path=..., offload_ssd_transport="cufile")` 또는 `vllm serve --offload-ssd-path ... --offload-ssd-transport cufile`. 실험 repo의 `run_66b.py`·`qa_ssd.py`는 그 진입점을 호출해 측정만 하는 얇은 스크립트다. 변경은 전부 파이썬이며 C++/CUDA 커널은 건드리지 않았다. cuFile은 새 확장을 컴파일한 것이 아니라 ctypes로 시스템 `libcufile.so`를 직접 호출한다. upstream에는 아직 올리지 않았다(로컬 브랜치, 경계 버그 수정은 PR 후보).
+
 **삽입 지점은 Prefetch 백엔드의 세 곳**이었다. (1) 파라미터를 CPU로 내리는 순간(`_CpuParamOffloader._offload_to_cpu_internal`), (2) forward 직전에 정적 버퍼를 채우는 한 줄(`start_onload_to_static`의 `gpu_buffer.copy_(cpu_storage)`), (3) 그 완료를 기다리는 곳(`_wait_for_layer`). 바뀐 파일과 규모:
 
 | 파일 | 변경 | 무엇을 |
