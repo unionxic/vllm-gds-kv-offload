@@ -38,6 +38,33 @@ vLLM의 가중치 오프로드는 UVA(`cpu_offload_gb`, zero-copy pinned)와 Pre
 
 OPT-66B 배치(group 64 / num_in_group 61): GPU 상주 3층, 오프로드 61 모듈(층당 fp16 1.90 GiB). host 30 % = 37.6 GiB 예산 → host 19층(36.1 GiB), SSD 42층(79.7 GiB, 168 파일). 정적 버퍼 풀 1.9 GiB(step 1) / 3.8 GiB(step 2). KV 5.55 GiB(2,512 tok).
 
+### 2.1 정적 버퍼와 BAR1 — 왜 4개 중 1개만 등록되는가
+
+정적 버퍼는 체크포인트의 일부가 아니라 prefetch 오프로더가 GPU에 한 번 잡아 두고 계속 재사용하는 **한 층 분량의 착지 공간**이다. 오프로드된 61개 층의 가중치 원본은 pinned CPU(19층)와 SSD 파일(42층)에 있고, 층 L을 계산하기 직전에 그 층의 행렬들을 이 버퍼로 읽어 넣은 뒤 파라미터의 `.data`가 버퍼를 가리키게 한다. 계산이 끝나면 다음 층이 같은 자리를 덮어쓴다(prefetch_step = 슬롯 수, step 2면 두 벌 3.8 GiB).
+
+버퍼는 행렬(파라미터 텐서) 단위다. 행렬곱 커널이 행렬 전체를 연속 메모리로 읽으므로 쪼갤 수 없고, 크기는 모델 형상이 정한다. OPT-66B 디코더 층 하나(hidden 9216)의 구성:
+
+| 행렬 | 역할 | 모양(fp16) | 크기 | BAR1 256 MiB 등록 |
+|---|---|---|---|---|
+| qkv_proj | 어텐션 입력 투영(Q·K·V 세 행렬을 이어 붙인 것) | 27648 × 9216 | 486 MiB | 실패 |
+| out_proj | 어텐션 출력 투영 | 9216 × 9216 | 162 MiB | **성공** |
+| fc1 | MLP 첫 층(hidden → 4×, ReLU) | 36864 × 9216 | 648 MiB | 실패 |
+| fc2 | MLP 둘째 층(4× → hidden) | 9216 × 36864 | 648 MiB | 실패 |
+
+LayerNorm·bias 같은 1 MiB 미만 파라미터는 오프로드해도 pinned CPU에 두고 매번 복사한다(SSD 파일로 만들 가치가 없음).
+
+`cuFileBufRegister`는 GPU 버퍼를 nvidia-fs가 DMA 대상으로 쓰도록 BAR1 창에 고정 매핑(`nvidia_p2p_get_pages_persistent`)한다. BAR1은 PCIe에서 GPU 메모리를 직접 보는 창으로, 데이터센터 GPU(A100 등)는 VRAM 전체 크기지만 Turing 워크스테이션 카드(Quadro RTX 5000)는 256 MiB 고정이며 Resizable BAR도 없다. 162 MiB인 out_proj만 들어가고 나머지 셋은 각각 단독으로도 256 MiB를 넘어 순서와 무관하게 실패한다. dmesg 증거:
+
+```
+NVRM: RmThirdPartyP2PBAR1GetPages: no space for BAR1 mappings, length: 0x1000000
+nvidia-fs: nvfs_pin_gpu_pages: Error ret -12 invoking nvidia_p2p_get_pages_persistent
+```
+(ring 16 MiB × 16 슬롯을 등록하다 13개째 이후 실패한 기록: 13 × 16 = 208 MiB + 기존 매핑 ≈ 256 MiB.)
+
+등록에 실패해도 POSIX로 떨어지지는 않는다. cuFile은 미등록 목적지에 대해 자기 내부의 등록된 GPU 캐시(1 MiB 조각)로 DMA한 뒤 D2D로 옮긴다. nsys의 D2D 863 GB / 1 MiB × 824k회, nvidia-fs 읽기 826,056회가 그 흔적이다. **ring 모드는 이 우회를 명시적으로 크게 만든 것**이다: BAR1에 들어가는 8 MiB × 16 슬롯(128 MiB)만 등록해 거기로 DMA한 뒤 정적 버퍼로 D2D 복사하면 1 MiB 82만 번이 8 MiB 11만 번이 되어 CPU −17 %, 8 스레드 경합 해소 → 최속 arm(26.7 s).
+
+조정 가능한 축: 슬롯 수(`offload_prefetch_step`), 오프로드 대상(`offload_params`), ring 슬롯 크기(`offload_ssd_ring_mb`, 슬롯 × 2 × 스레드 ≤ BAR1). 조정 불가: 버퍼 하나의 크기(모델 형상), BAR1 크기(하드웨어). BAR1이 큰 GPU라면 정적 버퍼를 그대로 등록해 ring 없이 직접 DMA가 된다.
+
 ## 3. 검증
 
 - **QA(opt-2.7b, `run_qa.sh`)**: baseline / cpu / ssd-posix / ssd-cufile 4 arm 토큰 완전 일치. cuFile 경로 TRACE 분류 DIRECT(px_io 0, bounce 0). ring 모드(`smoke_ring.py`)도 PASS.
