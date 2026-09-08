@@ -84,6 +84,29 @@ nvidia-fs: nvfs_pin_gpu_pages: Error ret -12 invoking nvidia_p2p_get_pages_persi
 | `model_loader/utils.py` | +17 | 로더가 CPU 파라미터를 제자리 갱신하도록 |
 | `offloader/base.py` | +5 | 새 필드를 PrefetchOffloader 생성자에 전달 |
 
+
+**함수 단위로 보면** (`vllm/model_executor/` 기준):
+
+| 파일 | 함수·클래스 | 구분 | 무엇을 |
+|---|---|---|---|
+| `prefetch.py` | `PrefetchOffloader.__init__` | 수정 | SSD 인자 5개 수신, SsdTier 생성, host 예산(MemTotal × fraction) 계산 |
+| `prefetch.py` | `PrefetchOffloader._layer_mode` | 신규 | 층 크기 누적으로 "cpu"/"ssd" 결정(첫맞춤) |
+| `prefetch.py` | `PrefetchOffloader.wrap_modules` | 수정 | _layer_mode 결과를 _ModuleOffloader에 전달 |
+| `prefetch.py` | `PrefetchOffloader._hook_module_forward 내부 forward` | 수정 | start_prefetch를 _prefetch_plan대로 호출 |
+| `prefetch.py` | `PrefetchOffloader._build_prefetch_plan` | 신규 | 패스 경계 슬롯 충돌 회피 계획(§6) |
+| `prefetch.py` | `PrefetchOffloader._wait_for_layer / sync_prev_onload / join_after_forward` | 수정 | 이벤트 대기 전에 wait_host() 선행 |
+| `prefetch.py` | `PrefetchOffloader.post_init` | 수정 | 티어 요약 로그, register_buffers(), 계획 생성 |
+| `prefetch.py` | `_ModuleOffloader.__init__` | 수정 | mode별 파라미터 오프로더 생성, 1 MiB 미만은 cpu 유지 |
+| `prefetch.py` | `_ModuleOffloader.wait_host` | 신규 | SSD 읽기 job(Future) 완료 대기 |
+| `prefetch.py` | `_ModuleOffloader.start_onload_to_static` | 수정 | ssd 파라미터를 모아 SsdTier.submit_layer(); 그래프 캡처 중이면 RuntimeError |
+| `prefetch.py` | `_BaseParamOffloader.create` | 수정 | mode "ssd" 분기 |
+| `prefetch.py` | `_SsdParamOffloader (클래스)` | 신규 | _offload_to_cpu_internal(파일 mmap 텐서), _update_cpu_storage_from_param, assign_static_buffer(finalize) |
+| `ssd_tier.py` | `CuFile / SsdFile / SsdTier / host_mem_total_bytes` | 신규 | cuFile ctypes 바인딩; new_file_tensor, finalize, register_buffers, _read_one, _read_via_ring, submit_layer, close |
+| `model_loader/utils.py` | `device_loading_context` | 수정 | 되돌릴 때 새 텐서 대신 원본 저장소에 제자리 copy_ |
+| `config/offload.py` | `PrefetchOffloadConfig, OffloadConfig.validate_offload_config` | 수정 | 필드 5개 추가; ssd_path는 group_size > 0일 때만 허용 |
+| `engine/arg_utils.py` | `EngineArgs 필드, add_cli_args, create_engine_config` | 수정 | --offload-ssd-* 플래그와 config 전달 |
+| `offloader/base.py` | `create_offloader` | 수정 | 새 필드를 PrefetchOffloader에 전달 |
+
 (`v1/kv_offload/cpu/shared_offload_region.py`의 변경은 앞선 KV 실험의 shm 누수 수정이며 이 실험과 무관하다.)
 
 **데이터 흐름을 시간순으로 보면:**
