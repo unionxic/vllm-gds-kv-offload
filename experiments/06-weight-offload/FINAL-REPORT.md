@@ -65,6 +65,43 @@ nvidia-fs: nvfs_pin_gpu_pages: Error ret -12 invoking nvidia_p2p_get_pages_persi
 
 조정 가능한 축: 슬롯 수(`offload_prefetch_step`), 오프로드 대상(`offload_params`), ring 슬롯 크기(`offload_ssd_ring_mb`, 슬롯 × 2 × 스레드 ≤ BAR1). 조정 불가: 버퍼 하나의 크기(모델 형상), BAR1 크기(하드웨어). BAR1이 큰 GPU라면 정적 버퍼를 그대로 등록해 ring 없이 직접 DMA가 된다.
 
+### 2.2 vLLM에서 무엇을 어디에 고쳤나 (GDS 경로가 생기기까지)
+
+기본 vLLM(v0.26.1.dev, 568afb3a13)에는 SSD 티어가 없다. 가중치 오프로드는 `vllm/model_executor/offloader/` 아래 두 백엔드뿐이다.
+
+- **UVA**(`uva.py`): `cpu_offload_gb`만큼 파라미터를 pinned CPU에 두고 GPU가 zero-copy로 읽는다. 매 커널이 PCIe를 건너므로 느리고 디스크 개념이 없다.
+- **Prefetch**(`prefetch.py`, SGLang의 `offloader.py`를 가져온 것): `offload_group_size` / `offload_num_in_group`으로 층을 골라 pinned CPU에 두고, 정적 GPU 버퍼 풀(§2.1)에 `copy_stream`으로 H2D prefetch한다. 각 층 forward를 감싸 `torch.ops.vllm.wait_prefetch(idx)` → forward → `start_prefetch(idx+step)` 순서로 호출한다(`prefetch_ops.py`의 custom op, torch.compile 호환용).
+
+**삽입 지점은 Prefetch 백엔드의 세 곳**이었다. (1) 파라미터를 CPU로 내리는 순간(`_CpuParamOffloader._offload_to_cpu_internal`), (2) forward 직전에 정적 버퍼를 채우는 한 줄(`start_onload_to_static`의 `gpu_buffer.copy_(cpu_storage)`), (3) 그 완료를 기다리는 곳(`_wait_for_layer`). 바뀐 파일과 규모:
+
+| 파일 | 변경 | 무엇을 |
+|---|---|---|
+| `offloader/ssd_tier.py` | +410 (신규) | cuFile 바인딩, 파일 티어, 읽기 경로 두 개, ring |
+| `offloader/prefetch.py` | +253 | 층별 티어 배정, SSD 파라미터 오프로더, 호스트 대기, prefetch 계획(§6) |
+| `config/offload.py`, `engine/arg_utils.py` | +31, +25 | 설정 필드 5개와 CLI 플래그 |
+| `model_loader/utils.py` | +17 | 로더가 CPU 파라미터를 제자리 갱신하도록 |
+| `offloader/base.py` | +5 | 새 필드를 PrefetchOffloader 생성자에 전달 |
+
+(`v1/kv_offload/cpu/shared_offload_region.py`의 변경은 앞선 KV 실험의 shm 누수 수정이며 이 실험과 무관하다.)
+
+**데이터 흐름을 시간순으로 보면:**
+
+1. **모델 구성 시 티어 배정** — `PrefetchOffloader.wrap_modules`가 오프로드 대상 층을 고를 때 `_layer_mode()`가 층 크기를 누적해 host 예산(`offload_host_fraction × MemTotal`, /proc/meminfo)을 넘기 전까지는 `"cpu"`, 넘긴 뒤부터는 `"ssd"`를 준다(앞 층부터 채우는 첫맞춤). `"ssd"` 층이라도 1 MiB 미만 파라미터(LayerNorm, bias)는 `"cpu"`로 남긴다(`SSD_MIN_PARAM_BYTES`).
+2. **가중치 로드 — 파일에 직접 쓰기** — `"ssd"` 파라미터는 `_SsdParamOffloader._offload_to_cpu_internal`이 pinned 텐서 대신 `SsdTier.new_file_tensor()`가 만든 **파일 백업 mmap 텐서**(`torch.from_file(shared=True)`, 파일은 `<ssd_path>/rank0/<layer>/<param>.bin`)를 파라미터에 꽂는다. 체크포인트 로더는 평소처럼 `param.copy_()`를 하는데 그 목적지가 mmap이라 **가중치가 DRAM을 거치지 않고 디스크에 내려간다**. 132 GB 모델을 125 GiB RAM에서 한 번도 통째로 들지 않는 이유다.
+3. **로드 후 처리와 제자리 갱신** — vLLM의 `device_loading_context`는 `process_weights_after_loading`을 위해 CPU 파라미터를 GPU로 올렸다가 되돌리는데, 원래 코드는 되돌릴 때 **새 pageable 텐서**를 만든다. 오프로더가 쥔 원본(pinned/mmap)과 이중으로 존재해 anon RSS 72 GB → OOM kill이 났다. `model_loader/utils.py`를 고쳐 모양·dtype·stride가 같으면 원본 저장소에 `copy_()`로 제자리 갱신하게 했다(커밋 1c86373b60).
+4. **post_init: 파일 확정과 등록** — `_SsdParamOffloader.assign_static_buffer`가 정적 버퍼를 배정한 뒤 `SsdTier.finalize()`를 부른다: `fsync` → `posix_fadvise(DONTNEED)`로 페이지 캐시에서 내보냄 → mmap 해제 → **O_DIRECT로 재오픈** → `cuFileHandleRegister`. 이어서 `register_buffers()`가 정적 버퍼에 `cuFileBufRegister`를 시도한다(§2.1, best-effort). ring 모드면 대신 ring 슬롯을 등록한다.
+5. **forward마다 읽기** — `start_onload_to_static`에서 `"cpu"` 파라미터는 기존대로 `copy_stream`에 H2D를 넣고, `"ssd"` 파라미터는 `(SsdFile, gpu_buffer)` 목록으로 모아 `SsdTier.submit_layer(items, fork_event, done_event)`에 넘긴다. 코디네이터 스레드 1개가 층 단위 job을 직렬로 받아, `fork_event.synchronize()`로 **이 슬롯을 쓰던 이전 층의 커널이 끝날 때까지 호스트에서 기다린 뒤** IO 스레드 풀(`offload_ssd_io_threads`)로 파라미터별 읽기를 병렬 실행하고, 끝나면 `done_event.record(copy_stream)`을 찍는다.
+   - **cufile**: `cuFileRead(fh, gpu_ptr, nbytes, 0)` 한 번. 등록된 버퍼면 직접 DMA, 아니면 cuFile 내부 GPU 캐시(1 MiB) 경유 후 D2D.
+   - **cufile + ring**: 파일을 `ring_mb` 조각으로 나눠 등록된 ring 슬롯(큐로 관리)에 `cuFileRead` → 스레드별 스트림에서 정적 버퍼로 D2D → 슬롯 반납.
+   - **posix**: 스레드별 4 KiB 정렬 pinned bounce에 `os.preadv`(O_DIRECT) → `copy_stream`에 non_blocking H2D → `copy_stream.synchronize()` 후 bounce 재사용.
+6. **forward 직전 대기** — `_wait_for_layer`가 먼저 `offloader.wait_host()`(job Future 완료)를 부르고, 그 다음 기존처럼 `current_stream.wait_event(done_event)`를 건다. 호스트 구동 IO라 이벤트만으로는 순서를 보장할 수 없어서 넣은 단계다.
+
+**왜 V1 러너와 enforce_eager인가.** V2 model runner는 `set_offloader`를 아예 호출하지 않아 prefetch 오프로더 자체가 붙지 않는다(`VLLM_USE_V2_MODEL_RUNNER=0`). 그리고 cuFileRead는 동기 호스트 호출이라 CUDA graph 캡처 안에 들어갈 수 없다. `start_onload_to_static`이 캡처 중이면 RuntimeError를 내고, 실험은 `enforce_eager=True`로 돈다.
+
+**cuFile을 어떻게 붙였나.** `cuda-python`의 cufile 모듈은 시스템 libcufile과 이중 로드되어 충돌했으므로 `ctypes`로 `/usr/local/cuda/.../libcufile.so.0`을 직접 열고 `cuFileDriverOpen / HandleRegister / BufRegister / Read`만 바인딩했다(`CuFile` 싱글턴, 약 80줄). 경로가 진짜 GDS인지는 코드가 판정할 수 없으므로 매 런 `CUFILE_ENV_PATH_JSON`으로 TRACE 로그를 켜 `cufio-px`(compat POSIX) / `read_through_bounce_buffer` / 둘 다 없음(DIRECT)으로 분류하고, `/proc/driver/nvidia-fs/stats`의 `Reads.readMiB` 델타가 `ssd_stats`와 맞는지 확인한다.
+
+**설정 표면.** `PrefetchOffloadConfig`에 `offload_ssd_path`, `offload_host_fraction`(0.3), `offload_ssd_transport`(`cufile`|`posix`), `offload_ssd_io_threads`(4), `offload_ssd_ring_mb`(0) 다섯 필드를 추가하고 `--offload-ssd-*` CLI 플래그와 `LLM(...)` kwargs로 노출했다. `offload_ssd_path`는 `offload_group_size > 0`(prefetch 백엔드)일 때만 유효하도록 validator를 두었다.
+
 ## 3. 검증
 
 - **QA(opt-2.7b, `run_qa.sh`)**: baseline / cpu / ssd-posix / ssd-cufile 4 arm 토큰 완전 일치. cuFile 경로 TRACE 분류 DIRECT(px_io 0, bounce 0). ring 모드(`smoke_ring.py`)도 PASS.
@@ -158,3 +195,21 @@ python3 summarize_66b.py            # arm별 중앙값 표 + 토큰 일치
 
 - 결과: `results/weight-offload/opt66b/` (json·log·campaign.log·sysmon.log·nsys csv), 이상치 런은 표에서 자동 제외.
 - vLLM: `~/vllm` 브랜치 `weight-ssd-offload`(커밋 `2fbceeb103`, `1c86373b60`, `fbfc637cb0`, `3fc4433b62`). 주의: 그 아래 `77c4033078`이 requirements의 torch 라인을 지워 놓음(sed 사고, 런타임 무관, upstream diff 전 `git checkout 568afb3a13 -- pyproject.toml requirements/`).
+
+## 9. 선행 사례와 이 실험의 위치
+
+"GPU에 안 들어가는 LLM 가중치를 SSD에 두고 GPU로 스트리밍"은 여러 팀이 했고, 그중 GDS(cuFile)로 호스트를 건너뛴 사례도 있다. 우리가 한 것과의 차이는 **vLLM 안에 넣었다는 점**과 **같은 코드에서 POSIX bounce와 cuFile을 스위치 하나로 바꿔 경로 비용만 분리해 측정했다는 점**이다.
+
+| 사례 | 무엇을 | SSD→GPU 경로 | 우리와의 관계 |
+|---|---|---|---|
+| **FlexGen** (ICML 2023, [arXiv 2303.06865](https://arxiv.org/abs/2303.06865)) | 단일 T4로 OPT-175B. 가중치·KV·활성화를 GPU/CPU/디스크에 배치하는 선형계획 + 4-bit 압축 | 디스크 → CPU → GPU(호스트 경유) | 배치 크기를 키워 처리량을 노리는 설계. 경로 비교는 없음 |
+| **DeepSpeed ZeRO-Inference / DeepNVMe** ([2022 블로그](https://www.deepspeed.ai/2022/09/09/zero-inference.html), [DeepNVMe 2025-06](https://github.com/deepspeedai/DeepSpeed/blob/master/blogs/deepnvme/06-2025/README.md), [PyTorch 블로그](https://pytorch.org/blog/deepnvme-affordable-i-o-scaling-for-deep-learning-applications/)) | 가중치를 DRAM/NVMe에 두고 층 단위로 가져옴. **AIO(CPU bounce)와 GDS 두 모드** 제공, SGLang에 통합 | 둘 다 | 가장 가까운 선행. H200 + Gen5 NVMe 4~8장으로 Llama-3-70B에서 GDS 모드 7 → 17 → 26 tok/s(디스크 수에 비례) 보고. 우리 실험(01~05, gds-llm-demo)에서도 ZeRO-Inference GDS로 decode +40 %를 재현했었다. 다만 GPU/host 비율 knob이 없어(전량 NVMe) "host 30 %" 같은 3단 배치는 못 한다 |
+| **Endor** ([arXiv 2406.11674](https://arxiv.org/pdf/2406.11674)) | 오프로드 추론용 희소 압축 포맷. **OPT-66B·Llama2-70B**로 HF Accelerate 대비 1.70×, 여기에 SSD→GPU 직접 전송(GDS)을 더해 2.25× | GDS | 같은 모델(OPT-66B)에서 "직접 전송만으로 약 1.3×"를 보고. 우리는 압축 없이 경로만 바꿔 2.4~2.5× |
+| **I/O 특성 연구** (CHEOPS 2025, [PDF](https://atlarge-research.com/pdfs/2025-cheops-llm.pdf)) | DeepSpeed(OPT-13B)·FlexGen(OPT-30B)의 NVMe 오프로드 I/O를 계측 | 호스트 경유만 | 결론이 우리 5.1과 같다: **CPU bounce buffer와 작은 I/O 때문에 SSD 피크에 한참 못 미침**, 직접 GPU-스토리지 경로가 해법일 것이라 제안. 우리는 그 제안을 실측으로 확인한 셈 |
+| **LLM in a flash** (Apple, ACL 2024, [링크](https://machinelearning.apple.com/research/efficient-large-language)) | 플래시에 가중치를 두고 FFN 희소성·윈도잉·row-column bundling으로 읽는 양과 횟수를 줄임 | 플래시 → DRAM(모바일/Mac) | 접근 패턴 최적화 쪽. GPU DMA 경로는 아님 |
+| **DAK** ([arXiv 2604.26074](https://arxiv.org/pdf/2604.26074)) | prefetch 대신 GPU TMA로 원격 메모리에서 SMEM으로 직접 가져옴 | 원격 메모리(NVLink-C2C/PCIe) 직접 접근 | prefetch 자체를 없애는 방향. 우리는 prefetch 계열 |
+| **TERAIO** ([arXiv 2506.06472](https://arxiv.org/abs/2506.06472)), **SSDTrain** ([arXiv 2408.10013](https://arxiv.org/pdf/2408.10013)) | 학습 시 텐서/활성화를 GDS로 SSD에 오프로드 | GDS | 추론이 아니라 학습. GDS 사용법은 동일 |
+| **MoE SSD 오프로드 에너지 분석** ([arXiv 2508.06978](https://arxiv.org/pdf/2508.06978)), llama.cpp [Expert-Aware SSD Streaming 논의](https://github.com/ggml-org/llama.cpp/discussions/27149) | MoE 전문가 가중치만 SSD에서 토큰마다 스트리밍 | 다양 | dense 모델 전체를 스트리밍하는 우리와 달리 활성 전문가만 읽어 양 자체를 줄이는 쪽 |
+| **vLLM 쪽 논의** ([RFC #38256 MoE expert offloading](https://github.com/vllm-project/vllm/issues/38256), [vllm-omni #754 layerwise CPU offloading](https://github.com/vllm-project/vllm-omni/issues/754)) | CPU pinned + GPU 캐시 기반 전문가 오프로드, 층 단위 CPU 오프로드 | CPU까지만 | upstream에는 아직 SSD/GDS 티어가 없다. 우리 `weight-ssd-offload`가 그 자리를 채운 형태 |
+
+정리하면: SSD 스트리밍 자체(FlexGen, ZeRO-Inference)와 GDS 적용(DeepNVMe, Endor, TERAIO)은 선례가 있고, "bounce buffer가 병목"이라는 진단(CHEOPS)도 있다. 새로운 부분은 ① vLLM prefetch 오프로더 위에 host 비율이 파라미터인 3단 티어를 구현한 것, ② 동일 코드·동일 읽기량·동일 토큰을 보장한 상태에서 transport만 바꿔 nsys memcpy 집계로 경로를 증명한 것, ③ BAR1 256 MiB짜리 워크스테이션 GPU에서 ring으로 직접 DMA를 살린 것, ④ 그 과정에서 upstream prefetch 스케줄 버그를 찾은 것이다.
