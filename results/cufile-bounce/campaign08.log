@@ -1,0 +1,81 @@
+[19:06:59] 07 캠페인 종료 확인, 08 시작
+[19:07:06] == c-h0.3-pb1024-r1 (per_buffer_cache_size_kb=1024 io_batchsize=128 step=1 thr=4)
+  verify pb1024: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb1024 chunks:     272 size 1048576
+  verify pb1024 chunks:      16 size 16777216
+RESULT c-h0.3-pb1024-r1 {"load_s": 601.5, "prefill_batch_s": 68.47, "decode_step_s": 66.07, "out_tok_per_s": 0.06, "cpu_s": 185.1, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 53.94, "ssd_read_gib": 877.08}
+[19:27:32] == c-h0.3-pb4096-r1 (per_buffer_cache_size_kb=4096 io_batchsize=32 step=1 thr=4)
+  verify pb4096: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb4096 chunks:      80 size 4194304
+  verify pb4096 chunks:      16 size 16777216
+RESULT c-h0.3-pb4096-r1 {"load_s": 540.7, "prefill_batch_s": 29.95, "decode_step_s": 27.68, "out_tok_per_s": 0.143, "cpu_s": 138.4, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 52.28, "ssd_read_gib": 877.08}
+[19:41:13] == c-h0.3-pb8192-r1 (per_buffer_cache_size_kb=8192 io_batchsize=16 step=1 thr=4)
+  verify pb8192: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb8192 chunks:      48 size 8388608
+  verify pb8192 chunks:      16 size 16777216
+RESULT c-h0.3-pb8192-r1 {"load_s": 538.1, "prefill_batch_s": 30.82, "decode_step_s": 28.57, "out_tok_per_s": 0.139, "cpu_s": 114.4, "gpu_max_gib": 14.37, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 54.02, "ssd_read_gib": 877.08}
+[19:54:59] == c-h0.3-pb16384-r1 (per_buffer_cache_size_kb=16384 io_batchsize=8 step=1 thr=4)
+  verify pb16384: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb16384 chunks:      48 size 16777216
+[20:03:06] FAILED c-h0.3-pb16384-r1
+[rank0]: Traceback (most recent call last):
+[rank0]:     raise CuFileError(f"cuFileRead ret={n}")
+[rank0]: vllm.model_executor.offloader.ssd_tier.CuFileError: cuFileRead ret=-1
+[20:03:06] 가장 큰 성공 조각: 8192KiB → step2 thr8 arm과 반복에 사용
+[20:03:13] == c-h0.3-pb8192-s2-t8-r1 (per_buffer_cache_size_kb=8192 io_batchsize=16 step=2 thr=8)
+  verify pb8192: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb8192 chunks:      48 size 8388608
+  verify pb8192 chunks:      16 size 16777216
+[20:11:26] FAILED c-h0.3-pb8192-s2-t8-r1
+[rank0]: Traceback (most recent call last):
+[rank0]:     raise CuFileError(f"cuFileRead ret={n}")
+[rank0]: vllm.model_executor.offloader.ssd_tier.CuFileError: cuFileRead ret=-1
+[20:11:32] == c-h0.3-pb8192-r2 (per_buffer_cache_size_kb=8192 io_batchsize=16 step=1 thr=4)
+  verify pb8192: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb8192 chunks:      48 size 8388608
+  verify pb8192 chunks:      16 size 16777216
+RESULT c-h0.3-pb8192-r2 {"load_s": 533.0, "prefill_batch_s": 30.6, "decode_step_s": 28.4, "out_tok_per_s": 0.14, "cpu_s": 113.6, "gpu_max_gib": 14.37, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 53.99, "ssd_read_gib": 877.08}
+[20:25:11] == c-h0.3-pb1024-r2 (per_buffer_cache_size_kb=1024 io_batchsize=128 step=1 thr=4)
+  verify pb1024: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb1024 chunks:     272 size 1048576
+  verify pb1024 chunks:      16 size 16777216
+RESULT c-h0.3-pb1024-r2 {"load_s": 622.1, "prefill_batch_s": 68.51, "decode_step_s": 66.24, "out_tok_per_s": 0.06, "cpu_s": 182.8, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 53.99, "ssd_read_gib": 877.08}
+[20:45:53] 08 캠페인 완료
+[20:46:17] 08 종료 확인, 08b 시작
+[20:46:24] == c-h0.3-pb4096-s2-t8-r1 (per_buffer_cache_size_kb=4096 io_batchsize=32 step=2 thr=8)
+  verify pb4096: cuFileRead unregistered 64 MiB -> 67108864 bytes
+  verify pb4096 chunks:      80 size 4194304
+  verify pb4096 chunks:      16 size 16777216
+RESULT c-h0.3-pb4096-s2-t8-r1 {"load_s": 525.1, "prefill_batch_s": 27.27, "decode_step_s": 27.03, "out_tok_per_s": 0.148, "cpu_s": 150.0, "gpu_max_gib": 13.93, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 3.8}, "rss_gib": 54.01, "ssd_read_gib": 877.08}
+[20:59:33] 08b 완료
+[20:59:55] 08b 종료 확인, 08c 시작
+[21:00:09] GDSIO bounce-1M: Throughput: 3.281170 GiB/sec Avg_Latency: 1189.787708 usecs 
+[21:00:20] GDSIO bounce-4M: Throughput: 3.201463 GiB/sec Avg_Latency: 4874.274834 usecs 
+[21:00:31] GDSIO registered-1M: Throughput: 1.237545 GiB/sec Avg_Latency: 3154.030174 usecs 
+[21:00:42] GDSIO registered-4M: Throughput: 3.253462 GiB/sec Avg_Latency: 4798.421093 usecs 
+[21:00:48] == c-h0.3-pb1024-pinexact-r1 ( PIN_EXACT=1)
+RESULT c-h0.3-pb1024-pinexact-r1 {"load_s": 586.1, "prefill_batch_s": 68.55, "decode_step_s": 66.17, "out_tok_per_s": 0.06, "cpu_s": 183.5, "gpu_max_gib": 14.42, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 38.03, "ssd_read_gib": 877.08}
+[21:20:54] == c-h0.3-pb1024-g60-r1 (--num-in-group 60 PIN_EXACT=0)
+RESULT c-h0.3-pb1024-g60-r1 {"load_s": 606.2, "prefill_batch_s": 66.9, "decode_step_s": 64.53, "out_tok_per_s": 0.062, "cpu_s": 176.9, "gpu_max_gib": 14.39, "tiers": {"n_modules": 60, "n_ssd": 41, "host_tier_gib": 36.07, "ssd_tier_gib": 77.85, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 53.91, "ssd_read_gib": 856.2}
+[21:41:01] 08c 완료
+[21:41:18] 08c 종료 확인, 08d 시작
+BENCH json=default threads=4 chunk=64MiB register=0 total=4.0GiB time=3.61s -> 1.11 GiB/s errs=[]
+BENCH json=default threads=4 chunk=256MiB register=0 total=4.0GiB time=2.06s -> 1.94 GiB/s errs=[]
+BENCH json=default threads=8 chunk=64MiB register=0 total=4.0GiB time=3.63s -> 1.10 GiB/s errs=[]
+BENCH json=default threads=8 chunk=256MiB register=0 total=4.0GiB time=1.47s -> 2.73 GiB/s errs=[]
+BENCH json=cufile-pb4096.json threads=4 chunk=64MiB register=0 total=4.0GiB time=1.25s -> 3.21 GiB/s errs=[]
+BENCH json=cufile-pb4096.json threads=4 chunk=256MiB register=0 total=4.0GiB time=1.25s -> 3.21 GiB/s errs=[]
+BENCH json=cufile-pb4096.json threads=8 chunk=64MiB register=0 total=4.0GiB time=1.24s -> 3.21 GiB/s errs=[]
+BENCH json=cufile-pb4096.json threads=8 chunk=256MiB register=0 total=4.0GiB time=1.25s -> 3.21 GiB/s errs=[]
+BENCH json=cufile-pb8192.json threads=4 chunk=64MiB register=0 total=4.0GiB time=1.30s -> 3.09 GiB/s errs=[]
+BENCH json=cufile-pb8192.json threads=4 chunk=256MiB register=0 total=4.0GiB time=1.39s -> 2.87 GiB/s errs=[]
+BENCH json=cufile-pb8192.json threads=8 chunk=64MiB register=0 total=4.0GiB time=1.31s -> 3.06 GiB/s errs=[]
+BENCH json=cufile-pb8192.json threads=8 chunk=256MiB register=0 total=4.0GiB time=1.66s -> 2.42 GiB/s errs=[]
+[21:42:20] 08d 완료
+[00:36:02] == c-h0.3-pb1024-phys-r1 (taskset -c 0-17)
+RESULT c-h0.3-pb1024-phys-r1 {"load_s": 547.8, "prefill_batch_s": 30.67, "decode_step_s": 28.72, "out_tok_per_s": 0.138, "cpu_s": 192.3, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 53.98, "ssd_
+[00:49:48]   ssd 스레드 CPU 분포: 
+[00:49:54] == c-h0.3-pb1024-free-r1 (env)
+RESULT c-h0.3-pb1024-free-r1 {"load_s": 563.5, "prefill_batch_s": 30.54, "decode_step_s": 28.18, "out_tok_per_s": 0.14, "cpu_s": 158.1, "gpu_max_gib": 14.39, "tiers": {"n_modules": 61, "n_ssd": 42, "host_tier_gib": 36.07, "ssd_tier_gib": 79.74, "host_budget_gib": 37.64, "buffer_pool_gib": 1.9}, "rss_gib": 52.01, "ssd_r
+[01:03:54]   ssd 스레드 CPU 분포: 
+[01:03:54] 08e 완료
