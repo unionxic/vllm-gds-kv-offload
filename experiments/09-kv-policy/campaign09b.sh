@@ -18,15 +18,19 @@ run(){ # tag, extra args...
   log "== $tag ($*)"
   ./memguard.sh $tag $O/memguard.log & local guard=$!
   python run_policy_66b.py --host-fraction 0.85 --num-in-group 62 --kv-cache-gib $KV \
-    --n-prompts 16 --out-dir $O "$@" --tag $tag > $O/$tag.log 2>&1
+    --n-prompts 16 --out-dir $O $SLOTS "$@" --tag $tag > $O/$tag.log 2>&1
   kill $guard 2>/dev/null; wait $guard 2>/dev/null
   [ -f $O/$tag.json ] && { grep -a '^RESULT' $O/$tag.log | cut -c1-500; return 0; }
   log "FAILED $tag"; grep -aE 'Error|Killed|out of memory|KILL|Traceback' $O/$tag.log $O/memguard.log | tail -3; return 1
 }
-while pgrep -f 'campaign09\.s[h]|run_combo_66b\.p[y]|run_policy_66b\.p[y]' >/dev/null; do sleep 30; done
+while pgrep -f 'campaign09[c]\.s[h]|run_policy_66b\.p[y]' >/dev/null; do sleep 30; done
 KV=$(ls $O/b-kv*-cufile.json 2>/dev/null | head -1 | sed 's/.*b-kv\(.*\)-cufile\.json/\1/')
 [ -z "$KV" ] && { log "1단계 결과가 없어 2단계 중단"; exit 1; }
 log "2단계 시작 (KV=${KV}GiB)"
+# staging ring 슬롯: 기본 2로 돌린 첫 런(p-staged-cpufb-slots2)은 slot_full 247회, 저장 시도 286건 중 183건 버림 →
+# 2라운드 적중이 186만에서 2.4만 토큰으로 붕괴. 청크가 141MiB라 슬롯 2개(283MiB)로는 도착률을 못 따라간다.
+# 슬롯 6개(848MiB) + writer 4개로 올린다. 슬롯2 런의 gpu_max 13.02GiB이므로 +565MiB 해도 예산 14.4GiB 안.
+SLOTS="--staging-slots 6 --staging-writers 4 --cpu-fallback-slots 8"
 run p-staged-cpufb   --kv-transport cufile_staged --staging-policy cpu_fallback
 run p-staged-skip    --kv-transport cufile_staged --staging-policy skip
 run p-staged-block   --kv-transport cufile_staged --staging-policy block

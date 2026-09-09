@@ -1,0 +1,200 @@
+{
+ "args": {
+  "model": "facebook/opt-66b",
+  "weight_transport": "cufile",
+  "kv_transport": "cufile",
+  "host_fraction": 0.85,
+  "group_size": 64,
+  "num_in_group": 62,
+  "prefetch_step": 1,
+  "io_threads": 4,
+  "ring_mb": 0,
+  "gpu_util": 0.9,
+  "kv_cache_gib": 5.5,
+  "max_model_len": 640,
+  "n_prompts": 16,
+  "prefix_tokens": 448,
+  "tail_tokens": 32,
+  "decode_tokens": 8,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "ssd_root": "/home/unionxic/experiments/vllm-gds-kv/results/weight-offload/ssd-66b",
+  "kv_root": "/home/unionxic/experiments/vllm-gds-kv/results/combined/kv-66b",
+  "out_dir": "../../results/kv-policy",
+  "tag": "ph-cufile"
+ },
+ "sysmem_start": {
+  "MemTotal": 134724603904,
+  "MemAvailable": 130430197760,
+  "Cached": 1572487168,
+  "AnonPages": 1067708416
+ },
+ "load_s": 236.4,
+ "tiers": {
+  "n_modules": 62,
+  "n_ssd": 6,
+  "host_tier_gib": 106.32,
+  "ssd_tier_gib": 11.39,
+  "gpu_resident_layers": 2
+ },
+ "rounds": [
+  {
+   "round": 1,
+   "wall_s": 445.28,
+   "cpu_s": 405.2,
+   "n_steps": 36,
+   "n_prefill_steps": 29,
+   "n_decode_steps": 7,
+   "seg1_submit_to_kvload_s": null,
+   "seg2_kvload_to_first_token_s": null,
+   "first_token_s": {
+    "min": 32.885,
+    "max": 365.628
+   },
+   "seg3_first_to_last_token_s": 412.395,
+   "last_token_s": 445.28,
+   "prefill_steps": {
+    "wall_s": 365.537,
+    "w_bytes_gib": 296.16,
+    "kv_read_gib": 0.0,
+    "kv_read_n": 0,
+    "kv_write_gib": 15.75,
+    "kv_write_n": 112
+   },
+   "decode_steps": {
+    "wall_s": 79.651,
+    "w_bytes_gib": 68.34,
+    "kv_read_gib": 0.0,
+    "kv_read_n": 0,
+    "kv_write_gib": 0.0,
+    "kv_write_n": 0
+   },
+   "kv_io": {
+    "read_n": 0,
+    "read_gib": 0.0,
+    "write_n": 112,
+    "write_gib": 15.75,
+    "read_busy_s": 0,
+    "write_busy_s": 71.17,
+    "read_span_s": 0,
+    "max_outstanding_read": 0,
+    "max_outstanding_write": 8
+   },
+   "store_drain": {
+    "after_round_s": 0.0,
+    "leftover_writes": 0,
+    "leftover_jobs": 0
+   },
+   "matched": 0,
+   "ids": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+   ],
+   "store_fully_drained": true,
+   "decode_kvread_overlap": {
+    "seconds": 0.0,
+    "bytes_gib": 0.0
+   }
+  },
+  {
+   "round": 2,
+   "wall_s": 509.351,
+   "cpu_s": 459.2,
+   "n_steps": 1325,
+   "n_prefill_steps": 1318,
+   "n_decode_steps": 7,
+   "seg1_submit_to_kvload_s": 14.063,
+   "seg2_kvload_to_first_token_s": 13.263,
+   "first_token_s": {
+    "min": 27.327,
+    "max": 429.632
+   },
+   "seg3_first_to_last_token_s": 482.024,
+   "last_token_s": 509.351,
+   "prefill_steps": {
+    "wall_s": 429.593,
+    "w_bytes_gib": 364.5,
+    "kv_read_gib": 15.75,
+    "kv_read_n": 112,
+    "kv_write_gib": 0.0,
+    "kv_write_n": 0
+   },
+   "decode_steps": {
+    "wall_s": 79.717,
+    "w_bytes_gib": 68.34,
+    "kv_read_gib": 0.0,
+    "kv_read_n": 0,
+    "kv_write_gib": 0.0,
+    "kv_write_n": 0
+   },
+   "kv_io": {
+    "read_n": 112,
+    "read_gib": 15.75,
+    "write_n": 0,
+    "write_gib": 0.0,
+    "read_busy_s": 34.57,
+    "write_busy_s": 0,
+    "read_span_s": 389.774,
+    "max_outstanding_read": 8,
+    "max_outstanding_write": 0
+   },
+   "store_drain": {
+    "after_round_s": 0.0,
+    "leftover_writes": 0,
+    "leftover_jobs": 0
+   },
+   "matched": 595840,
+   "ids": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+   ],
+   "store_fully_drained": true,
+   "decode_kvread_overlap": {
+    "seconds": 0.0,
+    "bytes_gib": 0.0
+   }
+  }
+ ],
+ "ids_equal_rounds": true,
+ "gpu_max_gib": 12.74,
+ "weight_ssd_stats": {
+  "reads": 1728,
+  "read_gib": 820.12
+ },
+ "sysmem_end": {
+  "MemTotal": 134724603904,
+  "MemAvailable": 13429596160,
+  "Cached": 13402337280,
+  "AnonPages": 115425595392
+ },
+ "kv_files": 113,
+ "kv_bytes_gib": 15.75
+}

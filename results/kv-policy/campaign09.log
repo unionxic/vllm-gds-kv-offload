@@ -1,0 +1,82 @@
+[08:17:59] == b-kv5.5-cufile (kv 5.5GiB, 상주 2층, cufile)
+[08:42:39] FAILED b-kv5.5-cufile
+[08:42:39] kv 5.5 실패 → 다음 단
+[08:42:55] == b-kv4.5-cufile (kv 4.5GiB, 상주 2층, cufile)
+[08:44:07] skip b-kv5.5-cufile (exists)
+[08:44:07] == b-kv5.5-posix (kv 5.5GiB, 상주 2층, posix)
+RESULT b-kv5.5-posix {"load_s": 242.8, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 13.37, "kv_files": 113, "kv_bytes_gib": 15.75, "r1": {"prefill_s": 88.73, "gen_total_s": 586.15, "decode_step_s": 71.06, "cpu_s": 1025.4, "matched": 1281280, "kv_read_n": 112, "kv_read_b": 16911433728, "kv_write_n": 112, "kv_write_b": 16911433728}, "r2": {"prefill_s": 116.09, "gen_total_s": 585.43, "decod
+[09:11:28] == b-kv5.5-none (kv 5.5GiB, 상주 2층, none)
+RESULT b-kv5.5-none {"load_s": 242.9, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "r1": {"prefill_s": 72.78, "gen_total_s": 453.87, "decode_step_s": 54.44, "cpu_s": 467.8, "matched": 0, "kv_read_n": 0, "kv_read_b": 0, "kv_write_n": 0, "kv_write_b": 0}, "r2": {"prefill_s": 72.18, "gen_total_s": 454.91, "decode_step_s": 54.67, "cpu_s": 467.5, "matched": 0, "kv_read_n": 0, "kv_read_
+[09:33:28] 09 1단계 완료 (KV=5.5)
+[09:33:56] 2단계 시작 (KV=5.5GiB)
+[09:33:57] == p-staged-cpufb (--kv-transport cufile_staged --staging-policy cpu_fallback)
+RESULT p-staged-cpufb {"load_s": 236.8, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "staged_flush_s": 0.0, "staged_stats": {"ring_used": 39, "fallback": 64, "dropped": 183, "slot_full": 247, "ob_full": 0, "read_deferred": 0}, "gpu_max_gib": 13.02, "kv_files": 104, "kv_bytes_gib": 14.484, "r1": {"prefill_s": 72.76, "gen_total_s": 502.88, "decode_step_s": 61.44, "cpu_s": 513.7, "matched": 10368, "kv_rea
+[09:57:57] == p-staged-skip (--kv-transport cufile_staged --staging-policy skip)
+[10:12:46] 2단계 시작 (KV=5.5GiB)
+[10:12:47] == p-staged-cpufb (--kv-transport cufile_staged --staging-policy cpu_fallback)
+RESULT p-staged-cpufb {"load_s": 234.5, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "staged_flush_s": 0.0, "staged_stats": {"ring_used": 60, "fallback": 52, "dropped": 77, "slot_full": 129, "ob_full": 0, "read_deferred": 0}, "gpu_max_gib": 13.58, "kv_files": 113, "kv_bytes_gib": 15.75, "r1": {"prefill_s": 73.38, "gen_total_s": 510.76, "decode_step_s": 62.48, "cpu_s": 523.4, "matched": 15232, "kv_read_
+[10:37:05] == p-staged-skip (--kv-transport cufile_staged --staging-policy skip)
+[10:46:07] == L-kv10.0-none (kv 10.0GiB, prefix 1700, none)
+RESULT L-kv10.0-none {"load_s": 263.0, "tiers": {"n_modules": 64, "n_ssd": 8, "host_tier_gib": 106.32, "ssd_tier_gib": 15.19, "gpu_resident_layers": 0}, "ids_equal_rounds": true, "gpu_max_gib": 13.67, "r1": {"prefill_s": 83.93, "gen_total_s": 395.3, "decode_step_s": 44.48, "cpu_s": 422.1, "matched": 0, "kv_read_n": 0, "kv_read_b": 0, "kv_write_n": 0, "kv_write_b": 0}, "r2": {"prefill_s": 83.8, "gen_total_s": 395.68, "decode_step_s": 44.55, "cpu_s": 422.3, "matched": 0, "kv_read_n": 0, "kv_read_b
+[11:06:53] == L-kv10.0-cufile (kv 10.0GiB, prefix 1700, cufile)
+RESULT L-kv10.0-cufile {"load_s": 253.5, "tiers": {"n_modules": 64, "n_ssd": 8, "host_tier_gib": 106.32, "ssd_tier_gib": 15.19, "gpu_resident_layers": 0}, "ids_equal_rounds": true, "gpu_max_gib": 13.66, "kv_files": 163, "kv_bytes_gib": 22.781, "r1": {"prefill_s": 98.37, "gen_total_s": 457.08, "decode_step_s": 51.24, "cpu_s": 475.1, "matched": 10387008, "kv_read_n": 162, "kv_read_b": 24461180928, "kv_write_n": 162, "kv_write_b": 24461180928}, "r2": {"prefill_s": 91.67, "gen_total_s": 447.25, "dec
+[11:29:45] == L-kv10.0-posix (kv 10.0GiB, prefix 1700, posix)
+RESULT L-kv10.0-posix {"load_s": 264.3, "tiers": {"n_modules": 64, "n_ssd": 8, "host_tier_gib": 106.32, "ssd_tier_gib": 15.19, "gpu_resident_layers": 0}, "ids_equal_rounds": true, "gpu_max_gib": 14.07, "kv_files": 163, "kv_bytes_gib": 22.781, "r1": {"prefill_s": 98.91, "gen_total_s": 459.24, "decode_step_s": 51.48, "cpu_s": 827.2, "matched": 17314560, "kv_read_n": 162, "kv_read_b": 24461180928, "kv_write_n": 162, "kv_write_b": 24461180928}, "r2": {"prefill_s": 102.63, "gen_total_s": 451.83, "dec
+[11:53:06] 09 프리픽스 확대 완료 (KV=10.0)
+[13:34:33] 10 비용 분해 시작
+[13:34:33] == c-n8-none (--host-fraction 0.85 --n-prompts 8 --kv-transport none)
+RESULT c-n8-none {"load_s": 243.0, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "r1": {"prefill_s": 39.23, "gen_total_s": 253.83, "decode_step_s": 30.66, "cpu_s": 235.5, "matched": 0, "kv_read_n": 0, "kv_read_b": 0, "kv_write_n": 0, "kv_write_b": 0}, "r2": {"prefill_s": 39.15, "gen_total_s": 253.95, "d
+[13:48:46] == c-n8-cufile (--host-fraction 0.85 --n-prompts 8 --kv-transport cufile)
+RESULT c-n8-cufile {"load_s": 245.7, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 57, "kv_bytes_gib": 7.875, "r1": {"prefill_s": 37.49, "gen_total_s": 272.11, "decode_step_s": 33.52, "cpu_s": 276.9, "matched": 578368, "kv_read_n": 56, "kv_read_b": 8455716864, "kv_write_n": 56, "kv_write_b":
+[14:03:52] == c-blk256-cufile (--host-fraction 0.85 --n-prompts 16 --kv-block 256 --kv-transport cufile)
+RESULT c-blk256-cufile {"load_s": 242.0, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 17, "kv_bytes_gib": 9.0, "r1": {"prefill_s": 75.26, "gen_total_s": 516.5, "decode_step_s": 63.03, "cpu_s": 533.2, "matched": 1193216, "kv_read_n": 16, "kv_read_b": 9663676416, "kv_write_n": 16, "kv_write_b
+[14:28:27] == c-h0.75-none (--host-fraction 0.75 --n-prompts 16 --kv-transport none)
+RESULT c-h0.75-none {"load_s": 283.6, "tiers": {"n_modules": 62, "n_ssd": 13, "host_tier_gib": 93.03, "ssd_tier_gib": 24.68, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "r1": {"prefill_s": 101.94, "gen_total_s": 694.95, "decode_step_s": 84.71, "cpu_s": 520.0, "matched": 0, "kv_read_n": 0, "kv_read_b": 0, "kv_write_n": 0, "kv_write_b": 0}, "r2": {"prefill_s": 102.0, "gen_total_s": 692.14
+[15:00:04] == c-h0.75-cufile (--host-fraction 0.75 --n-prompts 16 --kv-transport cufile)
+RESULT c-h0.75-cufile {"load_s": 275.6, "tiers": {"n_modules": 62, "n_ssd": 13, "host_tier_gib": 93.03, "ssd_tier_gib": 24.68, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "r1": {"prefill_s": 95.73, "gen_total_s": 687.86, "decode_step_s": 84.59, "cpu_s": 579.0, "matched": 635264, "kv_read_n": 112, "kv_read_b": 16911433728, "kv_write_n": 112, "kv_wr
+[15:31:45] 10 비용 분해 완료
+[15:32:01] 11 구간 분리 시작
+[15:32:03] == ph-none (python run_phase_66b.py --out-dir ../../results/kv-policy --kv-transport none --tag ph-none)
+RESULT ph-none {"load_s": 237.1, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 443.951, "seg1_submit_to_kvload_s": null, "seg2_kvload_to_first_token_s": null, "seg3_first_to_last_token_s": 411.727, "prefill_steps": {"wall_s": 364.27, "w_bytes_gib": 296.16, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 0.0, "kv_write_n": 0}, "decode_steps": {"wall_s": 79.593, "w_bytes_gib": 68.34, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 0.0, "kv_write_n": 0}, "decode_kvread_overlap": {"seconds": 0.0, "bytes_gib": 0.0}, "store_drain": {"after_ro
+WARNING 09-09 15:32:12 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-09 15:32:13 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-09 15:32:13 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-09 15:32:18 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-09 15:36:09 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-09 15:36:09 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 15:36:09 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 15:42:00 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[15:51:13] == ph-cufile (python run_phase_66b.py --out-dir ../../results/kv-policy --kv-transport cufile --tag ph-cufile)
+RESULT ph-cufile {"load_s": 236.4, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "wall_s": 445.28, "seg1_submit_to_kvload_s": null, "seg2_kvload_to_first_token_s": null, "seg3_first_to_last_token_s": 412.395, "prefill_steps": {"wall_s": 365.537, "w_bytes_gib": 296.16, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 15.75, "kv_write_n": 112}, "decode_steps": {"wall_s": 79.651, "w_bytes_gib": 68.34, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 0.0, "kv_write_n": 0}, "decode_kvread_overlap": {"seconds": 0.0
+WARNING 09-09 15:51:21 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-09 15:51:22 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-09 15:51:22 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-09 15:51:27 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-09 15:55:02 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 15:55:02 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 15:55:17 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 15:55:17 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 15:55:17 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-09 15:55:17 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 15:55:17 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 16:01:10 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[16:11:26] 11 nsys 런(중첩 육안 확인용)
+[16:11:28] == ph-cufile-nsys (/usr/local/cuda/bin/nsys profile -t cuda,nvtx,osrt --cuda-memory-usage=false --sample=none --cpuctxsw=none -o ../../results/kv-policy/ph-cufile-nsys --force-overwrite true python run_phase_66b.py --out-dir ../../results/kv-policy --kv-transport cufile --tag ph-cufile-nsys)
+RESULT ph-cufile-nsys {"load_s": 250.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "wall_s": 446.709, "seg1_submit_to_kvload_s": null, "seg2_kvload_to_first_token_s": null, "seg3_first_to_last_token_s": 413.685, "prefill_steps": {"wall_s": 366.33, "w_bytes_gib": 296.16, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 15.75, "kv_write_n": 112}, "decode_steps": {"wall_s": 80.279, "w_bytes_gib": 68.34, "kv_read_gib": 0.0, "kv_read_n": 0, "kv_write_gib": 0.0, "kv_write_n": 0}, "decode_kvread_overlap": {"seconds"
+WARNING 09-09 16:11:37 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-09 16:11:39 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-09 16:11:39 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-09 16:11:44 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-09 16:15:33 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 16:15:33 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 16:15:48 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 16:15:48 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-09 16:15:48 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-09 16:15:48 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 16:15:48 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-09 16:21:41 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[16:36:27] 11 완료
+[00:15:46] == ph-cufile-steps (step 원본 저장)
+RESULT ph-cufile-steps {"load_s": 241.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "wall_s": 444.006, "seg1_submit_t
+[00:36:02] 12 완료
+[04:35:57] == ph-none-steps (step 원본 저장)
