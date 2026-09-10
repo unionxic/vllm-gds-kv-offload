@@ -1,0 +1,10 @@
+### 결과 해석
+
+- 새 결과 json이 생기면 먼저 `python tools/compare_results.py --ref <기준 런>`으로 이전 결과와 forward 고정비 모형에 대조. 절차는 .claude/skills/compare-results/SKILL.md.
+- 병목은 고정비 분해에서 시작. OPT-66B 스트리밍에서 forward는 host 티어/12.3 GB/s + SSD 티어/3.44 GB/s. 분해로 설명되지 않는 몫이 있을 때만 경합·폴링·스케줄링을 가설로 세우고, 직접 측정 없이 원인을 확정하지 않음.
+- 지난 결과와 어긋나는 점은 발견 즉시 docs/detailed-log.md에 기록. 미확립이면 미확립이라고 씀.
+
+### 문서와 용어
+
+- md 문서: 볼드·절번호·날짜 금지, 대주제 h3·소주제 h4, 개조식 명사 종결. 요약은 README, 상세는 docs/detailed-log.md. 실험 폴더에 보고서를 따로 두지 않음.
+- 설명용 조어를 만들지 않음. 풀어서 쓰거나 영어 용어 그대로. 실험 조건은 "조건"으로 부름.

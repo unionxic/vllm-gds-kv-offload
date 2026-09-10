@@ -470,6 +470,24 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 
 프리픽스 적중이 재계산보다 24.5초, 34% 느림. 프리픽스를 1700토큰으로 늘리면(상주 0층, KV 10 GiB, 프롬프트 6개) 9.4% 손해로 줄지만 방향은 같음. 비용 분해로 세 가설을 기각. 프롬프트를 절반으로 줄이면 손해가 34%만 감소(바이트 비례 아님), 블록을 64에서 256으로 키우면 손해 증가(IO 건당 고정 비용 아님), host 0.75로 가중치 SSD 트래픽을 2.2배로 하면 손해 9%만 증가(경합 아님).
 
+#### forward 비용의 분해
+
+이 조건의 병목은 forward마다 GPU 밖에서 들여오는 가중치 이동이고, 그 시간은 host 티어와 SSD 티어의 크기를 각 경로의 실측 대역폭으로 나눈 합으로 설명된다. host에서 GPU는 pinned H2D 12.3 GB/s(PCIe 3.0 x16), SSD에서 GPU는 cuFile 3.2 GiB/s(gdsio, 06 decode 중 NVMe 점유 90%). KV는 계산 중 GPU 안에 있어 이 합에 들어가지 않는다.
+
+| 구성 | host 티어 | SSD 티어 | 모형 | 실측 decode step | 출처 |
+|---|---|---|---|---|---|
+| host 0.85, 상주 2층 (09) | 106.3 GiB, 9.3 s | 11.4 GiB, 3.6 s | 12.8 s | 11.3~11.5 s | ab-none, ph-none |
+| host 0.85, 상주 4층 (07) | 106.3 GiB, 9.3 s | 7.6 GiB, 2.4 s | 11.7 s | 12.1 s | h0.85-kv* |
+| host 0.5 (06) | 62.7 GiB, 5.5 s | 53.2 GiB, 16.6 s | 22.1 s | 22.8 s | c-h0.5-r1 |
+| host 0.3 (06, 07) | 36.1 GiB, 3.1 s | 78~80 GiB, 24.3~24.9 s | 27.4~28.0 s | 28.1~28.5 s | c-h0.3-r1~3, h0.3-kv* |
+| host 0.1 (06) | 11.4 GiB, 1.0 s | 104.4 GiB, 32.6 s | 33.6 s | 56.5 s | c-h0.1-r1 |
+
+- host 0.3에서 0.85까지 cuFile 런은 모형과 5% 안에서 맞음. 0.85에서는 PCIe 몫이 7할, SSD 몫이 3할이라 SSD를 무한히 빠르게 해도 9.3초가 남고, 이 조건에서 SSD 대역폭은 forward의 3할만 좌우. host 비율을 내릴수록 SSD 몫이 커져 0.3에서는 9할.
+- host 0.1은 모형보다 68% 느림. 디스크 점유 85%에서 nvidia-fs 대역폭이 2.3 GiB/s로 떨어진 것으로 일부만 설명되고 나머지는 미확립.
+- 모형에서 벗어난 나머지 cuFile 런은 1 MiB 조각의 느린 모드(c-h0.3-ring16-r3, c-h0.3-s2-t8-r2, c-h0.3-r1-nsys, 62~148% 느림)와 gate-storeall(decode step 16.1초, 25% 느림, 미확립).
+- 09의 손익은 이 고정비 위에서 정해짐. 적중이 아끼는 상한은 prefill forward의 토큰 몫 5초(18.7초에서 13.6초)이고, 배치가 쪼개져 forward가 2개 늘면 27초를 잃음. 이 분해를 먼저 놓았으면 경합이나 폴링 가설 이전에 손해의 크기와 상한이 정해졌을 것. 초기에 그 순서를 거꾸로 밟은 것이 09의 시행착오.
+- tools/compare_results.py가 06, 07, 09의 결과 json 전체를 이 모형과 대조하고 15% 이상 벗어난 런과 기준 런 대비 10% 이상 움직인 런을 표시. 새 결과는 이 표부터 확인.
+
 #### 구간 분리와 원인
 
 벽시계 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측기(run_phase_66b.py)를 만들었다. KV 읽기와 쓰기 건마다 시각과 outstanding, step마다 가중치와 KV 바이트, 요청마다 제출과 첫 토큰과 완료 시각을 기록하고, decode step과 KV 읽기의 실제 중첩을 IO 구간 교차로 계산. 초기의 generate 두 번 방식은 두 번째 호출의 prefill이 decode 몫으로 섞여 "decode 손해"라는 잘못된 결론을 냈고 폐기.
@@ -579,6 +597,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 | results/combined | 07 결과 |
 | results/cufile-bounce | 08 결과, verify 로그 |
 | results/kv-policy | 09 결과, campaign09.log, nsys 기록 |
+| tools/compare_results.py | 06, 07, 09 결과 json 일람, forward 고정비 모형 대조, 기준 런 대비 변화율 |
 | lib/expfs.py | CuFileQ8Transport 추가 |
 | ~/vllm weight-ssd-offload | SSD 티어(2fbceeb103, 1c86373b60, fbfc637cb0), prefetch 경계 수정(3fc4433b62), 정확 등록(2f050f7fd5), 스케줄러 게이트(2998fcca0b, b576070a77) |
 
