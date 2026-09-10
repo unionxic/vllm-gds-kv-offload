@@ -98,7 +98,9 @@ if args.host_weight_fraction is not None or args.kv_batch:
     w_off = w_layer * n_layer * args.num_in_group / args.group_size
     if args.host_weight_fraction is not None:
         mem_total = int(next(l for l in open("/proc/meminfo") if l.startswith("MemTotal")).split()[1]) * 1024
-        args.host_fraction = round(args.host_weight_fraction * w_off / mem_total, 4)
+        # 층 바이트 추정이 실제보다 살짝 작을 수 있어 1.0(전부 CPU)이 한 층을 SSD로 흘리지 않도록 3% 여유
+        margin = 1.03 if args.host_weight_fraction >= 1.0 else 1.0
+        args.host_fraction = round(args.host_weight_fraction * w_off * margin / mem_total, 4)
         derived["host_fraction_from_weight"] = args.host_fraction
     if args.kv_batch:
         kv_req = 2 * n_layer * d_model * 2 * args.max_model_len
