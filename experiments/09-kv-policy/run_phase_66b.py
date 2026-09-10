@@ -15,7 +15,7 @@ import argparse, json, os, random, resource, sys, threading, time
 ap = argparse.ArgumentParser()
 ap.add_argument("--model", default="facebook/opt-66b")
 ap.add_argument("--weight-transport", default="cufile", choices=["cufile", "posix"])
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "posix", "none", "cufile_staged", "posix_staged"])
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "posix", "none", "cufile_staged", "posix_staged", "cufile_q8"])
 ap.add_argument("--staging-policy", default="block", choices=["block", "skip", "cpu_fallback", "value"])
 ap.add_argument("--staging-slots", type=int, default=6)
 ap.add_argument("--staging-writers", type=int, default=4)
@@ -96,7 +96,7 @@ if args.kv_transport != "none":
             "expfs_staging_policy": args.staging_policy, "expfs_staging_slots": args.staging_slots,
             "expfs_staging_writers": args.staging_writers, "expfs_cpu_fallback_slots": args.cpu_fallback_slots})
     import expfs
-    for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport, expfs.StagedCuFileTransport):
+    for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport, expfs.StagedCuFileTransport, expfs.CuFileQ8Transport):
         for nm, op in (("read_chunk", "r"), ("write_chunk", "w")):
             if hasattr(cls, nm): _wrap(cls, nm, op)
     # staged 의 ring 경유 쓰기는 write_slot 으로 나간다
