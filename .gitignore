@@ -38,3 +38,4 @@ results/combined/smoke/*/
 results/combined/smoke/wssd-*/
 results/combined/smoke/kv-*/
 results/combined/kv-66b/
+results/**/*.nsys-rep
