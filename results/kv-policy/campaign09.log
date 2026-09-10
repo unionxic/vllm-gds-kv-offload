@@ -80,3 +80,117 @@ WARNING 09-09 16:21:41 [jit_monitor.py:135] Triton kernel JIT compilation during
 RESULT ph-cufile-steps {"load_s": 241.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "wall_s": 444.006, "seg1_submit_t
 [00:36:02] 12 완료
 [04:35:57] == ph-none-steps (step 원본 저장)
+[04:40:15] FAILED ph-none-steps
+[rank0]: Traceback (most recent call last):
+[rank0]: NameError: name 'envs' is not defined
+[04:40:15] 12 완료
+[04:40:22] 13 admission 시작
+[04:40:23] == adm-none (--kv-transport none)
+[04:41:27] == ph-none-steps (step 원본 저장)
+[05:00:51] 13 admission 시작
+[05:00:53] == adm-none (--kv-transport none)
+RESULT ph-none-steps {"load_s": 246.0, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 449.283, "n_steps": 36, "seg1_submit_to_kvload_s": null, "seg2_kv
+[05:00:53] 12 완료
+RESULT adm-none {"load_s": 240.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 449.773, "n_steps": 36, "seg1_submit_to_kvload_s": null, "seg2_kvload_
+WARNING 09-10 05:01:01 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 05:01:03 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 05:01:03 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 05:01:08 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 05:05:02 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 05:05:02 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 05:05:02 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 05:10:58 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[05:27:45] == adm-storeall (--kv-transport cufile)
+RESULT adm-storeall {"load_s": 242.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1, "wall_s": 447.596, "n_steps": 36, "
+WARNING 09-10 05:27:53 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 05:27:55 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 05:27:55 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 05:28:00 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 05:31:40 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:31:40 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:31:56 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:31:56 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:31:56 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 05:31:56 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 05:31:56 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 05:37:50 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[05:55:45] == adm-seen2 (--kv-transport cufile_staged --staging-policy value --value-mode seen_twice)
+RESULT adm-seen2 {"load_s": 238.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 13.58, "kv_files": 29, "kv_bytes_gib": 3.938, "rounds": [{"round": 1, "wall_s": 445.642, "n_steps": 36, "seg1_
+WARNING 09-10 05:55:53 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 05:55:54 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 05:55:54 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 05:55:59 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 05:59:36 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:59:36 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:59:51 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:59:51 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 05:59:51 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 05:59:51 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 05:59:51 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 06:05:44 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[06:23:00] == adm-staged-block (--kv-transport cufile_staged --staging-policy block)
+RESULT adm-staged-block {"load_s": 242.2, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 13.58, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1, "wall_s": 446.828, "n_steps": 3
+WARNING 09-10 06:23:09 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 06:23:10 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 06:23:10 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 06:23:15 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 06:26:55 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:26:55 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:27:11 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:27:11 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:27:11 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 06:27:11 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 06:27:11 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 06:33:05 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[06:50:55] 13 완료
+[06:51:04] 14 파도 게이트 시작
+[06:51:05] == gate-cufile-2r (--kv-transport cufile)
+RESULT gate-cufile-2r {"load_s": 238.4, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "wall_s": 500.016, "n_steps": 36, 
+WARNING 09-10 06:51:14 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 06:51:15 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 06:51:15 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 06:51:20 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 06:54:57 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:54:57 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:55:12 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:55:12 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 06:55:12 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 06:55:12 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 06:55:12 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 07:01:47 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[07:11:59] == gate-storeall (--rounds 3 --n-prompts 16 --hot-prompts 4 --kv-transport cufile)
+RESULT gate-storeall {"load_s": 250.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1, "wall_s": 615.471, "n_steps": 36, 
+WARNING 09-10 07:12:07 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+WARNING 09-10 07:12:09 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-10 07:12:09 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+WARNING 09-10 07:12:14 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+WARNING 09-10 07:16:02 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 07:16:02 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 07:16:17 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 07:16:17 [base.py:493] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-10 07:16:18 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-10 07:16:18 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 07:16:18 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-10 07:24:22 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+[07:49:15] 14 완료
+[07:49:24] 15 깨끗한 A/B 시작 (CUFILE_ENV_PATH_JSON=/home/unionxic/experiments/vllm-gds-kv/experiments/08-cufile-bounce/cufile-pb8192.json)
+[07:49:30]   cuFile 경로 상태: 2.92 GiB/s  (8MiB 조각, 정상 ≈3.1)
+[07:49:31] == ab-none (--kv-transport none GATE=0)
+RESULT ab-none {"load_s": 253.7, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 445.062, "n_steps": 36, "seg1_s
+[08:08:57] == ab-cufile (--kv-transport cufile GATE=0)
+[08:13:47] FAILED ab-cufile
+[rank0]: Traceback (most recent call last):
+[rank0]: AssertionError
+[08:13:48] == ab-gate (--kv-transport cufile GATE=1)
+[08:14:39] 15 깨끗한 A/B 시작 (CUFILE_ENV_PATH_JSON=/home/unionxic/experiments/vllm-gds-kv/experiments/08-cufile-bounce/cufile-pb4096.json)
+[08:14:49]   cuFile 경로 상태: 3.24 GiB/s  (4MiB 조각, 정상 ≈3.2)
+[08:14:49] == ab-none (--kv-transport none GATE=0)
+RESULT ab-none {"load_s": 245.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 439.716, "n_steps": 36, "seg1_s
+[08:33:56] == ab-cufile (--kv-transport cufile GATE=0)
+RESULT ab-cufile {"load_s": 251.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1,
+[08:54:17] == ab-gate (--kv-transport cufile GATE=1)
+RESULT ab-gate {"load_s": 236.7, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 113, "kv_bytes_gib": 15.75, "rounds": [{"round": 1, "
+[09:13:06] 15 완료
+[09:13:16] 16 섞인 파도 게이트 비교 시작
+[09:13:22]   cuFile 경로 상태: 3.22 GiB/s
+[09:13:23] == mx-none (--kv-transport none GATE=0)
