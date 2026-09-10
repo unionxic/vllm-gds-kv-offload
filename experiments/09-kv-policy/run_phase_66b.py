@@ -47,6 +47,8 @@ ap.add_argument("--host-weight-fraction", type=float, default=None,
                 help="오프로드되는 가중치 중 CPU에 둘 비율. 지정하면 --host-fraction(RAM 전체 대비)을 모델 크기로부터 환산")
 ap.add_argument("--kv-batch", type=int, default=0,
                 help="GPU KV 예산을 '요청 N개분(max_model_len 토큰) × 1.15'로 모델 크기에서 계산. 0이면 --kv-cache-gib 사용")
+ap.add_argument("--poll-sleep-ms", type=float, default=0.0,
+                help="step이 아무 출력도 내지 않은 폴링이면 이만큼 잠들어 GIL을 KV 로드 스레드에 양보(검증용)")
 ap.add_argument("--prompt-source", default="random", choices=["random", "leval"],
                 help="leval: 03-leval/workload.json의 실제 문서 프리픽스 + 라운드별 다른 질문")
 ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
@@ -229,6 +231,7 @@ for rnd in range(1, args.rounds + 1):
         s0 = time.perf_counter()
         torch.cuda.nvtx.range_push("step")
         outs = eng.step()
+        if args.poll_sleep_ms and not outs: time.sleep(args.poll_sleep_ms / 1000.0)
         torch.cuda.nvtx.range_pop()
         s1 = time.perf_counter()
         post_w = wstat(); post_kv = kv_snapshot()
