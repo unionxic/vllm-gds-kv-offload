@@ -4,11 +4,23 @@ import glob, json, os, re, sys
 GIB = 2**30
 root = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results", "model-host-baseline")
 def stats(r):
-    real = [s for s in r["steps"] if s["t1"] - s["t0"] > 0.5]
-    pre = [s["t1"] - s["t0"] for s in real if s["n_out"] == 0]
-    dec = sorted(s["t1"] - s["t0"] for s in real if s["n_out"] > 0)
-    gaps = sum(max(0, real[i + 1]["t0"] - real[i]["t1"]) for i in range(len(real) - 1)) + real[0]["t0"]
-    return dict(wall=r["wall_s"], pre=sum(pre) / len(pre), dec=dec[len(dec) // 2], wait=gaps / max(1, len(pre)))
+    """배치 = n_tok이 다시 작아지는 지점으로 구분. 배치의 prefill = 출력 0인 step이 있으면 그것, 없으면 배치 안 최장 step.
+    decode = 나머지 step의 중앙값. 대기 = 앞 배치 끝에서 이 배치 첫 step까지."""
+    real = [s for s in r["steps"] if s["t1"] - s["t0"] > 0.3]
+    groups, cur, prev_tok = [], [], -1
+    for s in real:
+        if cur and (s["n_out"] == 0 or s["n_tok"] <= prev_tok):
+            groups.append(cur); cur = []
+        cur.append(s); prev_tok = s["n_tok"]
+    if cur: groups.append(cur)
+    pre, dec, waits, prev_end = [], [], [], 0.0
+    for g in groups:
+        z = [s for s in g if s["n_out"] == 0]
+        p = z[0] if z else max(g, key=lambda s: s["t1"] - s["t0"])
+        pre.append(p["t1"] - p["t0"]); dec += [s["t1"] - s["t0"] for s in g if s is not p]
+        waits.append(g[0]["t0"] - prev_end); prev_end = g[-1]["t1"]
+    dec.sort()
+    return dict(wall=r["wall_s"], pre=sum(pre) / len(pre), dec=dec[len(dec) // 2], wait=sum(waits) / len(waits), waits=waits, n_batches=len(groups))
 print("model host | CPU/SSD tier | fwd meas/model | prefill none/hit | wait/batch | wall none/hit | store extra")
 for nf in sorted(glob.glob(os.path.join(root, "*-none.json"))):
     m = re.match(r"(.+)-h([\d.]+)-none\.json", os.path.basename(nf)); cf = nf.replace("-none.json", "-cufile.json")
