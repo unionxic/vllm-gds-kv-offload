@@ -9,7 +9,7 @@
 - tail latency의 원인은 전송 방식이 아니라 store 실행 구조다. store 스레드의 CUDA event spin wait가 CPU를 태웠고(blocking event로 9배 감소), store 작업이 GPU 원본 블록을 SSD 쓰기 완료까지 붙잡아 요청 경계를 침범한 것이 tail을 만들었다(순수 sleep으로 재현). CPU staging의 수명 분리를 GPU staging ring으로 재현하고 포화 시 원본을 붙잡지 않는 비차단 admission을 붙이자 tail이 5초에서 1.3초로, CPU가 1/5로 떨어졌다.
 - 무엇을 저장할지(admission)의 최적해는 workload의 재사용 구조에 의존한다. 반복형 재사용에서는 빈도 필터(seen-twice)가 random 대비 같은 tail에서 write를 절반으로 줄이며 이겼으나, 먼 거리 1회 재사용(cold tail)에서는 seen-twice가 구조적으로 실패했고(2번째에 저장하므로 2회 재사용을 못 잡음) 1번째에 저장하는 정책만 cold tail을 잡았다. 단일 최적 정책은 없다.
 
-- 가중치가 GPU와 RAM을 넘어 SSD에서 스트리밍되는 조건(OPT-66B, 16 GB GPU)에서는 KV 오프로드의 손익이 대역폭이 아니라 배치 형성으로 정해진다. forward 하나가 가중치 전송 13초로 고정되므로, KV가 먼저 도착한 요청 하나가 혼자 forward를 돌면 배치 파도가 쪼개져 적중이 재계산보다 34% 느려졌다. 같은 파도의 로드가 끝날 때까지 계산을 미루는 게이트를 스케줄러에 넣자 forward 수가 기준선으로 돌아오고 적중이 재계산보다 2.5% 빨라졌다. 저장 정책과 int8 양자화는 이 손해를 고치지 못했고, 가중치 경로 자체는 cuFile이 POSIX보다 2.4배 빠르며 병목은 디스크 대역폭이다.
+- 가중치가 GPU와 RAM을 넘어 SSD에서 스트리밍되는 조건(OPT-66B, 16 GB GPU)에서는 KV 오프로드의 손익이 대역폭이 아니라 배치 형성으로 정해진다. forward 하나가 가중치 전송 13초로 고정되므로, KV가 먼저 도착한 요청 하나가 혼자 forward를 돌면 함께 올라간 배치가 쪼개져 적중이 재계산보다 34% 느려졌다. 같은 배치의 로드가 끝날 때까지 계산을 미루는 게이트를 스케줄러에 넣자 forward 수가 기준선으로 돌아오고 적중이 재계산보다 2.5% 빨라졌다. 저장 정책과 int8 양자화는 이 손해를 고치지 못했고, 가중치 경로 자체는 cuFile이 POSIX보다 2.4배 빠르며 병목은 디스크 대역폭이다.
 
 즉 vLLM에서 GDS의 실용성은 전송 API가 아니라 KV 블록 수명 분리, 저장 admission, 캐시 적중률을 함께 설계하느냐로 결정되고, 가중치까지 스트리밍하는 환경에서는 스케줄러가 배치를 지키느냐가 그 위에 더해진다.
 
@@ -69,7 +69,7 @@ one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. 
 | 가중치 경로, decode step | cuFile / POSIX | 28.5 s / 68.0 s. 최선 정책(2-layer prefetch, 스레드 8, ring 8 MiB)에서 26.7 s |
 | cuFile 조각 크기 4~8 MiB | 벽시계 / CPU | 벽시계 동일, CPU 28% 감소. ring 없이 27.0 s로 ring 대체 |
 | KV 적중 로드, 배치 5, 게이트 없음 | 2라운드 wall (재계산 439.5 s) | 503.7 s, forward 32에서 38로 |
-| 같은 조건, 파도 게이트 | | 428.4 s, forward 32, 마지막 요청 첫 토큰 425 s에서 349 s로 |
+| 같은 조건, 스케줄러 게이트 | | 428.4 s, forward 32, 마지막 요청 첫 토큰 425 s에서 349 s로 |
 | 재사용 4 + 1회성 12, 3라운드 합계 | 재계산 / 게이트 없음 / 게이트 2 | 1,321.9 s / 1,395.4 s / 1,317.7 s |
 | seen_twice admission (게이트 없음) | 3라운드 합계 손해 | 64.8 s에서 24.9 s. 읽기를 피한 몫이지 원인 교정 아님 |
 | KV int8 저장 (게이트 2) | 디스크 / wall | 절반 / 라운드당 1.4 s 느려짐 |
@@ -83,7 +83,7 @@ decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운�
 - W1(store 지속 유입)과 W2(load 중심 재사용)의 우열 차이는 워크로드 경계이지 모순 아님.
 - W3(open-loop): closed 동시성은 cuFile 지연 store 우위, Poisson 지속 부하는 처리량 열위가 큐 대기를 증폭해 3~9배 역전 — gap 전용 배출은 단일 스트림 전용.
 - 기존 tiering 수치는 종료 race를 가드로 우회한 측정. race는 최신 main #49671로 해결 확인. /dev/shm 누출은 #52596 이후에도 Tiering 경로에서 재현(후속 보고 대상), 로컬 `offload-shm-leak-fix`는 이 경우까지 처리.
-- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 파도 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립.
+- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 스케줄러 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립.
 
 #### Directory
 
@@ -102,7 +102,7 @@ decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운�
 | `experiments/06-weight-offload/` | OPT-66B 가중치 3단 스트리밍(GPU·host·SSD)의 cuFile 대 POSIX, prefetch 깊이와 ring, host 비율 스윕 |
 | `experiments/07-combined/` | 가중치 스트리밍 위에 KV를 SSD로 두는 결합 실험, pinned 정확 등록, 메모리 워치독 |
 | `experiments/08-cufile-bounce/` | cuFile 미등록 버퍼 경로의 조각 크기, 검증 읽기, 읽기 패턴 마이크로벤치 |
-| `experiments/09-kv-policy/` | 배치 구성, 구간 계측 러너, 비용 분해, 파도 게이트 A/B, 저장 정책, KV int8 |
+| `experiments/09-kv-policy/` | 배치 구성, 구간 계측 러너, 비용 분해, 스케줄러 게이트 A/B, 저장 정책, KV int8 |
 | `results/` | 실험별 원자료(bailian·leval·leval-openloop·admission·weight-offload·combined·cufile-bounce·kv-policy) |
 | `docs/detailed-log.md` | 설계 근거, 전체 측정표, 실패와 정정의 상세 기록 |
 
