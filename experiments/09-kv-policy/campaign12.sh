@@ -10,7 +10,7 @@ while pgrep -f 'python run_phase_66b|python run_policy_66b' >/dev/null; do sleep
 tag=${TAG:-ph-cufile-steps}
 rm -rf ../../results/weight-offload/ssd-66b ../../results/combined/kv-66b
 log "== $tag (step 원본 저장)"
-./memguard.sh $tag $O/memguard.log & guard=$!
+../07-combined/memguard.sh $tag $O/memguard.log & guard=$!
 python run_phase_66b.py --out-dir $O --kv-transport ${KVT:-cufile} --tag $tag > $O/$tag.log 2>&1
 kill $guard 2>/dev/null; wait $guard 2>/dev/null
 [ -f $O/$tag.json ] && grep -a '^RESULT' $O/$tag.log | cut -c1-300 || { log "FAILED $tag"; grep -aE 'Error|Traceback' $O/$tag.log | tail -3; }

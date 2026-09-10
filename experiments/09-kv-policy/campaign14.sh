@@ -13,7 +13,7 @@ run(){ local tag=$1; shift
   [ -f $O/$tag.json ] && { log "skip $tag (exists)"; return 0; }
   rm -rf ../../results/weight-offload/ssd-66b ../../results/combined/kv-66b
   log "== $tag ($*)"
-  ./memguard.sh $tag $O/memguard.log & local guard=$!
+  ../07-combined/memguard.sh $tag $O/memguard.log & local guard=$!
   python run_phase_66b.py --out-dir $O "$@" --tag $tag > $O/$tag.log 2>&1
   kill $guard 2>/dev/null; wait $guard 2>/dev/null
   [ -f $O/$tag.json ] && { grep -a '^RESULT' $O/$tag.log | cut -c1-300; grep -a '^WARN' $O/$tag.log; return 0; }

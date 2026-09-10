@@ -11,7 +11,7 @@ log(){ echo "[$(date +%H:%M:%S)] $*"; }
 tag=mx-gate2-q8
 rm -rf ../../results/weight-offload/ssd-66b ../../results/combined/kv-66b
 log "== $tag (cufile_q8, GATE=2)"
-./memguard.sh $tag $O/memguard.log & guard=$!
+../07-combined/memguard.sh $tag $O/memguard.log & guard=$!
 python run_phase_66b.py --rounds 3 --n-prompts 16 --hot-prompts 4 --out-dir $O --kv-transport cufile_q8 --tag $tag > $O/$tag.log 2>&1
 kill $guard 2>/dev/null; wait $guard 2>/dev/null
 [ -f $O/$tag.json ] && grep -a '^RESULT' $O/$tag.log | cut -c1-300 || { log "FAILED $tag"; grep -aE 'Error|Traceback' $O/$tag.log | tail -4; }

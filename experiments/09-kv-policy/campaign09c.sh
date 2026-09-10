@@ -15,7 +15,7 @@ run(){ # tag kv transport
   rm -rf ../../results/weight-offload/ssd-66b ../../results/combined/kv-66b
   local free_gb=$(df --output=avail -BG / | tail -1 | tr -dc 0-9); [ "$free_gb" -lt 90 ] && { log "disk free ${free_gb}G < 90G, abort"; exit 1; }
   log "== $tag (kv ${kv}GiB, prefix 1700, $tr)"
-  ./memguard.sh $tag $O/memguard.log & local guard=$!
+  ../07-combined/memguard.sh $tag $O/memguard.log & local guard=$!
   python run_policy_66b.py $COMMON --kv-cache-gib $kv --out-dir $O --kv-transport $tr --tag $tag > $O/$tag.log 2>&1
   kill $guard 2>/dev/null; wait $guard 2>/dev/null
   [ -f $O/$tag.json ] && { grep -a '^RESULT' $O/$tag.log | cut -c1-500; return 0; }
