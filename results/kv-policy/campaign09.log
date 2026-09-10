@@ -194,3 +194,43 @@ RESULT ab-gate {"load_s": 236.7, "tiers": {"n_modules": 62, "n_ssd": 6, "host_ti
 [09:13:16] 16 섞인 파도 게이트 비교 시작
 [09:13:22]   cuFile 경로 상태: 3.22 GiB/s
 [09:13:23] == mx-none (--kv-transport none GATE=0)
+RESULT mx-none {"load_s": 236.4, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.75, "rounds": [{"round": 1, "wall_s": 440.855, "n_steps": 36, "seg1_s
+[09:39:44] == mx-gate0 (--kv-transport cufile GATE=0)
+RESULT mx-gate0 {"load_s": 239.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[10:07:24] == mx-gate1 (--kv-transport cufile GATE=1)
+RESULT mx-gate1 {"load_s": 240.2, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[10:35:04] == mx-gate2 (--kv-transport cufile GATE=2)
+RESULT mx-gate2 {"load_s": 248.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[11:02:52] 16 완료
+[11:04:37] 16 섞인 파도 게이트 비교 시작
+[11:04:42]   cuFile 경로 상태: 3.21 GiB/s
+[11:04:42] skip mx-none (exists)
+[11:04:42] skip mx-gate0 (exists)
+[11:04:42] skip mx-gate1 (exists)
+[11:04:43] == mx-gate2 (--kv-transport cufile GATE=2)
+RESULT mx-gate2 {"load_s": 244.8, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[11:32:24] 16 완료
+[11:34:01] 16 섞인 파도 게이트 비교 시작
+[11:34:06]   cuFile 경로 상태: 3.27 GiB/s
+[11:34:06] skip mx-none (exists)
+[11:34:06] skip mx-gate0 (exists)
+[11:34:06] skip mx-gate1 (exists)
+[11:34:07] == mx-gate2 (--kv-transport cufile GATE=2)
+RESULT mx-gate2 {"load_s": 242.3, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[12:01:47] 16 완료
+[12:04:34] 16 섞인 파도 게이트 비교 시작
+[12:04:39]   cuFile 경로 상태: 3.26 GiB/s
+[12:04:39] skip mx-none (exists)
+[12:04:39] skip mx-gate0 (exists)
+[12:04:39] skip mx-gate1 (exists)
+[12:04:40] == mx-gate2 (--kv-transport cufile GATE=2)
+RESULT mx-gate2 {"load_s": 249.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[12:32:34] 16 완료
+[12:33:57] 16 섞인 파도 게이트 비교 시작
+[12:34:02]   cuFile 경로 상태: 3.23 GiB/s
+[12:34:02] skip mx-none (exists)
+[12:34:02] skip mx-gate0 (exists)
+[12:34:02] skip mx-gate1 (exists)
+[12:34:03] == mx-gate2 (--kv-transport cufile GATE=2)
+RESULT mx-gate2 {"load_s": 248.2, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
+[13:00:30] 16 완료
