@@ -234,3 +234,11 @@ RESULT mx-gate2 {"load_s": 249.6, "tiers": {"n_modules": 62, "n_ssd": 6, "host_t
 [12:34:03] == mx-gate2 (--kv-transport cufile GATE=2)
 RESULT mx-gate2 {"load_s": 248.2, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.74, "kv_files": 281, "kv_bytes_gib": 39.375, "rounds": [{"round": 1,
 [13:00:30] 16 완료
+[13:28:44] == mx-gate2-q8 (cufile_q8, GATE=2)
+[13:33:39] FAILED mx-gate2-q8
+[rank0]: Traceback (most recent call last):
+[rank0]: AssertionError
+[13:33:39] 17 완료
+[13:35:58] == mx-gate2-q8 (cufile_q8, GATE=2)
+RESULT mx-gate2-q8 {"load_s": 244.1, "tiers": {"n_modules": 62, "n_ssd": 6, "host_tier_gib": 106.32, "ssd_tier_gib": 11.39, "gpu_resident_layers": 2}, "ids_equal_rounds": true, "gpu_max_gib": 12.79, "kv_files": 281, "kv_bytes_gib": 19.696, "rounds": [{"round": 1, "wall_s": 441.582, "n_steps": 36, "s
+[14:02:24] 17 완료

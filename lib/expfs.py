@@ -198,6 +198,142 @@ class CuFileTransport:
         self.g.close()
 
 
+class CuFileQ8Transport(CuFileTransport):
+    """KV 를 파일에 int8 로 저장하는 cuFile 전송. 모델 코드는 건드리지 않고 저장 계층에서만 변환.
+    행(group 원소, 기본 9216 = OPT-66B 토큰 하나의 K 또는 V 벡터)마다 absmax 스케일 하나(fp32).
+    파일 레이아웃: span 순서대로 [int8 payload][fp32 scales] 를 4KiB 로 패딩해 이어 붙임.
+    GPU 여유가 200MiB 남짓이라 span 전체를 한 번에 다루지 않고 고정 크기 타일로 처리하며,
+    타일 버퍼는 스레드마다 한 번만 잡아 정상 상태에서는 GPU 할당이 없다. cuFile 은 타일 버퍼를 읽고 쓴다.
+    파일 크기가 절반 남짓이 되므로 읽기 바이트가 줄고, 출력 토큰은 fp16 저장과 달라질 수 있다."""
+    name = "cufile_q8"
+    TILE_ROWS = 256                       # 256 × 9216 fp16 = 4.5 MiB 타일
+
+    def __init__(self, flat_tensors: list[torch.Tensor], mode: str, group: int = 9216):
+        super().__init__(flat_tensors, "unregistered")
+        self.group = group
+        self._tls = threading.local()
+        self.stats = {"q_spans": 0, "q_bytes_in": 0, "q_bytes_file": 0}
+
+    def _bufs(self, rows: int):
+        tl = self._tls
+        if getattr(tl, "stream", None) is None:
+            dev = self.flat[0].device
+            tl.stream = torch.cuda.Stream(device=dev)
+            tl.tmp16 = torch.empty(self.TILE_ROWS, self.group, dtype=torch.float16, device=dev)
+            raw = torch.empty(self.TILE_ROWS * self.group + ALIGN, dtype=torch.uint8, device=dev)
+            off = (-raw.data_ptr()) % ALIGN
+            tl.q8raw = raw; tl.q8 = raw[off:off + self.TILE_ROWS * self.group]
+            tl.sc_rows = 0
+        if getattr(tl, "sc_rows", 0) < rows:
+            n = (rows * 4 + ALIGN - 1) // ALIGN * ALIGN + ALIGN
+            raw = torch.empty(n, dtype=torch.uint8, device=self.flat[0].device)
+            off = (-raw.data_ptr()) % ALIGN
+            tl.scraw = raw; tl.sc = raw[off:off + n - ALIGN]; tl.sc_rows = rows
+        return tl
+
+    def _layout(self, size: int):
+        if size % (2 * self.group):
+            raise ValueError(f"expfs q8: span {size} B not a multiple of group {self.group} fp16")
+        rows = size // (2 * self.group)
+        payload = rows * self.group
+        sc_bytes = (rows * 4 + ALIGN - 1) // ALIGN * ALIGN
+        return rows, payload, sc_bytes, payload + sc_bytes
+
+    def _region(self, t: int, boff: int, size: int, rows: int):
+        return self.flat[t].view(-1)[boff:boff + size].view(torch.float16).view(rows, self.group)
+
+    def write_chunk(self, path: str, spans, chunk_bytes: int):
+        tmp = f"{path}.{os.getpid()}.{threading.get_ident()}.tmp"
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        fd = os.open(tmp, os.O_CREAT | os.O_EXCL | os.O_RDWR | getattr(os, "O_DIRECT", 0), 0o644)
+        try:
+            fh = self.g.handle_register(fd)
+            try:
+                foff = 0
+                for t, boff, size, _ in spans:
+                    rows, payload, sc_bytes, total = self._layout(size)
+                    tl = self._bufs(rows)
+                    x = self._region(t, boff, size, rows)
+                    scales = tl.sc[:rows * 4].view(torch.float32)
+                    with torch.cuda.stream(tl.stream):
+                        for r0 in range(0, rows, self.TILE_ROWS):
+                            r1 = min(rows, r0 + self.TILE_ROWS); n = r1 - r0
+                            xt = x[r0:r1]
+                            sc = scales[r0:r1]
+                            amax = xt.abs().amax(dim=1)                        # fp16, n 개
+                            sc.copy_(amax.float().clamp_min_(1e-6).div_(127.0))
+                            t16 = tl.tmp16[:n]
+                            torch.div(xt, sc.to(torch.float16)[:, None], out=t16)
+                            t16.round_().clamp_(-127, 127)
+                            q = tl.q8[:n * self.group].view(torch.int8).view(n, self.group)
+                            q.copy_(t16)
+                            tl.stream.synchronize()
+                            nb = n * self.group
+                            w = self.g.write(fh, q.data_ptr(), nb, foff + r0 * self.group)
+                            if w != nb:
+                                raise OSError(f"short cuFileWrite {w}/{nb} @{path}+{foff + r0 * self.group}")
+                        # 스케일 블록(4KiB 패딩)
+                        tl.sc[rows * 4:sc_bytes].zero_()
+                        tl.stream.synchronize()
+                    w = self.g.write(fh, tl.sc.data_ptr(), sc_bytes, foff + payload)
+                    if w != sc_bytes:
+                        raise OSError(f"short cuFileWrite(scales) {w}/{sc_bytes} @{path}+{foff + payload}")
+                    foff += total
+                    self.stats["q_spans"] += 1; self.stats["q_bytes_in"] += size; self.stats["q_bytes_file"] += total
+            finally:
+                self.g.handle_deregister(fh)
+            os.close(fd)
+            fd = None
+            os.replace(tmp, path)
+        except Exception:
+            if fd is not None:
+                os.close(fd)
+            try:
+                os.remove(tmp)
+            except OSError:
+                pass
+            raise
+
+    def read_chunk(self, path: str, spans, chunk_bytes: int):
+        fd = os.open(path, os.O_RDONLY | getattr(os, "O_DIRECT", 0))
+        try:
+            fh = self.g.handle_register(fd)
+            try:
+                foff = 0
+                for t, boff, size, _ in spans:
+                    rows, payload, sc_bytes, total = self._layout(size)
+                    tl = self._bufs(rows)
+                    dst = self._region(t, boff, size, rows)
+                    n = self.g.read(fh, tl.sc.data_ptr(), sc_bytes, foff + payload)
+                    if n != sc_bytes:
+                        raise OSError(f"short cuFileRead(scales) {n}/{sc_bytes} @{path}+{foff + payload}")
+                    scales = tl.sc[:rows * 4].view(torch.float32)
+                    for r0 in range(0, rows, self.TILE_ROWS):
+                        r1 = min(rows, r0 + self.TILE_ROWS); k = r1 - r0
+                        nb = k * self.group
+                        n = self.g.read(fh, tl.q8.data_ptr(), nb, foff + r0 * self.group)
+                        if n != nb:
+                            raise OSError(f"short cuFileRead {n}/{nb} @{path}+{foff + r0 * self.group}")
+                        with torch.cuda.stream(tl.stream):
+                            q = tl.q8[:nb].view(torch.int8).view(k, self.group)
+                            t16 = tl.tmp16[:k]
+                            t16.copy_(q)
+                            t16.mul_(scales[r0:r1].to(torch.float16)[:, None])
+                            dst[r0:r1].copy_(t16)
+                        tl.stream.synchronize()
+                    foff += total
+            finally:
+                self.g.handle_deregister(fh)
+        except Exception:
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+            raise
+        finally:
+            os.close(fd)
+
+
 class StagedCuFileTransport(CuFileTransport):
     """GPU staging ring: 수명 분리 + GPU측 코얼레싱 + 스핀 없는 대기 (v3).
 
@@ -587,6 +723,7 @@ class FilesystemWorker(OffloadingWorker):
         staging_policy: str = "block",
         max_outstanding_write_bytes: int | None = None,
         cpu_fallback_slots: int = 0,
+        q8_group: int = 9216,
     ):
         assert len(kv_caches.group_data_refs) == 1, (
             "expfs prototype: single KV cache group only")
@@ -610,6 +747,8 @@ class FilesystemWorker(OffloadingWorker):
 
         if transport_name == "cufile":
             self.transport = CuFileTransport(self.flat, cufile_mode)
+        elif transport_name == "cufile_q8":
+            self.transport = CuFileQ8Transport(self.flat, cufile_mode, group=q8_group)
         elif transport_name in ("cufile_staged", "posix_staged"):
             self.transport = StagedCuFileTransport(
                 self.flat, self.chunk_bytes, staging_slots, staging_writers,
@@ -864,6 +1003,7 @@ class ExperimentalFilesystemSpec(OffloadingSpec):
         self.max_ob = int(mob) if mob else None
         self.cpu_fallback_slots = int(
             self.extra_config.get("expfs_cpu_fallback_slots", 0))
+        self.q8_group = int(self.extra_config.get("expfs_q8_group", 9216))
         self._manager: FilesystemManager | None = None
         self._worker: FilesystemWorker | None = None
 
@@ -890,5 +1030,6 @@ class ExperimentalFilesystemSpec(OffloadingSpec):
                 kv_caches, self.blocks_per_chunk, self.transport_name, self.cufile_mode,
                 self.n_read_threads, self.n_write_threads,
                 self.staging_slots, self.staging_writers,
-                self.staging_policy, self.max_ob, self.cpu_fallback_slots)
+                self.staging_policy, self.max_ob, self.cpu_fallback_slots,
+                self.q8_group)
         return self._worker
