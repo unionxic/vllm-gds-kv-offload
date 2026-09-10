@@ -77,6 +77,19 @@ one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. 
 
 decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운드는 기준선과 같아, 손해는 전부 forward 개수에서 온다. 상세와 배제한 가설, 문헌 대조는 docs/detailed-log.md의 결합 절.
 
+#### 측정 6: 모델 크기와 host 비율 기준표 (실제 문서 8개, 프리픽스 1,920, 배치 2, KV는 SSD)
+
+host 비율은 오프로드 가중치 대비. forward는 decode step 중앙값, 모형은 CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s.
+
+| 모델, host | forward 실측 / 모형 | prefill 재계산 / SSD 적중 | 라운드 재계산 / 적중 | 저장 라운드 추가 |
+| --- | --- | --- | --- | --- |
+| OPT-66B 0.7 | 19.4 / 19.1 s | 35.0 / 19.7 s | 683 / 633 s (−7.3%) | +6 s |
+| OPT-66B 0.5 | 24.7 / 24.7 s | 40.3 / 25.1 s | 854 / 807 s (−5.4%) | +25 s |
+| OPT-66B 0.3 | 29.8 / 29.8 s | 45.3 / 30.3 s | 1,015 / 971 s (−4.4%) | +45 s |
+| OPT-66B 0.1 | 35.7 / 35.4 s | 51.2 / 36.0 s | 1,205 / 1,153 s (−4.3%) | +66 s |
+
+적중이 아끼는 것은 prefill의 토큰 계산 몫 15초로 비율과 무관하고, 저장 라운드의 추가 시간은 prefill 직후 KV 쓰기 8.4 GiB와 가중치 SSD 읽기가 겹치는 decode step 하나에서 나며 SSD 가중치 몫에 비례한다. 작은 모델(6.7b, 13b, 30b)은 진행 중. 상세는 docs/detailed-log.md의 기준표 절.
+
 #### 해석과 한계
 
 - 첫 표의 V2 GDS 수치는 최초 측정값. 재현 3회에서 미유지. 원인은 함수 수준까지 규명: CPU 폭증은 store 스레드의 CUDA event 스핀 대기(blocking 플래그로 9배 제거, 3/3), tail은 store 점유의 요청 경계 침범(순수 sleep으로 재현, 지연 store가 제거책).
@@ -84,7 +97,7 @@ decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운�
 - W1(store 지속 유입)과 W2(load 중심 재사용)의 우열 차이는 워크로드 경계이지 모순 아님.
 - W3(open-loop): closed 동시성은 cuFile 지연 store 우위, Poisson 지속 부하는 처리량 열위가 큐 대기를 증폭해 3~9배 역전 — gap 전용 배출은 단일 스트림 전용.
 - 기존 tiering 수치는 종료 race를 가드로 우회한 측정. race는 최신 main #49671로 해결 확인. /dev/shm 누출은 #52596 이후에도 Tiering 경로에서 재현(후속 보고 대상), 로컬 `offload-shm-leak-fix`는 이 경우까지 처리.
-- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 스케줄러 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립. host 0.1에서 모형보다 68% 느린 몫.
+- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 스케줄러 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립. 06의 host 0.1 편차 68%는 4 MiB 조각 재측정에서 재현되지 않아 1 MiB 느린 모드로 봄.
 
 #### Directory
 
@@ -104,6 +117,7 @@ decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운�
 | `experiments/07-combined/` | 가중치 스트리밍 위에 KV를 SSD로 두는 결합 실험, pinned 정확 등록, 메모리 워치독 |
 | `experiments/08-cufile-bounce/` | cuFile 미등록 버퍼 경로의 조각 크기, 검증 읽기, 읽기 패턴 마이크로벤치 |
 | `experiments/09-kv-policy/` | 배치 구성, 구간 계측 러너, 비용 분해, 스케줄러 게이트 A/B, 저장 정책, KV int8 |
+| `experiments/10-model-host-baseline/` | 모델 크기 × host 비율 기준표 캠페인(실제 문서, 배치 2, KV는 SSD) |
 | `results/` | 실험별 원자료(bailian·leval·leval-openloop·admission·weight-offload·combined·cufile-bounce·kv-policy) |
 | `docs/detailed-log.md` | 설계 근거, 전체 측정표, 실패와 정정의 상세 기록 |
 
