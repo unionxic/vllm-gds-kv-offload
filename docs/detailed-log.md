@@ -476,12 +476,13 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 
 | 구성 | host 티어 | SSD 티어 | 모형 | 실측 decode step | 출처 |
 |---|---|---|---|---|---|
-| host 0.85, 상주 2층 (09) | 106.3 GiB, 9.3 s | 11.4 GiB, 3.6 s | 12.8 s | 11.3~11.5 s | ab-none, ph-none |
+| host 0.85, 상주 2층 (09) | 106.3 GiB, 9.3 s | 11.4 GiB, 3.6 s | 12.8 s | 13.2~13.3 s | ab-none, ph-none |
 | host 0.85, 상주 4층 (07) | 106.3 GiB, 9.3 s | 7.6 GiB, 2.4 s | 11.7 s | 12.1 s | h0.85-kv* |
 | host 0.5 (06) | 62.7 GiB, 5.5 s | 53.2 GiB, 16.6 s | 22.1 s | 22.8 s | c-h0.5-r1 |
 | host 0.3 (06, 07) | 36.1 GiB, 3.1 s | 78~80 GiB, 24.3~24.9 s | 27.4~28.0 s | 28.1~28.5 s | c-h0.3-r1~3, h0.3-kv* |
 | host 0.1 (06) | 11.4 GiB, 1.0 s | 104.4 GiB, 32.6 s | 33.6 s | 56.5 s | c-h0.1-r1 |
 
+- decode step은 출력이 있는 step 길이의 중앙값. 러너의 phase 라벨은 첫 토큰을 기다리는 요청이 남아 있으면 decode forward도 prefill로 적으므로 그 평균(11.3초)은 쓰지 않음.
 - host 0.3에서 0.85까지 cuFile 런은 모형과 5% 안에서 맞음. 0.85에서는 PCIe 몫이 7할, SSD 몫이 3할이라 SSD를 무한히 빠르게 해도 9.3초가 남고, 이 조건에서 SSD 대역폭은 forward의 3할만 좌우. host 비율을 내릴수록 SSD 몫이 커져 0.3에서는 9할.
 - host 0.1은 모형보다 68% 느림. 디스크 점유 85%에서 nvidia-fs 대역폭이 2.3 GiB/s로 떨어진 것으로 일부만 설명되고 나머지는 미확립.
 - 모형에서 벗어난 나머지 cuFile 런은 1 MiB 조각의 느린 모드(c-h0.3-ring16-r3, c-h0.3-s2-t8-r2, c-h0.3-r1-nsys, 62~148% 느림)와 gate-storeall. 후자는 campaign14가 조각 크기 지정 없이(1 MiB) 돈 런으로, decode step 16.1초와 prefill step 16.6초가 기준 11.3초와 11.7초보다 고르게 느리고 decode 중 KV 쓰기 활동은 0건. SSD 몫 3.6초가 2.3배가 되면 17.6초로 같은 느린 모드. 저장 IO 때문이 아니며 campaign15부터 4 MiB로 바꾼 이유.

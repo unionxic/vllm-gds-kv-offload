@@ -66,7 +66,7 @@ one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. 
 
 | 구성 | 측정 | 결과 |
 | --- | --- | --- |
-| forward 고정비 (host 0.85, 상주 2층) | 모형 / 실측 | PCIe 9.3 s + SSD 3.6 s = 12.8 s / 11.3~11.5 s. host 0.3~0.85에서 5% 안 |
+| forward 고정비 (host 0.85, 상주 2층) | 모형 / 실측 | PCIe 9.3 s + SSD 3.6 s = 12.8 s / 13.2~13.3 s. host 0.3~0.85에서 5% 안 |
 | 가중치 경로, decode step | cuFile / POSIX | 28.5 s / 68.0 s. 최선 정책(2-layer prefetch, 스레드 8, ring 8 MiB)에서 26.7 s |
 | cuFile 조각 크기 4~8 MiB | 벽시계 / CPU | 벽시계 동일, CPU 28% 감소. ring 없이 27.0 s로 ring 대체 |
 | KV 적중 로드, 배치 5, 게이트 없음 | 2라운드 wall (재계산 439.5 s) | 503.7 s, forward 32에서 38로 |
