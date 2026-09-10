@@ -43,6 +43,13 @@ ap.add_argument("--ssd-root", default=os.path.expanduser("~/experiments/vllm-gds
 ap.add_argument("--kv-root", default=os.path.expanduser("~/experiments/vllm-gds-kv/results/combined/kv-66b"))
 ap.add_argument("--out-dir", default=None)
 ap.add_argument("--tag", default="run")
+ap.add_argument("--host-weight-fraction", type=float, default=None,
+                help="오프로드되는 가중치 중 CPU에 둘 비율. 지정하면 --host-fraction(RAM 전체 대비)을 모델 크기로부터 환산")
+ap.add_argument("--kv-batch", type=int, default=0,
+                help="GPU KV 예산을 '요청 N개분(max_model_len 토큰) × 1.15'로 모델 크기에서 계산. 0이면 --kv-cache-gib 사용")
+ap.add_argument("--prompt-source", default="random", choices=["random", "leval"],
+                help="leval: 03-leval/workload.json의 실제 문서 프리픽스 + 라운드별 다른 질문")
+ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
 args = ap.parse_args()
 os.environ.setdefault("VLLM_USE_V2_MODEL_RUNNER", "0"); os.environ.setdefault("VLLM_ENABLE_V1_MULTIPROCESSING", "0")
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.join(HERE, "..", "..")
@@ -81,6 +88,24 @@ def _wrap(cls, name, op):
                 OUTS[op] -= 1; IO.append((t0, t1, nb, op))
     setattr(cls, name, inner)
 
+derived = {}
+if args.host_weight_fraction is not None or args.kv_batch:
+    from transformers import AutoConfig
+    hc = AutoConfig.from_pretrained(args.model)
+    d_model, n_layer = int(hc.hidden_size), int(hc.num_hidden_layers)
+    # 디코더 층 가중치 = (qkv+out 4d² + fc1+fc2 8d²) × 2바이트. opt-2.7b 실측 4.69 GiB, opt-66b 62층 117.7 GiB와 일치
+    w_layer = 12 * d_model * d_model * 2
+    w_off = w_layer * n_layer * args.num_in_group / args.group_size
+    if args.host_weight_fraction is not None:
+        mem_total = int(next(l for l in open("/proc/meminfo") if l.startswith("MemTotal")).split()[1]) * 1024
+        args.host_fraction = round(args.host_weight_fraction * w_off / mem_total, 4)
+        derived["host_fraction_from_weight"] = args.host_fraction
+    if args.kv_batch:
+        kv_req = 2 * n_layer * d_model * 2 * args.max_model_len
+        args.kv_cache_gib = round(args.kv_batch * kv_req * 1.15 / 2**30, 2)
+        derived["kv_per_request_gib"] = round(kv_req / 2**30, 3)
+    derived.update(offloaded_weight_gib=round(w_off / 2**30, 2), d_model=d_model, n_layer=n_layer)
+    print("derived:", derived, flush=True)
 kw = dict(offload_backend="prefetch", offload_group_size=args.group_size, offload_num_in_group=args.num_in_group,
           offload_prefetch_step=args.prefetch_step, offload_ssd_path=args.ssd_root, offload_host_fraction=args.host_fraction,
           offload_ssd_transport=args.weight_transport, offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=args.ring_mb)
@@ -117,7 +142,7 @@ if args.kv_transport != "none":
         r = _gm(self, request, n); matched[0] += r[0] or 0; return r
     osched.OffloadingConnectorScheduler.get_num_new_matched_tokens = _gmw
 
-res = dict(args=vars(args), sysmem_start=sysmem())
+res = dict(args=vars(args), derived=derived, sysmem_start=sysmem())
 t0 = time.time()
 llm = LLM(model=args.model, dtype="float16", gpu_memory_utilization=args.gpu_util, max_model_len=args.max_model_len,
           kv_cache_memory_bytes=int(args.kv_cache_gib * 2**30), enforce_eager=True, **kw)
@@ -136,7 +161,16 @@ def wstat():
 
 vocab_hi = 50000
 HOT = args.n_prompts if args.hot_prompts is None else args.hot_prompts
+LEVAL = json.load(open(args.leval_workload)) if args.prompt_source == "leval" else None
 def make_prompts(rnd):
+    # leval: 문서 i의 프리픽스 1920토큰 + 구분자 + 질문(rnd-1). 라운드가 바뀌면 질문만 바뀌어 프리픽스가 적중
+    if LEVAL is not None:
+        out = []
+        for i in range(args.n_prompts):
+            d = LEVAL["docs"][i]
+            q = d["questions"][(rnd - 1) % len(d["questions"])]
+            out.append(d["prefix"] + LEVAL["delim_tokens"] + q["tokens"])
+        return out
     # 앞 HOT 개는 라운드가 바뀌어도 같은 토큰열(재사용), 나머지는 라운드마다 새 토큰열(1회성)
     out = []
     for i in range(args.n_prompts):
@@ -261,7 +295,8 @@ for rnd in range(1, args.rounds + 1):
                        sys.modules["expfs"].LAST_WORKER.transport.stats} if _stg0 is not None else None),
         first_token_hot_s=[round(st[f"r{rnd}-{i}"]["first"] - tR0, 3) for i in range(min(HOT, args.n_prompts)) if st[f"r{rnd}-{i}"]["first"]],
         first_token_cold_s=[round(st[f"r{rnd}-{i}"]["first"] - tR0, 3) for i in range(HOT, args.n_prompts) if st[f"r{rnd}-{i}"]["first"]],
-        ids=[st[f"r{rnd}-{i}"]["ntok"] for i in range(args.n_prompts)]))
+        ids=[st[f"r{rnd}-{i}"]["ntok"] for i in range(args.n_prompts)],
+        prompt_tokens=[len(t) for t in prompts]))
     # 요구사항: 라운드 2 시작 전에 라운드 1 store 가 전부 끝났는지 확인.
     # 여기서 즉시 중단하면 20분치 측정이 날아가므로 기록만 하고 json 을 쓴 뒤 종료 코드로 알린다.
     rounds[-1]["store_fully_drained"] = (drain_out == 0 and drain_pend == 0)

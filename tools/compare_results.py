@@ -27,6 +27,7 @@ DEFAULT_DIRS = [
     "results/weight-offload/opt66b",
     "results/combined/opt66b",
     "results/kv-policy",
+    "results/model-host-baseline",
 ]
 
 
