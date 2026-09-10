@@ -69,11 +69,18 @@ def extract(path):
         row["wall"] = sum(r.get("wall_s", 0) for r in rs)
         # 폴링 step(토큰 0)은 forward가 아니므로 제외
         row["fwd_n"] = sum(
-            (sum(1 for st in r["steps"] if st.get("n_tok", 0) > 0) if r.get("steps")
+            (sum(1 for st in r["steps"] if st["t1"] - st["t0"] > 0.5) if r.get("steps")
              else r.get("n_prefill_steps", 0) + r.get("n_decode_steps", 0)) for r in rs)
-        dec_w = sum(r["decode_steps"]["wall_s"] for r in rs if r.get("decode_steps"))
-        dec_n = sum(r.get("n_decode_steps", 0) for r in rs)
-        row["fwd_meas"] = dec_w / dec_n if dec_n else None
+        # 러너의 phase 라벨은 첫 토큰 대기 중인 요청이 있으면 decode forward도 prefill로 적으므로 쓰지 않는다.
+        # 출력이 있는 step(decode forward가 대부분)의 중앙값. prefill forward는 출력 0으로 기록되어 제외됨.
+        durs = sorted(st["t1"] - st["t0"] for r in rs for st in (r.get("steps") or [])
+                      if st.get("n_out", 0) > 0 and st["t1"] - st["t0"] > 0.5)
+        if durs:
+            row["fwd_meas"] = durs[len(durs) // 2]
+        else:
+            dec_w = sum(r["decode_steps"]["wall_s"] for r in rs if r.get("decode_steps"))
+            dec_n = sum(r.get("n_decode_steps", 0) for r in rs)
+            row["fwd_meas"] = dec_w / dec_n if dec_n else None
         row["kv_r_gib"] = sum(r["kv_io"]["read_gib"] for r in rs if r.get("kv_io"))
         row["kv_w_gib"] = sum(r["kv_io"]["write_gib"] for r in rs if r.get("kv_io"))
     elif "r1" in d:  # run_combo_66b.py / run_policy_66b.py: generate 두 번 방식
