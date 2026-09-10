@@ -84,7 +84,7 @@ decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운�
 - W1(store 지속 유입)과 W2(load 중심 재사용)의 우열 차이는 워크로드 경계이지 모순 아님.
 - W3(open-loop): closed 동시성은 cuFile 지연 store 우위, Poisson 지속 부하는 처리량 열위가 큐 대기를 증폭해 3~9배 역전 — gap 전용 배출은 단일 스트림 전용.
 - 기존 tiering 수치는 종료 race를 가드로 우회한 측정. race는 최신 main #49671로 해결 확인. /dev/shm 누출은 #52596 이후에도 Tiering 경로에서 재현(후속 보고 대상), 로컬 `offload-shm-leak-fix`는 이 경우까지 처리.
-- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 스케줄러 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립. host 0.1에서 모형보다 68% 느린 몫과 gate-storeall의 decode step 25% 증가.
+- 미해결: cuFile Batch API 엔진 통합. cuFile 1 MiB 조각 경로가 간헐적으로 3배 느려지는 모드의 원인. 스케줄러 게이트의 이득이 2.5%로 작고 GPU 한 장이라 일반성 미확립. host 0.1에서 모형보다 68% 느린 몫.
 
 #### Directory
 
