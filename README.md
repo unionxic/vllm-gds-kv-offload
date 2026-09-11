@@ -75,7 +75,7 @@ one_shot·near_reuse·far_reuse·repeated를 섞어 admission 변별을 시험. 
 | seen_twice admission (게이트 없음) | 3라운드 합계 손해 | 64.8 s에서 24.9 s. 읽기를 피한 몫이지 원인 교정 아님 |
 | KV int8 저장 (게이트 2) | 디스크 / wall | 절반 / 라운드당 1.4 s 느려짐 |
 
-decode 구간에 KV 읽기가 겹친 시간은 0초이고 쓰기 전용 라운드는 기준선과 같아, 손해는 전부 forward 개수에서 온다. 상세와 배제한 가설, 문헌 대조는 docs/detailed-log.md의 결합 절.
+KV 읽기가 forward와 겹쳐도 forward 길이는 기준선과 같고(게이트를 켜면 겹침 자체가 0) 쓰기 전용 라운드는 기준선과 같아, 손해는 전부 forward 개수에서 온다. 상세와 배제한 가설, 문헌 대조는 docs/detailed-log.md의 결합 절.
 
 #### 측정 6: 모델 크기와 host 비율 기준표 (실제 문서 8개, 프리픽스 1,920, 배치 2, KV는 SSD)
 
