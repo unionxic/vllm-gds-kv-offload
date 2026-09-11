@@ -705,7 +705,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 
 #### BAR1 창과 정적 버퍼 등록
 
-13b는 host 0.7부터 가중치 SSD 읽기가 cuFileRead −1(cuFile 로그 −5011)로 실패. qkv 150 MiB와 out_proj 50 MiB가 등록되어 BAR1 256 MiB 중 227 MiB를 차지했고, 등록 실패한 fc1과 fc2가 쓰는 cuFile bounce 캐시를 매핑할 자리가 29 MiB뿐. 66B는 out_proj 162 MiB 하나만 등록돼 여유가 있었고 6.7b는 128 MiB로 턱걸이. 포크 ssd_tier에 등록 총량 상한 VLLM_OFFLOAD_SSD_REGISTER_MAX_MB(기본 상한 없음, 포크 929df037b9)를 넣어 13b와 30b는 100 MiB로 실행. 상한 적용 후 BAR1 사용 85 MiB.
+13b는 host 0.7부터 가중치 SSD 읽기가 cuFileRead −1(cuFile 로그 −5011)로 실패. qkv 150 MiB와 out_proj 50 MiB가 등록되어 BAR1 256 MiB 중 227 MiB를 차지했고, 등록 실패한 fc1과 fc2가 쓰는 cuFile bounce 캐시를 매핑할 자리가 29 MiB뿐. 66B는 out_proj 162 MiB 하나만 등록돼 여유가 있었고 6.7b는 128 MiB로 턱걸이. 포크 ssd_tier에 등록 총량 상한 VLLM_OFFLOAD_SSD_REGISTER_MAX_MB(기본 상한 없음, 포크 929df037b9)를 넣어 13b와 30b는 100 MiB로 실행. 상한 적용 후 BAR1 사용 85 MiB. BAR1 256 MiB는 카드 자체의 최대. PCI Resizable BAR capability(0xbb0)를 setpci로 읽으면 BAR1 항목의 지원 크기가 64, 128, 256 MB(capability 0x1c00, control 0x801)뿐이라 BIOS나 커널로 키울 수 없음. 데이터센터 GPU는 VRAM 전체를 BAR1로 광고.
 
 #### 러너 검토에서 고친 것
 
