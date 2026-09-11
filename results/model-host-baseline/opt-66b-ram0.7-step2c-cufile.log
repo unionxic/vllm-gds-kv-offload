@@ -1,0 +1,27 @@
+derived: {'host_fraction_from_weight': 0.7001, 'offloaded_weight_gib': 121.5, 'd_model': 9216, 'n_layer': 64}
+INFO 09-11 17:40:49 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 2048, 'offload_backend': 'prefetch', 'offload_group_size': 64, 'offload_num_in_group': 64, 'offload_prefetch_step': 2, 'offload_ssd_path': '/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/ssd-opt-66b', 'offload_host_fraction': 0.7001, 'gpu_memory_utilization': 0.95, 'kv_cache_memory_bytes': 9878424780, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='f44edf1d-2742-4ca2-964c-3da3bd6fe838', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'ExperimentalFilesystemSpec', 'spec_module_path': 'expfs', 'expfs_root_dir': '/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/kv-opt-66b', 'expfs_transport': 'cufile', 'expfs_read_threads': 4, 'expfs_write_threads': 4, 'block_size': 64}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'facebook/opt-66b'}
+WARNING 09-11 17:40:49 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_OFFLOAD_SSD_REGISTER_MAX_MB
+WARNING 09-11 17:40:49 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+INFO 09-11 17:40:51 [model.py:623] Resolved architecture: OPTForCausalLM
+INFO 09-11 17:40:51 [model.py:1788] Using max model len 2048
+INFO 09-11 17:40:51 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-11 17:40:51 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-11 17:40:51 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-11 17:40:51 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-11 17:40:51 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-11 17:40:51 [vllm.py:1392] Cudagraph is disabled under eager mode
+Traceback (most recent call last):
+  File "/home/unionxic/experiments/vllm-gds-kv/experiments/09-kv-policy/run_phase_66b.py", line 151, in <module>
+    llm = LLM(model=args.model, dtype="float16", gpu_memory_utilization=args.gpu_util, max_model_len=args.max_model_len,
+  File "/home/unionxic/vllm/vllm/entrypoints/llm.py", line 338, in __init__
+    self.llm_engine = LLMEngine.from_engine_args(
+  File "/home/unionxic/vllm/vllm/v1/engine/llm_engine.py", line 171, in from_engine_args
+    vllm_config = engine_args.create_engine_config(usage_context)
+  File "/home/unionxic/vllm/vllm/engine/arg_utils.py", line 2397, in create_engine_config
+    config = VllmConfig(
+  File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/pydantic/_internal/_dataclasses.py", line 121, in __init__
+    s.__pydantic_validator__.validate_python(ArgsKwargs(args, kwargs), self_instance=s)
+pydantic_core._pydantic_core.ValidationError: 1 validation error for VllmConfig
+  Value error, KV connector OffloadingConnector is incompatible with PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True unless enable_cumem_allocator is also enabled. PyTorch's CUDA VMM allocator can remap KV cache virtual addresses to different physical pages, invalidating any pinned/registered KV memory (e.g. IB memory regions registered by NIXL or Mooncake). Either unset expandable_segments:True or enable the cumem allocator (sleep mode does this automatically and also routes KV allocations through CuMemAllocator's pool, where expandable_segments is automatically disabled). [type=value_error, input_value=ArgsKwargs((), {'model_co... 'shutdown_timeout': 0}), input_type=ArgsKwargs]
+    For further information visit https://errors.pydantic.dev/2.13/v/value_error
