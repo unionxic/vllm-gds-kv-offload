@@ -137,3 +137,18 @@
 [09-11 13:09:31] start opt-66b-ram0.5-none (weight frac 0.516)
 [09-11 13:44:31] done  opt-66b-ram0.5-none rc=0
 [09-11 13:44:36] start opt-66b-ram0.5-cufile (weight frac 0.516)
+[09-11 14:19:27] done  opt-66b-ram0.5-cufile rc=0
+[09-11 14:19:32] start opt-66b-ram0.6-none (weight frac 0.620)
+[09-11 14:51:45] done  opt-66b-ram0.6-none rc=0
+[09-11 14:51:49] start opt-66b-ram0.6-cufile (weight frac 0.620)
+[09-11 15:23:20] done  opt-66b-ram0.6-cufile rc=0
+[09-11 15:23:25] start opt-66b-ram0.7-none (weight frac 0.723)
+[09-11 15:51:45] done  opt-66b-ram0.7-none rc=0
+[09-11 15:51:48] start opt-66b-ram0.7-cufile (weight frac 0.723)
+[09-11 16:18:58] done  opt-66b-ram0.7-cufile rc=0
+[09-11 16:19:01] start opt-66b-ram0.8-none (weight frac 0.826)
+[09-11 16:44:06] done  opt-66b-ram0.8-none rc=0
+[09-11 16:44:08] start opt-66b-ram0.8-cufile (weight frac 0.826)
+[09-11 17:08:13] done  opt-66b-ram0.8-cufile rc=0
+[09-11 17:08:15] == 66B RAM 0.5~0.8 런 종료
+[09-11 17:08:29] start opt-66b-ram0.7-step2-none (prefetch_step 2, gpu_util 0.95)
