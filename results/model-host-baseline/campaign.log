@@ -152,3 +152,49 @@
 [09-11 17:08:13] done  opt-66b-ram0.8-cufile rc=0
 [09-11 17:08:15] == 66B RAM 0.5~0.8 런 종료
 [09-11 17:08:29] start opt-66b-ram0.7-step2-none (prefetch_step 2, gpu_util 0.95)
+[09-11 17:13:48] FAILED opt-66b-ram0.7-step2-none rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-none.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-none.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 166.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 30.12 MiB is free. Including non-PyTorch memory, this process has 15.34 GiB memory in use. Of the allocated memory 14.74 GiB is allocated by PyTorch, and 409.05 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 17:13:51] start opt-66b-ram0.7-step2-none (prefetch_step 2, gpu_util 0.97)
+[09-11 17:19:18] FAILED opt-66b-ram0.7-step2-none rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-none.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-none.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 166.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 30.12 MiB is free. Including non-PyTorch memory, this process has 15.34 GiB memory in use. Of the allocated memory 14.74 GiB is allocated by PyTorch, and 409.05 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 17:19:21] start opt-66b-ram0.7-step2-cufile (prefetch_step 2, gpu_util 0.95)
+[09-11 17:24:22] FAILED opt-66b-ram0.7-step2-cufile rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-cufile.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-cufile.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 10.34 GiB. GPU 0 has a total capacity of 15.55 GiB of which 10.17 GiB is free. Including non-PyTorch memory, this process has 5.20 GiB memory in use. Of the allocated memory 4.86 GiB is allocated by PyTorch, and 148.05 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 17:24:25] start opt-66b-ram0.7-step2-cufile (prefetch_step 2, gpu_util 0.97)
+[09-11 17:29:32] FAILED opt-66b-ram0.7-step2-cufile rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-cufile.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2-cufile.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 10.34 GiB. GPU 0 has a total capacity of 15.55 GiB of which 10.17 GiB is free. Including non-PyTorch memory, this process has 5.20 GiB memory in use. Of the allocated memory 4.86 GiB is allocated by PyTorch, and 148.05 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 17:29:35] == 66B prefetch_step 2 런 종료
+[09-11 17:29:55] start opt-66b-ram0.7-step2b-none (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95)
+[09-11 17:34:46] FAILED opt-66b-ram0.7-step2b-none rc=139
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2b-none.log:[rank0]: Traceback (most recent call last):
+[09-11 17:34:49] start opt-66b-ram0.7-step2b-cufile (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95)
+[09-11 17:35:02] FAILED opt-66b-ram0.7-step2b-cufile rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2b-cufile.log:Traceback (most recent call last):
+[09-11 17:35:02] == step2b 종료
+[09-11 17:35:51] start opt-66b-ram0.7-step2c-none (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95, 등록 상한 100 MiB)
+[09-11 17:40:37] FAILED opt-66b-ram0.7-step2c-none rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2c-none.log:[rank0]:     raise CuFileError(f"cuFileRead ret={n}")
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2c-none.log:[rank0]: vllm.model_executor.offloader.ssd_tier.CuFileError: cuFileRead ret=-1
+[09-11 17:40:40] start opt-66b-ram0.7-step2c-cufile (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95, 등록 상한 100 MiB)
+[09-11 17:40:53] FAILED opt-66b-ram0.7-step2c-cufile rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2c-cufile.log:Traceback (most recent call last):
+[09-11 17:40:53] == step2c 종료
+[09-11 17:41:22] start opt-66b-ram0.7-step2d-none (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95, 등록 상한 100 MiB, expandable_segments 제거)
+[09-11 17:47:04] FAILED opt-66b-ram0.7-step2d-none rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2d-none.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2d-none.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 276.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 264.12 MiB is free. Including non-PyTorch memory, this process has 15.11 GiB memory in use. Of the allocated memory 14.57 GiB is allocated by PyTorch, and 348.56 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 17:47:07] start opt-66b-ram0.7-step2d-cufile (prefetch_step 2, kv 9.2 GiB, gpu_util 0.95, 등록 상한 100 MiB, expandable_segments 제거)
+[09-11 17:47:37] start opt-66b-ram0.7-step2e-none (prefetch_step 2, kv 9.0 GiB, gpu_util 0.97, 등록 상한 100 MiB, expandable_segments 제거)
+[09-11 18:09:47] FAILED opt-66b-ram0.7-step2e-none rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2e-none.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/opt-66b-ram0.7-step2e-none.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 278.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 222.12 MiB is free. Including non-PyTorch memory, this process has 15.15 GiB memory in use. Of the allocated memory 14.40 GiB is allocated by PyTorch, and 566.92 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-11 18:09:49] start opt-66b-ram0.7-step2e-cufile (prefetch_step 2, kv 9.0 GiB, gpu_util 0.97, 등록 상한 100 MiB, expandable_segments 제거)
+[09-11 18:10:30] start opt-66b-ram0.7-b1-step2-none (prefetch_step 2, 배치 1, 등록 상한 100 MiB)
+[09-11 18:34:37] done  opt-66b-ram0.7-b1-step2-none rc=0
+[09-11 18:34:40] start opt-66b-ram0.7-b1-step1-none (prefetch_step 1, 배치 1, 등록 상한 100 MiB)
+[09-11 19:00:47] done  opt-66b-ram0.7-b1-step1-none rc=0
+[09-11 19:00:50] == 배치 1 step 1/2 비교 종료
