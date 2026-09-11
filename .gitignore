@@ -39,3 +39,6 @@ results/combined/smoke/wssd-*/
 results/combined/smoke/kv-*/
 results/combined/kv-66b/
 results/**/*.nsys-rep
+# 10-model-host-baseline 산출물(가중치 SSD 티어·KV 저장소, 런마다 재생성)
+results/model-host-baseline/ssd-*/
+results/model-host-baseline/kv-*/
