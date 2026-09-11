@@ -224,29 +224,33 @@ for rnd in range(1, args.rounds + 1):
         eng.add_request(rid, {"prompt_token_ids": toks}, sp)
         st[rid] = dict(submit=time.perf_counter(), first=None, finish=None, ntok=0)
     kv_load_done = None
-    guard = 0
-    while any(v["finish"] is None for v in st.values()) and guard < 100000:
-        guard += 1
+    guard_tripped = False
+    while any(v["finish"] is None for v in st.values()):
+        if time.perf_counter() - tR0 > 3 * 3600:   # 폴링 step은 초당 수천 개라 개수 상한은 무의미. 벽시계 상한
+            guard_tripped = True; print(f"WARN round{rnd} 3시간 초과, 미완료 요청 남김", flush=True); break
         pre_w = wstat(); pre_kv = kv_snapshot()
         s0 = time.perf_counter()
         torch.cuda.nvtx.range_push("step")
         outs = eng.step()
-        if args.poll_sleep_ms and not outs: time.sleep(args.poll_sleep_ms / 1000.0)
         torch.cuda.nvtx.range_pop()
         s1 = time.perf_counter()
+        if args.poll_sleep_ms and not outs: time.sleep(args.poll_sleep_ms / 1000.0)
         post_w = wstat(); post_kv = kv_snapshot()
         pending_first = sum(1 for v in st.values() if v["first"] is None and v["finish"] is None)
         n_out = len(outs)
         n_tok = sum(len(o.outputs[0].token_ids) for o in outs if o.outputs)
+        got_first = False
         for o in outs:
             v = st.get(o.request_id)
             if v is None: continue
             if v["first"] is None and o.outputs and o.outputs[0].token_ids:
-                v["first"] = s1
+                v["first"] = s1; got_first = True
             if o.outputs: v["ntok"] = len(o.outputs[0].token_ids)
             if o.finished: v["finish"] = s1
         steps.append(dict(t0=round(s0 - tR0, 4), t1=round(s1 - tR0, 4),
-                          phase="prefill" if pending_first > 0 else "decode",
+                          # 첫 토큰을 낸 step(prefill forward)과 출력 없이 첫 토큰을 기다린 step만 prefill.
+                          # 예전 기준(첫 토큰 대기 요청이 하나라도 있으면 prefill)은 배치가 여럿일 때 decode forward를 prefill로 적었음
+                          phase="prefill" if (got_first or (n_out == 0 and pending_first > 0)) else "decode",
                           w_reads=post_w[0] - pre_w[0], w_bytes=post_w[1] - pre_w[1],
                           kv_rn=post_kv[1] - pre_kv[1], kv_rb=post_kv[2] - pre_kv[2],
                           kv_wn=post_kv[3] - pre_kv[3], kv_wb=post_kv[4] - pre_kv[4],
@@ -305,6 +309,7 @@ for rnd in range(1, args.rounds + 1):
     # 요구사항: 라운드 2 시작 전에 라운드 1 store 가 전부 끝났는지 확인.
     # 여기서 즉시 중단하면 20분치 측정이 날아가므로 기록만 하고 json 을 쓴 뒤 종료 코드로 알린다.
     rounds[-1]["store_fully_drained"] = (drain_out == 0 and drain_pend == 0)
+    rounds[-1]["guard_tripped"] = guard_tripped
     if not rounds[-1]["store_fully_drained"]:
         print(f"WARN round{rnd} 잔여 store: out={drain_out} pend={drain_pend}", flush=True)
     # decode 단계와 KV 읽기가 실제로 겹쳤는지: 겹친 시간과 바이트
