@@ -810,6 +810,25 @@ Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batc
 | lfu, 상한 1 GiB, write-behind | 913 파일 2.01 GiB | 321 파일 0.69 GiB | 총량 1.00 GiB 유지, 축출 458 파일 1.01 GiB |
 | seen_twice | 684 파일 1.50 GiB | 66 파일 0.15 GiB | admit 684 / reject 684 (첫 제시 거부, 두 번째 저장) |
 
+#### Qwen2.5-72B, Bailian 트레이스에서의 정책 비교
+
+조건. 72B RAM 0.5 기본값(게이트 없음, 1 MiB 조각, GPU KV 자동 21k 토큰, gpu_util 0.85), Bailian 트레이스 offset 29,560부터 32건(hash_id → 결정적 16토큰 블록, 8,120 토큰 상한, 중앙값 6.5k, 합 154k 토큰), 창 안 프리픽스 공유 56%(트레이스 전체 66%), 고유 KV 21.7 GB. cold_fill(트레이스 순서) → settle 15 s → reverse_retrieve(역순, 다른 꼬리 8토큰). 용량 조건은 상한 8 GiB(고유량의 37%). 결과 results/qwen72b/bailian-ram0.5-*, 표는 tools/qwen72_policy_table.py.
+
+| 조건 | cold_fill / forward / prefill 평균 | reverse / forward / prefill 평균 | 두 단계 합계 (재계산 대비) | 읽기 | 쓰기 | 축출 |
+|---|---|---|---|---|---|---|
+| 재계산 | 2,280 s / 54 / 62 s | 2,070 s / 53 / 55 s | 4,350 s | 0 | 0 | |
+| SSD 적중, 전부 저장 | 2,355 s / 59 / 45 s | 1,677 s / 59 / 28 s | 4,032 s (−7.3%) | 20.3 GiB | 20.6 GiB | 0 |
+| LFU 8 GiB | 2,262 s / 54 / 53 s | 1,934 s / 52 / 46 s | 4,196 s (−3.5%) | 2.6 GiB | 38.3 GiB | 6,201 파일 30.3 GiB |
+| LRU 8 GiB | 2,260 s / 54 / 51 s | 1,989 s / 53 / 45 s | 4,249 s (−2.3%) | 2.2 GiB | 37.6 GiB | 6,058 파일 |
+| seen_twice admission | 2,251 s / 54 / 51 s | 1,919 s / 55 / 32 s | 4,169 s (−4.2%) | 5.9 GiB | 20.6 GiB | 0 |
+
+- 출력 토큰열 다섯 조건 모두 64건 재계산과 동일, backend 오류 0. decode forward 28.2~28.4 s, 고정비 모형 26.9 s(편차 5~6%).
+- 전부 저장이 가장 큼. Bailian은 저장 단계 안에서도 공유 프리픽스가 적중해 prefill 평균이 62 → 45 s. 저장 단계가 +75 s인 것은 쓰기가 아니라 forward 5개 증가(게이트 없음, 적중 요청이 따로 승격). 적중 단계도 forward 6개 증가. 66B·LongBench와 같은 자리라 게이트가 회수할 몫이 약 11 forward × 28 s.
+- 용량 상한 8 GiB의 LRU·LFU는 둘 다 쓰기 두 배, 읽기 8분의 1. 적중 단계가 역순 전체 재방문이라 캐시보다 큰 순차 스캔이고, 이 패턴에서 LRU는 방문 직전 항목을 지우는 최악 경우. LFU는 새로 저장된 파일(적중 0)을 먼저 지워 신규 항목이 살아남지 못함(보호 없는 LFU의 알려진 문제). 상한이 고유량보다 작으면 이 워크로드에서는 어느 쪽도 전부 저장에 못 미침. 용량 정책의 의미는 디스크 상한이 강제될 때 손실을 얼마나 줄이느냐이고, 그 답은 LFU가 LRU보다 1.2%p 나음.
+- seen_twice는 첫 저장 후보를 거부하고 두 번째 제시(역순 단계) 때 저장하므로 두 단계 설계에서는 적중이 세 번째 방문에서만 생김. 쓰기 총량은 전부 저장과 같고(같은 키가 결국 저장됨) 적중 단계 이득의 절반을 잃음. 이 규칙이 이기는 조건은 04와 같이 1회성 프리픽스가 많은 긴 트레이스이며, 32건 창에서는 검증 불가.
+- 저장 단계 wall clock이 LFU·LRU·seen_twice에서 재계산보다 20 s 짧은 것은 저장이 줄거나 늦어져 forward 수가 54로 유지된 것이고, 쓰기 자체의 비용은 어느 조건에서도 forward 길이에 나타나지 않음(decode forward 28.2~28.4 s 동일).
+- 다음 후보. 게이트를 켠 전부 저장(예상 −11%), 축출에 신규 보호(LFU 삽입 뒤 유예 또는 2-큐)와 상한을 고유량의 60~80%로 둔 조건, 같은 창을 세 번 방문하는 설계에서 seen_twice 재평가.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
