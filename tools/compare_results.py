@@ -93,6 +93,20 @@ def extract(path):
             row["fwd_meas"] = sum(r["decode_step_s"] for r in rs) / len(rs) / div
         row["kv_r_gib"] = sum(r.get("kv_read_b", 0) for r in rs) / GIB
         row["kv_w_gib"] = sum(r.get("kv_write_b", 0) for r in rs) / GIB
+    elif "phases" in d:  # 11-observability run_obs.py: run_dir/result.json + steps.jsonl
+        run_dir = os.path.dirname(path)
+        row["tag"] = os.path.basename(run_dir)
+        row["host"] = d.get("host_fraction"); row["kv_gib"] = d.get("kv_alloc_gib") or d.get("kv_gib"); row["np"] = a.get("n_docs")
+        row["res"] = 0 if t.get("n_modules") else "all"
+        row["wall"] = sum(p.get("wall_s", 0) for p in d["phases"].values())
+        sp = os.path.join(run_dir, "steps.jsonl")
+        if os.path.exists(sp):
+            st = [json.loads(l) for l in open(sp)]
+            durs = sorted(x["dur"] for x in st if x.get("kind") == "decode" and x["dur"] > 0.3)
+            row["fwd_meas"] = durs[len(durs) // 2] if durs else None
+            row["fwd_n"] = sum(1 for x in st if x["dur"] > 0.3)
+        kv = d.get("kv_io", {})
+        row["kv_r_gib"] = kv.get("read_gib", 0.0); row["kv_w_gib"] = kv.get("write_gib", 0.0)
     elif "decode_step_s" in d:  # run_66b.py: 가중치 경로만
         row["wall"] = d.get("gen_total_s")
         row["fwd_meas"] = d.get("decode_step_s")
@@ -119,7 +133,8 @@ def main():
     args = ap.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    paths = args.paths or [p for dd in DEFAULT_DIRS for p in glob.glob(os.path.join(root, dd, "*.json"))]
+    paths = args.paths or [p for dd in DEFAULT_DIRS for p in glob.glob(os.path.join(root, dd, "*.json"))] \
+        + ([] if args.paths else glob.glob(os.path.join(root, "results", "native-66b", "*", "result.json")))
     rows = []
     for p in sorted(paths):
         try:
