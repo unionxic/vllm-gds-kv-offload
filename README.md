@@ -5,7 +5,7 @@
 | 항목 | 값 |
 | --- | --- |
 | GPU | Quadro RTX 5000 16 GB. BAR1 256 MiB(카드 최대, Resizable BAR 레지스터로 확인) |
-| RAM, SSD | 125 GiB, Samsung 970 EVO 500 GB(OS와 같은 디스크). cuFile 실측 3.2 GiB/s, pinned H2D 12.3 GB/s |
+| RAM, SSD | 125 GiB, Samsung 970 EVO 500 GB(OS와 같은 디스크). cuFile 읽기 3.2 GiB/s, 지속 쓰기 0.3~0.7 GB/s(빈 공간에 좌우), pinned H2D 12.3 GB/s |
 | 소프트웨어 | CUDA 12.8, 드라이버 570, cuFile 1.13, nvidia-fs 2.25.7, vLLM 0.26.1 기반 포크(~/vllm, weight-ssd-offload) |
 | 모델 | opt-2.7b, 6.7b, 13b, 30b, 66b. KV 경로는 expfs(01~10) 또는 포크 in-tree CuFileFsSpec(11) |
 
@@ -23,6 +23,8 @@
 - forward 하나는 가중치 이동이고 CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s로 실측과 1~3% 안. layer가 0.5 GiB 미만이면 SSD 2.9 GB/s.
 - SSD KV 적중이 아끼는 것은 prefill의 토큰 계산 몫뿐. 66B 3,940토큰에서 15.5 s, host 비율과 무관. 모델 크기에 비례(6.7b 2 s, 13b 4 s, 30b 8 s).
 - 저장 라운드 손해는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유. 쓰기 중 가중치 읽기가 3.2에서 0.3 GB/s로 떨어짐(nvme 1초 샘플). SSD 가중치 몫에 비례해 RAM 0.7에서 +6 s, 0.1에서 +66 s.
+- KV 쓰기 속도는 backend가 아니라 SSD의 지속 쓰기 상한이 정함. 970 EVO는 SLC 캐시 약 4 GB 뒤 0.33 GB/s(디스크 94% 사용) 또는 0.70 GB/s(36% 사용). 같은 경로의 읽기는 3.5 GB/s. 66B 배치당 KV 8.4 GiB가 캐시보다 커서 쓰기가 forward 여러 개에 걸침.
+- write-behind(SSD 티어 layer 읽는 동안 KV 쓰기 정지, host 티어 구간에 재개)는 기본값 손해를 +19%에서 +9.1%로 줄임. 쓰기를 decode forward에서 빼내 다음 배치의 prefill forward로 옮긴 것이며 쓰는 양은 그대로.
 - 한 사이클 순이익(저장 + 적중 대 재계산 2라운드)은 RAM 0.5 이상에서 1~3%. 0.3 이하는 0.
 - vLLM 스케줄러는 KV 로드가 끝난 요청부터 승격하므로 먼저 온 요청이 혼자 forward를 돌아 배치가 쪼개짐. 게이트(승격 대기)로 forward 수가 기준선으로 복귀.
 - 오프로더 버퍼를 두 세트로 두면(prefetch_step 2) prefill 계산이 전송 아래 숨어 재계산 비용이 0에 가까워지고 KV 적중이 아낄 몫이 사라짐. 16 GB에서는 배치 2와 같이 못 넣음.
@@ -64,6 +66,7 @@ OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 
 | 조건 | 두 단계 합계(저장 + 적중 대 재계산) |
 | --- | --- |
 | 기본값(게이트 없음, 1 MiB 조각, KV 자동 10.4 GiB, gpu_util 0.85) | 1,674 → 1,992 s (+19%). forward 64 → 70, 저장 단계 prefill 32 → 41.5 s |
+| 기본값 + write-behind(cufile_fs_store_window=host, 상한 30 s) | 1,674 → 1,827 s (+9.1%). decode forward 최대 53.3 → 24.6 s, 저장 단계 prefill 41.5 → 36.5 s |
 | 게이트 + 4 MiB 조각 + KV 10.4 GiB | 1,653 → 1,631 s (−1.3%) |
 
 이중 버퍼(66B RAM 0.7, 배치 1, 재계산)
@@ -81,25 +84,25 @@ OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 
 | --- | --- |
 | 포크 offloader/prefetch.py, ssd_tier.py | 가중치 3단 스트리밍(GPU 정적 버퍼, pinned host, SSD cuFile). 정확 pinned 등록(VLLM_OFFLOAD_PIN_EXACT), 등록 총량 상한(VLLM_OFFLOAD_SSD_REGISTER_MAX_MB), cuFile 캐시 워밍업, SSD 창 신호(IoWindow) |
 | 포크 v1/core/sched/scheduler.py | 승격 대기 게이트 VLLM_KV_LOAD_WAVE_GATE(1: 로드 완료 요청, 2: 신규 요청도), VLLM_KV_LOAD_WAVE_WAIT_S |
-| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec. GPU KV 블록을 cuFile로 파일에 직접 저장·로드하는 C++ 전송기. 쓰기 일시정지(cufile_fs_store_window=host), admission(cufile_fs_admission=all/never/profile). 출력이 재계산과 동일함을 확인 |
+| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec. GPU KV 블록을 cuFile로 파일에 직접 저장·로드하는 C++ backend. 쓰기 일시정지(cufile_fs_store_window=host), admission(cufile_fs_admission=all/never/profile). 출력이 재계산과 동일함을 확인 |
 | lib/obs | 관측 계층. host 지표, nvidia-fs·프로세스·캐시 파일 1초 샘플, 이벤트 jsonl(wall과 monotonic), 환경 기록, 용량 검사, nsys 래퍼, 요약 |
 | experiments/11-observability/run_obs.py | cold_fill → settle → reverse_retrieve 러너. kv-transport cufile/none/lmcache, 기본값 런(--pure), 출력 토큰열 기록 |
 | tools/compare_results.py, baseline_table.py | 전 결과를 고정비 모형과 대조, 기준 런 대비 변화율, 순이익 표 |
-| lib/expfs.py | 01~10 결과 재현용 파이썬 전송기. 새 실험에는 쓰지 않음 |
+| lib/expfs.py | 01~10 결과 재현용 파이썬 backend. 새 실험에는 쓰지 않음 |
 
 #### 한계와 미해결
 
 - 카드 한 장, SSD 한 장(OS와 공유), BAR1 256 MiB. KV 텐서 등록이 안 되어 KV 경로는 cuFile bounce 두 홉. 데이터센터 GPU에서는 같은 코드가 등록 직접 DMA.
-- 이중 버퍼 조건에서 KV 오프로드 손익, 저장 창(host)의 66B 효과, host KV 층과 host 배분(layer 1개 = forward당 0.43 s 환율)은 미측정.
+- 이중 버퍼 조건에서 KV 오프로드 손익, write-behind와 게이트를 같이 켠 조합, host KV 층과 host 배분(layer 1개 = forward당 0.43 s 환율)은 미측정. OPT-66B 가중치는 삭제해 66B 추가 런은 없음.
 - 게이트의 일반성은 forward가 비싼 조건에서만 검증. GPU 상주 모델에서는 이득이 ms 단위.
-- 다음 모델은 GQA 70B급(Qwen2.5-72B, 토큰당 KV 328 KB)으로 예정. 입력은 LongBench-v2 32건과 Bailian 트레이스.
+- 다음 모델은 Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB). 입력은 LongBench-v2 32건과 Bailian 트레이스. SSD 쓰기 상한 때문에 디스크는 20% 이상 비워 둠.
 
 #### Directory
 
 | 경로 | 내용 |
 | --- | --- |
 | `env.sh` | 공통 실행 환경 |
-| `lib/` | obs(관측 계층), expfs.py(옛 전송기), gdslib.py, scheduler.py, policies.py, value_admission.py, snapshot.py |
+| `lib/` | obs(관측 계층), expfs.py(옛 backend), gdslib.py, scheduler.py, policies.py, value_admission.py, snapshot.py |
 | `harness/` | run_bench.py |
 | `experiments/01-feasibility/` | 개통, 프리픽스 정당성, cuFile 마이크로벤치, A~E 비교군 |
 | `experiments/02-bailian/` | Bailian coder trace 리플레이, staging과 비차단 admission |
