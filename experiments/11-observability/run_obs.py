@@ -302,6 +302,10 @@ try:
     res["kv_io"] = dict(read_n=ks.get("reads", 0), read_gib=round(ks.get("read_bytes", 0) / 2**30, 2), write_n=ks.get("writes", 0),
                         write_gib=round(ks.get("write_bytes", 0) / 2**30, 2), read_busy_s=round(ks.get("read_busy_ns", 0) / 1e9, 1),
                         write_busy_s=round(ks.get("write_busy_ns", 0) / 1e9, 1), errors=ks.get("errors", 0), registered_tensors=ks.get("registered_tensors", 0))
+    # 파일 1개 처리를 구간으로 나눈 스레드 시간 합(s): 이벤트 대기 / open+HandleRegister / cuFile 호출 / Deregister+close+rename
+    res["kv_io"]["write_stages_s"] = {k: round(ks.get(f"w_{k}_ns", 0) / 1e9, 1) for k in ("ev", "open", "io", "fin")}
+    res["kv_io"]["read_stages_s"] = {k: round(ks.get(f"r_{k}_ns", 0) / 1e9, 1) for k in ("open", "io", "fin")}
+    res["kv_io"]["write_calls"] = ks.get("w_calls", 0); res["kv_io"]["read_calls"] = ks.get("r_calls", 0)
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
     if args.kv_transport != "none" and os.path.isdir(args.kv_root):
