@@ -1,0 +1,13 @@
+[09-14 20:23:56] == qwen72b: RAM 0.5 × (none cufile cufile-wb), docs 8, decode 8, NSYS=0
+[09-14 20:23:56] start ram0.5-none
+[09-14 20:32:52] OOM ram0.5-none (gpu_util 0.9) → 재시도
+[09-14 21:37:49] done  ram0.5-none rc=0 (gpu_util 0.85)
+[09-14 21:37:49] start ram0.5-cufile
+[09-14 21:47:02] OOM ram0.5-cufile (gpu_util 0.9) → 재시도
+[09-14 22:44:52] done  ram0.5-cufile rc=0 (gpu_util 0.85)
+[09-14 22:44:52] start ram0.5-cufile-wb
+[09-14 22:53:47] OOM ram0.5-cufile-wb (gpu_util 0.9) → 재시도
+[09-14 23:50:47] done  ram0.5-cufile-wb rc=0 (gpu_util 0.85)
+[09-14 23:50:47] == qwen72b 종료
+[09-14 23:51:58] == qwen72b: RAM 0.5 × (cufile), docs 8, decode 8, NSYS=1
+[09-14 23:51:58] start ram0.5-cufile-nsys

@@ -1,0 +1,5 @@
+phase,count,ttft_p50,ttft_p95,e2e_p50,e2e_p95,e2e_max,phase_wall_s
+cold_fill,8,1130.89,1603.18,1329.35,1772.33,1772.33,1772.3
+reverse_retrieve,8,567.09,907.27,764.89,1076.22,1076.22,1076.2
+kv_r: 6 ops, 13.31 GiB, busy 143.8 s
+kv_w: 17 ops, 19.88 GiB, busy 1997.7 s

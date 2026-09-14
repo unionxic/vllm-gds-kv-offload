@@ -752,6 +752,25 @@ backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이�
 - LMCache 실패 런의 slab 40 GB와 OPT-66B(HF 캐시 124 GB, SSD 티어 59 GB)를 지우고 fstrim 뒤 36% 사용(여유 279 GB): 1.89, 0.70, 0.70, 0.70 GB/s. 지속 쓰기 상한이 0.33에서 0.70 GB/s로 올라감. 여유 96 GB, trim 직후: 1.04, 0.45, 0.43 GB/s(trim과 겹침).
 - 결론. KV 쓰기 속도는 backend 코드가 아니라 이 SSD의 지속 쓰기 상한(SLC 캐시 약 4 GB 뒤 0.3~0.7 GB/s, 빈 공간에 좌우)이 정함. 66B 한 배치의 KV 8.4 GiB는 캐시보다 커서 앞 4 GB만 빠르게 나감. 따라서 write-behind가 한 번에 내보내는 양은 4 GB 이하로 끊고 사이에 쉬는 시간을 둬야 캐시 안에서 처리되며, 근본 해결은 쓰는 양 자체를 줄이는 것(GQA 모델로 토큰당 KV 7분의 1, 저장 admission). 디스크는 20% 이상 비워 둠.
 
+### Qwen2.5-72B-Instruct 기준선 (GQA, KV는 SSD)
+
+#### 조건과 결과
+
+손대지 않은 기본값(게이트 없음, cuFile 기본 json 1 MiB, GPU KV 예산 vLLM 자동, gpu_util 0.9는 첫 prefill OOM이라 캠페인이 0.85로 재시도한 값). host memory 비율 RAM 0.5(host 38 layer 62.1 GiB, SSD 42 layer 68.7 GiB, 168 파일). 입력 LongBench-v2 8건을 8,128 토큰으로 자름, decode 8, cold_fill → settle 15 s → reverse_retrieve. fp16(Turing이라 bf16 불가). 결과 results/qwen72b/ram0.5-*. 실행 experiments/11-observability/campaign_qwen72.sh.
+
+| 조건 | cold_fill(저장) / forward | 저장 단계 prefill 평균 | reverse_retrieve(적중) / forward | 적중 단계 prefill 평균 | 두 단계 합계 |
+|---|---|---|---|---|---|
+| 재계산 | 1,800 s / 36 | 82 s | 1,539 s / 35 | 67 s | 3,340 s |
+| SSD 적중 | 1,795 s / 36 | 82 s | 1,101 s / 38 | 29 s | 2,896 s (−13.3%) |
+| SSD 적중 + write-behind 30 s | 1,773 s / 36 | 81 s | 1,076 s / 38 | 28 s | 2,849 s (−14.7%) |
+
+- decode forward 중앙값 28.2~29.0 s, 고정비 모형(62.1 GiB/12.3 + 68.7 GiB/3.44) 26.9 s, 편차 7.5~8%. 66B(1~3%)보다 큰 편차는 GQA라 k_proj·v_proj 파일이 16 MB로 작아 SSD 티어 파일 절반이 작은 읽기인 것과 방향이 같고 미확립.
+- 저장 단계 손해 0. 문서 하나의 KV가 2.6 GB(토큰당 0.33 MB)라 SSD의 SLC 쓰기 캐시(약 4 GB) 안이고 다음 문서까지 약 200 s 동안 캐시가 비워짐. 쓰기 19.9 GiB, 스레드 시간 합 67 s(이벤트 대기 32 s + cuFile 34 s), cuFile 구간 기준 4스레드 합 2.5 GB/s로 66B 때(0.5~0.7)의 4배. 가중치 읽기와 겹치는 쓰기가 문서당 1 s 안팎이라 forward가 늘지 않음. write-behind는 강제 재개 0회이고 차이 −47 s는 런 간 편차(decode 28.2 대 28.9 s) 범위.
+- 적중 단계. prefill forward가 67 s에서 29 s로 줄어 가중치 고정비만 남음(8k 토큰 prefill 계산 몫 문서당 38 s가 전부 아낀 몫). 읽기 13.3 GiB, 스레드 시간 합 16 s(합 3.5 GB/s). 게이트 없이 forward 35 → 38(66B는 32 → 38).
+- 출력 토큰열 16건 전부 재계산과 동일(세 조건 모두), backend 오류 0. Qwen 3B 4k 토큰에서 있던 재계산 간 불일치가 72B 8k에서는 없음.
+- 66B와 다른 결론이 나온 원인은 모델 구조. 토큰당 KV가 7분의 1이라 배치당 쓰기가 SSD 캐시 안에 들어가고, 8k 토큰이라 prefill 계산 몫이 커서 적중이 아끼는 양이 큼. 가중치 고정비 자체(26.9 s)는 66B(23.8 s)와 같은 부류.
+- GPU 최대 사용 14.9 GiB. 디스크는 SSD 티어 69 GB + KV 20 GB로 런 중 82% 사용. 32건은 디스크 상한 때문에 미실행.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
