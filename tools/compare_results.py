@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""OPT-66B 계열 결과 json을 한 표로 모으고, forward 비용을 고정비 모형과 대조한다.
+"""가중치 스트리밍 결과 json(06·07·09·10 러너, 11 run_obs)을 한 표로 모으고, forward 비용을 고정비 모형과 대조한다.
 
 모형: forward_s = host_tier_gib*GiB/H2D_GBPS + ssd_tier_gib*GiB/SSD_GBPS
   H2D_GBPS  12.3  pinned host -> GPU 실측 (PCIe 3.0 x16, pin_exact_test.py)
-  SSD_GBPS   3.44 970 EVO cuFile 실측 3.2 GiB/s (08c gdsio, 06 decode 중 NVMe 2.96~3.3 GB/s)
+  SSD_GBPS   3.44 970 EVO cuFile 실측 3.2 GiB/s (08c gdsio, 06 decode 중 NVMe 2.96~3.3 GB/s). layer 0.5 GiB 미만이면 2.9
 
 새 결과가 나오면 먼저 이 표를 보고, 모형과 15% 이상 어긋난 런(!)과 기준 런 대비
 10% 이상 움직인 지표(*)를 설명한 뒤에 다른 원인을 찾는다.
@@ -12,6 +12,7 @@
   python tools/compare_results.py                 # 기본 경로 전부
   python tools/compare_results.py --ref ab-none   # 기준 런 대비 변화율
   python tools/compare_results.py results/kv-policy/ab-*.json
+  python tools/compare_results.py --ref pure-ram0.5-none results/native-66b/*/result.json   # run_obs 런은 result.json 경로
 """
 import argparse
 import glob
@@ -31,12 +32,17 @@ DEFAULT_DIRS = [
 ]
 
 
+SSD_GBPS_SMALL_LAYER = 2.9e9   # layer가 0.5 GiB 미만이면 cuFile 유효 대역폭이 낮음(opt-6.7b 실측 7~20% 편차)
+
+
 def model_forward_s(tiers):
     if not tiers:
         return None
     h = tiers.get("host_tier_gib") or 0.0
     s = tiers.get("ssd_tier_gib") or 0.0
-    return h * GIB / H2D_GBPS + s * GIB / SSD_GBPS
+    n_ssd = tiers.get("n_ssd") or 0
+    ssd_bw = SSD_GBPS_SMALL_LAYER if (n_ssd and s / n_ssd < 0.5) else SSD_GBPS
+    return h * GIB / H2D_GBPS + s * GIB / ssd_bw
 
 
 def extract(path):
@@ -96,6 +102,7 @@ def extract(path):
     elif "phases" in d:  # 11-observability run_obs.py: run_dir/result.json + steps.jsonl
         run_dir = os.path.dirname(path)
         row["tag"] = os.path.basename(run_dir)
+        row["wt"] = "cufile" if t.get("n_modules") else "gpu"
         row["host"] = d.get("host_fraction"); row["kv_gib"] = d.get("kv_alloc_gib") or d.get("kv_gib"); row["np"] = a.get("n_docs")
         row["res"] = 0 if t.get("n_modules") else "all"
         row["wall"] = sum(p.get("wall_s", 0) for p in d["phases"].values())
@@ -133,8 +140,8 @@ def main():
     args = ap.parse_args()
 
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    paths = args.paths or [p for dd in DEFAULT_DIRS for p in glob.glob(os.path.join(root, dd, "*.json"))] \
-        + ([] if args.paths else glob.glob(os.path.join(root, "results", "native-66b", "*", "result.json")))
+    paths = args.paths or ([p for dd in DEFAULT_DIRS for p in glob.glob(os.path.join(root, dd, "*.json"))]
+                           + glob.glob(os.path.join(root, "results", "*", "*", "result.json")))   # run_obs 런 폴더
     rows = []
     for p in sorted(paths):
         try:
