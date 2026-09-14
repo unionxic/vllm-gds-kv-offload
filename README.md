@@ -30,6 +30,7 @@
 - 오프로더 버퍼를 두 세트로 두면(prefetch_step 2) prefill 계산이 전송 아래 숨어 재계산 비용이 0에 가까워지고 KV 적중이 아낄 몫이 사라짐. 16 GB에서는 배치 2와 같이 못 넣음.
 - 손대지 않은 기본값(게이트 없음, 1 MiB 조각, KV 자동)은 RAM 0.5에서 두 단계 합계 +19% 손해. 같은 조건에 게이트와 4 MiB 조각만 넣으면 −1.3%.
 - Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB) RAM 0.5 기본값, LongBench-v2 8건 × 8k 토큰: SSD 적중이 두 단계 합계 3,340 → 2,896 s(−13.3%). 저장 단계 손해 0(문서 KV 2.6 GB가 SSD 쓰기 캐시 안), 적중 단계 prefill forward 67 → 29 s. 출력 토큰열 동일.
+- 같은 72B 조건에 Bailian 트레이스 32건(프리픽스 공유 56%): 전부 저장 −7.3%. LMCache에서 옮긴 용량 정책은 상한 8 GiB(고유 KV의 37%)에서 LFU −3.5%, LRU −2.3%(역순 재방문이라 캐시보다 큰 순차 스캔, 쓰기 두 배). seen_twice admission −4.2%(첫 재사용을 잃음). 다섯 조건 모두 토큰열 동일.
 - LMCache 0.5.5 GDS L1은 이 카드에서 불성립. staging 버퍼 등록이 BAR1을 넘고 cuFileReadAsync가 적중에서 멈춤. LMCache는 저장 시점·admission·가중치 층 인식이 없어 위 문제의 설계 바깥.
 
 #### 측정
@@ -78,6 +79,16 @@ Qwen2.5-72B-Instruct RAM 0.5, 기본값, 8건 × 8k 토큰(저장 + 적중, 재�
 | SSD 적중 | 1,795 s | 1,101 s | 2,896 s (−13.3%) |
 | SSD 적중 + write-behind 30 s | 1,773 s | 1,076 s | 2,849 s (−14.7%) |
 
+Qwen2.5-72B RAM 0.5, 기본값, Bailian 32건 × 8k 상한(저장 + 적중, 재계산 대비). 정책은 포크 CuFileFsManager(LMCache 이식)
+
+| 조건 | 두 단계 합계 | 읽기 / 쓰기 |
+| --- | --- | --- |
+| 재계산 | 4,350 s | 0 |
+| SSD 적중, 전부 저장 | 4,032 s (−7.3%) | 20.3 / 20.6 GiB |
+| LFU 상한 8 GiB | 4,196 s (−3.5%) | 2.6 / 38.3 GiB |
+| LRU 상한 8 GiB | 4,249 s (−2.3%) | 2.2 / 37.6 GiB |
+| seen_twice admission | 4,169 s (−4.2%) | 5.9 / 20.6 GiB |
+
 이중 버퍼(66B RAM 0.7, 배치 1, 재계산)
 
 | prefetch_step | prefill forward | decode forward | 8요청 wall clock |
@@ -93,7 +104,7 @@ Qwen2.5-72B-Instruct RAM 0.5, 기본값, 8건 × 8k 토큰(저장 + 적중, 재�
 | --- | --- |
 | 포크 offloader/prefetch.py, ssd_tier.py | 가중치 3단 스트리밍(GPU 정적 버퍼, pinned host, SSD cuFile). 정확 pinned 등록(VLLM_OFFLOAD_PIN_EXACT), 등록 총량 상한(VLLM_OFFLOAD_SSD_REGISTER_MAX_MB), cuFile 캐시 워밍업, SSD 창 신호(IoWindow) |
 | 포크 v1/core/sched/scheduler.py | 승격 대기 게이트 VLLM_KV_LOAD_WAVE_GATE(1: 로드 완료 요청, 2: 신규 요청도), VLLM_KV_LOAD_WAVE_WAIT_S |
-| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec. GPU KV 블록을 cuFile로 파일에 직접 저장·로드하는 C++ backend. 쓰기 일시정지(cufile_fs_store_window=host), admission(cufile_fs_admission=all/never/profile). 출력이 재계산과 동일함을 확인 |
+| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec. manager에 용량 상한·LRU/LFU 축출·seen_twice admission(LMCache 정책 이식), write-behind. GPU KV 블록을 cuFile로 파일에 직접 저장·로드하는 C++ backend. 쓰기 일시정지(cufile_fs_store_window=host), admission(cufile_fs_admission=all/never/profile). 출력이 재계산과 동일함을 확인 |
 | lib/obs | 관측 계층. host 지표, nvidia-fs·프로세스·캐시 파일 1초 샘플, 이벤트 jsonl(wall과 monotonic), 환경 기록, 용량 검사, nsys 래퍼, 요약 |
 | experiments/11-observability/run_obs.py | cold_fill → settle → reverse_retrieve 러너. kv-transport cufile/none/lmcache, 기본값 런(--pure), 출력 토큰열 기록 |
 | tools/compare_results.py, baseline_table.py | 전 결과를 고정비 모형과 대조, 기준 런 대비 변화율, 순이익 표 |

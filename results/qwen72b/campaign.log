@@ -14,3 +14,15 @@
 [09-15 00:01:36] OOM ram0.5-cufile-nsys (gpu_util 0.9) → 재시도
 [09-15 01:05:03] done  ram0.5-cufile-nsys rc=0 (gpu_util 0.85)
 [09-15 01:05:03] == qwen72b 종료
+[09-15 02:15:02] == qwen72b: RAM 0.5 × (none cufile cufile-lfu cufile-lru cufile-seen2), docs 32, decode 8, NSYS=0
+[09-15 02:15:02] start bailian-ram0.5-none
+[09-15 03:37:27] done  bailian-ram0.5-none rc=0 (gpu_util 0.85)
+[09-15 03:37:27] start bailian-ram0.5-cufile
+[09-15 04:54:21] done  bailian-ram0.5-cufile rc=0 (gpu_util 0.85)
+[09-15 04:54:21] start bailian-ram0.5-cufile-lfu
+[09-15 06:13:55] done  bailian-ram0.5-cufile-lfu rc=0 (gpu_util 0.85)
+[09-15 06:13:55] start bailian-ram0.5-cufile-lru
+[09-15 07:34:29] done  bailian-ram0.5-cufile-lru rc=0 (gpu_util 0.85)
+[09-15 07:34:29] start bailian-ram0.5-cufile-seen2
+[09-15 08:53:51] done  bailian-ram0.5-cufile-seen2 rc=0 (gpu_util 0.85)
+[09-15 08:53:51] == qwen72b 종료
