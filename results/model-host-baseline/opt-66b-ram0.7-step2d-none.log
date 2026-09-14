@@ -1,123 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-derived: {'host_fraction_from_weight': 0.7001, 'offloaded_weight_gib': 121.5, 'd_model': 9216, 'n_layer': 64}
-INFO 09-11 17:41:28 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 2048, 'offload_backend': 'prefetch', 'offload_group_size': 64, 'offload_num_in_group': 64, 'offload_prefetch_step': 2, 'offload_ssd_path': '/home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/ssd-opt-66b', 'offload_host_fraction': 0.7001, 'gpu_memory_utilization': 0.95, 'kv_cache_memory_bytes': 9878424780, 'disable_log_stats': True, 'enforce_eager': True, 'model': 'facebook/opt-66b'}
-WARNING 09-11 17:41:28 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_OFFLOAD_SSD_REGISTER_MAX_MB
-WARNING 09-11 17:41:29 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
-INFO 09-11 17:41:30 [model.py:623] Resolved architecture: OPTForCausalLM
-INFO 09-11 17:41:30 [model.py:1788] Using max model len 2048
-INFO 09-11 17:41:30 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
-INFO 09-11 17:41:30 [vllm.py:1109] Asynchronous scheduling is enabled.
-WARNING 09-11 17:41:30 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
-WARNING 09-11 17:41:30 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
-INFO 09-11 17:41:30 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
-INFO 09-11 17:41:30 [vllm.py:1392] Cudagraph is disabled under eager mode
-INFO 09-11 17:41:30 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
-INFO 09-11 17:41:32 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-66b', speculative_config=None, tokenizer='facebook/opt-66b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-66b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
-INFO 09-11 17:41:33 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:40745 backend=nccl
-INFO 09-11 17:41:33 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
-WARNING 09-11 17:41:35 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
-INFO 09-11 17:41:35 [ssd_tier.py:128] cuFile driver opened from /usr/local/cuda/targets/x86_64-linux/lib/libcufile.so.0
-INFO 09-11 17:41:35 [prefetch.py:234] [PrefetchOffloader] SSD tier at /home/unionxic/experiments/vllm-gds-kv/results/model-host-baseline/ssd-opt-66b/rank0 (transport=cufile, io_threads=4), host budget 87.84 GiB (70% of DRAM)
-INFO 09-11 17:41:35 [base.py:123] Offloader set to PrefetchOffloader
-INFO 09-11 17:41:35 [gpu_model_runner.py:5250] Starting to load model facebook/opt-66b...
-ERROR 09-11 17:41:35 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
-INFO 09-11 17:41:35 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
-Loading pt checkpoint shards:   0% Completed | 0/14 [00:00<?, ?it/s]
-Loading pt checkpoint shards:   7% Completed | 1/14 [00:06<01:24,  6.49s/it]
-Loading pt checkpoint shards:  14% Completed | 2/14 [00:12<01:13,  6.10s/it]
-Loading pt checkpoint shards:  21% Completed | 3/14 [00:19<01:12,  6.59s/it]
-Loading pt checkpoint shards:  29% Completed | 4/14 [00:25<01:04,  6.45s/it]
-Loading pt checkpoint shards:  36% Completed | 5/14 [00:30<00:53,  5.99s/it]
-Loading pt checkpoint shards:  43% Completed | 6/14 [00:48<01:18,  9.80s/it]
-Loading pt checkpoint shards:  50% Completed | 7/14 [01:06<01:27, 12.46s/it]
-Loading pt checkpoint shards:  57% Completed | 8/14 [01:12<01:03, 10.52s/it]
-Loading pt checkpoint shards:  64% Completed | 9/14 [01:18<00:46,  9.22s/it]
-Loading pt checkpoint shards:  71% Completed | 10/14 [01:25<00:33,  8.35s/it]
-Loading pt checkpoint shards:  79% Completed | 11/14 [01:31<00:23,  7.74s/it]
-Loading pt checkpoint shards:  86% Completed | 12/14 [01:37<00:14,  7.26s/it]
-Loading pt checkpoint shards:  93% Completed | 13/14 [01:50<00:08,  8.97s/it]
-Loading pt checkpoint shards: 100% Completed | 14/14 [02:12<00:00, 12.98s/it]
-Loading pt checkpoint shards: 100% Completed | 14/14 [02:12<00:00,  9.49s/it]
-
-INFO 09-11 17:44:12 [default_loader.py:430] Loading weights took 132.84 seconds
-INFO 09-11 17:46:07 [gpu_model_runner.py:5347] Model loading took 0.9 GiB memory and 240.838771 seconds
-INFO 09-11 17:46:10 [ssd_tier.py:271] [SsdTier] cuFileBufRegister on static buffers: 0 ok, 8 failed (failed buffers use cuFile's internal GPU bounce cache)
-INFO 09-11 17:46:10 [prefetch.py:509] [PrefetchOffloader] Initialized 64 modules. Total GPU memory saved: 130.4750 GB, Static buffer pool: 4.0773 GB (group_size=64, num_in_group=64, prefetch_step=2, mode=cpu)
-INFO 09-11 17:46:10 [prefetch.py:518] [PrefetchOffloader] tiers: host 46 layers / 87.34 GiB (budget 87.84 GiB), ssd 18 layers / 34.18 GiB in 72 files
-INFO 09-11 17:46:35 [gpu_worker.py:479] Initial free memory 15.42 GiB, reserved 9.2 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
-INFO 09-11 17:46:35 [kv_cache_utils.py:2177] GPU KV cache size: 4,176 tokens
-INFO 09-11 17:46:35 [kv_cache_utils.py:2178] Maximum concurrency for 2,048 tokens per request: 2.04x
-<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
-<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
-INFO 09-11 17:46:35 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
-INFO 09-11 17:46:53 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
-INFO 09-11 17:46:53 [core.py:347] init engine (profile, create kv cache, warmup model) took 43.68 s
-WARNING 09-11 17:46:53 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
-WARNING 09-11 17:46:54 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
-ERROR 09-11 17:46:54 [dump_input.py:72] Dumping input data for V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='facebook/opt-66b', speculative_config=None, tokenizer='facebook/opt-66b', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=facebook/opt-66b, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto'), 
-ERROR 09-11 17:46:54 [dump_input.py:79] Dumping scheduler output for model execution: SchedulerOutput(scheduled_new_reqs=[NewRequestData(req_id=r1-0-9e1b7b56,prompt_token_ids_len=1971,prefill_token_ids_len=None,mm_features=[],sampling_params=SamplingParams(n=1, presence_penalty=0.0, frequency_penalty=0.0, repetition_penalty=1.0, temperature=0, top_p=1.0, top_k=0, min_p=0.0, seed=None, stop=[], stop_token_ids=[], bad_words=[], thinking_token_budget=None, include_stop_str_in_output=False, ignore_eos=True, max_tokens=8, min_tokens=0, logprobs=None, prompt_logprobs=None, skip_special_tokens=True, spaces_between_special_tokens=True, structured_outputs=None, extra_args=None),block_ids=([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124],),num_computed_tokens=0,lora_request=None,prompt_embeds_shape=None), NewRequestData(req_id=r1-1-9087b47a,prompt_token_ids_len=1963,prefill_token_ids_len=None,mm_features=[],sampling_params=SamplingParams(n=1, presence_penalty=0.0, frequency_penalty=0.0, repetition_penalty=1.0, temperature=0, top_p=1.0, top_k=0, min_p=0.0, seed=None, stop=[], stop_token_ids=[], bad_words=[], thinking_token_budget=None, include_stop_str_in_output=False, ignore_eos=True, max_tokens=8, min_tokens=0, logprobs=None, prompt_logprobs=None, skip_special_tokens=True, spaces_between_special_tokens=True, structured_outputs=None, extra_args=None),block_ids=([1, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246],),num_computed_tokens=16,lora_request=None,prompt_embeds_shape=None)], scheduled_cached_reqs=CachedRequestData(req_ids=[],resumed_req_ids=set(),new_token_ids_lens=[],all_token_ids_lens={},new_block_ids=[],num_computed_tokens=[],num_output_tokens=[]), num_scheduled_tokens={r1-1-9087b47a: 1947, r1-0-9e1b7b56: 1971}, total_num_scheduled_tokens=3918, scheduled_spec_decode_tokens={}, scheduled_encoder_inputs={}, num_common_prefix_blocks=[1], finished_req_ids=[], free_encoder_mm_hashes=[], scheduled_encoder_input_stats=null, preempted_req_ids=[], has_structured_output_requests=false, pending_structured_output_tokens=false, num_invalid_spec_tokens=null, kv_connector_metadata=null, ec_connector_metadata=null, new_block_ids_to_zero=null, kv_cache_block_copies=null, num_spec_tokens_to_schedule=0)
-[rank0]: Traceback (most recent call last):
-[rank0]:   File "/home/unionxic/experiments/vllm-gds-kv/experiments/09-kv-policy/run_phase_66b.py", line 234, in <module>
-[rank0]:     outs = eng.step()
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/llm_engine.py", line 304, in step
-[rank0]:     outputs = self.engine_core.get_output()
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/core_client.py", line 290, in get_output
-[rank0]:     outputs, model_executed = self.engine_core.step_fn()
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/engine/core.py", line 647, in step_with_batch_queue
-[rank0]:     exec_future = self.model_executor.execute_model(
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/executor/uniproc_executor.py", line 120, in execute_model
-[rank0]:     output.result()
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/concurrent/futures/_base.py", line 451, in result
-[rank0]:     return self.__get_result()
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/concurrent/futures/_base.py", line 403, in __get_result
-[rank0]:     raise self._exception
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/executor/uniproc_executor.py", line 98, in collective_rpc
-[rank0]:     result = run_method(self.driver_worker, method, args, kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/serial_utils.py", line 510, in run_method
-[rank0]:     return func(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/worker/worker_base.py", line 351, in execute_model
-[rank0]:     return self.worker.execute_model(scheduler_output)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-[rank0]:     return func(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/worker/gpu_worker.py", line 1147, in execute_model
-[rank0]:     output = self.model_runner.execute_model(
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
-[rank0]:     return func(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/worker/gpu_model_runner.py", line 4394, in execute_model
-[rank0]:     model_output = self._model_forward(
-[rank0]:   File "/home/unionxic/vllm/vllm/v1/worker/gpu_model_runner.py", line 3848, in _model_forward
-[rank0]:     return self.model(
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-[rank0]:     return self._call_impl(*args, **kwargs)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-[rank0]:     return forward_call(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/model_executor/models/opt.py", line 375, in forward
-[rank0]:     hidden_states = self.model(
-[rank0]:   File "/home/unionxic/vllm/vllm/compilation/decorators.py", line 507, in __call__
-[rank0]:     return self.forward(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/model_executor/models/opt.py", line 322, in forward
-[rank0]:     return self.decoder(
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-[rank0]:     return self._call_impl(*args, **kwargs)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-[rank0]:     return forward_call(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/model_executor/models/opt.py", line 285, in forward
-[rank0]:     hidden_states = layer(hidden_states)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-[rank0]:     return self._call_impl(*args, **kwargs)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-[rank0]:     return forward_call(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/model_executor/offloader/prefetch.py", line 325, in forward
-[rank0]:     output = original_forward(*args, **kwargs)
-[rank0]:   File "/home/unionxic/vllm/vllm/model_executor/models/opt.py", line 189, in forward
-[rank0]:     hidden_states = self.activation_fn(hidden_states)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1779, in _wrapped_call_impl
-[rank0]:     return self._call_impl(*args, **kwargs)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1790, in _call_impl
-[rank0]:     return forward_call(*args, **kwargs)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/modules/activation.py", line 143, in forward
-[rank0]:     return F.relu(input, inplace=self.inplace)
-[rank0]:   File "/home/unionxic/miniconda3/envs/gdsllm/lib/python3.10/site-packages/torch/nn/functional.py", line 1723, in relu
-[rank0]:     result = torch.relu(input)
-[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 276.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 264.12 MiB is free. Including non-PyTorch memory, this process has 15.11 GiB memory in use. Of the allocated memory 14.57 GiB is allocated by PyTorch, and 348.56 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
-[rank0]:[W911 17:46:54.155338136 ProcessGroupNCCL.cpp:1575] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
