@@ -150,8 +150,8 @@ def main():
     if args.ref and not ref:
         print(f"기준 런 {args.ref} 없음", file=sys.stderr)
 
-    def cfg(r):
-        return (r["host"], r["res"], r["kv_gib"], r["np"])
+    def cfg(r):  # KV 예산은 1 GiB 단위로 뭉뚱그려 비교(자동 산정 런과 지정 런의 미세 차이 무시)
+        return (r["host"], r["res"], round(r["kv_gib"] or 0), r["np"])
 
     hdr = (f"{'date':5} {'tag':24} {'wt':6} {'host':5} {'res':3} {'hostGiB':8} {'ssdGiB':7} {'kvt':11} {'kvGiB':5} "
            f"{'np':3} {'wall_s':8} {'fwd_n':5} {'fwd_s':6} {'model':6} {'dev%':6} {'kvR':6} {'kvW':6}")
