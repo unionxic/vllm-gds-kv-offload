@@ -10,7 +10,10 @@ ap.add_argument("--run-dir", required=True)
 ap.add_argument("--model", default="facebook/opt-13b")
 ap.add_argument("--n-docs", type=int, default=32)
 ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none"], help="cufile: in-tree CuFileFsSpec(native). none: 재계산")
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache"],
+                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접)")
+ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
+ap.add_argument("--lmcache-port", type=int, default=5555)
 ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만)")
 ap.add_argument("--kv-batch", type=int, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15")
 ap.add_argument("--kv-threads", type=int, default=4)
@@ -82,7 +85,35 @@ kw = dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in
           offload_ssd_path=args.ssd_root, offload_host_fraction=host_fraction, offload_ssd_transport="cufile",
           offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=0)
 matched = [0]
-if args.kv_transport != "none":
+LMC = None
+if args.kv_transport == "lmcache":
+    # LMCache MP 서버를 별도 프로세스로. --gds-l1-path 가 있으면 DRAM 층이 꺼지고 cuFile로 GPU↔NVMe 직접
+    import socket
+    os.makedirs(args.kv_root, exist_ok=True)
+    lmc_cmd = ["lmcache", "server", "--host", "127.0.0.1", "--port", str(args.lmcache_port), "--chunk-size", "256",
+               "--l1-size-gb", str(args.lmcache_l1_gb), "--gds-l1-path", args.kv_root, "--gds-l1-backend", "cufile",
+               "--gds-l1-use-direct-io", "--max-workers", str(args.kv_threads), "--eviction-policy", "LRU"]
+    open(os.path.join(R, "lmcache_command.txt"), "w").write(" ".join(lmc_cmd) + "\n")
+    LMC = subprocess.Popen(lmc_cmd, stdout=open(os.path.join(R, "lmcache.log"), "w"), stderr=subprocess.STDOUT)
+    for _ in range(600):
+        if LMC.poll() is not None: sys.exit("LMCache 서버가 종료됨. lmcache.log 확인")
+        try:
+            socket.create_connection(("127.0.0.1", args.lmcache_port), timeout=0.5).close(); break
+        except OSError: time.sleep(0.5)
+    else: sys.exit("LMCache 서버 포트 대기 시간 초과")
+    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="LMCacheMPConnector", kv_role="kv_both",
+        kv_connector_extra_config={"lmcache.mp.host": "tcp://127.0.0.1", "lmcache.mp.port": args.lmcache_port})
+    import vllm.distributed.kv_transfer.kv_connector.v1.lmcache_mp_connector as lmcc
+    for _n in dir(lmcc):
+        _c = getattr(lmcc, _n)
+        if isinstance(_c, type) and hasattr(_c, "get_num_new_matched_tokens") and "LMCache" in _n:
+            _orig = _c.get_num_new_matched_tokens
+            def _mk(_o):
+                def _w(self, request, n):
+                    r = _o(self, request, n); matched[0] += (r[0] or 0) if isinstance(r, tuple) else (r or 0); return r
+                return _w
+            _c.get_num_new_matched_tokens = _mk(_orig)
+elif args.kv_transport != "none":
     extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
              "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
     if not args.pure: extra["block_size"] = args.kv_block
@@ -105,7 +136,7 @@ try:
                  host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
     EV.emit("tiers", **tiers)
     KVW = None
-    if args.kv_transport != "none":
+    if args.kv_transport == "cufile":
         import vllm.v1.kv_offload.cufile_fs.spec as cfs
         KVW = cfs.LAST_WORKER
         EV.emit("kv_worker", registered_tensors=KVW.native.registered, register_err=KVW.native.register_err, chunk_bytes=KVW.chunk_bytes)
@@ -195,7 +226,7 @@ try:
                         write_busy_s=round(ks.get("write_busy_ns", 0) / 1e9, 1), errors=ks.get("errors", 0), registered_tensors=ks.get("registered_tensors", 0))
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
-    if args.kv_transport != "none":
+    if args.kv_transport != "none" and os.path.isdir(args.kv_root):
         files = [os.path.join(dp, f) for dp, _, fs in os.walk(args.kv_root) for f in fs]
         res["kv_files"], res["kv_bytes_gib"] = len(files), round(sum(os.path.getsize(f) for f in files) / 2**30, 3)
     json.dump(res, open(os.path.join(R, "result.json"), "w"), indent=1)
@@ -209,4 +240,7 @@ except BaseException as e:
     EV.emit("error", err=repr(e)); open(os.path.join(R, "workload.exitcode"), "w").write("1\n"); raise
 finally:
     stop_monitors()
+    if LMC is not None:
+        try: LMC.terminate(); LMC.wait(timeout=30)
+        except Exception: LMC.kill()
     subprocess.run([sys.executable, os.path.join(ROOT, "lib", "obs", "summarize.py"), R], stdout=open(os.path.join(R, "summary.csv"), "w"), check=False)
