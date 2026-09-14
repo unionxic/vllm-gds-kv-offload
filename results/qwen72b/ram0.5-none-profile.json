@@ -1,0 +1,242 @@
+{
+ "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-none",
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "prompt_source": "longbench",
+ "kv_transport": "none",
+ "n_docs": 8,
+ "input_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+ "requests": [
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-0",
+   "doc": 0,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-1",
+   "doc": 1,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-2",
+   "doc": 2,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-3",
+   "doc": 3,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-4",
+   "doc": 4,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-5",
+   "doc": 5,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-6",
+   "doc": 6,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-7",
+   "doc": 7,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-7",
+   "doc": 7,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-6",
+   "doc": 6,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-5",
+   "doc": 5,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-4",
+   "doc": 4,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-3",
+   "doc": 3,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-2",
+   "doc": 2,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-1",
+   "doc": 1,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-0",
+   "doc": 0,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 0
+  }
+ ],
+ "docs": [
+  {
+   "doc": 0,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 1,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 2,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 3,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 4,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 5,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 6,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 7,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  }
+ ],
+ "totals": {
+  "requests": 16,
+  "prompt_tokens": 130072,
+  "matched_tokens": 0,
+  "reused_docs": 8
+ }
+}

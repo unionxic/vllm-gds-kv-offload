@@ -1,0 +1,129 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-none",
+  "model": "Qwen/Qwen2.5-72B-Instruct",
+  "n_docs": 8,
+  "leval_workload": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../03-leval/workload.json",
+  "prompt_source": "longbench",
+  "longbench_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../02-bailian/replay600/trace/qwen_coder.jsonl",
+  "bailian_block": 16,
+  "prompt_cap": 0,
+  "profile_out": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-none-profile.json",
+  "kv_transport": "none",
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "register_tensors": false,
+  "kv_batch": 4,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": 0.5,
+  "pure": true,
+  "prefetch_step": 1,
+  "io_threads": 4,
+  "gpu_util": 0.85,
+  "max_model_len": 8192,
+  "decode_tokens": 8,
+  "settle_sec": 15.0,
+  "final_settle_sec": 15.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ssd-72b",
+  "kv_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/kv-72b",
+  "no_monitors": false,
+  "kv_extra": null,
+  "no_weight_offload": false,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": null,
+ "kv_alloc_gib": 52.27,
+ "host_fraction": 0.5,
+ "tiers": {
+  "n_modules": 80,
+  "n_ssd": 42,
+  "host_tier_gib": 62.12,
+  "ssd_tier_gib": 68.66
+ },
+ "phases": {
+  "cold_fill": {
+   "wall_s": 1800.232,
+   "matched": 0,
+   "drain_s": 0.0,
+   "ttft": [
+    245.544,
+    276.445,
+    697.079,
+    727.349,
+    1146.946,
+    1177.038,
+    1596.146,
+    1626.26
+   ],
+   "e2e": [
+    451.039,
+    573.507,
+    901.194,
+    1023.226,
+    1350.703,
+    1472.616,
+    1800.226,
+    1800.232
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 1539.328,
+   "matched": 0,
+   "drain_s": 0.0,
+   "ttft": [
+    58.734,
+    58.729,
+    436.105,
+    465.731,
+    885.435,
+    915.492,
+    1334.587,
+    1364.837
+   ],
+   "e2e": [
+    232.425,
+    232.419,
+    639.835,
+    761.599,
+    1089.184,
+    1210.844,
+    1539.322,
+    1539.328
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 0,
+  "read_gib": 0.0,
+  "write_n": 0,
+  "write_gib": 0.0,
+  "read_busy_s": 0.0,
+  "write_busy_s": 0.0,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 0.0,
+   "open": 0.0,
+   "io": 0.0,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 0.0,
+   "fin": 0.0
+  },
+  "write_calls": 0,
+  "read_calls": 0
+ },
+ "gpu_max_gib": 14.87,
+ "weight_ssd_reads": 12268,
+ "weight_ssd_gib": 5013.83,
+ "profile_out": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-none-profile.json"
+}
