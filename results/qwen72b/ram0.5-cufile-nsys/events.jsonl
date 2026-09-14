@@ -1,0 +1,62 @@
+{"kind": "run_start", "wall_ns": 1789398106399535197, "mono_ns": 553268855761403, "tid": 139999492931648, "args": {"run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-cufile-nsys", "model": "Qwen/Qwen2.5-72B-Instruct", "n_docs": 8, "leval_workload": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../03-leval/workload.json", "prompt_source": "longbench", "longbench_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl", "bailian_trace": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../02-bailian/replay600/trace/qwen_coder.jsonl", "bailian_block": 16, "prompt_cap": 0, "profile_out": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ram0.5-cufile-nsys-profile.json", "kv_transport": "cufile", "lmcache_l1_gb": 40.0, "lmcache_port": 5555, "lmcache_chunk": 64, "register_tensors": false, "kv_batch": 4, "kv_threads": 4, "kv_block": 64, "host_weight_fraction": null, "host_ram_fraction": 0.5, "pure": true, "prefetch_step": 1, "io_threads": 4, "gpu_util": 0.85, "max_model_len": 8192, "decode_tokens": 8, "settle_sec": 15.0, "final_settle_sec": 15.0, "poll_sleep_ms": 0.0, "ssd_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ssd-72b", "kv_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/kv-72b", "no_monitors": false, "kv_extra": null, "no_weight_offload": false, "kv_load_failure_policy": "fail", "nsys_phase": "cold_fill,reverse_retrieve", "nsys_steps": 12}, "kv_gib": null, "host_fraction": 0.5, "pid": 169425}
+{"kind": "phase", "wall_ns": 1789398110444781195, "mono_ns": 553272901006368, "tid": 139999492931648, "name": "model_load_begin"}
+{"kind": "phase", "wall_ns": 1789398628895276794, "mono_ns": 553791351503089, "tid": 139999492931648, "name": "model_load_end", "load_s": 518.5}
+{"kind": "tiers", "wall_ns": 1789398628895512133, "mono_ns": 553791351737275, "tid": 139999492931648, "n_modules": 80, "n_ssd": 42, "host_tier_gib": 62.12, "ssd_tier_gib": 68.66}
+{"kind": "kv_worker", "wall_ns": 1789398628895575483, "mono_ns": 553791351800539, "tid": 139999492931648, "registered_tensors": 0, "register_err": 0, "chunk_bytes": 5242880}
+{"kind": "phase", "wall_ns": 1789398630641499651, "mono_ns": 553793097724972, "tid": 139999492931648, "name": "cold_fill", "requests": 8}
+{"kind": "nsys", "wall_ns": 1789398631243875026, "mono_ns": 553793700101173, "tid": 139999492931648, "msg": "capture start cold_fill"}
+{"kind": "kv_w_submit", "wall_ns": 1789398755011702025, "mono_ns": 553917467927181, "tid": 139999492931648, "job": 0, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_submit", "wall_ns": 1789398755012821742, "mono_ns": 553917469046868, "tid": 139999492931648, "job": 1, "chunks": 4, "bytes": 20971520}
+{"kind": "kv_w_end", "wall_ns": 1789398878030244472, "mono_ns": 554040486469836, "tid": 139999492931648, "job": 0, "ok": true, "bytes": 2663383040, "dur_ms": 123018.5}
+{"kind": "kv_w_end", "wall_ns": 1789398878030385635, "mono_ns": 554040486610692, "tid": 139999492931648, "job": 1, "ok": true, "bytes": 20971520, "dur_ms": 123017.6}
+{"kind": "kv_w_submit", "wall_ns": 1789398878237322103, "mono_ns": 554040693547597, "tid": 139999492931648, "job": 2, "chunks": 504, "bytes": 2642411520}
+{"kind": "kv_w_end", "wall_ns": 1789398908910719531, "mono_ns": 554071366945097, "tid": 139999492931648, "job": 2, "ok": true, "bytes": 2642411520, "dur_ms": 30673.4}
+{"kind": "kv_w_submit", "wall_ns": 1789399203689454085, "mono_ns": 554366145679380, "tid": 139999492931648, "job": 3, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789399327878623418, "mono_ns": 554490334848985, "tid": 139999492931648, "job": 3, "ok": true, "bytes": 2663383040, "dur_ms": 124189.2}
+{"kind": "kv_w_submit", "wall_ns": 1789399327910835133, "mono_ns": 554490367061102, "tid": 139999492931648, "job": 4, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789399357857508378, "mono_ns": 554520313733988, "tid": 139999492931648, "job": 4, "ok": true, "bytes": 2663383040, "dur_ms": 29946.7}
+{"kind": "nsys", "wall_ns": 1789399526750765595, "mono_ns": 554689206991073, "tid": 139999492931648, "msg": "capture stop cold_fill after 12 forwards"}
+{"kind": "kv_w_submit", "wall_ns": 1789399817591619972, "mono_ns": 554980047845327, "tid": 139999492931648, "job": 5, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789399941025583915, "mono_ns": 555103481809584, "tid": 139999492931648, "job": 5, "ok": true, "bytes": 2663383040, "dur_ms": 123434.0}
+{"kind": "kv_w_submit", "wall_ns": 1789399941044471551, "mono_ns": 555103500696572, "tid": 139999492931648, "job": 6, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789399970356291196, "mono_ns": 555132812516789, "tid": 139999492931648, "job": 6, "ok": true, "bytes": 2663383040, "dur_ms": 29311.8}
+{"kind": "kv_w_submit", "wall_ns": 1789400261579738305, "mono_ns": 555424035963575, "tid": 139999492931648, "job": 7, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789400384616992255, "mono_ns": 555547073217738, "tid": 139999492931648, "job": 7, "ok": true, "bytes": 2663383040, "dur_ms": 123037.2}
+{"kind": "kv_w_submit", "wall_ns": 1789400384632931099, "mono_ns": 555547089156264, "tid": 139999492931648, "job": 8, "chunks": 508, "bytes": 2663383040}
+{"kind": "kv_w_end", "wall_ns": 1789400414276416345, "mono_ns": 555576732641960, "tid": 139999492931648, "job": 8, "ok": true, "bytes": 2663383040, "dur_ms": 29643.5}
+{"kind": "phase", "wall_ns": 1789400583598638544, "mono_ns": 555746054864012, "tid": 139999492931648, "name": "cold_fill_end", "wall_s": 1952.266, "matched_tokens": 0, "drain_s": 0.0}
+{"kind": "phase", "wall_ns": 1789400583598753284, "mono_ns": 555746054978382, "tid": 139999492931648, "name": "settle"}
+{"kind": "phase", "wall_ns": 1789400598613955818, "mono_ns": 555761070182717, "tid": 139999492931648, "name": "reverse_retrieve", "requests": 8}
+{"kind": "nsys", "wall_ns": 1789400598835698697, "mono_ns": 555761291924755, "tid": 139999492931648, "msg": "capture start reverse_retrieve"}
+{"kind": "kv_w_submit", "wall_ns": 1789400627903747512, "mono_ns": 555790359972898, "tid": 139999492931648, "job": 9, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_submit", "wall_ns": 1789400627904015949, "mono_ns": 555790360241104, "tid": 139999492931648, "job": 10, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789400657087076599, "mono_ns": 555819543302155, "tid": 139999492931648, "job": 9, "ok": true, "bytes": 5242880, "dur_ms": 29183.3}
+{"kind": "kv_w_end", "wall_ns": 1789400657087203151, "mono_ns": 555819543428263, "tid": 139999492931648, "job": 10, "ok": true, "bytes": 5242880, "dur_ms": 29183.2}
+{"kind": "kv_r_submit", "wall_ns": 1789400831380042191, "mono_ns": 555993836267232, "tid": 139999492931648, "job": 11, "chunks": 190, "bytes": 996147200}
+{"kind": "kv_r_submit", "wall_ns": 1789400831380353249, "mono_ns": 555993836578183, "tid": 139999492931648, "job": 12, "chunks": 507, "bytes": 2658140160}
+{"kind": "kv_r_end", "wall_ns": 1789400831669409455, "mono_ns": 555994125634494, "tid": 139999492931648, "job": 11, "ok": true, "bytes": 996147200, "dur_ms": 289.4}
+{"kind": "kv_r_end", "wall_ns": 1789400860525432162, "mono_ns": 556022981657623, "tid": 139999492931648, "job": 12, "ok": true, "bytes": 2658140160, "dur_ms": 29145.1}
+{"kind": "kv_w_submit", "wall_ns": 1789400860534807017, "mono_ns": 556022991032302, "tid": 139999492931648, "job": 13, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789400888787830333, "mono_ns": 556051244056165, "tid": 139999492931648, "job": 13, "ok": true, "bytes": 5242880, "dur_ms": 28253.0}
+{"kind": "kv_w_submit", "wall_ns": 1789400917651952331, "mono_ns": 556080108177931, "tid": 139999492931648, "job": 14, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789400946998416991, "mono_ns": 556109454642680, "tid": 139999492931648, "job": 14, "ok": true, "bytes": 5242880, "dur_ms": 29346.5}
+{"kind": "nsys", "wall_ns": 1789401067376182381, "mono_ns": 556229832408716, "tid": 139999492931648, "msg": "capture stop reverse_retrieve after 12 forwards"}
+{"kind": "kv_r_submit", "wall_ns": 1789401208694080072, "mono_ns": 556371150305156, "tid": 139999492931648, "job": 15, "chunks": 507, "bytes": 2658140160}
+{"kind": "kv_r_end", "wall_ns": 1789401237044383809, "mono_ns": 556399500609230, "tid": 139999492931648, "job": 15, "ok": true, "bytes": 2658140160, "dur_ms": 28350.3}
+{"kind": "kv_r_submit", "wall_ns": 1789401237071576545, "mono_ns": 556399527801503, "tid": 139999492931648, "job": 16, "chunks": 507, "bytes": 2658140160}
+{"kind": "kv_r_end", "wall_ns": 1789401265966651501, "mono_ns": 556428422877005, "tid": 139999492931648, "job": 16, "ok": true, "bytes": 2658140160, "dur_ms": 28895.1}
+{"kind": "kv_w_submit", "wall_ns": 1789401265975991045, "mono_ns": 556428432216154, "tid": 139999492931648, "job": 17, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789401294219335672, "mono_ns": 556456675561264, "tid": 139999492931648, "job": 17, "ok": true, "bytes": 5242880, "dur_ms": 28243.3}
+{"kind": "kv_w_submit", "wall_ns": 1789401322908447933, "mono_ns": 556485364673388, "tid": 139999492931648, "job": 18, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789401351073126928, "mono_ns": 556513529352703, "tid": 139999492931648, "job": 18, "ok": true, "bytes": 5242880, "dur_ms": 28164.7}
+{"kind": "kv_r_submit", "wall_ns": 1789401492048521984, "mono_ns": 556654504747131, "tid": 139999492931648, "job": 19, "chunks": 507, "bytes": 2658140160}
+{"kind": "kv_r_end", "wall_ns": 1789401520592996493, "mono_ns": 556683049221903, "tid": 139999492931648, "job": 19, "ok": true, "bytes": 2658140160, "dur_ms": 28544.5}
+{"kind": "kv_r_submit", "wall_ns": 1789401520612559821, "mono_ns": 556683068784756, "tid": 139999492931648, "job": 20, "chunks": 507, "bytes": 2658140160}
+{"kind": "kv_r_end", "wall_ns": 1789401549496681797, "mono_ns": 556711952907177, "tid": 139999492931648, "job": 20, "ok": true, "bytes": 2658140160, "dur_ms": 28884.1}
+{"kind": "kv_w_submit", "wall_ns": 1789401549499819880, "mono_ns": 556711956045131, "tid": 139999492931648, "job": 21, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789401577667631303, "mono_ns": 556740123856839, "tid": 139999492931648, "job": 21, "ok": true, "bytes": 5242880, "dur_ms": 28167.8}
+{"kind": "kv_w_submit", "wall_ns": 1789401606361711311, "mono_ns": 556768817936612, "tid": 139999492931648, "job": 22, "chunks": 1, "bytes": 5242880}
+{"kind": "kv_w_end", "wall_ns": 1789401634548759910, "mono_ns": 556797004985419, "tid": 139999492931648, "job": 22, "ok": true, "bytes": 5242880, "dur_ms": 28187.0}
+{"kind": "phase", "wall_ns": 1789401803955667399, "mono_ns": 556966411892592, "tid": 139999492931648, "name": "reverse_retrieve_end", "wall_s": 1205.082, "matched_tokens": 1417552, "drain_s": 0.0}
+{"kind": "phase", "wall_ns": 1789401803955773465, "mono_ns": 556966411998595, "tid": 139999492931648, "name": "final_settle"}
+{"kind": "phase", "wall_ns": 1789401819066989893, "mono_ns": 556981523215499, "tid": 139999492931648, "name": "complete"}

@@ -1,0 +1,5 @@
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Style,Range
+50.2,12621646488,1,12621646488.0,12621646488.0,12621646488,12621646488,0.0,PushPop,:phase:cold_fill
+49.8,12527503994,1,12527503994.0,12527503994.0,12527503994,12527503994,0.0,PushPop,:step:cold_fill
+0.0,2749417,14,196386.9,575.5,141,514968,235547.2,PushPop,NCCL:ncclGroupStart
+0.0,27832,14,1988.0,1745.0,233,3766,1399.2,PushPop,NCCL:ncclGroupEnd

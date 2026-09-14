@@ -11,3 +11,6 @@
 [09-14 23:50:47] == qwen72b 종료
 [09-14 23:51:58] == qwen72b: RAM 0.5 × (cufile), docs 8, decode 8, NSYS=1
 [09-14 23:51:58] start ram0.5-cufile-nsys
+[09-15 00:01:36] OOM ram0.5-cufile-nsys (gpu_util 0.9) → 재시도
+[09-15 01:05:03] done  ram0.5-cufile-nsys rc=0 (gpu_util 0.85)
+[09-15 01:05:03] == qwen72b 종료

@@ -1,0 +1,12 @@
+2026-09-15T00:01:37+09:00
+host=rain kernel=5.15.0-97-generic
+repo=9faeab6ad2d21561c671d9a08b4e8468e6289e81 dirty=5
+vllm_fork=ec68cd76b85367ccd0c880bac3313532bf0946b3 branch=weight-ssd-offload
+Quadro RTX 5000, 570.211.01, 16384 MiB, 00000000:65:00.0
+cuda=release 12.8 nsys=NVIDIA Nsight Systems version 2024.6.2.225-246235244400v0
+nvidia_fs=2.25.7 srcversion=11098DCCD3E6AA13C31791C
+cufile_json=default
+VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_OFFLOAD_PIN_EXACT=1 VLLM_USE_V2_MODEL_RUNNER=0 
+input=/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl sha256=9e0d60df4ec7da48 bytes=2046038
+/      /dev/nvme0n1p2 ext4   rw,relatime,errors=remount-ro,data=ordered
+/dev/nvme0n1p2  457G  353G   81G  82% /
