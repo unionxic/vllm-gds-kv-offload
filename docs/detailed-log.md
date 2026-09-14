@@ -722,6 +722,14 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - 기본값에서는 prefill이 요청 2개를 한 forward로 묶지 않고 요청마다 따로 돌아(기본 배치 토큰 상한) prefill forward가 32초짜리 둘.
 - LMCache 0.5.5의 GDS L1(--gds-l1-path, DRAM 층 없이 cuFile로 GPU↔NVMe)을 같은 조건의 비교 상대로 시도. 이 카드에서 성립하지 않음. (1) LMCache가 등록하는 GPU staging 버퍼가 chunk KV × 4라 BAR1 256 MiB 안에 들어가려면 opt-2.7b는 chunk 64토큰, 66B는 16토큰 이하여야 함(기본 256에서 cuFileBufRegister 5036). (2) chunk를 줄이고 오프로더를 끈 opt-2.7b 격리 시험에서 저장은 정상(GDS 쓰기 4.9 GB, 출력 토큰 재계산과 동일)이나 적중 시 서버의 cuFileReadAsync 읽기가 첫 요청에서 멈춰 vLLM이 서버를 불량으로 판정하고 재계산으로 우회. LMCache는 cuFile 1.15와 CUDA 13에서 검증된 async 경로를 쓰고 우리는 cuFile 1.13(CUDA 12.8). (3) 66B에서는 가중치 오프로더가 BAR1을 같이 써야 하므로 chunk 16으로도 여유 없음. 결론은 LMCache GDS L1 비교는 CUDA 13과 BAR1이 VRAM 전체인 카드(양태규 서버)에서 해야 한다는 것.
 
+#### Qwen 구조에서의 오프로더와 native KV 경로
+
+Qwen2.5-3B-Instruct(GQA, gate·up·down FFN, RMSNorm)로 오프로더와 CuFileFsSpec 스모크. 오프로더는 decoder layer 모듈 전체를 파라미터 이름 화이트리스트 없이 감싸므로 구조 의존이 없음. 36 layer, 정적 버퍼 풀 154 MB(layer 하나분)라 BAR1 등록이 4개 모두 성공(OPT-66B는 1.9 GiB라 실패). host 비율 0.02(2.51 GiB)에서 CPU 17 / SSD 19 layer, forward 1.5 s. 32문서·4k 토큰에서 reverse_retrieve wall clock 45.0 s(재계산)에서 10.2 s(SSD 적중, 읽기 833건 1.83 GiB, 오류 0). 4문서는 GPU KV 안에 다 남아 SSD 적중이 없음(축출이 있어야 SSD를 읽음). SSD 티어 런은 layer 0.144 GiB라 forward가 모형보다 26~32% 느려 소형 layer의 cuFile 유효 대역폭이 더 낮은 것으로 보이며 미확립.
+
+출력 토큰열 검사의 한계. 32문서에서 재계산 대 적중이 64건 중 1건 불일치였는데, 재계산끼리 GPU KV 예산만 바꾼 두 런도 2건이 달랐음. Qwen + TRITON_ATTN + chunked prefill에서 greedy 출력이 프리픽스 적중 길이에 따른 prefill 조각 경계에 좌우되는 부동소수점 축약 순서 문제. OPT에서는 없던 현상. 이 조건에서는 토큰열 완전 일치를 정합성 검사로 쓸 수 없고, 재계산 런 사이의 불일치 수를 기준선으로 둔다.
+
+러너 입력. LongBench-v2 32건(양태규 패키지 데이터)을 모델 토크나이저로 토큰화해 프리픽스로 쓰고 단계별로 다른 질문 꼬리를 붙이는 longbench 소스, 02의 Bailian 트레이스 hash_id 열을 결정적 16토큰 블록으로 바꿔 프리픽스 공유 구조를 보존하는 bailian 소스(실제 텍스트·시간 간격·멀티턴 거리는 미재현), 요청별 적중 토큰과 doc별 재사용 횟수를 남기는 --profile-out.
+
 #### BAR1 창과 정적 버퍼 등록
 
 13b는 host 0.7부터 가중치 SSD 읽기가 cuFileRead −1(cuFile 로그 −5011)로 실패. qkv 150 MiB와 out_proj 50 MiB가 등록되어 BAR1 256 MiB 중 227 MiB를 차지했고, 등록 실패한 fc1과 fc2가 쓰는 cuFile bounce 캐시를 매핑할 자리가 29 MiB뿐. 66B는 out_proj 162 MiB 하나만 등록돼 여유가 있었고 6.7b는 128 MiB로 턱걸이. 포크 ssd_tier에 등록 총량 상한 VLLM_OFFLOAD_SSD_REGISTER_MAX_MB(기본 상한 없음, 포크 929df037b9)를 넣어 13b와 30b는 100 MiB로 실행. 상한 적용 후 BAR1 사용 85 MiB. BAR1 256 MiB는 카드 자체의 최대. PCI Resizable BAR capability(0xbb0)를 setpci로 읽으면 BAR1 항목의 지원 크기가 64, 128, 256 MB(capability 0x1c00, control 0x801)뿐이라 BIOS나 커널로 키울 수 없음. 데이터센터 GPU는 VRAM 전체를 BAR1로 광고.

@@ -35,7 +35,7 @@ python tools/compare_results.py --ref pure-ram0.5-none results/native-66b/*/resu
 
 ### 정합성 검사
 
-- 전송기나 커넥터를 바꾼 뒤에는 같은 입력으로 재계산 런과 적중 런의 출력 토큰열(requests.jsonl의 ids)이 전부 같은지 먼저 확인한다. 다르면 성능 수치는 보고하지 않는다.
+- 전송기나 커넥터를 바꾼 뒤에는 같은 입력으로 재계산 런과 적중 런의 출력 토큰열(requests.jsonl의 ids)이 전부 같은지 먼저 확인한다. 다르면 성능 수치는 보고하지 않는다. 단 Qwen + TRITON_ATTN + chunked prefill에서는 재계산 런끼리도 GPU KV 예산에 따라 토큰열이 갈리므로(부동소수점 축약 순서) 이 검사가 성립하지 않는다. 그때는 재계산 런 두 개의 불일치 수를 먼저 재고 적중 런의 불일치가 그 안이면 통과로 본다.
 - native 전송기는 result.json의 kv_io.errors가 0이어야 한다. registered_tensors로 등록 직접 DMA였는지 bounce였는지 적는다(이 카드는 항상 0, bounce).
 - nvidia-fs 통계(rw_stats_enabled=1)의 읽기·쓰기 MiB가 KV IO 합계와 맞는지 tier_samples.jsonl로 대조한다.
 
