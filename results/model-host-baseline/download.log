@@ -1,75 +1,0 @@
-Warning: `huggingface-cli` is deprecated and no longer works. Use `hf` instead.
-
-Hint: A new version of huggingface_hub (1.31.0) is available! You are using version 1.28.0.
-To update, run: hf update
-Hint: `hf` is already installed! Use it directly.
-
-Hint: Examples:
-  hf auth login
-  hf download unsloth/gemma-4-31B-it-GGUF
-  hf upload my-cool-model . .
-  hf models ls --search "gemma"
-  hf repos ls --format json
-  hf jobs run python:3.12 python -c 'print("Hello!")'
-  hf --help
-
-Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Fetching 11 files:   9%|▉         | 1/11 [00:00<00:02,  4.60it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 11 files:  64%|██████▎   | 7/11 [00:00<00:00, 17.75it/s]Fetching 11 files:  82%|████████▏ | 9/11 [00:19<00:00, 17.75it/s]Fetching 11 files:  91%|█████████ | 10/11 [01:22<00:10, 10.70s/it]Fetching 11 files: 100%|██████████| 11/11 [02:05<00:00, 15.75s/it]Fetching 11 files: 100%|██████████| 11/11 [02:05<00:00, 11.40s/it]
-Warning: `huggingface-cli` is deprecated and no longer works. Use `hf` instead.
-
-Hint: `hf` is already installed! Use it directly.
-
-Hint: Examples:
-  hf auth login
-  hf download unsloth/gemma-4-31B-it-GGUF
-  hf upload my-cool-model . .
-  hf models ls --search "gemma"
-  hf repos ls --format json
-  hf jobs run python:3.12 python -c 'print("Hello!")'
-  hf --help
-
-Fetching 12 files:   0%|          | 0/12 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 12 files:   8%|▊         | 1/12 [00:00<00:02,  4.50it/s]Fetching 12 files:  50%|█████     | 6/12 [00:00<00:00, 14.38it/s]Fetching 12 files:  75%|███████▌  | 9/12 [00:00<00:00, 10.64it/s]Fetching 12 files:  75%|███████▌  | 9/12 [00:19<00:00, 10.64it/s]Fetching 12 files:  83%|████████▎ | 10/12 [02:47<00:56, 28.34s/it]Fetching 12 files:  92%|█████████▏| 11/12 [03:50<00:35, 35.09s/it]Fetching 12 files: 100%|██████████| 12/12 [03:50<00:00, 27.55s/it]Fetching 12 files: 100%|██████████| 12/12 [03:50<00:00, 19.24s/it]
-Warning: `huggingface-cli` is deprecated and no longer works. Use `hf` instead.
-
-Hint: `hf` is already installed! Use it directly.
-
-Hint: Examples:
-  hf auth login
-  hf download unsloth/gemma-4-31B-it-GGUF
-  hf upload my-cool-model . .
-  hf models ls --search "gemma"
-  hf repos ls --format json
-  hf jobs run python:3.12 python -c 'print("Hello!")'
-  hf --help
-
-Fetching 16 files:   0%|          | 0/16 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 16 files:   6%|▋         | 1/16 [00:00<00:03,  4.40it/s]Fetching 16 files:  25%|██▌       | 4/16 [00:00<00:01,  6.46it/s]Fetching 16 files:  31%|███▏      | 5/16 [00:01<00:02,  4.42it/s]Fetching 16 files:  38%|███▊      | 6/16 [00:01<00:02,  4.43it/s]Fetching 16 files:  44%|████▍     | 7/16 [00:01<00:03,  2.90it/s]Fetching 16 files:  50%|█████     | 8/16 [00:02<00:02,  3.26it/s]Fetching 16 files:  56%|█████▋    | 9/16 [00:02<00:01,  3.51it/s]Fetching 16 files:  62%|██████▎   | 10/16 [01:31<02:39, 26.61s/it]Fetching 16 files:  69%|██████▉   | 11/16 [08:15<11:34, 138.84s/it]Fetching 16 files:  75%|███████▌  | 12/16 [08:25<06:41, 100.28s/it]Fetching 16 files:  81%|████████▏ | 13/16 [08:28<03:34, 71.43s/it] Fetching 16 files:  88%|████████▊ | 14/16 [08:33<01:42, 51.37s/it]Fetching 16 files:  94%|█████████▍| 15/16 [08:36<00:36, 36.91s/it]Fetching 16 files: 100%|██████████| 16/16 [08:49<00:00, 29.72s/it]Fetching 16 files: 100%|██████████| 16/16 [08:49<00:00, 33.07s/it]
-Warning: `huggingface-cli` is deprecated and no longer works. Use `hf` instead.
-
-Hint: `hf` is already installed! Use it directly.
-
-Hint: Examples:
-  hf auth login
-  hf download unsloth/gemma-4-31B-it-GGUF
-  hf upload my-cool-model . .
-  hf models ls --search "gemma"
-  hf repos ls --format json
-  hf jobs run python:3.12 python -c 'print("Hello!")'
-  hf --help
-
-Fetching 11 files:   0%|          | 0/11 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 11 files:   9%|▉         | 1/11 [00:00<00:02,  4.49it/s]Fetching 11 files:  55%|█████▍    | 6/11 [00:00<00:00, 21.74it/s]Fetching 11 files:  82%|████████▏ | 9/11 [00:00<00:00, 17.69it/s]Fetching 11 files:  82%|████████▏ | 9/11 [00:19<00:00, 17.69it/s]Fetching 11 files:  91%|█████████ | 10/11 [19:07<03:14, 194.69s/it]Fetching 11 files: 100%|██████████| 11/11 [37:50<00:00, 375.84s/it]Fetching 11 files: 100%|██████████| 11/11 [37:50<00:00, 206.42s/it]
-Warning: `huggingface-cli` is deprecated and no longer works. Use `hf` instead.
-
-Hint: `hf` is already installed! Use it directly.
-
-Hint: Examples:
-  hf auth login
-  hf download unsloth/gemma-4-31B-it-GGUF
-  hf upload my-cool-model . .
-  hf models ls --search "gemma"
-  hf repos ls --format json
-  hf jobs run python:3.12 python -c 'print("Hello!")'
-  hf --help
-
