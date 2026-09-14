@@ -720,6 +720,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - 출력 토큰은 16요청 전부 재계산과 동일, native 오류 0. vLLM 자동 KV는 10.4 GiB(동시 2요청)이며 gpu_util 0.9에서는 첫 prefill이 OOM이라 0.85로 재시도한 값(캠페인 스크립트가 자동 재시도하고 기록).
 - 손해 자리는 앞 절과 같음. 저장 단계는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(1 MiB 조각이라 4 MiB 때보다 큼), 적중 단계는 게이트가 없어 forward 6개 증가. 같은 조건에 게이트와 4 MiB 조각만 넣으면 순이익 −1.3%였으므로 기본값과 손본 설정의 차이가 20%.
 - 기본값에서는 prefill이 요청 2개를 한 forward로 묶지 않고 요청마다 따로 돌아(기본 배치 토큰 상한) prefill forward가 32초짜리 둘.
+- 저장 창(cufile_fs_store_window=host, 상한 10 s)만 켠 같은 조건: cold_fill 1,061 s에서 906 s로(저장 단계 손해 +215 s에서 +60 s), 저장 단계에서 늘어나던 decode forward(최대 53.3 s)가 24.7 s로 정상화, 두 단계 합계 +19.0%에서 +10.3%. 출력 토큰열 재계산과 동일, 쓰기 34.5 GiB 그대로(점유 318 s로 분산). 남은 손해는 prefill forward(32.3 → 39.4 s)와 적중 단계의 forward 6개 증가(게이트 없음). RAM 0.5는 SSD layer 31개가 연속이라 SSD 창이 18 s로 상한 10 s를 넘겨 강제 재개가 발생. 상한 30 s로 재측정 중.
 - LMCache 0.5.5의 GDS L1(--gds-l1-path, DRAM 층 없이 cuFile로 GPU↔NVMe)을 같은 조건의 비교 상대로 시도. 이 카드에서 성립하지 않음. (1) LMCache가 등록하는 GPU staging 버퍼가 chunk KV × 4라 BAR1 256 MiB 안에 들어가려면 opt-2.7b는 chunk 64토큰, 66B는 16토큰 이하여야 함(기본 256에서 cuFileBufRegister 5036). (2) chunk를 줄이고 오프로더를 끈 opt-2.7b 격리 시험에서 저장은 정상(GDS 쓰기 4.9 GB, 출력 토큰 재계산과 동일)이나 적중 시 서버의 cuFileReadAsync 읽기가 첫 요청에서 멈춰 vLLM이 서버를 불량으로 판정하고 재계산으로 우회. LMCache는 cuFile 1.15와 CUDA 13에서 검증된 async 경로를 쓰고 우리는 cuFile 1.13(CUDA 12.8). (3) 66B에서는 가중치 오프로더가 BAR1을 같이 써야 하므로 chunk 16으로도 여유 없음. 결론은 LMCache GDS L1 비교는 CUDA 13과 BAR1이 VRAM 전체인 카드(양태규 서버)에서 해야 한다는 것.
 
 #### Qwen 구조에서의 오프로더와 native KV 경로
