@@ -103,6 +103,7 @@ Qwen2.5-72B-Instruct RAM 0.5, 기본값, 8건 × 8k 토큰(저장 + 적중, 재�
 
 - 카드 한 장, SSD 한 장(OS와 공유), BAR1 256 MiB. KV 텐서 등록이 안 되어 KV 경로는 cuFile bounce 두 홉. 데이터센터 GPU에서는 같은 코드가 등록 직접 DMA.
 - 이중 버퍼 조건에서 KV 오프로드 손익, write-behind와 게이트를 같이 켠 조합, host KV 층과 host 배분(layer 1개 = forward당 0.43 s 환율)은 미측정. OPT-66B 가중치는 삭제해 66B 추가 런은 없음.
+- write-behind가 보는 SSD 구간 표시는 prefetch 발행 시점이라 실제 SSD 읽기보다 약 5.5 s 앞섬(72B nsys). 실제 읽기 시작에 맞추는 수정은 미적용.
 - 게이트의 일반성은 forward가 비싼 조건에서만 검증. GPU 상주 모델에서는 이득이 ms 단위.
 - 다음 모델은 Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB). 입력은 LongBench-v2 32건과 Bailian 트레이스. SSD 쓰기 상한 때문에 디스크는 20% 이상 비워 둠.
 

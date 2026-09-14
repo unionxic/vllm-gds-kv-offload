@@ -771,6 +771,22 @@ backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이�
 - 66B와 다른 결론이 나온 원인은 모델 구조. 토큰당 KV가 7분의 1이라 배치당 쓰기가 SSD 캐시 안에 들어가고, 8k 토큰이라 prefill 계산 몫이 커서 적중이 아끼는 양이 큼. 가중치 고정비 자체(26.9 s)는 66B(23.8 s)와 같은 부류.
 - GPU 최대 사용 14.9 GiB. 디스크는 SSD 티어 69 GB + KV 20 GB로 런 중 82% 사용. 32건은 디스크 상한 때문에 미실행.
 
+#### nsys 타임라인: 72B SSD 적중 런
+
+같은 조건을 NSYS=1로 다시 돌려(results/qwen72b/ram0.5-cufile-nsys, 리포트는 -nsys-nsys/timeline.1·2.nsys-rep, git 제외) cold_fill과 reverse_retrieve의 앞 12 forward를 기록. 분석은 tools/nsys_overlap.py(forward마다 가중치 cuFileRead, KV cuFileWrite/Read 합집합과 겹침).
+
+| forward | 길이 | 가중치 cuFileRead 합집합 | KV cuFileWrite 합집합 | 쓰기와 가중치 읽기의 겹침 |
+|---|---|---|---|---|
+| cold_fill prefill(문서 2개째 조각) | 123 s | 24 s | 1.1~1.4 s | 0 |
+| cold_fill decode | 28~30 s | 22~24 s | 0 | 0 |
+| reverse prefill(적중) | 29 s | 22~23 s | 0 | 0 |
+
+- decode forward 29.1 s의 내부. 0.0 s에 host layer 1~37의 prefetch가 한꺼번에 발행되고 0.1 s에 SSD layer 38의 prefetch, 실제 SSD cuFileRead는 5.6 s에 시작해 29.1 s에 끝남(168 파일, 68.7 GiB, 3.1 GB/s). 즉 host 구간 5.6 s + SSD 구간 23.5 s이고 고정비 모형과 같음.
+- KV 쓰기는 prefill step이 끝나며 제출되어 다음 step의 0.0~1.1 s에 512 파일이 모두 나감. 그 구간은 host 구간이라 가중치 SSD 읽기(5.6 s부터)와 안 겹침. 66B는 한 배치 쓰기가 15 s 넘게 걸려 SSD 구간까지 밀렸던 것이고, 72B는 문서당 1 s라 자연히 host 구간 안에 끝남. 규칙으로 쓰면 쓰기 묶음이 host 구간(5~6 s)보다 짧으면 충돌이 없음.
+- KV 읽기(적중)는 forward 사이 공백(0.3 s)과 첫 forward 전에 일어나며 wave당 약 1 s, 스레드 시간 합 4.2 s. 가중치 읽기와 겹침 0.
+- ssd_window 표시는 0.1 s에 켜져 29.1 s에 꺼짐. 표시가 prefetch 발행 시점이라 실제 SSD 읽기(5.6 s)보다 5.5 s 앞서고, host 구간까지 SSD 구간으로 보고함. 이 구성에서 write-behind는 forward 내내 쓰기를 붙잡았을 것이며 강제 재개가 0회였던 것은 쓰기가 step 경계의 1 s 안에 끝났기 때문. 표시를 실제 읽기 시작에 맞추는 수정은 미적용.
+- cuFileHandleNVFS(gds trace의 내부 구간) 10,096건 평균 151 ms, 합 1,527 s. cuFileRead 안에 중첩된 nvidia-fs 처리 구간으로 보이며 별도 비용인지는 미확인.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
