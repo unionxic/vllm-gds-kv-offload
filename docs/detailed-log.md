@@ -752,6 +752,14 @@ backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이�
 - LMCache 실패 런의 slab 40 GB와 OPT-66B(HF 캐시 124 GB, SSD 티어 59 GB)를 지우고 fstrim 뒤 36% 사용(여유 279 GB): 1.89, 0.70, 0.70, 0.70 GB/s. 지속 쓰기 상한이 0.33에서 0.70 GB/s로 올라감. 여유 96 GB, trim 직후: 1.04, 0.45, 0.43 GB/s(trim과 겹침).
 - 결론. KV 쓰기 속도는 backend 코드가 아니라 이 SSD의 지속 쓰기 상한(SLC 캐시 약 4 GB 뒤 0.3~0.7 GB/s, 빈 공간에 좌우)이 정함. 66B 한 배치의 KV 8.4 GiB는 캐시보다 커서 앞 4 GB만 빠르게 나감. 따라서 write-behind가 한 번에 내보내는 양은 4 GB 이하로 끊고 사이에 쉬는 시간을 둬야 캐시 안에서 처리되며, 근본 해결은 쓰는 양 자체를 줄이는 것(GQA 모델로 토큰당 KV 7분의 1, 저장 admission). 디스크는 20% 이상 비워 둠.
 
+#### nsys 캡처 구간과 NVTX, 블록 I/O 추적
+
+- 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
+- NVTX. 러너 phase:NAME, step:NAME. 오프로더 prefetch:L{i}:{cpu|ssd}(layer마다), ssd_window:on/off(SSD 구간 전환). backend kv_store_file, kv_load_file(파일 하나), kv_writes_pause/resume. libnvToolsExt가 있을 때만 링크.
+- Qwen2.5-3B, host 0.02, LongBench 8건, cold_fill 캡처로 확인. 리포트 24 MB, NVTX 34,017건. gds trace는 cuFileRead 1,368건(평균 48 ms), cuFileWrite 1,376건(32 ms), cuFileHandleNVFS 5,138건(37 ms, 합 192 s)으로 잡혀 KV 파일 store(kv_store_file 32.8 ms)와 cuFileWrite(32.3 ms)가 1:1로 맞음. cuFileHandleNVFS의 몫은 미분석.
+- 블록 I/O 한 건 추적. bcc 0.12(bpfcc-tools)의 biosnoop은 커널 5.15에서 kprobe blk_account_io_completion이 없어 실패. 대신 bpftrace 0.9.4로 tracepoint block_rq_issue/complete 기반 lib/obs/blkio.bt(ns 시각, dev, rwbs, 섹터, 바이트, 지연 us)를 두고 hostmon.sh가 BLKIO=1이면 sudo로 실행. sudoers에 /usr/bin/bpftrace NOPASSWD가 필요하며 미설정.
+- SSD 쓰기 캐시 회복 시간(dd 4.5 GiB, 36% 사용, 72B 다운로드와 겹침): 채우기 0.85, 바로 이어서 0.70, 10 s 쉬고 1.06, 바로 이어서 0.70, 20 s 쉬고 0.40 GB/s. 쉬는 시간과 회복이 단조가 아니어서 write-behind의 묶음 크기·휴지 시간을 이 값으로 정하지 않음. 72B 런의 blkio·diskstats로 다시 봄.
+
 #### OPT-66B 종료와 모델 전환
 
 66B에서 볼 것은 위에서 끝남. HF 캐시와 SSD 티어 파일을 삭제(재현은 results/native-66b의 result.json·steps.jsonl·events.jsonl로). 다음 모델은 Qwen2.5-72B-Instruct(GQA, 80 layer, KV 헤드 8, 토큰당 KV 0.33 MB). 가중치 145 GB로 host를 넘쳐 SSD 티어가 남는 조건은 유지하면서 KV만 7분의 1로 줄어 GPU에 요청 여럿이 공존하고 배치당 쓰기 양이 줄어듦. 입력은 LongBench-v2 32건과 Bailian 프로파일. Qwen에서는 토큰열 완전 일치를 정합성 검사로 못 쓰는 점(앞 절)을 그대로 적용.

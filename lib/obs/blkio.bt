@@ -1,0 +1,15 @@
+// 블록 I/O 한 건마다 한 줄: ns 시각, dev(dev_t, nvme0n1=259<<20), rwbs, 시작 섹터, 바이트, 발행→완료 지연 us.
+// usage: sudo bpftrace lib/obs/blkio.bt > blkio.log   (bpftrace 0.9.4, tracepoint block 기반이라 커널 함수 이름에 의존하지 않음)
+tracepoint:block:block_rq_issue
+{
+  @s[args->dev, args->sector] = nsecs;
+  @b[args->dev, args->sector] = args->bytes;
+}
+tracepoint:block:block_rq_complete
+/@s[args->dev, args->sector]/
+{
+  printf("%lld %d %s %llu %u %llu\n", nsecs, args->dev, args->rwbs, args->sector, @b[args->dev, args->sector], (nsecs - @s[args->dev, args->sector]) / 1000);
+  delete(@s[args->dev, args->sector]);
+  delete(@b[args->dev, args->sector]);
+}
+END { clear(@s); clear(@b); }
