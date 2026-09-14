@@ -46,7 +46,11 @@ ap.add_argument("--no-monitors", action="store_true")
 ap.add_argument("--kv-extra", default=None, help="cufile: kv_connector_extra_config에 덧붙일 JSON. 예: '{\"cufile_fs_store_window\": \"host\"}'")
 ap.add_argument("--no-weight-offload", action="store_true", help="가중치를 전부 GPU에(오프로더 끔). 작은 모델 전용")
 ap.add_argument("--kv-load-failure-policy", default="fail", choices=["fail", "recompute"])
+ap.add_argument("--nsys-phase", default="", help="nsys 캡처 구간으로 삼을 phase 이름(쉼표 구분). 그 phase 시작에 cudaProfilerStart, 끝(또는 --nsys-steps 뒤)에 Stop. "
+                     "lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi 로 감쌌을 때만 효과")
+ap.add_argument("--nsys-steps", type=int, default=0, help="캡처 phase에서 이 수만큼의 엔진 step(0.3 s 이상인 forward 기준) 뒤 캡처 종료. 0이면 phase 끝까지")
 args = ap.parse_args()
+NSYS_PHASES = {x.strip() for x in args.nsys_phase.split(",") if x.strip()}
 os.environ.setdefault("VLLM_USE_V2_MODEL_RUNNER", "0"); os.environ.setdefault("VLLM_ENABLE_V1_MULTIPROCESSING", "0")
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "lib"))
@@ -251,6 +255,9 @@ try:
     def run_phase(name, order, q):
         matched[0] = 0; matched_req.clear()
         EV.phase(name, requests=len(order))
+        capture = name in NSYS_PHASES; n_fwd = 0
+        if capture: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
+        torch.cuda.nvtx.range_push(f"phase:{name}")
         st = {}
         for i in order:
             rid = f"{name}-{i}"; toks = prompt(i, q)
@@ -260,8 +267,12 @@ try:
         while any(v["finish_mono"] is None for v in st.values()):
             if time.monotonic() - tS > 3 * 3600: EV.emit("warn", msg=f"{name} 3시간 초과"); break
             pre_w = wstat(); pre_k = kvstat(); s0 = time.monotonic(); w0 = time.time()
-            torch.cuda.nvtx.range_push("step"); outs = eng.step(); torch.cuda.nvtx.range_pop()
+            torch.cuda.nvtx.range_push(f"step:{name}"); outs = eng.step(); torch.cuda.nvtx.range_pop()
             s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
+            if capture and s1 - s0 > 0.3:
+                n_fwd += 1
+                if args.nsys_steps and n_fwd >= args.nsys_steps:
+                    torch.cuda.profiler.stop(); capture = False; EV.emit("nsys", msg=f"capture stop {name} after {n_fwd} forwards")
             got_first = False
             for o in outs:
                 v = st.get(o.request_id)
@@ -284,6 +295,8 @@ try:
             elif args.poll_sleep_ms and not outs:
                 time.sleep(args.poll_sleep_ms / 1000.0)
         d = drain()
+        torch.cuda.nvtx.range_pop()
+        if capture: torch.cuda.profiler.stop(); EV.emit("nsys", msg=f"capture stop {name} at phase end")
         EV.phase(name + "_end", wall_s=round(time.monotonic() - tS, 3), matched_tokens=matched[0], drain_s=d)
         return dict(wall_s=round(time.monotonic() - tS, 3), matched=matched[0], drain_s=d,
                     ttft=[round(v["first_mono"] - v["submit_mono"], 3) for v in st.values() if v["first_mono"]],
