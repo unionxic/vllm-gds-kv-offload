@@ -10,9 +10,16 @@ for f in ${RATIOS:-0.5}; do for kvt in none cufile; do tag=pure-ram$f-$kvt
   [ -f $O/$tag/result.json ] && { log "skip $tag"; continue; }
   rm -rf $O/ssd-66b $O/kv-66b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
   log "start $tag"
-  python run_obs.py --run-dir $O/$tag --model facebook/opt-66b --n-docs 8 --decode-tokens 8 --host-ram-fraction $f --pure --poll-sleep-ms 0 \
-    --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 --ssd-root $O/ssd-66b --kv-root $O/kv-66b > $O/$tag.log 2>&1
-  rc=$?; kill $g 2>/dev/null; wait $g 2>/dev/null; rm -rf $O/kv-66b
-  [ -f $O/$tag/result.json ] && log "done  $tag rc=$rc" || { log "FAILED $tag rc=$rc"; grep -aE 'Traceback|Error|KILL' $O/$tag.log $O/memguard.log | tail -2 >> $O/campaign.log; }
+  # 1차: gpu_util 기본 0.9. OOM이면 0.85로 한 번 재시도(기록에 남김)
+  for util in 0.9 0.85; do
+    python run_obs.py --run-dir $O/$tag --model facebook/opt-66b --n-docs 8 --decode-tokens 8 --host-ram-fraction $f --pure --poll-sleep-ms 0 --gpu-util $util \
+      --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 --ssd-root $O/ssd-66b --kv-root $O/kv-66b > $O/$tag.log 2>&1
+    rc=$?
+    [ -f $O/$tag/result.json ] && break
+    if grep -aq "OutOfMemoryError" $O/$tag.log; then log "OOM $tag (gpu_util $util) → 재시도"; rm -rf $O/$tag $O/kv-66b; continue; fi
+    break
+  done
+  kill $g 2>/dev/null; wait $g 2>/dev/null; rm -rf $O/kv-66b
+  [ -f $O/$tag/result.json ] && log "done  $tag rc=$rc (gpu_util $util)" || { log "FAILED $tag rc=$rc"; grep -aE 'Traceback|Error|KILL' $O/$tag.log $O/memguard.log | tail -2 >> $O/campaign.log; }
 done; done
 rm -rf $O/ssd-66b; log "== pure 66B 종료"
