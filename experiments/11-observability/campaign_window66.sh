@@ -3,7 +3,7 @@
 # 비교 대상 results/native-66b/pure-ram0.5-cufile(저장 단계 1,061 s, 두 단계 합계 1,992 s)
 set -u; cd "$(dirname "$0")"; source ../../env.sh
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_OFFLOAD_PIN_EXACT=1
-unset VLLM_KV_LOAD_WAVE_GATE CUFILE_ENV_PATH_JSON VLLM_OFFLOAD_SSD_REGISTER_MAX_MB
+unset CUFILE_ENV_PATH_JSON VLLM_OFFLOAD_SSD_REGISTER_MAX_MB; [ -n "${GATE:-}" ] && export VLLM_KV_LOAD_WAVE_GATE=$GATE || unset VLLM_KV_LOAD_WAVE_GATE
 O=$(cd ../../results/native-66b && pwd); log(){ echo "[$(date +%m-%d\ %H:%M:%S)] $*" >> $O/campaign.log; }
 tag=${TAG:-pure-ram0.5-cufile-window}; [ -f $O/$tag/result.json ] && exit 0
 rm -rf $O/ssd-66b $O/kv-66b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
