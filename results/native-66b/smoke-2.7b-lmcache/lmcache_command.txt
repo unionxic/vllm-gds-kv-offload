@@ -1,0 +1,1 @@
+lmcache server --host 127.0.0.1 --port 5555 --chunk-size 256 --l1-size-gb 8.0 --gds-l1-path /home/unionxic/experiments/vllm-gds-kv/results/native-66b/kv-smoke-2.7b-lmcache --gds-l1-backend cufile --gds-l1-use-direct-io --max-workers 4 --eviction-policy LRU
