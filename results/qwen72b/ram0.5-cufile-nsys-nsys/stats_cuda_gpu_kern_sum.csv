@@ -1,0 +1,17 @@
+Time (%),Total Time (ns),Instances,Avg (ns),Med (ns),Min (ns),Max (ns),StdDev (ns),Name
+86.5,955130421,1,955130421.0,955130421.0,955130421,955130421,0.0,kernel_unified_attention
+11.3,124382148,2,62191074.0,62191074.0,13584154,110797994,68740565.5,turing_fp16_s1688gemm_fp16_256x128_ldg8_f2f_tn
+1.8,20037594,1,20037594.0,20037594.0,20037594,20037594,0.0,turing_fp16_s1688gemm_fp16_256x128_ldg8_relu_f2f_tn
+0.1,1590296,1,1590296.0,1590296.0,1590296,1590296,0.0,"std::enable_if<T2>(int)0&&vllm::_typeConvert<T1>::exists, void>::type vllm::fused_add_rms_norm_kernel<c10::Half, (int)8, (bool)1>(T1 *, long, T1 *, const T1 *, float, int, int)"
+0.1,1018746,1,1018746.0,1018746.0,1018746,1018746,0.0,"void vllm::rms_norm_kernel<c10::Half, (int)8, (int)2, (bool)1>(T1 *, const T1 *, long, long, long, long, long, const T1 *, long, float, int, int)"
+0.1,907291,1,907291.0,907291.0,907291,907291,0.0,"void vllm::rotary_embedding_kernel<c10::Half, c10::Half, (bool)1>(const long *, T1 *, T1 *, const T2 *, int, long, long, long, int, int, int, long, bool)"
+0.0,528766,1,528766.0,528766.0,528766,528766,0.0,"void at::native::vectorized_gather_kernel<(int)16, long>(char *, char *, T2 *, int, long, long, long, long, bool)"
+0.0,229695,1,229695.0,229695.0,229695,229695,0.0,reshape_and_cache_kernel_flash
+0.0,14528,1,14528.0,14528.0,14528,14528,0.0,_compute_slot_mapping_kernel
+0.0,6400,2,3200.0,3200.0,3136,3264,90.5,"void at::native::unrolled_elementwise_kernel<at::native::direct_copy_kernel_cuda(at::TensorIteratorBase &)::[lambda() (instance 3)]::operator ()() const::[lambda() (instance 4)]::operator ()() const::[lambda(long) (instance 1)], std::array<char *, (unsigned long)2>, (int)4, TrivialOffsetCalculator<(int)1, unsigned int>, TrivialOffsetCalculator<(int)1, unsigned int>, at::native::memory::LoadWithCast<(int)1>, at::native::memory::StoreWithCast<(int)1>>(int, T1, T2, T4, T5, T6, T7)"
+0.0,4384,1,4384.0,4384.0,4384,4384,0.0,"void at::native::index_elementwise_kernel<(int)128, (int)4, void at::native::gpu_index_kernel<void at::native::index_kernel_impl<at::native::OpaqueType<(int)4>>(at::TensorIteratorBase &, c10::ArrayRef<long>, c10::ArrayRef<long>)::[lambda(char *, const char *, long) (instance 1)]>(at::TensorIteratorBase &, c10::ArrayRef<long>, c10::ArrayRef<long>, const T1 &, bool)::[lambda(int) (instance 1)]>(long, T3)"
+0.0,1696,1,1696.0,1696.0,1696,1696,0.0,"void at::native::vectorized_elementwise_kernel<(int)2, at::native::CUDAFunctor_add<long>, std::array<char *, (unsigned long)3>>(int, T2, T3)"
+0.0,1440,1,1440.0,1440.0,1440,1440,0.0,"void at::native::vectorized_elementwise_kernel<(int)4, at::native::CUDAFunctor_add<int>, std::array<char *, (unsigned long)3>>(int, T2, T3)"
+0.0,1407,1,1407.0,1407.0,1407,1407,0.0,"void at::native::vectorized_elementwise_kernel<(int)4, at::native::FillFunctor<int>, std::array<char *, (unsigned long)1>>(int, T2, T3)"
+0.0,1216,1,1216.0,1216.0,1216,1216,0.0,"void at::native::vectorized_elementwise_kernel<(int)2, at::native::FillFunctor<int>, std::array<char *, (unsigned long)1>>(int, T2, T3)"
+0.0,1184,1,1184.0,1184.0,1184,1184,0.0,"void at::native::unrolled_elementwise_kernel<at::native::CUDAFunctorOnSelf_add<int>, std::array<char *, (unsigned long)2>, (int)4, TrivialOffsetCalculator<(int)1, unsigned int>, TrivialOffsetCalculator<(int)1, unsigned int>, at::native::memory::LoadWithoutCast, at::native::memory::StoreWithoutCast>(int, T1, T2, T4, T5, T6, T7)"
