@@ -5,8 +5,8 @@ set -u; cd "$(dirname "$0")"; source ../../env.sh
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_OFFLOAD_PIN_EXACT=1
 unset VLLM_KV_LOAD_WAVE_GATE CUFILE_ENV_PATH_JSON VLLM_OFFLOAD_SSD_REGISTER_MAX_MB
 O=$(cd ../../results/native-66b && pwd); log(){ echo "[$(date +%m-%d\ %H:%M:%S)] $*" >> $O/campaign.log; }
-log "== pure 66B: RAM 0.1~0.7 × (none, cufile), 기본값(게이트 없음, cuFile 기본 json, KV 예산 vLLM 기본, poll sleep 0)"
-for f in 0.1 0.2 0.3 0.4 0.5 0.6 0.7; do for kvt in none cufile; do tag=pure-ram$f-$kvt
+log "== pure 66B: RAM ${RATIOS:-0.5} × (none, cufile), 기본값(게이트 없음, cuFile 기본 json, KV 예산 vLLM 기본, poll sleep 0)"
+for f in ${RATIOS:-0.5}; do for kvt in none cufile; do tag=pure-ram$f-$kvt
   [ -f $O/$tag/result.json ] && { log "skip $tag"; continue; }
   rm -rf $O/ssd-66b $O/kv-66b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
   log "start $tag"
