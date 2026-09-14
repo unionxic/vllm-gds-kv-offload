@@ -704,6 +704,24 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - 결론 순서. 가중치 스트리밍 조건에서는 오프로더의 이중 버퍼가 KV 오프로드보다 먼저이고, 대가는 GPU 메모리 layer 한 세트(66B 1.9 GiB). 그 뒤에 남는 KV 오프로드의 역할은 이중 버퍼를 켤 GPU 메모리가 없는 경우로 좁혀진다.
 
 
+#### 기본값 런과 native 전송기, LMCache 비교 시도
+
+관측 계층(lib/obs)과 in-tree CuFileFsSpec(C++)으로 66B RAM 0.5를 손대지 않은 설정(게이트 없음, cuFile 기본 json 1 MiB, KV 예산 vLLM 자동, 폴링 양보 없음)에서 재계산과 SSD 적중을 비교. 워크로드는 LEval 문서 8개, cold_fill → settle 15초 → reverse_retrieve(역순, 다른 질문), decode 8. 결과 results/native-66b/pure-ram0.5-*.
+
+| 단계 | 재계산 | native SSD 적중 |
+|---|---|---|
+| cold_fill(저장) wall clock | 846 s | 1,061 s (+25%) |
+| cold_fill prefill forward | 32.3 s | 41.5 s |
+| reverse_retrieve(적중) wall clock | 828 s | 931 s (+12%) |
+| reverse_retrieve forward 수 | 32 | 38 |
+| reverse_retrieve prefill forward | 30.2 s | 24.6 s |
+| 두 단계 합계 | 1,674 s | 1,992 s (+19%) |
+
+- 출력 토큰은 16요청 전부 재계산과 동일, native 오류 0. vLLM 자동 KV는 10.4 GiB(동시 2요청)이며 gpu_util 0.9에서는 첫 prefill이 OOM이라 0.85로 재시도한 값(캠페인 스크립트가 자동 재시도하고 기록).
+- 손해 자리는 앞 절과 같음. 저장 단계는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(1 MiB 조각이라 4 MiB 때보다 큼), 적중 단계는 게이트가 없어 forward 6개 증가. 같은 조건에 게이트와 4 MiB 조각만 넣으면 순이익 −1.3%였으므로 기본값과 손본 설정의 차이가 20%.
+- 기본값에서는 prefill이 요청 2개를 한 forward로 묶지 않고 요청마다 따로 돌아(기본 배치 토큰 상한) prefill forward가 32초짜리 둘.
+- LMCache 0.5.5의 GDS L1(--gds-l1-path, DRAM 층 없이 cuFile로 GPU↔NVMe)을 같은 조건의 비교 상대로 시도. 이 카드에서 성립하지 않음. (1) LMCache가 등록하는 GPU staging 버퍼가 chunk KV × 4라 BAR1 256 MiB 안에 들어가려면 opt-2.7b는 chunk 64토큰, 66B는 16토큰 이하여야 함(기본 256에서 cuFileBufRegister 5036). (2) chunk를 줄이고 오프로더를 끈 opt-2.7b 격리 시험에서 저장은 정상(GDS 쓰기 4.9 GB, 출력 토큰 재계산과 동일)이나 적중 시 서버의 cuFileReadAsync 읽기가 첫 요청에서 멈춰 vLLM이 서버를 불량으로 판정하고 재계산으로 우회. LMCache는 cuFile 1.15와 CUDA 13에서 검증된 async 경로를 쓰고 우리는 cuFile 1.13(CUDA 12.8). (3) 66B에서는 가중치 오프로더가 BAR1을 같이 써야 하므로 chunk 16으로도 여유 없음. 결론은 LMCache GDS L1 비교는 CUDA 13과 BAR1이 VRAM 전체인 카드(양태규 서버)에서 해야 한다는 것.
+
 #### BAR1 창과 정적 버퍼 등록
 
 13b는 host 0.7부터 가중치 SSD 읽기가 cuFileRead −1(cuFile 로그 −5011)로 실패. qkv 150 MiB와 out_proj 50 MiB가 등록되어 BAR1 256 MiB 중 227 MiB를 차지했고, 등록 실패한 fc1과 fc2가 쓰는 cuFile bounce 캐시를 매핑할 자리가 29 MiB뿐. 66B는 out_proj 162 MiB 하나만 등록돼 여유가 있었고 6.7b는 128 MiB로 턱걸이. 포크 ssd_tier에 등록 총량 상한 VLLM_OFFLOAD_SSD_REGISTER_MAX_MB(기본 상한 없음, 포크 929df037b9)를 넣어 13b와 30b는 100 MiB로 실행. 상한 적용 후 BAR1 사용 85 MiB. BAR1 256 MiB는 카드 자체의 최대. PCI Resizable BAR capability(0xbb0)를 setpci로 읽으면 BAR1 항목의 지원 크기가 64, 128, 256 MB(capability 0x1c00, control 0x801)뿐이라 BIOS나 커널로 키울 수 없음. 데이터센터 GPU는 VRAM 전체를 BAR1로 광고.

@@ -14,6 +14,7 @@ ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "
                 help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접)")
 ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
 ap.add_argument("--lmcache-port", type=int, default=5555)
+ap.add_argument("--lmcache-chunk", type=int, default=64, help="lmcache: 토큰 chunk. GDS staging 버퍼 = chunk KV × 4가 BAR1 안이어야 함")
 ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만)")
 ap.add_argument("--kv-batch", type=int, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15")
 ap.add_argument("--kv-threads", type=int, default=4)
@@ -31,6 +32,8 @@ ap.add_argument("--final-settle-sec", type=float, default=15.0)
 ap.add_argument("--poll-sleep-ms", type=float, default=1.0)
 ap.add_argument("--ssd-root", required=True); ap.add_argument("--kv-root", required=True)
 ap.add_argument("--no-monitors", action="store_true")
+ap.add_argument("--no-weight-offload", action="store_true", help="가중치를 전부 GPU에(오프로더 끔). 작은 모델 전용")
+ap.add_argument("--kv-load-failure-policy", default="fail", choices=["fail", "recompute"])
 args = ap.parse_args()
 os.environ.setdefault("VLLM_USE_V2_MODEL_RUNNER", "0"); os.environ.setdefault("VLLM_ENABLE_V1_MULTIPROCESSING", "0")
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
@@ -81,7 +84,7 @@ def stop_monitors():
 import torch
 from vllm import LLM, SamplingParams
 from vllm.config import KVTransferConfig
-kw = dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in_group=n_layer, offload_prefetch_step=args.prefetch_step,
+kw = {} if args.no_weight_offload else dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in_group=n_layer, offload_prefetch_step=args.prefetch_step,
           offload_ssd_path=args.ssd_root, offload_host_fraction=host_fraction, offload_ssd_transport="cufile",
           offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=0)
 matched = [0]
@@ -90,7 +93,7 @@ if args.kv_transport == "lmcache":
     # LMCache MP 서버를 별도 프로세스로. --gds-l1-path 가 있으면 DRAM 층이 꺼지고 cuFile로 GPU↔NVMe 직접
     import socket
     os.makedirs(args.kv_root, exist_ok=True)
-    lmc_cmd = ["lmcache", "server", "--host", "127.0.0.1", "--port", str(args.lmcache_port), "--chunk-size", "256",
+    lmc_cmd = ["lmcache", "server", "--host", "127.0.0.1", "--port", str(args.lmcache_port), "--chunk-size", str(args.lmcache_chunk),
                "--l1-size-gb", str(args.lmcache_l1_gb), "--gds-l1-path", args.kv_root, "--gds-l1-backend", "cufile",
                "--gds-l1-use-direct-io", "--max-workers", str(args.kv_threads), "--eviction-policy", "LRU"]
     open(os.path.join(R, "lmcache_command.txt"), "w").write(" ".join(lmc_cmd) + "\n")
@@ -101,7 +104,7 @@ if args.kv_transport == "lmcache":
             socket.create_connection(("127.0.0.1", args.lmcache_port), timeout=0.5).close(); break
         except OSError: time.sleep(0.5)
     else: sys.exit("LMCache 서버 포트 대기 시간 초과")
-    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="LMCacheMPConnector", kv_role="kv_both",
+    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="LMCacheMPConnector", kv_role="kv_both", kv_load_failure_policy=args.kv_load_failure_policy,
         kv_connector_extra_config={"lmcache.mp.host": "tcp://127.0.0.1", "lmcache.mp.port": args.lmcache_port})
     import vllm.distributed.kv_transfer.kv_connector.v1.lmcache_mp_connector as lmcc
     for _n in dir(lmcc):
@@ -130,10 +133,13 @@ try:
     llm = LLM(model=args.model, dtype="float16", gpu_memory_utilization=args.gpu_util, max_model_len=args.max_model_len,
               enforce_eager=True, **kw)
     EV.phase("model_load_end", load_s=round(time.time() - t0, 1))
-    from vllm.model_executor.offloader.base import get_offloader
-    off = get_offloader()
-    tiers = dict(n_modules=len(off.module_offloaders), n_ssd=sum(1 for m in off.module_offloaders if m.mode == "ssd"),
-                 host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
+    if args.no_weight_offload:
+        off = None; tiers = dict(n_modules=0, n_ssd=0, host_tier_gib=0.0, ssd_tier_gib=0.0, gpu_resident="all")
+    else:
+        from vllm.model_executor.offloader.base import get_offloader
+        off = get_offloader()
+        tiers = dict(n_modules=len(off.module_offloaders), n_ssd=sum(1 for m in off.module_offloaders if m.mode == "ssd"),
+                     host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
     EV.emit("tiers", **tiers)
     KVW = None
     if args.kv_transport == "cufile":
@@ -164,7 +170,7 @@ try:
     eng = llm.llm_engine
     steps_f = open(os.path.join(R, "steps.jsonl"), "a", buffering=1); reqs_f = open(os.path.join(R, "requests.jsonl"), "a", buffering=1)
     def wstat():
-        s = getattr(off, "ssd_tier", None); return (s.stats["reads"], s.stats["bytes"]) if s is not None else (0, 0)
+        s = getattr(off, "ssd_tier", None) if off is not None else None; return (s.stats["reads"], s.stats["bytes"]) if s is not None else (0, 0)
     def drain():
         t = time.monotonic()
         while KVW is not None and time.monotonic() - t < 600:

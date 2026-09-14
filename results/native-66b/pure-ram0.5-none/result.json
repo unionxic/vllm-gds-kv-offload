@@ -1,0 +1,101 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/native-66b/pure-ram0.5-none",
+  "model": "facebook/opt-66b",
+  "n_docs": 8,
+  "leval_workload": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../03-leval/workload.json",
+  "kv_transport": "none",
+  "register_tensors": false,
+  "kv_batch": 4,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": 0.5,
+  "pure": true,
+  "prefetch_step": 1,
+  "io_threads": 4,
+  "gpu_util": 0.85,
+  "max_model_len": 2048,
+  "decode_tokens": 8,
+  "settle_sec": 15.0,
+  "final_settle_sec": 15.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/experiments/vllm-gds-kv/results/native-66b/ssd-66b",
+  "kv_root": "/home/unionxic/experiments/vllm-gds-kv/results/native-66b/kv-66b",
+  "no_monitors": false
+ },
+ "kv_gib": null,
+ "kv_alloc_gib": 10.44,
+ "host_fraction": 0.5,
+ "tiers": {
+  "n_modules": 64,
+  "n_ssd": 31,
+  "host_tier_gib": 62.66,
+  "ssd_tier_gib": 58.86
+ },
+ "phases": {
+  "cold_fill": {
+   "wall_s": 845.875,
+   "matched": 0,
+   "drain_s": 0.0,
+   "ttft": [
+    64.97,
+    64.969,
+    276.746,
+    276.745,
+    487.957,
+    487.956,
+    699.137,
+    699.135
+   ],
+   "e2e": [
+    212.183,
+    212.182,
+    423.494,
+    423.493,
+    634.644,
+    634.642,
+    845.876,
+    845.875
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 828.444,
+   "matched": 0,
+   "drain_s": 0.0,
+   "ttft": [
+    49.352,
+    49.35,
+    258.751,
+    258.749,
+    470.187,
+    470.186,
+    681.669,
+    681.668
+   ],
+   "e2e": [
+    196.167,
+    196.165,
+    405.431,
+    405.43,
+    616.905,
+    616.903,
+    828.445,
+    828.443
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 0,
+  "read_gib": 0.0,
+  "write_n": 0,
+  "write_gib": 0.0,
+  "read_busy_s": 0.0,
+  "write_busy_s": 0.0,
+  "errors": 0,
+  "registered_tensors": 0
+ },
+ "gpu_max_gib": 14.27,
+ "weight_ssd_reads": 8188,
+ "weight_ssd_gib": 3886.1
+}
