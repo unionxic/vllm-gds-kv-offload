@@ -11,6 +11,11 @@ nvidia-smi --query-gpu=timestamp,utilization.gpu,utilization.memory,memory.used,
 nvidia-smi dmon -s pucvmet -d "$INTERVAL" -o DT >"$RUN_DIR/gpu_dmon.log" 2>&1 & pids+=($!)
 vmstat -w -t "$INTERVAL" >"$RUN_DIR/vmstat.log" & pids+=($!)
 if command -v iostat >/dev/null; then iostat -t -y -dxm "$INTERVAL" >"$RUN_DIR/iostat.log" & pids+=($!); fi
+# BLKIO=1 이면 블록 I/O 한 건마다 한 줄(lib/obs/blkio.bt: ns 시각, dev, rwbs, 섹터, 바이트, 지연 us)을 blkio.log에. sudoers에 /usr/bin/bpftrace NOPASSWD 필요.
+# root 프로세스는 직접 못 죽이므로 뒤의 cat을 죽여 SIGPIPE로 끝냄(다음 I/O 줄에서 종료).
+if [ "${BLKIO:-0}" = 1 ] && sudo -n -l /usr/bin/bpftrace >/dev/null 2>&1; then
+  sudo -n /usr/bin/bpftrace "$(dirname "$0")/blkio.bt" 2>"$RUN_DIR/blkio.err" | cat >"$RUN_DIR/blkio.log" & pids+=($!)
+fi
 echo "wall_ns,MemAvailable_kB,Dirty_kB,Writeback_kB,Shmem_kB,Mlocked_kB" >"$RUN_DIR/meminfo.csv"
 echo "wall_ns,read_MBps,write_MBps,read_lat_ms,write_lat_ms,inflight" >"$RUN_DIR/diskstats.csv"
 prev=$(awk -v d="$DEV" '$3==d{print $4,$6,$7,$8,$10,$11,$12}' /proc/diskstats); pt=$(date +%s.%N)
