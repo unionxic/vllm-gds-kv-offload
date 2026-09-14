@@ -42,3 +42,9 @@ results/**/*.nsys-rep
 # 10-model-host-baseline 산출물(가중치 SSD 티어·KV 저장소, 런마다 재생성)
 results/model-host-baseline/ssd-*/
 results/model-host-baseline/kv-*/
+# 런이 만드는 가중치 SSD 티어·KV 캐시·nsys 원본(수 GB)
+results/**/ssd-*/
+results/**/kv-*/
+results/**/nsys-tmp/
+results/qwen72b/**/*.nsys-rep
+results/qwen72b/**/*.sqlite
