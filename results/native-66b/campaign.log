@@ -20,3 +20,10 @@
 /home/unionxic/experiments/vllm-gds-kv/results/native-66b/smoke-2.7b-lmcache/lmcache.log:    raise RuntimeError(
 /home/unionxic/experiments/vllm-gds-kv/results/native-66b/smoke-2.7b-lmcache/lmcache.log:RuntimeError: cuFileBufRegister failed: cuFileError(err=5036, cu_err=0)
 [09-14 15:57:10] start pure-ram0.5-lmcache
+[09-14 17:52:40] start pure-ram0.5-cufile-window (store_window=host)
+[09-14 17:56:16] FAILED pure-ram0.5-cufile-window rc=135
+[09-14 17:56:51] start pure-ram0.5-cufile-window (store_window=host)
+[09-14 18:36:15] done  pure-ram0.5-cufile-window rc=0
+[09-14 18:37:19] start pure-ram0.5-cufile-window30 (kv_extra {"cufile_fs_store_window": "host", "cufile_fs_store_window_max_s": 30})
+[09-14 19:16:44] done  pure-ram0.5-cufile-window30 rc=0
+[09-14 19:17:36] start pure-ram0.5-cufile-window30-gate2 (kv_extra {"cufile_fs_store_window": "host", "cufile_fs_store_window_max_s": 30})

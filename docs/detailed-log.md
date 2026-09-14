@@ -704,7 +704,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - 결론 순서. 가중치 스트리밍 조건에서는 오프로더의 이중 버퍼가 KV 오프로드보다 먼저이고, 대가는 GPU 메모리 layer 한 세트(66B 1.9 GiB). 그 뒤에 남는 KV 오프로드의 역할은 이중 버퍼를 켤 GPU 메모리가 없는 경우로 좁혀진다.
 
 
-#### 기본값 런과 native 전송기, LMCache 비교 시도
+#### 기본값 런과 native backend, LMCache 비교 시도
 
 관측 계층(lib/obs)과 in-tree CuFileFsSpec(C++)으로 66B RAM 0.5를 손대지 않은 설정(게이트 없음, cuFile 기본 json 1 MiB, KV 예산 vLLM 자동, 폴링 양보 없음)에서 재계산과 SSD 적중을 비교. 워크로드는 LEval 문서 8개, cold_fill → settle 15초 → reverse_retrieve(역순, 다른 질문), decode 8. 결과 results/native-66b/pure-ram0.5-*.
 
@@ -720,8 +720,41 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - 출력 토큰은 16요청 전부 재계산과 동일, native 오류 0. vLLM 자동 KV는 10.4 GiB(동시 2요청)이며 gpu_util 0.9에서는 첫 prefill이 OOM이라 0.85로 재시도한 값(캠페인 스크립트가 자동 재시도하고 기록).
 - 손해 자리는 앞 절과 같음. 저장 단계는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(1 MiB 조각이라 4 MiB 때보다 큼), 적중 단계는 게이트가 없어 forward 6개 증가. 같은 조건에 게이트와 4 MiB 조각만 넣으면 순이익 −1.3%였으므로 기본값과 손본 설정의 차이가 20%.
 - 기본값에서는 prefill이 요청 2개를 한 forward로 묶지 않고 요청마다 따로 돌아(기본 배치 토큰 상한) prefill forward가 32초짜리 둘.
-- 저장 창(cufile_fs_store_window=host, 상한 10 s)만 켠 같은 조건: cold_fill 1,061 s에서 906 s로(저장 단계 손해 +215 s에서 +60 s), 저장 단계에서 늘어나던 decode forward(최대 53.3 s)가 24.7 s로 정상화, 두 단계 합계 +19.0%에서 +10.3%. 출력 토큰열 재계산과 동일, 쓰기 34.5 GiB 그대로(점유 318 s로 분산). 남은 손해는 prefill forward(32.3 → 39.4 s)와 적중 단계의 forward 6개 증가(게이트 없음). RAM 0.5는 SSD layer 31개가 연속이라 SSD 창이 18 s로 상한 10 s를 넘겨 강제 재개가 발생. 상한 30 s로 재측정 중.
+- write-behind(cufile_fs_store_window=host: 가중치 오프로더가 SSD 티어 layer를 읽는 동안 KV 쓰기 스레드를 멈추고 host 티어 layer 구간에 재개, 상한 초과 시 강제 재개)만 켠 같은 조건. 상한 10 s는 RAM 0.5의 SSD 구간 18 s(layer 33~63 연속)보다 짧아 forward마다 강제 재개가 남았고, 상한 30 s에서 forward 안에서는 안 풀림.
+
+| 조건 | cold_fill(저장) | 저장 단계 prefill 평균 / decode 최대 | reverse(적중) / forward 수 | 두 단계 합계 |
+|---|---|---|---|---|
+| 재계산 | 846 s | 32.3 / 24.7 s | 828 s / 32 | 1,674 s |
+| SSD 적중, write-behind 없음 | 1,061 s | 41.5 / 53.3 s | 931 s / 38 | 1,992 s (+19.0%) |
+| write-behind 상한 10 s | 906 s | 39.4 / 24.7 s | 940 s / 38 | 1,846 s (+10.3%) |
+| write-behind 상한 30 s | 892 s | 36.5 / 24.6 s | 935 s / 38 | 1,827 s (+9.1%) |
+
+- 쓰기가 어느 forward에 떨어졌는지(step별 KV 쓰기 바이트). 저장 단계의 한 배치는 요청 A prefill 40 s → 요청 B prefill 24.5 s → decode 7회 → KV 8.4 GiB 쓰기 제출. write-behind 없음: 다음 배치의 B prefill(24.5 → 29.5 s, 안에서 8.5 GiB) 과 decode(24.7 → 53.3 s)에 떨어짐. write-behind 30 s: B prefill과 decode는 재계산과 같고(0.1 GiB), 다음 배치의 A prefill(40.5 → 50.5 s, 안에서 7.3 GiB)에 떨어짐. 세 배치 모두 50.4, 50.9, 50.6 s. 즉 규칙은 쓰기를 decode forward에서 빼내 다음 배치의 긴 prefill forward로 옮긴 것이고 배치당 손해가 약 30 s에서 10 s. 출력 토큰열 세 런 모두 재계산과 동일, 오류 0.
+- 한 배치의 쓰기가 RAM 구간(forward당 5.5 s) 하나에 못 들어가는 이유는 쓰기 속도. 스레드당 111~188 MB/s(4스레드 합 0.5~0.7 GB/s)라 8.4 GiB에 스레드 시간 15 s가 들고, 같은 구조의 읽기는 스레드당 844 MB/s(합 3.3 GB/s). 원인은 아래 절.
+- 적중 단계의 forward 6개 증가는 게이트 몫이며 write-behind와 게이트를 같이 켠 조합은 측정하지 않음(66B 종료).
 - LMCache 0.5.5의 GDS L1(--gds-l1-path, DRAM 층 없이 cuFile로 GPU↔NVMe)을 같은 조건의 비교 상대로 시도. 이 카드에서 성립하지 않음. (1) LMCache가 등록하는 GPU staging 버퍼가 chunk KV × 4라 BAR1 256 MiB 안에 들어가려면 opt-2.7b는 chunk 64토큰, 66B는 16토큰 이하여야 함(기본 256에서 cuFileBufRegister 5036). (2) chunk를 줄이고 오프로더를 끈 opt-2.7b 격리 시험에서 저장은 정상(GDS 쓰기 4.9 GB, 출력 토큰 재계산과 동일)이나 적중 시 서버의 cuFileReadAsync 읽기가 첫 요청에서 멈춰 vLLM이 서버를 불량으로 판정하고 재계산으로 우회. LMCache는 cuFile 1.15와 CUDA 13에서 검증된 async 경로를 쓰고 우리는 cuFile 1.13(CUDA 12.8). (3) 66B에서는 가중치 오프로더가 BAR1을 같이 써야 하므로 chunk 16으로도 여유 없음. 결론은 LMCache GDS L1 비교는 CUDA 13과 BAR1이 VRAM 전체인 카드(양태규 서버)에서 해야 한다는 것.
+
+#### KV 쓰기 속도와 SSD 쓰기 상한
+
+backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이벤트 대기 → 임시 파일 O_DIRECT open과 cuFileHandleRegister → layer마다 cuFileWrite(66B는 576 KiB × 64회, 파일 36 MiB) → Deregister, close, rename. stats에 구간별 스레드 시간 합과 호출 수를 추가(포크 f3bb7ad92e)하고 vLLM 없이 GPU 가짜 KV 4.5 GiB를 파일 128개로 store/load 하는 단독 벤치로 분해.
+
+| 구간 | store (4스레드) | load (4스레드) |
+|---|---|---|
+| 이벤트 대기 | 0 s | 없음 |
+| open + HandleRegister | 0.1 s | 0.0 s |
+| cuFile 호출 합 | 30.9 s | 5.5 s |
+| rename, close | 0.0 s | 0.0 s |
+| 처리량 | 0.62 GB/s | 3.5 GB/s |
+
+- 시간은 전부 cuFileWrite 안. 스레드 8개(0.38 GB/s), 파일당 4블록으로 호출 2.3 MiB(0.34 GB/s), fallocate 선할당 모두 개선 없음. 이벤트를 forward 뒤에 기록하면 대기가 그대로 쓰기 시간에 더해짐(busy 이벤트 23.9 s).
+- gdsio 쓰기(-I 1, bounce, 4 worker): 1 MiB 0.28 GiB/s, 4 MiB 0.70 GiB/s. 08의 3.28 GiB/s는 읽기(-I 0)였음.
+- cuFile을 빼고 host에서 dd O_DIRECT 1 MiB 4병렬로 4.5 GiB씩 연속 쓰기. 디스크 94% 사용(여유 31 GB) 상태: 1.59, 0.33, 0.32 GB/s. 40초 쉬고 1회: 1.67 GB/s. 처음 약 4 GB만 빠르고 그 뒤 0.33 GB/s로 떨어지며 쉬면 회복. 970 EVO의 SLC 쓰기 캐시가 차면 TLC 직접 쓰기로 넘어가는 동작이며 온도 48°C라 스로틀 아님. ext4는 discard 없이 마운트(주 1회 fstrim.timer).
+- LMCache 실패 런의 slab 40 GB와 OPT-66B(HF 캐시 124 GB, SSD 티어 59 GB)를 지우고 fstrim 뒤 36% 사용(여유 279 GB): 1.89, 0.70, 0.70, 0.70 GB/s. 지속 쓰기 상한이 0.33에서 0.70 GB/s로 올라감. 여유 96 GB, trim 직후: 1.04, 0.45, 0.43 GB/s(trim과 겹침).
+- 결론. KV 쓰기 속도는 backend 코드가 아니라 이 SSD의 지속 쓰기 상한(SLC 캐시 약 4 GB 뒤 0.3~0.7 GB/s, 빈 공간에 좌우)이 정함. 66B 한 배치의 KV 8.4 GiB는 캐시보다 커서 앞 4 GB만 빠르게 나감. 따라서 write-behind가 한 번에 내보내는 양은 4 GB 이하로 끊고 사이에 쉬는 시간을 둬야 캐시 안에서 처리되며, 근본 해결은 쓰는 양 자체를 줄이는 것(GQA 모델로 토큰당 KV 7분의 1, 저장 admission). 디스크는 20% 이상 비워 둠.
+
+#### OPT-66B 종료와 모델 전환
+
+66B에서 볼 것은 위에서 끝남. HF 캐시와 SSD 티어 파일을 삭제(재현은 results/native-66b의 result.json·steps.jsonl·events.jsonl로). 다음 모델은 Qwen2.5-72B-Instruct(GQA, 80 layer, KV 헤드 8, 토큰당 KV 0.33 MB). 가중치 145 GB로 host를 넘쳐 SSD 티어가 남는 조건은 유지하면서 KV만 7분의 1로 줄어 GPU에 요청 여럿이 공존하고 배치당 쓰기 양이 줄어듦. 입력은 LongBench-v2 32건과 Bailian 프로파일. Qwen에서는 토큰열 완전 일치를 정합성 검사로 못 쓰는 점(앞 절)을 그대로 적용.
 
 #### Qwen 구조에서의 오프로더와 native KV 경로
 
