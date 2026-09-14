@@ -3,6 +3,8 @@
    가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 in-tree CuFileFsSpec(native cuFile)으로 SSD. 외부 파이썬 전송 코드 없음. 엔진 step을 직접 돌려 step 단위 기록.
    산출물(RUN_DIR): environment.txt, capacity.json, events.jsonl(KV IO와 phase 마커), requests.jsonl(요청별 시각),
      steps.jsonl, tier_samples.jsonl(nvidia-fs·프로세스·캐시 파일 1초), hostmon 파일들, result.json, summary.csv
+   프롬프트 소스: --prompt-source leval(03-leval OPT 토큰열) | longbench(문서 텍스트 → 모델 토크나이저) | bailian(02-bailian trace 프리픽스 구조)
+   --profile-out PATH를 주면 재사용 프로파일(요청별 doc·phase·프롬프트 토큰·적중 토큰, doc별 재사용 횟수)을 따로 남김
    usage: python run_obs.py --run-dir DIR --model facebook/opt-13b --n-docs 32 --kv-batch 6 ..."""
 import argparse, json, os, subprocess, sys, threading, time
 ap = argparse.ArgumentParser()
@@ -10,6 +12,15 @@ ap.add_argument("--run-dir", required=True)
 ap.add_argument("--model", default="facebook/opt-13b")
 ap.add_argument("--n-docs", type=int, default=32)
 ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
+ap.add_argument("--prompt-source", default="leval", choices=["leval", "longbench", "bailian"],
+                help="leval: 03-leval 토큰열(OPT 토크나이저 전용). longbench: data/longbench-v2-10k-32.jsonl 텍스트를 모델 토크나이저로. "
+                     "bailian: 02-bailian trace(qwen_coder.jsonl)의 hash_ids 프리픽스 구조만 합성 토큰으로 재현")
+ap.add_argument("--longbench-file", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "longbench-v2-10k-32.jsonl"))
+ap.add_argument("--bailian-trace", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "02-bailian", "replay600", "trace", "qwen_coder.jsonl"),
+                help="bailian trace jsonl(chat_id, turn, input_length, hash_ids). 02-bailian/replay600/replay.py와 같은 파일")
+ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
+ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
+ap.add_argument("--profile-out", default=None, help="재사용 프로파일 json 경로. 요청별(doc, phase, 프롬프트 토큰 수, 적중 토큰 수)와 doc별 재사용 횟수")
 ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache"],
                 help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접)")
 ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
@@ -32,6 +43,7 @@ ap.add_argument("--final-settle-sec", type=float, default=15.0)
 ap.add_argument("--poll-sleep-ms", type=float, default=1.0)
 ap.add_argument("--ssd-root", required=True); ap.add_argument("--kv-root", required=True)
 ap.add_argument("--no-monitors", action="store_true")
+ap.add_argument("--kv-extra", default=None, help="cufile: kv_connector_extra_config에 덧붙일 JSON. 예: '{\"cufile_fs_store_window\": \"host\"}'")
 ap.add_argument("--no-weight-offload", action="store_true", help="가중치를 전부 GPU에(오프로더 끔). 작은 모델 전용")
 ap.add_argument("--kv-load-failure-policy", default="fail", choices=["fail", "recompute"])
 args = ap.parse_args()
@@ -46,7 +58,8 @@ if os.path.isdir(args.kv_root) and os.listdir(args.kv_root):
     sys.exit(f"kv-root가 비어 있지 않음: {args.kv_root}")
 
 # ---- 환경, 용량 사전 검사 ----
-subprocess.run(["bash", os.path.join(ROOT, "lib", "obs", "envinfo.sh"), R, args.leval_workload], check=False)
+INPUT_FILE = {"longbench": args.longbench_file, "bailian": args.bailian_trace}.get(args.prompt_source, args.leval_workload)
+subprocess.run(["bash", os.path.join(ROOT, "lib", "obs", "envinfo.sh"), R, INPUT_FILE], check=False)
 from transformers import AutoConfig
 hc = AutoConfig.from_pretrained(args.model); d_model, n_layer = int(hc.hidden_size), int(hc.num_hidden_layers)
 kv_req = 2 * n_layer * d_model * 2 * args.max_model_len
@@ -87,7 +100,7 @@ from vllm.config import KVTransferConfig
 kw = {} if args.no_weight_offload else dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in_group=n_layer, offload_prefetch_step=args.prefetch_step,
           offload_ssd_path=args.ssd_root, offload_host_fraction=host_fraction, offload_ssd_transport="cufile",
           offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=0)
-matched = [0]
+matched = [0]; matched_req = {}
 LMC = None
 if args.kv_transport == "lmcache":
     # LMCache MP 서버를 별도 프로세스로. --gds-l1-path 가 있으면 DRAM 층이 꺼지고 cuFile로 GPU↔NVMe 직접
@@ -113,18 +126,23 @@ if args.kv_transport == "lmcache":
             _orig = _c.get_num_new_matched_tokens
             def _mk(_o):
                 def _w(self, request, n):
-                    r = _o(self, request, n); matched[0] += (r[0] or 0) if isinstance(r, tuple) else (r or 0); return r
+                    r = _o(self, request, n); m = (r[0] or 0) if isinstance(r, tuple) else (r or 0)
+                    matched[0] += m; matched_req.setdefault(getattr(request, "request_id", None), []).append(m)
+                    return r
                 return _w
             _c.get_num_new_matched_tokens = _mk(_orig)
 elif args.kv_transport != "none":
     extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
              "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
     if not args.pure: extra["block_size"] = args.kv_block
+    if args.kv_extra: extra.update(json.loads(args.kv_extra))
     kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both", kv_connector_extra_config=extra)
     import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched
     _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
     def _gmw(self, request, n):
-        r = _gm(self, request, n); matched[0] += r[0] or 0; return r
+        r = _gm(self, request, n); m = r[0] or 0
+        matched[0] += m; matched_req.setdefault(getattr(request, "request_id", None), []).append(m)
+        return r
     osched.OffloadingConnectorScheduler.get_num_new_matched_tokens = _gmw
 
 try:
@@ -163,9 +181,52 @@ try:
         KVW.submit_store, KVW.submit_load, KVW.get_finished = submit_store, submit_load, get_finished
     def kvstat():
         return KVW.stats() if KVW is not None else {}
-    W = json.load(open(args.leval_workload)); docs = W["docs"][:args.n_docs]
-    def prompt(i, q):
-        d = docs[i]; return d["prefix"] + W["delim_tokens"] + d["questions"][q % len(d["questions"])]["tokens"]
+    if args.prompt_source == "longbench":
+        # 실제 문서 텍스트를 모델 토크나이저로. 프리픽스 = 문서 토큰(상한까지), 단계별 꼬리 = 다른 질문 문장 → 프리픽스 적중
+        from transformers import AutoTokenizer
+        tok = AutoTokenizer.from_pretrained(args.model)
+        rows = [json.loads(l) for l in open(args.longbench_file) if l.strip()][:args.n_docs]
+        cap = args.prompt_cap or (args.max_model_len - args.decode_tokens - 64)
+        TAILS = ["\n\nDescribe the generated KV working set.", "\n\nExplain where this cached prefix was recovered from.",
+                 "\n\nSummarize the document in one sentence.", "\n\nList three named entities from the text."]
+        docs = [tok.encode(r["prompt"], add_special_tokens=True)[:cap] for r in rows]
+        tails = [tok.encode(t, add_special_tokens=False) for t in TAILS]
+        def prompt(i, q):
+            return docs[i] + tails[q % len(tails)]
+    elif args.prompt_source == "bailian":
+        # trace의 hash_ids만 사용. hash_id 하나 = 결정적 16토큰 블록(시드=hash) → 같은 hash = 같은 토큰열이므로
+        # trace의 프리픽스 공유 구조(hit/miss 패턴)가 그대로 재현됨. 02-bailian/replay600/replay.py와 같은 방식.
+        import random
+        _vocab = int(getattr(llm.get_tokenizer(), "vocab_size", 0) or hc.vocab_size)
+        _lo, _hi = 1000, _vocab - 1000
+        rows = []
+        with open(os.path.abspath(args.bailian_trace)) as f:
+            for line in f:
+                if line.strip():
+                    rows.append(json.loads(line))
+                if len(rows) >= args.n_docs: break
+        cap = args.prompt_cap or (args.max_model_len - args.decode_tokens - 64)
+        nblk = max(1, cap // args.bailian_block)
+        _bcache = {}
+        def _block(h):
+            if h not in _bcache:
+                rng = random.Random(0xB10C0000 + h)
+                _bcache[h] = [rng.randrange(_lo, _hi) for _ in range(args.bailian_block)]
+            return _bcache[h]
+        docs, doc_meta = [], []
+        for r in rows:
+            toks = []
+            for h in r["hash_ids"][:nblk]: toks.extend(_block(h))
+            docs.append(toks[:cap]); doc_meta.append(dict(chat_id=r.get("chat_id"), turn=r.get("turn"), input_length=r.get("input_length"), n_hash=len(r["hash_ids"])))
+        EV.emit("bailian_trace", rows=len(docs), block=args.bailian_block, blocks_kept=nblk, vocab=_vocab,
+                unique_hashes=len(_bcache), total_hash_refs=sum(m["n_hash"] for m in doc_meta))
+        _tail = {q: [random.Random(0x7A11 + q).randrange(_lo, _hi) for _ in range(8)] for q in range(4)}
+        def prompt(i, q):
+            return docs[i] + _tail[q % 4]
+    else:
+        W = json.load(open(args.leval_workload)); docs = W["docs"][:args.n_docs]
+        def prompt(i, q):
+            d = docs[i]; return d["prefix"] + W["delim_tokens"] + d["questions"][q % len(d["questions"])]["tokens"]
     sp = SamplingParams(max_tokens=args.decode_tokens, temperature=0, ignore_eos=True)
     eng = llm.llm_engine
     steps_f = open(os.path.join(R, "steps.jsonl"), "a", buffering=1); reqs_f = open(os.path.join(R, "requests.jsonl"), "a", buffering=1)
@@ -179,8 +240,16 @@ try:
             if not KVW._pending and st_["outstanding_writes"] == 0 and st_["outstanding_reads"] == 0: break
             time.sleep(0.005)
         return round(time.monotonic() - t, 3)
+    prof = []
+    def matched_of(rid):
+        # 엔진이 내부 request_id에 접미사를 붙이므로(예: cold_fill-3-9feca30f) 접두 일치까지 본다.
+        # 커넥터 lookup은 한 요청에 여러 번 불릴 수 있어 적중 토큰은 최댓값, 호출 수는 따로 센다.
+        v = matched_req.get(rid)
+        if v is None:
+            v = [m for k, ms in matched_req.items() if k.startswith(rid + "-") for m in ms]
+        return (max(v) if v else 0), len(v)
     def run_phase(name, order, q):
-        matched[0] = 0
+        matched[0] = 0; matched_req.clear()
         EV.phase(name, requests=len(order))
         st = {}
         for i in order:
@@ -202,6 +271,9 @@ try:
                 if o.finished:
                     v["finish_mono"] = s1; v["finish_wall"] = time.time()
                     reqs_f.write(json.dumps(dict(phase=name, rid=o.request_id, **v)) + "\n")
+                    _m, _n = matched_of(o.request_id)
+                    prof.append(dict(phase=name, rid=o.request_id, doc=v["doc"], q=q, tokens=v["tokens"],
+                                     matched=_m, lookups=_n))
             n_out = len(outs); n_tok = sum(len(o.outputs[0].token_ids) for o in outs if o.outputs)
             if s1 - s0 > 0.3 or n_out:
                 kd = {k: post_k[k] - pre_k[k] for k in ("reads", "writes", "read_bytes", "write_bytes")} if post_k else {}
@@ -235,6 +307,22 @@ try:
     if args.kv_transport != "none" and os.path.isdir(args.kv_root):
         files = [os.path.join(dp, f) for dp, _, fs in os.walk(args.kv_root) for f in fs]
         res["kv_files"], res["kv_bytes_gib"] = len(files), round(sum(os.path.getsize(f) for f in files) / 2**30, 3)
+    if args.profile_out:
+        by_doc = {}
+        for e in prof:
+            d = by_doc.setdefault(e["doc"], dict(doc=e["doc"], reuse=0, phases=[], tokens=e["tokens"], matched_total=0))
+            d["reuse"] += 1; d["phases"].append(e["phase"]); d["matched_total"] += e["matched"]
+        pdoc = sorted(by_doc.values(), key=lambda d: d["doc"])
+        if args.prompt_source == "bailian":
+            for d in pdoc: d["meta"] = doc_meta[d["doc"]]
+        po = dict(run_dir=R, model=args.model, prompt_source=args.prompt_source, kv_transport=args.kv_transport,
+                  n_docs=len(docs), input_file=INPUT_FILE, requests=prof, docs=pdoc,
+                  totals=dict(requests=len(prof), prompt_tokens=sum(e["tokens"] for e in prof),
+                              matched_tokens=sum(e["matched"] for e in prof),
+                              reused_docs=sum(1 for d in pdoc if d["reuse"] > 1)))
+        os.makedirs(os.path.dirname(os.path.abspath(args.profile_out)) or ".", exist_ok=True)
+        json.dump(po, open(args.profile_out, "w"), indent=1)
+        res["profile_out"] = os.path.abspath(args.profile_out)
     json.dump(res, open(os.path.join(R, "result.json"), "w"), indent=1)
     EV.phase("complete")
     open(os.path.join(R, "workload.exitcode"), "w").write("0\n")
