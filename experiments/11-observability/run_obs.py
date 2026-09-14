@@ -15,7 +15,9 @@ ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cu
 ap.add_argument("--kv-batch", type=int, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15")
 ap.add_argument("--kv-threads", type=int, default=4)
 ap.add_argument("--kv-block", type=int, default=64)
-ap.add_argument("--host-weight-fraction", type=float, default=1.0)
+ap.add_argument("--host-weight-fraction", type=float, default=None, help="오프로드 가중치 대비 CPU 비율(환산). 미지정이면 --host-ram-fraction")
+ap.add_argument("--host-ram-fraction", type=float, default=None, help="host memory(RAM 전체) 대비 비율을 오프로더에 그대로 전달. 둘 다 없으면 오프로더 기본값 0.3")
+ap.add_argument("--pure", action="store_true", help="GPU KV 예산과 block_size를 vLLM 기본에 맡김(--kv-batch, --kv-block 무시)")
 ap.add_argument("--prefetch-step", type=int, default=1)
 ap.add_argument("--io-threads", type=int, default=4)
 ap.add_argument("--gpu-util", type=float, default=0.9)
@@ -45,10 +47,17 @@ kv_req = 2 * n_layer * d_model * 2 * args.max_model_len
 kv_gib = round(args.kv_batch * kv_req * 1.15 / 2**30, 2)
 w_off = 12 * d_model * d_model * 2 * n_layer
 mem_total = int(next(l for l in open("/proc/meminfo") if l.startswith("MemTotal")).split()[1]) * 1024
-host_fraction = round(args.host_weight_fraction * w_off * (1.03 if args.host_weight_fraction >= 1.0 else 1.0) / mem_total, 4)
+if args.host_weight_fraction is not None:
+    host_fraction = round(args.host_weight_fraction * w_off * (1.03 if args.host_weight_fraction >= 1.0 else 1.0) / mem_total, 4)
+elif args.host_ram_fraction is not None:
+    host_fraction = args.host_ram_fraction
+else:
+    host_fraction = 0.3
+if args.pure:
+    kv_gib = None
 plan = subprocess.run([sys.executable, os.path.join(ROOT, "lib", "obs", "plan.py"), "--model", args.model, "--tokens-per-request", str(args.max_model_len),
-                       "--requests", str(args.n_docs), "--gpu-kv-gib", str(kv_gib), "--cache-dir", args.kv_root,
-                       "--host-gib", str(w_off * args.host_weight_fraction / 2**30), "--out", os.path.join(R, "capacity.json")], capture_output=True, text=True)
+                       "--requests", str(args.n_docs), "--gpu-kv-gib", str(kv_gib if kv_gib else 0), "--cache-dir", args.kv_root,
+                       "--host-gib", str(host_fraction * mem_total / 2**30), "--out", os.path.join(R, "capacity.json")], capture_output=True, text=True)
 print(plan.stdout, plan.stderr, flush=True)
 
 from obs.events import Events
@@ -74,10 +83,10 @@ kw = dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in
           offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=0)
 matched = [0]
 if args.kv_transport != "none":
-    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both",
-        kv_connector_extra_config={"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root,
-            "cufile_fs_register_tensors": str(args.register_tensors), "cufile_fs_read_threads": args.kv_threads,
-            "cufile_fs_write_threads": args.kv_threads, "block_size": args.kv_block})
+    extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
+             "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
+    if not args.pure: extra["block_size"] = args.kv_block
+    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both", kv_connector_extra_config=extra)
     import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched
     _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
     def _gmw(self, request, n):
@@ -86,8 +95,9 @@ if args.kv_transport != "none":
 
 try:
     t0 = time.time(); EV.phase("model_load_begin")
+    if kv_gib: kw["kv_cache_memory_bytes"] = int(kv_gib * 2**30)
     llm = LLM(model=args.model, dtype="float16", gpu_memory_utilization=args.gpu_util, max_model_len=args.max_model_len,
-              kv_cache_memory_bytes=int(kv_gib * 2**30), enforce_eager=True, **kw)
+              enforce_eager=True, **kw)
     EV.phase("model_load_end", load_s=round(time.time() - t0, 1))
     from vllm.model_executor.offloader.base import get_offloader
     off = get_offloader()
@@ -169,7 +179,11 @@ try:
         return dict(wall_s=round(time.monotonic() - tS, 3), matched=matched[0], drain_s=d,
                     ttft=[round(v["first_mono"] - v["submit_mono"], 3) for v in st.values() if v["first_mono"]],
                     e2e=[round(v["finish_mono"] - v["submit_mono"], 3) for v in st.values() if v["finish_mono"]])
-    res = dict(args=vars(args), kv_gib=kv_gib, host_fraction=host_fraction, tiers=tiers, phases={})
+    try:
+        cc = llm.llm_engine.vllm_config.cache_config
+        kv_alloc_gib = round(cc.num_gpu_blocks * cc.block_size * (2 * n_layer * d_model * 2) / 2**30, 2)
+    except Exception: kv_alloc_gib = kv_gib
+    res = dict(args=vars(args), kv_gib=kv_gib, kv_alloc_gib=kv_alloc_gib, host_fraction=host_fraction, tiers=tiers, phases={})
     N = len(docs)
     res["phases"]["cold_fill"] = run_phase("cold_fill", list(range(N)), 0)
     EV.phase("settle"); time.sleep(args.settle_sec)
