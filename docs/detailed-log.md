@@ -787,6 +787,29 @@ backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이�
 - ssd_window 표시는 0.1 s에 켜져 29.1 s에 꺼짐. 표시가 prefetch 발행 시점이라 실제 SSD 읽기(5.6 s)보다 5.5 s 앞서고, host 구간까지 SSD 구간으로 보고함. 이 구성에서 write-behind는 forward 내내 쓰기를 붙잡았을 것이며 강제 재개가 0회였던 것은 쓰기가 step 경계의 1 s 안에 끝났기 때문. 표시를 실제 읽기 시작에 맞추는 수정은 미적용.
 - cuFileHandleNVFS(gds trace의 내부 구간) 10,096건 평균 151 ms, 합 1,527 s. cuFileRead 안에 중첩된 nvidia-fs 처리 구간으로 보이며 별도 비용인지는 미확인.
 
+#### KV 관리 정책: LMCache 정책의 이식
+
+LMCache 0.5.5의 정책 클래스(cache_policy LRU/LFU/FIFO, EvictionPolicy와 축출 목적지, StorePolicy, PrefetchPolicy, lazy offload)를 우리 구조로 옮긴 것. 위치는 포크 vllm/v1/kv_offload/cufile_fs/spec.py의 CuFileFsManager(scheduler 쪽 파이썬). C++ backend는 파일 이동만 하므로 무변경. vLLM in-tree의 cpu/manager.py(LRU, ref_cnt 보호)와 같은 인터페이스(lookup, touch, prepare_load/complete_load, prepare_store/evicted_keys)를 씀.
+
+| 설정 키 | 값 | 하는 일 | LMCache 대응 |
+|---|---|---|---|
+| cufile_fs_capacity_gb | 0(무제한) 또는 GiB | SSD 파일 총량 상한. 완료분 + 대기 중 저장 예약분(chunk 크기 × 대기 수)이 상한을 넘으면 축출, 자리를 못 만들면 들어가는 만큼만 저장 | EvictionController 용량 |
+| cufile_fs_policy | lru, lfu | lru는 마지막 접근(lookup 적중, touch, 저장) 오래된 순, lfu는 적중 횟수 적은 순(같으면 lru). 적재 중·저장 중 키는 보호 | LRUCachePolicy, LFUCachePolicy |
+| cufile_fs_admission | all, never, profile, seen_twice | seen_twice는 같은 블록이 저장 후보로 두 번째 제시될 때부터 저장(04의 온라인 규칙). lookup은 첫 miss에서 멈추므로 제시 횟수로 셈 | StorePolicy(LMCache는 전부 저장) |
+| cufile_fs_store_window | any, host | write-behind. SSD 구간 신호를 prefetch 발행이 아니라 SSD 티어 읽기 스레드의 실제 cuFileRead 진행(SsdTier.on_activity → IoWindow.activity, 빈틈 50 ms 유예)으로 판정하도록 수정 | lazy offload |
+
+미이식: 프리페치 정책(SSD → host 선적재. 72B에서 wave당 1 s라 보류), host KV 층(host memory를 가중치와 나눠야 해 별도 설계).
+
+manager stats(파일 수, 총량, 축출 수·GiB, 거부 수, lookup hit/miss, admission admit/reject)를 run_obs가 result.json kv_manager에 기록.
+
+Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batch 2, GQA 반영 공식)으로 검증. 오류 0.
+
+| 조건 | 쓰기 | 읽기 | manager |
+|---|---|---|---|
+| 전부 저장 | 684 파일 1.50 GiB | 577 파일 1.25 GiB | lookup hit 10,809 |
+| lfu, 상한 1 GiB, write-behind | 913 파일 2.01 GiB | 321 파일 0.69 GiB | 총량 1.00 GiB 유지, 축출 458 파일 1.01 GiB |
+| seen_twice | 684 파일 1.50 GiB | 66 파일 0.15 GiB | admit 684 / reject 684 (첫 제시 거부, 두 번째 저장) |
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
