@@ -1,6 +1,6 @@
 """관측 체계(lib/obs)를 붙인 3단계 워크로드 러너.
    단계: cold_fill(문서 N개, 질문 0) → settle → reverse_retrieve(역순, 질문 1) → final_settle
-   가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 expfs로 SSD. 엔진 step을 직접 돌려 step 단위 기록.
+   가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 in-tree CuFileFsSpec(native cuFile)으로 SSD. 외부 파이썬 전송 코드 없음. 엔진 step을 직접 돌려 step 단위 기록.
    산출물(RUN_DIR): environment.txt, capacity.json, events.jsonl(KV IO와 phase 마커), requests.jsonl(요청별 시각),
      steps.jsonl, tier_samples.jsonl(nvidia-fs·프로세스·캐시 파일 1초), hostmon 파일들, result.json, summary.csv
    usage: python run_obs.py --run-dir DIR --model facebook/opt-13b --n-docs 32 --kv-batch 6 ..."""
@@ -10,7 +10,8 @@ ap.add_argument("--run-dir", required=True)
 ap.add_argument("--model", default="facebook/opt-13b")
 ap.add_argument("--n-docs", type=int, default=32)
 ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "posix", "none"])
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none"], help="cufile: in-tree CuFileFsSpec(native). none: 재계산")
+ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만)")
 ap.add_argument("--kv-batch", type=int, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15")
 ap.add_argument("--kv-threads", type=int, default=4)
 ap.add_argument("--kv-block", type=int, default=64)
@@ -74,13 +75,9 @@ kw = dict(offload_backend="prefetch", offload_group_size=n_layer, offload_num_in
 matched = [0]
 if args.kv_transport != "none":
     kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both",
-        kv_connector_extra_config={"spec_name": "ExperimentalFilesystemSpec", "spec_module_path": "expfs",
-            "expfs_root_dir": args.kv_root, "expfs_transport": args.kv_transport,
-            "expfs_read_threads": args.kv_threads, "expfs_write_threads": args.kv_threads, "block_size": args.kv_block})
-    import expfs
-    for cls in (expfs.CuFileTransport, expfs.PosixBounceTransport):
-        for nm, op in (("read_chunk", "r"), ("write_chunk", "w")):
-            if hasattr(cls, nm): EV.wrap_transport(cls, nm, op)
+        kv_connector_extra_config={"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root,
+            "cufile_fs_register_tensors": str(args.register_tensors), "cufile_fs_read_threads": args.kv_threads,
+            "cufile_fs_write_threads": args.kv_threads, "block_size": args.kv_block})
     import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched
     _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
     def _gmw(self, request, n):
@@ -97,6 +94,28 @@ try:
     tiers = dict(n_modules=len(off.module_offloaders), n_ssd=sum(1 for m in off.module_offloaders if m.mode == "ssd"),
                  host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
     EV.emit("tiers", **tiers)
+    KVW = None
+    if args.kv_transport != "none":
+        import vllm.v1.kv_offload.cufile_fs.spec as cfs
+        KVW = cfs.LAST_WORKER
+        EV.emit("kv_worker", registered_tensors=KVW.native.registered, register_err=KVW.native.register_err, chunk_bytes=KVW.chunk_bytes)
+        _ss, _sl, _gf = KVW.submit_store, KVW.submit_load, KVW.get_finished
+        _jobs = {}
+        def submit_store(job_id, src, dst):
+            _jobs[job_id] = ("w", time.monotonic(), len(dst.paths) * KVW.chunk_bytes)
+            EV.emit("kv_w_submit", job=job_id, chunks=len(dst.paths), bytes=len(dst.paths) * KVW.chunk_bytes); return _ss(job_id, src, dst)
+        def submit_load(job_id, src, dst):
+            _jobs[job_id] = ("r", time.monotonic(), len(src.paths) * KVW.chunk_bytes)
+            EV.emit("kv_r_submit", job=job_id, chunks=len(src.paths), bytes=len(src.paths) * KVW.chunk_bytes); return _sl(job_id, src, dst)
+        def get_finished():
+            out = _gf()
+            for r in out:
+                op, t, nb = _jobs.pop(r.job_id, ("?", time.monotonic(), 0))
+                EV.emit(f"kv_{op}_end", job=r.job_id, ok=r.success, bytes=nb, dur_ms=round((time.monotonic() - t) * 1e3, 1))
+            return out
+        KVW.submit_store, KVW.submit_load, KVW.get_finished = submit_store, submit_load, get_finished
+    def kvstat():
+        return KVW.stats() if KVW is not None else {}
     W = json.load(open(args.leval_workload)); docs = W["docs"][:args.n_docs]
     def prompt(i, q):
         d = docs[i]; return d["prefix"] + W["delim_tokens"] + d["questions"][q % len(d["questions"])]["tokens"]
@@ -106,15 +125,11 @@ try:
     def wstat():
         s = getattr(off, "ssd_tier", None); return (s.stats["reads"], s.stats["bytes"]) if s is not None else (0, 0)
     def drain():
-        w = getattr(sys.modules.get("expfs"), "LAST_WORKER", None) if args.kv_transport != "none" else None
         t = time.monotonic()
-        while time.monotonic() - t < 600:
-            with EV.lk: ow = EV.outs["w"]
-            pend = len(getattr(w, "_pending", ())) if w is not None else 0
-            if ow == 0 and pend == 0: break
-            if w is not None:
-                try: w.get_finished()
-                except Exception: pass
+        while KVW is not None and time.monotonic() - t < 600:
+            KVW.get_finished()
+            st_ = KVW.stats()
+            if not KVW._pending and st_["outstanding_writes"] == 0 and st_["outstanding_reads"] == 0: break
             time.sleep(0.005)
         return round(time.monotonic() - t, 3)
     def run_phase(name, order, q):
@@ -128,9 +143,9 @@ try:
         tS = time.monotonic()
         while any(v["finish_mono"] is None for v in st.values()):
             if time.monotonic() - tS > 3 * 3600: EV.emit("warn", msg=f"{name} 3시간 초과"); break
-            pre_w = wstat(); s0 = time.monotonic(); w0 = time.time()
+            pre_w = wstat(); pre_k = kvstat(); s0 = time.monotonic(); w0 = time.time()
             torch.cuda.nvtx.range_push("step"); outs = eng.step(); torch.cuda.nvtx.range_pop()
-            s1 = time.monotonic(); post_w = wstat()
+            s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
             got_first = False
             for o in outs:
                 v = st.get(o.request_id)
@@ -142,10 +157,11 @@ try:
                     reqs_f.write(json.dumps(dict(phase=name, rid=o.request_id, **v)) + "\n")
             n_out = len(outs); n_tok = sum(len(o.outputs[0].token_ids) for o in outs if o.outputs)
             if s1 - s0 > 0.3 or n_out:
-                with EV.lk: outs_r, outs_w = EV.outs["r"], EV.outs["w"]
+                kd = {k: post_k[k] - pre_k[k] for k in ("reads", "writes", "read_bytes", "write_bytes")} if post_k else {}
                 steps_f.write(json.dumps(dict(phase=name, mono0=round(s0, 4), mono1=round(s1, 4), wall0=w0, dur=round(s1 - s0, 4),
                     kind="prefill" if (got_first or (n_out == 0 and any(v["first_mono"] is None for v in st.values()))) else "decode",
-                    n_out=n_out, n_tok=n_tok, w_reads=post_w[0] - pre_w[0], w_bytes=post_w[1] - pre_w[1], kv_out_r=outs_r, kv_out_w=outs_w)) + "\n")
+                    n_out=n_out, n_tok=n_tok, w_reads=post_w[0] - pre_w[0], w_bytes=post_w[1] - pre_w[1],
+                    kv_out_r=post_k.get("outstanding_reads", 0), kv_out_w=post_k.get("outstanding_writes", 0), **{"kv_" + k: v for k, v in kd.items()})) + "\n")
             elif args.poll_sleep_ms and not outs:
                 time.sleep(args.poll_sleep_ms / 1000.0)
         d = drain()
@@ -159,9 +175,10 @@ try:
     EV.phase("settle"); time.sleep(args.settle_sec)
     res["phases"]["reverse_retrieve"] = run_phase("reverse_retrieve", list(reversed(range(N))), 1)
     EV.phase("final_settle"); time.sleep(args.final_settle_sec)
-    with EV.lk: io = list(EV.io)
-    res["kv_io"] = dict(read_n=sum(1 for x in io if x[3] == "r"), read_gib=round(sum(x[2] for x in io if x[3] == "r") / 2**30, 2),
-                        write_n=sum(1 for x in io if x[3] == "w"), write_gib=round(sum(x[2] for x in io if x[3] == "w") / 2**30, 2))
+    ks = kvstat()
+    res["kv_io"] = dict(read_n=ks.get("reads", 0), read_gib=round(ks.get("read_bytes", 0) / 2**30, 2), write_n=ks.get("writes", 0),
+                        write_gib=round(ks.get("write_bytes", 0) / 2**30, 2), read_busy_s=round(ks.get("read_busy_ns", 0) / 1e9, 1),
+                        write_busy_s=round(ks.get("write_busy_ns", 0) / 1e9, 1), errors=ks.get("errors", 0), registered_tensors=ks.get("registered_tensors", 0))
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
     if args.kv_transport != "none":
