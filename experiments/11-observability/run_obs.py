@@ -151,7 +151,7 @@ try:
                 v = st.get(o.request_id)
                 if v is None: continue
                 if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True
-                if o.outputs: v["ntok"] = len(o.outputs[0].token_ids)
+                if o.outputs: v["ntok"] = len(o.outputs[0].token_ids); v["ids"] = list(o.outputs[0].token_ids)
                 if o.finished:
                     v["finish_mono"] = s1; v["finish_wall"] = time.time()
                     reqs_f.write(json.dumps(dict(phase=name, rid=o.request_id, **v)) + "\n")
