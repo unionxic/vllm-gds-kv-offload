@@ -18,6 +18,7 @@ ap.add_argument("--prompt-source", default="leval", choices=["leval", "longbench
 ap.add_argument("--longbench-file", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "longbench-v2-10k-32.jsonl"))
 ap.add_argument("--bailian-trace", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "02-bailian", "replay600", "trace", "qwen_coder.jsonl"),
                 help="bailian trace jsonl(chat_id, turn, input_length, hash_ids). 02-bailian/replay600/replay.py와 같은 파일")
+ap.add_argument("--bailian-offset", type=int, default=0, help="bailian: trace 앞에서 건너뛸 행 수(재사용 비율이 평균에 가까운 창을 고를 때)")
 ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
 ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
 ap.add_argument("--profile-out", default=None, help="재사용 프로파일 json 경로. 요청별(doc, phase, 프롬프트 토큰 수, 적중 토큰 수)와 doc별 재사용 횟수")
@@ -66,7 +67,8 @@ INPUT_FILE = {"longbench": args.longbench_file, "bailian": args.bailian_trace}.g
 subprocess.run(["bash", os.path.join(ROOT, "lib", "obs", "envinfo.sh"), R, INPUT_FILE], check=False)
 from transformers import AutoConfig
 hc = AutoConfig.from_pretrained(args.model); d_model, n_layer = int(hc.hidden_size), int(hc.num_hidden_layers)
-kv_req = 2 * n_layer * d_model * 2 * args.max_model_len
+_kvh = int(getattr(hc, 'num_key_value_heads', None) or hc.num_attention_heads); _hd = d_model // int(hc.num_attention_heads)
+kv_req = 2 * n_layer * _kvh * _hd * 2 * args.max_model_len  # K+V × layer × kv_heads × head_dim × fp16(GQA 반영)
 kv_gib = round(args.kv_batch * kv_req * 1.15 / 2**30, 2)
 w_off = 12 * d_model * d_model * 2 * n_layer
 mem_total = int(next(l for l in open("/proc/meminfo") if l.startswith("MemTotal")).split()[1]) * 1024
@@ -203,11 +205,12 @@ try:
         import random
         _vocab = int(getattr(llm.get_tokenizer(), "vocab_size", 0) or hc.vocab_size)
         _lo, _hi = 1000, _vocab - 1000
-        rows = []
+        rows = []; _skipped = 0
         with open(os.path.abspath(args.bailian_trace)) as f:
             for line in f:
-                if line.strip():
-                    rows.append(json.loads(line))
+                if not line.strip(): continue
+                if _skipped < args.bailian_offset: _skipped += 1; continue
+                rows.append(json.loads(line))
                 if len(rows) >= args.n_docs: break
         cap = args.prompt_cap or (args.max_model_len - args.decode_tokens - 64)
         nblk = max(1, cap // args.bailian_block)
@@ -222,7 +225,7 @@ try:
             toks = []
             for h in r["hash_ids"][:nblk]: toks.extend(_block(h))
             docs.append(toks[:cap]); doc_meta.append(dict(chat_id=r.get("chat_id"), turn=r.get("turn"), input_length=r.get("input_length"), n_hash=len(r["hash_ids"])))
-        EV.emit("bailian_trace", rows=len(docs), block=args.bailian_block, blocks_kept=nblk, vocab=_vocab,
+        EV.emit("bailian_trace", offset=args.bailian_offset, rows=len(docs), block=args.bailian_block, blocks_kept=nblk, vocab=_vocab,
                 unique_hashes=len(_bcache), total_hash_refs=sum(m["n_hash"] for m in doc_meta))
         _tail = {q: [random.Random(0x7A11 + q).randrange(_lo, _hi) for _ in range(8)] for q in range(4)}
         def prompt(i, q):
@@ -319,6 +322,11 @@ try:
     res["kv_io"]["write_stages_s"] = {k: round(ks.get(f"w_{k}_ns", 0) / 1e9, 1) for k in ("ev", "open", "io", "fin")}
     res["kv_io"]["read_stages_s"] = {k: round(ks.get(f"r_{k}_ns", 0) / 1e9, 1) for k in ("open", "io", "fin")}
     res["kv_io"]["write_calls"] = ks.get("w_calls", 0); res["kv_io"]["read_calls"] = ks.get("r_calls", 0)
+    try:
+        import vllm.v1.kv_offload.cufile_fs.spec as _cfs
+        res["kv_manager"] = _cfs.LAST_MANAGER.stats() if _cfs.LAST_MANAGER is not None else None
+    except Exception as e:
+        res["kv_manager"] = {"error": repr(e)}
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
     if args.kv_transport != "none" and os.path.isdir(args.kv_root):
