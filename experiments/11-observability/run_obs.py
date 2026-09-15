@@ -22,8 +22,8 @@ ap.add_argument("--bailian-offset", type=int, default=0, help="bailian: trace �
 ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
 ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
 ap.add_argument("--profile-out", default=None, help="재사용 프로파일 json 경로. 요청별(doc, phase, 프롬프트 토큰 수, 적중 토큰 수)와 doc별 재사용 횟수")
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache", "cpu"],
-                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음)")
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache", "cpu", "hybrid"],
+                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음). hybrid: 포크 HybridSpec(host 층 + GDS SSD 층, write-through)")
 ap.add_argument("--kv-host-gb", type=float, default=8.0, help="cpu: host KV 층 크기(GB, cpu_bytes_to_use)")
 ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
 ap.add_argument("--lmcache-port", type=int, default=5555)
@@ -141,6 +141,9 @@ if args.kv_transport == "lmcache":
 elif args.kv_transport != "none":
     if args.kv_transport == "cpu":
         extra = {"spec_name": "CPUOffloadingSpec", "cpu_bytes_to_use": int(args.kv_host_gb * 1e9)}
+    elif args.kv_transport == "hybrid":
+        extra = {"spec_name": "HybridSpec", "hybrid_host_gb": args.kv_host_gb, "cufile_fs_root_dir": args.kv_root,
+                 "cufile_fs_register_tensors": str(args.register_tensors), "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
     else:
         extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
                  "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
@@ -170,6 +173,9 @@ try:
                      host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
     EV.emit("tiers", **tiers)
     KVW = None
+    if args.kv_transport == "hybrid":
+        import vllm.v1.kv_offload.hybrid.spec as hspec
+        KVW = hspec.LAST_WORKER.ssd if hspec.LAST_WORKER is not None else None  # SSD(GDS) 쪽 native 통계·이벤트
     if args.kv_transport == "cufile":
         import vllm.v1.kv_offload.cufile_fs.spec as cfs
         KVW = cfs.LAST_WORKER
@@ -327,8 +333,13 @@ try:
     res["kv_io"]["read_stages_s"] = {k: round(ks.get(f"r_{k}_ns", 0) / 1e9, 1) for k in ("open", "io", "fin")}
     res["kv_io"]["write_calls"] = ks.get("w_calls", 0); res["kv_io"]["read_calls"] = ks.get("r_calls", 0)
     try:
-        import vllm.v1.kv_offload.cufile_fs.spec as _cfs
-        res["kv_manager"] = _cfs.LAST_MANAGER.stats() if _cfs.LAST_MANAGER is not None else None
+        if args.kv_transport == "hybrid":
+            import vllm.v1.kv_offload.hybrid.spec as _hs
+            res["kv_manager"] = _hs.LAST_MANAGER.stats() if _hs.LAST_MANAGER is not None else None
+            res["kv_worker_hybrid"] = {k: v for k, v in _hs.LAST_WORKER.stats().items() if k != "ssd"} if _hs.LAST_WORKER is not None else None
+        else:
+            import vllm.v1.kv_offload.cufile_fs.spec as _cfs
+            res["kv_manager"] = _cfs.LAST_MANAGER.stats() if _cfs.LAST_MANAGER is not None else None
     except Exception as e:
         res["kv_manager"] = {"error": repr(e)}
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)

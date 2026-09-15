@@ -16,6 +16,7 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
     cufile-lru) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_capacity_gb\": $CAP, \"cufile_fs_policy\": \"lru\"}");;
     cufile-lfu) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_capacity_gb\": $CAP, \"cufile_fs_policy\": \"lfu\"}");;
     cufile-seen2) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_admission\": \"seen_twice\"}");;
+    hybrid) kvt=hybrid; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"hybrid_host_policy\": \"${CPUPOL:-lru}\", \"hybrid_placement\": \"${PLACEMENT:-host_first}\"${PROFILE:+, \"hybrid_profile\": \"$PROFILE\"}}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru}-${PLACEMENT:-host_first};;
     cpu) kvt=cpu; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"eviction_policy\": \"${CPUPOL:-lru}\"}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru};;
     *) log "unknown cond $cond"; continue;; esac
   rm -rf $O/kv-72b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
