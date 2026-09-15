@@ -183,7 +183,7 @@ try:
         _ss, _sl, _gf = KVW.submit_store, KVW.submit_load, KVW.get_finished
         _jobs = {}
         def submit_store(job_id, src, dst):
-            _jobs[job_id] = ("w", time.monotonic(), len(dst.paths) * KVW.chunk_bytes)
+            torch.cuda.nvtx.mark(f"kv_submit_store job={job_id} chunks={len(dst.paths) if hasattr(dst, 'paths') else '?'}"); _jobs[job_id] = ("w", time.monotonic(), len(dst.paths) * KVW.chunk_bytes)
             EV.emit("kv_w_submit", job=job_id, chunks=len(dst.paths), bytes=len(dst.paths) * KVW.chunk_bytes); return _ss(job_id, src, dst)
         def submit_load(job_id, src, dst):
             _jobs[job_id] = ("r", time.monotonic(), len(src.paths) * KVW.chunk_bytes)
@@ -268,19 +268,19 @@ try:
     def run_phase(name, order, q):
         matched[0] = 0; matched_req.clear()
         EV.phase(name, requests=len(order))
-        capture = name in NSYS_PHASES; n_fwd = 0
+        capture = name in NSYS_PHASES; n_fwd = 0; n_step = 0
         if capture: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
         torch.cuda.nvtx.range_push(f"phase:{name}")
         st = {}
         for i in order:
             rid = f"{name}-{i}"; toks = prompt(i, q)
-            eng.add_request(rid, {"prompt_token_ids": toks}, sp)
+            eng.add_request(rid, {"prompt_token_ids": toks}, sp); torch.cuda.nvtx.mark(f"req_submit {rid} {len(toks)}tok")
             st[rid] = dict(doc=i, tokens=len(toks), submit_mono=time.monotonic(), submit_wall=time.time(), first_mono=None, finish_mono=None, ntok=0)
         tS = time.monotonic()
         while any(v["finish_mono"] is None for v in st.values()):
             if time.monotonic() - tS > 3 * 3600: EV.emit("warn", msg=f"{name} 3시간 초과"); break
             pre_w = wstat(); pre_k = kvstat(); s0 = time.monotonic(); w0 = time.time()
-            torch.cuda.nvtx.range_push(f"step:{name}"); outs = eng.step(); torch.cuda.nvtx.range_pop()
+            torch.cuda.nvtx.range_push(f"step:{name} #{n_step} running={sum(1 for v in st.values() if v['first_mono'] is None or v['finish_mono'] is None)}"); outs = eng.step(); torch.cuda.nvtx.range_pop(); n_step += 1
             s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
             if capture and s1 - s0 > 0.3:
                 n_fwd += 1
@@ -290,10 +290,10 @@ try:
             for o in outs:
                 v = st.get(o.request_id)
                 if v is None: continue
-                if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True
+                if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True; torch.cuda.nvtx.mark(f"req_first_token {o.request_id}")
                 if o.outputs: v["ntok"] = len(o.outputs[0].token_ids); v["ids"] = list(o.outputs[0].token_ids)
                 if o.finished:
-                    v["finish_mono"] = s1; v["finish_wall"] = time.time()
+                    v["finish_mono"] = s1; v["finish_wall"] = time.time(); torch.cuda.nvtx.mark(f"req_finish {o.request_id}")
                     reqs_f.write(json.dumps(dict(phase=name, rid=o.request_id, **v)) + "\n")
                     _m, _n = matched_of(o.request_id)
                     prof.append(dict(phase=name, rid=o.request_id, doc=v["doc"], q=q, tokens=v["tokens"],
