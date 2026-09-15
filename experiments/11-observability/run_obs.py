@@ -22,8 +22,9 @@ ap.add_argument("--bailian-offset", type=int, default=0, help="bailian: trace �
 ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
 ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
 ap.add_argument("--profile-out", default=None, help="재사용 프로파일 json 경로. 요청별(doc, phase, 프롬프트 토큰 수, 적중 토큰 수)와 doc별 재사용 횟수")
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache"],
-                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접)")
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache", "cpu"],
+                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음)")
+ap.add_argument("--kv-host-gb", type=float, default=8.0, help="cpu: host KV 층 크기(GB, cpu_bytes_to_use)")
 ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
 ap.add_argument("--lmcache-port", type=int, default=5555)
 ap.add_argument("--lmcache-chunk", type=int, default=64, help="lmcache: 토큰 chunk. GDS staging 버퍼 = chunk KV × 4가 BAR1 안이어야 함")
@@ -138,8 +139,11 @@ if args.kv_transport == "lmcache":
                 return _w
             _c.get_num_new_matched_tokens = _mk(_orig)
 elif args.kv_transport != "none":
-    extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
-             "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
+    if args.kv_transport == "cpu":
+        extra = {"spec_name": "CPUOffloadingSpec", "cpu_bytes_to_use": int(args.kv_host_gb * 1e9)}
+    else:
+        extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
+                 "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
     if not args.pure: extra["block_size"] = args.kv_block
     if args.kv_extra: extra.update(json.loads(args.kv_extra))
     kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both", kv_connector_extra_config=extra)
