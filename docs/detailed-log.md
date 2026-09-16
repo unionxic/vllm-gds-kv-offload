@@ -112,7 +112,7 @@ opt-2.7b 결과. prefix 2032에서 재계산 1.155초 대 SSD hit 0.483초로 2.
 
 함정 둘. cuda-python의 cufile 바인딩은 pip 휠 libcufile을 dlopen해 시스템 라이브러리와 이중 로드되고 비결정 segfault를 낸다. 해법은 시스템 libcufile만 ctypes로 단일 로드하는 gdslib.py. 또 rain의 nvidia-fs는 IO 통계가 꺼져 있어 per-IO 카운터가 0에 고정된다. 대체 증거로 Bar1 매핑 카운터와 cufile.log TRACE 분류기를 쓴다. 분류 결과 등록 IO는 direct, 미등록 write는 nvidia-fs 내부 바운스, 미등록 read는 direct, compat POSIX 폴백은 전무.
 
-행렬 결과(27개 기하 x 4개 transport x 읽기/쓰기, 체크섬 전건 통과). 등록 실패 없음. op별로 필요한 쪽만 등록하면 BAR1 256MB에서 128MiB span까지 등록된다. 단일 span 기하에서 등록 GDS가 posix 대비 쓰기 14%, 읽기 22% 빠르고(최대 3.3GiB/s), 작은 span 여러 개에서는 posix 코얼레싱이 이긴다. crossover는 span 조각 1MiB 부근. CPU 사용률은 GDS 쪽이 3할가량 낮고 host 메모리 왕복이 없다. staging 경유는 전 구간 최하위. 게이트 통과.
+행렬 결과(27개 기하 x 4개 transport x 읽기/쓰기, 체크섬 전건 통과). 등록 실패 없음. op별로 필요한 쪽만 등록하면 BAR1 256MB에서 128MiB span까지 등록된다. 단일 span 기하에서 등록 GDS가 posix 대비 쓰기 14%, 읽기 22% 빠르고(최대 3.3GiB/s), 작은 span 여러 개에서는 posix 코얼레싱이 이긴다. crossover는 span chunk 1MiB 부근. CPU 사용률은 GDS 쪽이 3할가량 낮고 host 메모리 왕복이 없다. staging 경유는 전 구간 최하위. 게이트 통과.
 
 #### expfs 검증
 
@@ -777,7 +777,7 @@ backend(csrc/kv_offload/cufile_fs.cpp)의 파일 1개 처리 순서는 CUDA 이�
 
 | forward | 길이 | 가중치 cuFileRead 합집합 | KV cuFileWrite 합집합 | 쓰기와 가중치 읽기의 겹침 |
 |---|---|---|---|---|
-| cold_fill prefill(문서 2개째 조각) | 123 s | 24 s | 1.1~1.4 s | 0 |
+| cold_fill prefill(문서 2개째 chunk) | 123 s | 24 s | 1.1~1.4 s | 0 |
 | cold_fill decode | 28~30 s | 22~24 s | 0 | 0 |
 | reverse prefill(적중) | 29 s | 22~23 s | 0 | 0 |
 
