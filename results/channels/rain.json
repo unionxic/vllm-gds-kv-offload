@@ -1,0 +1,71 @@
+{
+ "gib": 4.0,
+ "reps": 3,
+ "single": {
+  "h2d_pinned": 12.26,
+  "h2d_pageable": 11.21,
+  "d2h_pinned": 13.17,
+  "ssd_write_cufile": 2.05,
+  "ssd_read_cufile": 2.95,
+  "gpu_fp16_tflops": 68.6,
+  "gpu_mm60_s": 0.964
+ },
+ "pair": {
+  "h2d_pinned+ssd_read": {
+   "wall_s": 1.78,
+   "h2d_gbps": 8.21,
+   "ssd_read_gbps": 2.42,
+   "h2d_vs_single": 0.67,
+   "ssd_read_vs_single": 0.82
+  },
+  "h2d_pinned+d2h_pinned": {
+   "wall_s": 0.38,
+   "h2d_gbps": 11.28,
+   "d2h_gbps": 11.28,
+   "h2d_vs_single": 0.92,
+   "d2h_vs_single": 0.86
+  },
+  "ssd_read+ssd_write": {
+   "wall_s": 6.46,
+   "ssd_read_gbps": 1.58,
+   "ssd_write_gbps": 0.67,
+   "ssd_read_vs_single": 0.54,
+   "ssd_write_vs_single": 0.33
+  },
+  "h2d_pinned+gpu_mm": {
+   "wall_s": 1.07,
+   "h2d_gbps": 12.09,
+   "gpu_mm_s": 0.973,
+   "h2d_vs_single": 0.99,
+   "gpu_mm_vs_single": 0.99
+  },
+  "ssd_read+gpu_mm": {
+   "wall_s": 1.26,
+   "ssd_read_gbps": 3.42,
+   "gpu_mm_s": 0.972,
+   "ssd_read_vs_single": 1.16,
+   "gpu_mm_vs_single": 0.99
+  },
+  "h2d_pinned+ssd_read+gpu_mm": {
+   "h2d_gbps": 8.24,
+   "ssd_read_gbps": 3.42,
+   "gpu_mm_s": 0.974,
+   "wall_s": 1.26,
+   "h2d_vs_single": 0.67,
+   "ssd_read_vs_single": 1.16,
+   "gpu_mm_vs_single": 0.99
+  },
+  "d2h_pinned+ssd_read": {
+   "wall_s": 1.26,
+   "d2h_gbps": 13.0,
+   "ssd_read_gbps": 3.41,
+   "d2h_vs_single": 0.99,
+   "ssd_read_vs_single": 1.16
+  }
+ },
+ "env": {
+  "gpu": "Quadro RTX 5000",
+  "torch": "2.11.0+cu129",
+  "host": "rain"
+ }
+}
