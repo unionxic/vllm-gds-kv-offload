@@ -9,7 +9,7 @@ unset CUFILE_ENV_PATH_JSON VLLM_OFFLOAD_SSD_REGISTER_MAX_MB; export VLLM_OFFLOAD
 MODEL=Qwen/Qwen2.5-72B-Instruct; O=$(mkdir -p ../../results/qwen72b && cd ../../results/qwen72b && pwd); log(){ echo "[$(date +%m-%d\ %H:%M:%S)] $*" >> $O/campaign.log; }
 WB='{"cufile_fs_store_window": "host", "cufile_fs_store_window_max_s": 30}'
 log "== qwen72b: RAM ${RATIOS:-0.5} × (${CONDS:-none cufile cufile-wb}), docs ${NDOCS:-32}, decode ${DECODE:-8}, NSYS=${NSYS:-0}"
-for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=${SRC:+$SRC-}ram$f-$cond${LAYOUT:+-$LAYOUT}${PSTEP:+-p$PSTEP}${TAGSUF:-}
+for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=${SRC:+$SRC-}ram$f-$cond${LAYOUT:+-$LAYOUT}${PSTEP:+-p$PSTEP}${SPLIT:+-split}${TAGSUF:-}
   [ -f $O/$tag/result.json ] && { log "skip $tag"; continue; }
   CAP=${CAPGB:-12}
   case $cond in none) kvt=none; extra=();; cufile) kvt=cufile; extra=();; cufile-wb) kvt=cufile; extra=(--kv-extra "$WB");;
@@ -25,7 +25,7 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
   log "start $tag"
   for util in ${UTILS:-0.9 0.85}; do
     "${wrap[@]}" python run_obs.py --run-dir $O/$tag --model $MODEL --prompt-source ${SRC:-longbench} --bailian-offset ${BOFF:-0} --n-docs ${NDOCS:-32} --decode-tokens ${DECODE:-8} --max-model-len ${MAXLEN:-12288} \
-      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --max-num-batched-tokens ${MNBT:-0} --pure --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
+      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --max-num-batched-tokens ${MNBT:-0} --kv-split ${SPLIT:-off} --pure --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
       --profile-out $O/$tag-profile.json --ssd-root $O/ssd-72b --kv-root $O/kv-72b "${extra[@]}" > $O/$tag.log 2>&1
     rc=$?
     [ -f $O/$tag/result.json ] && break
