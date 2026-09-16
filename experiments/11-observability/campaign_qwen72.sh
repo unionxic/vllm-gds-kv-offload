@@ -21,10 +21,11 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
     *) log "unknown cond $cond"; continue;; esac
   rm -rf $O/kv-72b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
   wrap=(); [ "${NSYS:-0}" = 1 ] && { wrap=(../../lib/obs/run_nsys.sh $O/$tag-nsys --); export NSYS_CAPTURE=cudaProfilerApi; extra+=(--nsys-phase "${NSYS_PHASE:-cold_fill}" --nsys-steps "${NSYS_STEPS:-40}"); mkdir -p $O/$tag-nsys; }
+  avail_gb=$(df -BG --output=avail $O | tail -1 | tr -dc 0-9); [ "${avail_gb:-0}" -lt 60 ] && { log "SKIP $tag: 디스크 여유 ${avail_gb} GB < 60 GB"; kill $g 2>/dev/null; continue; }
   log "start $tag"
   for util in ${UTILS:-0.9 0.85}; do
     "${wrap[@]}" python run_obs.py --run-dir $O/$tag --model $MODEL --prompt-source ${SRC:-longbench} --bailian-offset ${BOFF:-0} --n-docs ${NDOCS:-32} --decode-tokens ${DECODE:-8} --max-model-len ${MAXLEN:-12288} \
-      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --pure --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
+      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --max-num-batched-tokens ${MNBT:-0} --pure --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
       --profile-out $O/$tag-profile.json --ssd-root $O/ssd-72b --kv-root $O/kv-72b "${extra[@]}" > $O/$tag.log 2>&1
     rc=$?
     [ -f $O/$tag/result.json ] && break
