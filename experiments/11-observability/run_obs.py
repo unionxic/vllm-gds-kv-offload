@@ -46,6 +46,9 @@ ap.add_argument("--final-settle-sec", type=float, default=15.0)
 ap.add_argument("--poll-sleep-ms", type=float, default=1.0)
 ap.add_argument("--ssd-root", required=True); ap.add_argument("--kv-root", required=True)
 ap.add_argument("--no-monitors", action="store_true")
+ap.add_argument("--kv-split", default="off", help="split-source KV 모드(VLLM_KV_SPLIT): off | fixed:<frac> | model. "
+                "적중 프리픽스의 앞 k청크는 GPU 재계산, 뒤 H-k청크는 티어에서 동시 적재")
+ap.add_argument("--kv-split-rate-toks", type=float, default=None, help="split model 모드의 prefill 처리율(tok/s, VLLM_KV_SPLIT_RATE_TOKS)")
 ap.add_argument("--kv-extra", default=None, help="cufile: kv_connector_extra_config에 덧붙일 JSON. 예: '{\"cufile_fs_store_window\": \"host\"}'")
 ap.add_argument("--no-weight-offload", action="store_true", help="가중치를 전부 GPU에(오프로더 끔). 작은 모델 전용")
 ap.add_argument("--kv-load-failure-policy", default="fail", choices=["fail", "recompute"])
@@ -55,6 +58,9 @@ ap.add_argument("--nsys-steps", type=int, default=0, help="캡처 phase에서 �
 args = ap.parse_args()
 NSYS_PHASES = {x.strip() for x in args.nsys_phase.split(",") if x.strip()}
 os.environ.setdefault("VLLM_USE_V2_MODEL_RUNNER", "0"); os.environ.setdefault("VLLM_ENABLE_V1_MULTIPROCESSING", "0")
+os.environ["VLLM_KV_SPLIT"] = args.kv_split
+if args.kv_split_rate_toks is not None:
+    os.environ["VLLM_KV_SPLIT_RATE_TOKS"] = str(args.kv_split_rate_toks)
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(ROOT, "lib"))
 R = os.path.abspath(args.run_dir)
@@ -344,6 +350,12 @@ try:
             res["kv_manager"] = _cfs.LAST_MANAGER.stats() if _cfs.LAST_MANAGER is not None else None
     except Exception as e:
         res["kv_manager"] = {"error": repr(e)}
+    try:
+        import vllm.v1.kv_offload.split_policy as _sp
+        res["kv_split"] = dict(_sp.LAST_SPLIT_STATS)
+        res["kv_split"]["tail_wait_s_total"] = round(res["kv_split"]["tail_wait_s_total"], 3)
+    except Exception as e:
+        res["kv_split"] = {"error": repr(e)}
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
     if args.kv_transport != "none" and os.path.isdir(args.kv_root):
