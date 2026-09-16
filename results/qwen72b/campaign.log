@@ -26,3 +26,94 @@
 [09-15 07:34:29] start bailian-ram0.5-cufile-seen2
 [09-15 08:53:51] done  bailian-ram0.5-cufile-seen2 rc=0 (gpu_util 0.85)
 [09-15 08:53:51] == qwen72b 종료
+[09-15 13:15:27] == qwen72b: RAM 0.44 × (cpu), docs 32, decode 8, NSYS=0
+[09-15 13:15:27] start bailian-ram0.44-cpu8gb-lru
+[09-15 14:40:45] done  bailian-ram0.44-cpu8gb-lru rc=0 (gpu_util 0.85)
+[09-15 14:40:45] == qwen72b: RAM 0.31 × (cpu none), docs 32, decode 8, NSYS=0
+[09-15 14:40:45] start bailian-ram0.31-cpu24gb-lru
+[09-15 15:02:27] cancelled bailian-ram0.31-cpu24gb-lru (사용자 지시: 티어 교차 배치 먼저)
+[09-15 15:13:52] == qwen72b: RAM 0.5 × (none cufile), docs 32, decode 8, NSYS=0
+[09-15 15:13:52] start bailian-ram0.5-none-interleave-p2
+[09-15 15:14:19] OOM bailian-ram0.5-none-interleave-p2 (gpu_util 0.85) → 재시도
+[09-15 15:14:47] OOM bailian-ram0.5-none-interleave-p2 (gpu_util 0.8) → 재시도
+[09-15 15:14:47] FAILED bailian-ram0.5-none-interleave-p2 rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 462.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 300.12 MiB is free. Including non-PyTorch memory, this process has 15.24 GiB memory in use. Of the allocated memory 15.08 GiB is allocated by PyTorch, and 12.78 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-15 15:14:47] start bailian-ram0.5-cufile-interleave-p2
+[09-15 15:15:15] OOM bailian-ram0.5-cufile-interleave-p2 (gpu_util 0.85) → 재시도
+[09-15 15:15:48] interleave 캠페인 중단(교차 배치 구현이 적재 단계 OOM)
+[09-15 15:19:17] == qwen72b: RAM 0.5 × (none cufile), docs 32, decode 8, NSYS=0
+[09-15 15:19:17] start bailian-ram0.5-none-interleave-p2
+[09-15 15:29:47] OOM bailian-ram0.5-none-interleave-p2 (gpu_util 0.85) → 재시도
+[09-15 15:37:34] interleave 런 취소(사용자 지시: LFU 무제한 + nsys 먼저)
+[09-15 15:37:34] == qwen72b: RAM 0.5 × (cufile-lfu), docs 32, decode 8, NSYS=1
+[09-15 15:37:34] start bailian-ram0.5-cufile-lfu-nocap-nsys
+[09-15 15:46:38] LFU 무제한 nsys 런 취소(사용자 지시). 정책 묶음 비교(A0, A1, B)로 진행
+[09-15 15:51:53] 3B hybrid smoke rc=0
+[09-15 15:51:53] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-15 15:51:53] start bailian-ram0.5-none-interleave-p2
+[09-15 16:02:21] OOM bailian-ram0.5-none-interleave-p2 (gpu_util 0.8) → 재시도
+[09-15 17:31:53] done  bailian-ram0.5-none-interleave-p2 rc=0 (gpu_util 0.75)
+[09-15 17:31:53] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-15 17:31:53] start bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys
+[09-15 17:43:07] OOM bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys (gpu_util 0.8) → 재시도
+[09-15 17:53:38] OOM bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys (gpu_util 0.75) → 재시도
+[09-15 17:53:38] FAILED bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-gate2-ours-nsys.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 462.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 444.12 MiB is free. Including non-PyTorch memory, this process has 14.98 GiB memory in use. Of the allocated memory 14.34 GiB is allocated by PyTorch, and 453.82 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-15 17:53:38] == qwen72b 종료
+[09-15 17:53:38] == qwen72b: RAM 0.5 × (hybrid), docs 32, decode 8, NSYS=1
+[09-15 17:53:38] start bailian-ram0.5-hybrid-lmcache-nsys8gb-lru-host_first
+[09-16 12:56:28] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 12:56:28] start bailian-ram0.5-none-interleave-p2-mnbt2k
+[09-16 12:58:14] 정책 비교 큐 중단(사용자 지시)
+[09-16 16:18:51] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 16:18:51] start bailian-ram0.5-none-interleave-p2-mnbt2k
+[09-16 16:29:20] OOM bailian-ram0.5-none-interleave-p2-mnbt2k (gpu_util 0.85) → 재시도
+[09-16 16:39:41] OOM bailian-ram0.5-none-interleave-p2-mnbt2k (gpu_util 0.8) → 재시도
+[09-16 16:39:41] FAILED bailian-ram0.5-none-interleave-p2-mnbt2k rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-mnbt2k.log:[rank0]:     raise RuntimeError(
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-mnbt2k.log:[rank0]: RuntimeError: CUDA out of memory occurred when warming up sampler with 256 dummy requests. Please try lowering `max_num_seqs` or `gpu_memory_utilization` when initializing the engine.
+[09-16 16:39:41] == qwen72b 종료
+[09-16 16:41:54] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 16:41:54] start bailian-ram0.5-none-interleave-p2-mnbt2k
+[09-16 16:41:54] FAILED bailian-ram0.5-none-interleave-p2-mnbt2k rc=2
+[09-16 16:41:54] == qwen72b 종료
+[09-16 16:41:54] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-16 16:41:54] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-nsys
+[09-16 16:41:55] FAILED bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-nsys rc=2
+[09-16 16:41:55] == qwen72b 종료
+[09-16 16:41:55] == qwen72b: RAM 0.5 × (hybrid), docs 32, decode 8, NSYS=1
+[09-16 16:41:55] start bailian-ram0.5-hybrid-lmcache-mnbt2k-nsys8gb-lru-host_first
+[09-16 16:41:56] FAILED bailian-ram0.5-hybrid-lmcache-mnbt2k-nsys8gb-lru-host_first rc=2
+[09-16 16:41:56] == qwen72b 종료
+[09-16 16:41:56] == night policy sets 종료
+[09-16 16:42:48] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 16:42:48] start bailian-ram0.5-none-interleave-p2-mnbt2k
+[09-16 16:42:48] FAILED bailian-ram0.5-none-interleave-p2-mnbt2k rc=2
+[09-16 16:42:48] == qwen72b 종료
+[09-16 16:42:48] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-16 16:42:48] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-nsys
+[09-16 16:42:49] FAILED bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-nsys rc=2
+[09-16 16:42:49] == qwen72b 종료
+[09-16 16:42:49] == qwen72b: RAM 0.5 × (hybrid), docs 32, decode 8, NSYS=1
+[09-16 16:42:50] start bailian-ram0.5-hybrid-lmcache-mnbt2k-nsys8gb-lru-host_first
+[09-16 16:42:50] FAILED bailian-ram0.5-hybrid-lmcache-mnbt2k-nsys8gb-lru-host_first rc=2
+[09-16 16:42:50] == qwen72b 종료
+[09-16 16:42:50] == night policy sets 종료
+[09-16 16:44:37] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 16:44:37] start bailian-ram0.5-none-interleave-p2-mnbt2k
+[09-16 16:54:58] OOM bailian-ram0.5-none-interleave-p2-mnbt2k (gpu_util 0.85) → 재시도
+[09-16 17:04:25] OOM bailian-ram0.5-none-interleave-p2-mnbt2k (gpu_util 0.8) → 재시도
+[09-16 17:04:25] FAILED bailian-ram0.5-none-interleave-p2-mnbt2k rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-mnbt2k.log:[rank0]:     raise RuntimeError(
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-mnbt2k.log:[rank0]: RuntimeError: CUDA out of memory occurred when warming up sampler with 256 dummy requests. Please try lowering `max_num_seqs` or `gpu_memory_utilization` when initializing the engine.
+[09-16 17:04:25] == qwen72b 종료
+[09-16 17:04:25] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-16 17:04:25] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-nsys
+[09-16 17:05:06] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 17:05:06] start bailian-ram0.5-none-interleave-p2-mnbt2k-kv2
+[09-16 18:27:51] done  bailian-ram0.5-none-interleave-p2-mnbt2k-kv2 rc=0 (gpu_util 0.85)
+[09-16 18:27:51] == qwen72b 종료
+[09-16 18:27:51] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-16 18:27:51] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys
