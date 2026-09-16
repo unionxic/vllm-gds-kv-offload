@@ -56,3 +56,65 @@ INFO 09-16 19:48:17 [weight_utils.py:899] Auto-prefetch is disabled because the 
 Loading safetensors checkpoint shards:  70% Completed | 26/37 [02:24<02:19, 12.67s/it]
 Loading safetensors checkpoint shards:  73% Completed | 27/37 [02:37<02:08, 12.89s/it]
 Loading safetensors checkpoint shards:  76% Completed | 28/37 [02:50<01:57, 13.01s/it]
+Loading safetensors checkpoint shards:  78% Completed | 29/37 [03:03<01:42, 12.81s/it]
+Loading safetensors checkpoint shards:  81% Completed | 30/37 [03:15<01:28, 12.67s/it]
+Loading safetensors checkpoint shards:  84% Completed | 31/37 [03:27<01:14, 12.43s/it]
+Loading safetensors checkpoint shards:  86% Completed | 32/37 [03:39<01:01, 12.20s/it]
+Loading safetensors checkpoint shards:  89% Completed | 33/37 [03:50<00:47, 11.92s/it]
+Loading safetensors checkpoint shards:  92% Completed | 34/37 [04:00<00:34, 11.37s/it]
+Loading safetensors checkpoint shards:  95% Completed | 35/37 [04:10<00:22, 11.00s/it]
+Loading safetensors checkpoint shards:  97% Completed | 36/37 [04:24<00:11, 11.70s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [04:30<00:00, 10.18s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [04:30<00:00,  7.31s/it]
+
+INFO 09-16 19:52:48 [default_loader.py:430] Loading weights took 270.82 seconds
+INFO 09-16 19:57:03 [gpu_model_runner.py:5347] Model loading took 4.65 GiB memory and 539.713087 seconds
+INFO 09-16 19:57:16 [ssd_tier.py:272] [SsdTier] cuFileBufRegister on static buffers: 1 ok, 3 failed (failed buffers use cuFile's internal GPU bounce cache)
+INFO 09-16 19:57:16 [prefetch.py:609] [PrefetchOffloader] Initialized 80 modules. Total GPU memory saved: 140.4296 GB, Static buffer pool: 1.7554 GB (group_size=80, num_in_group=80, prefetch_step=1, mode=cpu)
+INFO 09-16 19:57:16 [prefetch.py:618] [PrefetchOffloader] tiers: host 38 layers / 62.12 GiB (budget 62.74 GiB), ssd 42 layers / 68.66 GiB in 168 files
+INFO 09-16 19:57:16 [prefetch.py:647] [PrefetchOffloader] cuFile warm-up: 4 reads into static buffers
+INFO 09-16 19:57:51 [gpu_worker.py:479] Initial free memory 15.4 GiB, reserved 5.75 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-16 19:57:51 [kv_cache_utils.py:2177] GPU KV cache size: 18,832 tokens
+INFO 09-16 19:57:51 [kv_cache_utils.py:2178] Maximum concurrency for 8,192 tokens per request: 2.30x
+INFO 09-16 19:57:51 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 0207bede-9848-4357-b3fb-3b265ebfb2a4
+WARNING 09-16 19:57:51 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 19:57:51 [factory.py:47] Creating offloading spec with name: HybridSpec
+WARNING 09-16 19:57:51 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-16 19:57:51 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-16 19:57:51 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 19:57:51 [spec.py:89] HybridSpec: host 8.0 GB -> 381 blocks (20971520 bytes/chunk, policy=lru), SSD root=/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/kv-72b, placement=host_first, write_through=True
+INFO 09-16 19:57:51 [kv_connector_model_runner_mixin.py:230] Allocating a cross layer KV cache of shape (1177, 8, 80, 16, 256)
+INFO 09-16 19:57:51 [gpu_worker.py:480] Allocating 1 CPU tensors...
+INFO 09-16 19:57:54 [native.py:28] cufile_fs: building native extension from /home/unionxic/vllm/csrc/kv_offload/cufile_fs.cpp (CXX=g++-10)
+INFO 09-16 19:57:54 [spec.py:371] CuFileFs worker: 1 tensors, bpc=4, chunk=20971520 bytes, registered_tensors=0
+INFO 09-16 19:57:54 [worker.py:39] Hybrid worker: host+SSD, bpc=4
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-16 19:57:54 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-16 19:58:23 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-16 19:58:24 [core.py:347] init engine (profile, create kv cache, warmup model) took 67.31 s
+INFO 09-16 19:58:24 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 0207bede-9848-4357-b3fb-3b265ebfb2a4
+WARNING 09-16 19:58:24 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 19:58:24 [factory.py:47] Creating offloading spec with name: HybridSpec
+WARNING 09-16 19:58:24 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-16 19:58:24 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-16 19:58:24 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 19:58:24 [spec.py:89] HybridSpec: host 8.0 GB -> 381 blocks (20971520 bytes/chunk, policy=lru), SSD root=/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/kv-72b, placement=host_first, write_through=True
+INFO 09-16 19:58:24 [manager.py:122] Hybrid manager: host blocks=381 policy=LRUCachePolicy, placement=host_first, write_through=True
+WARNING 09-16 19:58:25 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-16 19:58:25 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-16 20:05:09 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT {"tiers": {"n_modules": 80, "n_ssd": 42, "host_tier_gib": 62.12, "ssd_tier_gib": 68.66}, "kv_io": {"read_n": 896, "read_gib": 17.35, "write_n": 1052, "write_gib": 20.55, "read_busy_s": 29.4, "write_busy_s": 138.5, "errors": 0, "registered_tensors": 0, "write_stages_s": {"ev": 30.4, "open": 0.3, "io": 107.7, "fin": 0.1}, "read_stages_s": {"open": 0.1, "io": 29.3, "fin": 0.0}, "write_calls": 2350, "read_calls": 2480}, "gpu_max_gib": 12.63}
+  cold_fill: wall 3116.133 s, ttft median 1624.646, matched 53024
+  reverse_retrieve: wall 2047.923 s, ttft median 1078.568, matched 520032
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first-nsys/nsys-tmp/nsys-report-0a55.qdstrm'
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first-nsys/nsys-tmp/nsys-report-defa.qdstrm'
+Processing events...
+[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [8%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [8%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [8%                          ] timeline.2.nsys-rep[2/2] [9%                          ] timeline.2.nsys-rep[2/2] [10%                         ] timeline.2.nsys-rep[2/2] [11%                         ] timeline.2.nsys-rep[2/2] [12%                         ] timeline.2.nsys-rep[2/2] [13%                         ] timeline.2.nsys-rep[2/2] [14%                         ] timeline.2.nsys-rep[2/2] [=15%                        ] timeline.2.nsys-rep[2/2] [=16%                        ] timeline.2.nsys-rep[2/2] [=17%                        ] timeline.2.nsys-rep[2/2] [==18%                       ] timeline.2.nsys-rep[2/2] [==19%                       ] timeline.2.nsys-rep[2/2] [==20%                       ] timeline.2.nsys-rep[2/2] [==21%                       ] timeline.2.nsys-rep[2/2] [===22%                      ] timeline.2.nsys-rep[2/2] [===23%                      ] timeline.2.nsys-rep[2/2] [===24%                      ] timeline.2.nsys-rep[2/2] [====25%                     ] timeline.2.nsys-rep[2/2] [====26%                     ] timeline.2.nsys-rep[2/2] [====27%                     ] timeline.2.nsys-rep[2/2] [====28%                     ] timeline.2.nsys-rep[2/2] [=====29%                    ] timeline.2.nsys-rep[2/2] [=====30%                    ] timeline.2.nsys-rep[2/2] [=====31%                    ] timeline.2.nsys-rep[2/2] [=====32%                    ] timeline.2.nsys-rep[2/2] [======33%                   ] timeline.2.nsys-rep[2/2] [======34%                   ] timeline.2.nsys-rep[2/2] [======35%                   ] timeline.2.nsys-rep[2/2] [=======36%                  ] timeline.2.nsys-rep[2/2] [=======37%                  ] timeline.2.nsys-rep[2/2] [=======38%                  ] timeline.2.nsys-rep[2/2] [=======39%                  ] timeline.2.nsys-rep[2/2] [========40%                 ] timeline.2.nsys-rep[2/2] [========41%                 ] timeline.2.nsys-rep[2/2] [========42%                 ] timeline.2.nsys-rep[2/2] [=========43%                ] timeline.2.nsys-rep[2/2] [=========44%                ] timeline.2.nsys-rep[2/2] [=========45%                ] timeline.2.nsys-rep[2/2] [=========46%                ] timeline.2.nsys-rep[2/2] [==========47%               ] timeline.2.nsys-rep[2/2] [==========48%               ] timeline.2.nsys-rep[2/2] [==========49%               ] timeline.2.nsys-rep[2/2] [===========50%              ] timeline.2.nsys-rep[2/2] [===========51%              ] timeline.2.nsys-rep[2/2] [===========52%              ] timeline.2.nsys-rep[2/2] [===========53%              ] timeline.2.nsys-rep[2/2] [============54%             ] timeline.2.nsys-rep[2/2] [============55%             ] timeline.2.nsys-rep[2/2] [============56%             ] timeline.2.nsys-rep[2/2] [============57%             ] timeline.2.nsys-rep[2/2] [=============58%            ] timeline.2.nsys-rep[2/2] [=============59%            ] timeline.2.nsys-rep[2/2] [=============60%            ] timeline.2.nsys-rep[2/2] [==============61%           ] timeline.2.nsys-rep[2/2] [==============62%           ] timeline.2.nsys-rep[2/2] [==============63%           ] timeline.2.nsys-rep[2/2] [========================100%] timeline.2.nsys-rep[2/2] [========================100%] timeline.2.nsys-rep
+Generated:
+	/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first-nsys/timeline.1.nsys-rep
+	/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first-nsys/timeline.2.nsys-rep
