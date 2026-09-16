@@ -898,6 +898,20 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 - 0.75·조각 8192 런의 26.4 s가 22.7 s와 다른 원인은 미확립(nsys 없음).
 - 출력 토큰열 64건 동일.
 
+#### 정책 묶음 비교: 우리 정책 대 LMCache 카피 (72B, 조각 2048·KV 18.8k)
+
+OOM을 피하려고 prefill 조각 2048과 GPU KV 고정(요청 2.0개분, 18.8k 토큰)으로 맞춘 조건. 기준 런(조각 8192, KV 21.4k)과는 forward 수가 달라 같은 조건 안에서만 비교. 결과 results/qwen72b/*-mnbt2k-kv2*.
+
+| 조건 | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
+|---|---|---|---|---|
+| A0' 재계산, 교차 배치 + 깊이 2 | 2,246 s / 83 | 2,123 s / 81 | 4,369 s | 22.7 s |
+| A1' 우리 묶음: 교차 배치 + 깊이 2 + 게이트 2 + write-behind + 분할 model + 전부 저장 | 2,357 s / 81 | 1,728 s / 70 | 4,086 s (A0' 대비 −6.5%) | 22.2 s |
+| B LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 3,116 s / 81 | 2,048 s / 67 | 5,164 s | 28.4 s |
+
+- A1'의 분할은 model 모드가 k=0(전부 적재)을 골라 채널 측정 예측과 같음. nsys(앞 12 forward): decode forward 23 s 안에서 SSD 가중치 읽기가 0.5 s에 시작해 끝까지, host 복사(memcpy 합집합 8.0 s, 동시 실행 저하로 5.7 → 8 s)는 전부 그 안에 겹침. forward = SSD 읽기 시간. KV 쓰기는 forward당 1.5~3.4 s, 가중치 읽기와 겹친 몫 0.9~1.8 s(SSD 구간이 forward의 95%라 write-behind가 피할 자리가 거의 없음). KV 읽기는 forward 사이, 겹침 0.
+- B는 가중치가 기본 배치라 forward 28.4 s이고, 조각 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 조각·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. 조각 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
+- 세 런 모두 출력 토큰열 64건 동일, 오류 0.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
