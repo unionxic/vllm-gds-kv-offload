@@ -29,10 +29,10 @@ def load_memcpy(db):
     return [(a,b) for a,b,k,n in rows if k==1 and n>=1<<20], [(a,b) for a,b,k,n in rows if k==2 and n>=1<<20]
 h2d_big, d2h_big = load_memcpy(sys.argv[1])
 steps=sorted([(a,b) for a,b,n,t in ev if n==f"step:{phase}" or n.startswith(f"step:{phase} ")])
-kvfiles=[(a,b) for a,b,n,t in ev if n in ("kv_store_file","kv_load_file")]
+kvfiles=[(a,b) for a,b,n,t in ev if n.startswith(("kv_store","kv_load"))]
 def inside(x, ivs): return any(a<=x[0] and x[1]<=b for a,b in ivs)
 reads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b]; writes=[(a,b) for a,b,n,t in ev if n=="cuFileWrite" and b]
-kvthreads={t for a,b,n,t in ev if n in ("kv_store_file","kv_load_file")}
+kvthreads={t for a,b,n,t in ev if n.startswith(("kv_store","kv_load"))}
 wreads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b and t not in kvthreads]; kreads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b and t in kvthreads]
 marks=sorted([(a,n) for a,b,n,t in ev if n in ("ssd_window:on","ssd_window:off")])
 print(f"{phase}: steps {len(steps)}, weight cuFileRead {len(wreads)}, kv cuFileRead {len(kreads)}, cuFileWrite {len(writes)}, ssd_window marks {len(marks)}")
