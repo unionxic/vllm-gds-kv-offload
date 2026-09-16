@@ -37,3 +37,404 @@ INFO 09-16 18:28:43 [weight_utils.py:899] Auto-prefetch is disabled because the 
 Loading safetensors checkpoint shards:  14% Completed | 5/37 [00:17<01:52,  3.53s/it]
 Loading safetensors checkpoint shards:  16% Completed | 6/37 [00:21<01:50,  3.57s/it]
 Loading safetensors checkpoint shards:  19% Completed | 7/37 [00:24<01:46,  3.57s/it]
+Loading safetensors checkpoint shards:  22% Completed | 8/37 [00:30<02:00,  4.16s/it]
+Loading safetensors checkpoint shards:  24% Completed | 9/37 [00:36<02:19,  4.97s/it]
+Loading safetensors checkpoint shards:  27% Completed | 10/37 [00:44<02:33,  5.70s/it]
+Loading safetensors checkpoint shards:  30% Completed | 11/37 [00:50<02:35,  5.97s/it]
+Loading safetensors checkpoint shards:  32% Completed | 12/37 [00:57<02:35,  6.23s/it]
+Loading safetensors checkpoint shards:  35% Completed | 13/37 [01:04<02:36,  6.53s/it]
+Loading safetensors checkpoint shards:  38% Completed | 14/37 [01:11<02:33,  6.67s/it]
+Loading safetensors checkpoint shards:  41% Completed | 15/37 [01:18<02:24,  6.57s/it]
+Loading safetensors checkpoint shards:  43% Completed | 16/37 [01:24<02:18,  6.59s/it]
+Loading safetensors checkpoint shards:  46% Completed | 17/37 [01:31<02:11,  6.57s/it]
+Loading safetensors checkpoint shards:  49% Completed | 18/37 [01:37<02:04,  6.57s/it]
+Loading safetensors checkpoint shards:  51% Completed | 19/37 [01:47<02:12,  7.36s/it]
+Loading safetensors checkpoint shards:  54% Completed | 20/37 [01:53<02:01,  7.16s/it]
+Loading safetensors checkpoint shards:  57% Completed | 21/37 [02:00<01:52,  7.04s/it]
+Loading safetensors checkpoint shards:  59% Completed | 22/37 [02:07<01:46,  7.11s/it]
+Loading safetensors checkpoint shards:  62% Completed | 23/37 [02:15<01:43,  7.39s/it]
+Loading safetensors checkpoint shards:  65% Completed | 24/37 [02:26<01:47,  8.29s/it]
+Loading safetensors checkpoint shards:  68% Completed | 25/37 [02:35<01:41,  8.42s/it]
+Loading safetensors checkpoint shards:  70% Completed | 26/37 [02:43<01:31,  8.32s/it]
+Loading safetensors checkpoint shards:  73% Completed | 27/37 [02:51<01:22,  8.21s/it]
+Loading safetensors checkpoint shards:  76% Completed | 28/37 [02:59<01:13,  8.14s/it]
+Loading safetensors checkpoint shards:  78% Completed | 29/37 [03:06<01:03,  7.99s/it]
+Loading safetensors checkpoint shards:  81% Completed | 30/37 [03:14<00:55,  7.88s/it]
+Loading safetensors checkpoint shards:  84% Completed | 31/37 [03:20<00:44,  7.43s/it]
+Loading safetensors checkpoint shards:  86% Completed | 32/37 [03:27<00:36,  7.20s/it]
+Loading safetensors checkpoint shards:  89% Completed | 33/37 [03:33<00:27,  7.00s/it]
+Loading safetensors checkpoint shards:  92% Completed | 34/37 [03:40<00:20,  6.83s/it]
+Loading safetensors checkpoint shards:  95% Completed | 35/37 [03:47<00:13,  6.83s/it]
+Loading safetensors checkpoint shards:  97% Completed | 36/37 [03:54<00:06,  6.96s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [03:59<00:00,  6.52s/it]
+Loading safetensors checkpoint shards: 100% Completed | 37/37 [03:59<00:00,  6.48s/it]
+
+INFO 09-16 18:32:43 [default_loader.py:430] Loading weights took 240.05 seconds
+INFO 09-16 18:36:23 [gpu_model_runner.py:5347] Model loading took 4.65 GiB memory and 479.327249 seconds
+INFO 09-16 18:36:37 [ssd_tier.py:272] [SsdTier] cuFileBufRegister on static buffers: 1 ok, 7 failed (failed buffers use cuFile's internal GPU bounce cache)
+INFO 09-16 18:36:37 [prefetch.py:609] [PrefetchOffloader] Initialized 80 modules. Total GPU memory saved: 140.4296 GB, Static buffer pool: 3.5107 GB (group_size=80, num_in_group=80, prefetch_step=2, mode=cpu)
+INFO 09-16 18:36:37 [prefetch.py:618] [PrefetchOffloader] tiers: host 38 layers / 62.12 GiB (budget 62.74 GiB), ssd 42 layers / 68.66 GiB in 168 files
+INFO 09-16 18:36:38 [prefetch.py:647] [PrefetchOffloader] cuFile warm-up: 8 reads into static buffers
+INFO 09-16 18:37:04 [gpu_worker.py:479] Initial free memory 15.4 GiB, reserved 5.75 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-16 18:37:04 [kv_cache_utils.py:2177] GPU KV cache size: 18,832 tokens
+INFO 09-16 18:37:04 [kv_cache_utils.py:2178] Maximum concurrency for 8,192 tokens per request: 2.30x
+INFO 09-16 18:37:04 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 46694325-87aa-42e8-8063-4624f09aefbd
+WARNING 09-16 18:37:04 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 18:37:04 [factory.py:47] Creating offloading spec with name: CuFileFsSpec
+WARNING 09-16 18:37:04 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 18:37:04 [kv_connector_model_runner_mixin.py:230] Allocating a cross layer KV cache of shape (1177, 8, 80, 16, 256)
+INFO 09-16 18:37:04 [native.py:28] cufile_fs: building native extension from /home/unionxic/vllm/csrc/kv_offload/cufile_fs.cpp (CXX=g++-10)
+INFO 09-16 18:37:04 [spec.py:371] CuFileFs worker: 1 tensors, bpc=4, chunk=20971520 bytes, registered_tensors=0
+INFO 09-16 18:37:04 [spec.py:377] CuFileFs store window=host: KV writes pause while weights stream from SSD (max 30.0s)
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-16 18:37:05 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-16 18:37:27 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-16 18:37:28 [core.py:347] init engine (profile, create kv cache, warmup model) took 49.85 s
+INFO 09-16 18:37:28 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: 46694325-87aa-42e8-8063-4624f09aefbd
+WARNING 09-16 18:37:28 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 18:37:28 [factory.py:47] Creating offloading spec with name: CuFileFsSpec
+WARNING 09-16 18:37:28 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-16 18:37:28 [split_policy.py:122] KV split-source: model (rate 215.0 tok/s, host 12.3 GB/s, ssd 3.4 GB/s)
+WARNING 09-16 18:37:29 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-16 18:37:29 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-16 18:42:37 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-16 18:43:06 [spec.py:172] CuFileFs write window: writes paused > 30.0s, resuming anyway (weight SSD window stuck?)
+INFO 09-16 18:54:35 [split_policy.py:190] KV split model: req cold_fill-13-94daa97e H=15 chunks (0 host / 15 ssd) -> head k=0
+INFO 09-16 19:01:45 [split_policy.py:190] KV split model: req cold_fill-22-838065ce H=68 chunks (0 host / 68 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-26-93d0e031 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:14 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:15 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:20:16 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=108 chunks (0 host / 108 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-25-861083a8 H=74 chunks (0 host / 74 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:47 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:25:48 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=32 chunks (0 host / 32 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-23-9dfba020 H=33 chunks (0 host / 33 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:28:45 [split_policy.py:190] KV split model: req reverse_retrieve-19-86932da0 H=80 chunks (0 host / 80 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-17-8653f9b1 H=3 chunks (0 host / 3 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:43 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:31:44 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:32:07 [split_policy.py:190] KV split model: req reverse_retrieve-12-aed45019 H=28 chunks (0 host / 28 ssd) -> head k=0
+INFO 09-16 19:35:27 [split_policy.py:190] KV split model: req reverse_retrieve-6-890480b0 H=14 chunks (0 host / 14 ssd) -> head k=0
+INFO 09-16 19:39:32 [split_policy.py:190] KV split model: req reverse_retrieve-0-81edf9f1 H=102 chunks (0 host / 102 ssd) -> head k=0
+RESULT {"tiers": {"n_modules": 80, "n_ssd": 42, "host_tier_gib": 62.12, "ssd_tier_gib": 68.66}, "kv_io": {"read_n": 1073, "read_gib": 20.75, "write_n": 1052, "write_gib": 20.55, "read_busy_s": 61.2, "write_busy_s": 151.5, "errors": 0, "registered_tensors": 0, "write_stages_s": {"ev": 0.0, "open": 0.4, "io": 151.1, "fin": 0.1}, "read_stages_s": {"open": 0.1, "io": 61.1, "fin": 0.0}, "write_calls": 2424, "read_calls": 2691}, "gpu_max_gib": 14.26}
+  cold_fill: wall 2357.445 s, ttft median 1285.306, matched 61728
+  reverse_retrieve: wall 1728.2 s, ttft median 927.848, matched 20377184
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys-nsys/nsys-tmp/nsys-report-b77b.qdstrm'
+Capture range started in the application.
+Capture range ended in the application.
+Generating '/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys-nsys/nsys-tmp/nsys-report-f8ad.qdstrm'
+Processing events...
+[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [0%                          ] timeline.2.nsys-rep[2/2] [5%                          ] timeline.2.nsys-rep[2/2] [6%                          ] timeline.2.nsys-rep[2/2] [7%                          ] timeline.2.nsys-rep[2/2] [8%                          ] timeline.2.nsys-rep[2/2] [9%                          ] timeline.2.nsys-rep[2/2] [10%                         ] timeline.2.nsys-rep[2/2] [11%                         ] timeline.2.nsys-rep[2/2] [12%                         ] timeline.2.nsys-rep[2/2] [13%                         ] timeline.2.nsys-rep[2/2] [14%                         ] timeline.2.nsys-rep[2/2] [=15%                        ] timeline.2.nsys-rep[2/2] [=16%                        ] timeline.2.nsys-rep[2/2] [=17%                        ] timeline.2.nsys-rep[2/2] [==18%                       ] timeline.2.nsys-rep[2/2] [==19%                       ] timeline.2.nsys-rep[2/2] [==20%                       ] timeline.2.nsys-rep[2/2] [==21%                       ] timeline.2.nsys-rep[2/2] [===22%                      ] timeline.2.nsys-rep[2/2] [===23%                      ] timeline.2.nsys-rep[2/2] [===24%                      ] timeline.2.nsys-rep[2/2] [====25%                     ] timeline.2.nsys-rep[2/2] [====26%                     ] timeline.2.nsys-rep[2/2] [====27%                     ] timeline.2.nsys-rep[2/2] [====28%                     ] timeline.2.nsys-rep[2/2] [=====29%                    ] timeline.2.nsys-rep[2/2] [=====30%                    ] timeline.2.nsys-rep[2/2] [=====31%                    ] timeline.2.nsys-rep[2/2] [=====32%                    ] timeline.2.nsys-rep[2/2] [======33%                   ] timeline.2.nsys-rep[2/2] [======34%                   ] timeline.2.nsys-rep[2/2] [======35%                   ] timeline.2.nsys-rep[2/2] [=======36%                  ] timeline.2.nsys-rep[2/2] [=======37%                  ] timeline.2.nsys-rep[2/2] [=======38%                  ] timeline.2.nsys-rep[2/2] [=======39%                  ] timeline.2.nsys-rep[2/2] [========40%                 ] timeline.2.nsys-rep[2/2] [========41%                 ] timeline.2.nsys-rep[2/2] [========42%                 ] timeline.2.nsys-rep[2/2] [=========43%                ] timeline.2.nsys-rep[2/2] [=========44%                ] timeline.2.nsys-rep[2/2] [=========45%                ] timeline.2.nsys-rep[2/2] [=========46%                ] timeline.2.nsys-rep[2/2] [==========47%               ] timeline.2.nsys-rep[2/2] [==========48%               ] timeline.2.nsys-rep[2/2] [==========49%               ] timeline.2.nsys-rep[2/2] [===========50%              ] timeline.2.nsys-rep[2/2] [===========51%              ] timeline.2.nsys-rep[2/2] [===========52%              ] timeline.2.nsys-rep[2/2] [===========53%              ] timeline.2.nsys-rep[2/2] [============54%             ] timeline.2.nsys-rep[2/2] [============55%             ] timeline.2.nsys-rep[2/2] [============56%             ] timeline.2.nsys-rep[2/2] [============57%             ] timeline.2.nsys-rep[2/2] [=============58%            ] timeline.2.nsys-rep[2/2] [=============59%            ] timeline.2.nsys-rep[2/2] [=============60%            ] timeline.2.nsys-rep[2/2] [==============61%           ] timeline.2.nsys-rep[2/2] [==============62%           ] timeline.2.nsys-rep[2/2] [==============63%           ] timeline.2.nsys-rep[2/2] [========================100%] timeline.2.nsys-rep[2/2] [========================100%] timeline.2.nsys-rep
+Generated:
+	/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys-nsys/timeline.1.nsys-rep
+	/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys-nsys/timeline.2.nsys-rep
