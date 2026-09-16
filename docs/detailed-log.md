@@ -912,6 +912,23 @@ OOM을 피하려고 prefill 조각 2048과 GPU KV 고정(요청 2.0개분, 18.8k
 - B는 가중치가 기본 배치라 forward 28.4 s이고, 조각 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 조각·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. 조각 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
 - 세 런 모두 출력 토큰열 64건 동일, 오류 0.
 
+#### 3B 소스 분할 격자
+
+Qwen2.5-3B, host 0.02(가중치 host 17 / SSD 19 layer), Bailian 24건 4k, GPU KV 2요청분. 적중 단계(reverse_retrieve) wall clock(s). 각 점 1런, 런 간 편차 약 ±2 s. host 층 1.8 GB로 돌린 첫 판은 작업 집합(고유 청크 684개, 1.5 GiB)이 다 들어가 host만 조건과 같아져 results/grid3b/host1.8gb로 옮기고 0.75 GB(317 블록, host 적중 1,060 / SSD 4,050)로 다시 잼. 결과 results/grid3b, 표 tools/grid3b_table.py.
+
+| 재계산 비율 k | SSD만 split | SSD만 serial | host 0.75 GB + SSD split | 같은 조건 serial | host만 split | host만 serial |
+|---|---|---|---|---|---|---|
+| 0 (전부 적재) | 90.0 | 92.1 | 87.2 | 91.2 | 90.1 | 87.7 |
+| 0.25 | 87.8 | 96.2 | 87.9 | 96.9 | 89.5 | 98.8 |
+| 0.5 | 91.5 | 107.3 | 91.9 | 103.7 | 91.4 | 99.0 |
+| 0.75 | 97.6 | 108.2 | 102.2 | 108.9 | 99.0 | 106.3 |
+| 1 (전부 재계산) | 96.9 | 98.9 | 99.9 | 99.6 | 99.0 | 98.3 |
+
+- 겹침의 효과: 같은 k에서 split이 serial보다 8~16 s(k=0.5에서 12~16%) 빠름. serial은 적재를 기다린 뒤 계산하므로 k=0.75가 전부 재계산보다 느림.
+- 이 조건의 최적은 k=0. 4k 문서 KV 150 MB를 SSD에서 읽는 데 0.05 s, 재계산에 1.1 s라 적재가 20배 빠르고, split의 k=0.25는 앞 계산이 다른 요청의 적재·계산 아래 숨어 k=0과 같음. 채널 측정으로 세운 max 모형이 예측한 대로이며, 섞기의 최적이 가운데에 오는 영역은 3B + GDS에서는 없음(토큰당 KV가 큰 MHA 모델이나 저장 채널을 일부러 느리게 한 조건이 필요).
+- host 층의 유무는 차이 없음(적재 0.05 s 대 0.01 s). 출력 오류 0, 분할 요청 18~20/런.
+- nsys(k=0.5, host 0.75 GB, 적중 단계 앞 40 forward): split 68.7 s, serial 73.8 s. KV 적재 149파일 합집합 0.11 s가 split에서는 전부 forward(계산) 안에 겹침. 분할 결정에서 뒤 도착 확인까지 중앙값 5.6 s로 거의 전부 앞 계산 시간(도착은 step 경계에서 확인).
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.

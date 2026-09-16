@@ -1,0 +1,136 @@
+[09-16 14:15:55] == grid3b K(0 0.25 0.5 0.75 1) × G(0 0.5 1) × (split serial)
+[09-16 14:15:55] start k0-g0-split
+[09-16 14:19:58] done  k0-g0-split rc=0
+[09-16 14:19:58] start k0-g0-serial
+[09-16 14:24:04] done  k0-g0-serial rc=0
+[09-16 14:24:04] start k0.25-g0-split
+[09-16 14:24:41] FAILED k0.25-g0-split rc=1
+[rank0]: ValueError: unknown VLLM_KV_SPLIT: 'split:0.25' (off | fixed:<frac> | serial:<frac> | model)
+[09-16 14:24:41] start k0.25-g0-serial
+[09-16 14:25:36] == grid3b K(0 0.25 0.5 0.75 1) × G(0 0.5 1) × (split serial)
+[09-16 14:25:36] skip k0-g0-split
+[09-16 14:25:36] skip k0-g0-serial
+[09-16 14:25:36] start k0.25-g0-split
+[09-16 14:29:37] done  k0.25-g0-split rc=0
+[09-16 14:29:37] start k0.25-g0-serial
+[09-16 14:32:05] FAILED k0.25-g0-serial rc=1
+[rank0]: AssertionError: CuFileFs: 16 blocks vs 5 chunks (bpc=4, skip=3)
+[09-16 14:32:05] start k0.5-g0-split
+[09-16 14:36:14] done  k0.5-g0-split rc=0
+[09-16 14:36:14] start k0.5-g0-serial
+[09-16 14:38:42] FAILED k0.5-g0-serial rc=1
+[rank0]: AssertionError: CuFileFs: 12 blocks vs 4 chunks (bpc=4, skip=3)
+[09-16 14:38:42] start k0.75-g0-split
+[09-16 14:42:52] done  k0.75-g0-split rc=0
+[09-16 14:42:52] start k0.75-g0-serial
+[09-16 14:47:13] done  k0.75-g0-serial rc=0
+[09-16 14:47:13] start k1-g0-split
+[09-16 14:51:18] done  k1-g0-split rc=0
+[09-16 14:51:18] start k1-g0-serial
+[09-16 14:55:28] done  k1-g0-serial rc=0
+[09-16 14:55:28] start k0-g0.5-split
+[09-16 14:59:28] done  k0-g0.5-split rc=0
+[09-16 14:59:28] start k0-g0.5-serial
+[09-16 15:03:38] done  k0-g0.5-serial rc=0
+[09-16 15:03:38] start k0.25-g0.5-split
+[09-16 15:07:42] done  k0.25-g0.5-split rc=0
+[09-16 15:07:42] start k0.25-g0.5-serial
+[09-16 15:11:53] done  k0.25-g0.5-serial rc=0
+[09-16 15:11:53] start k0.5-g0.5-split
+[09-16 15:16:00] done  k0.5-g0.5-split rc=0
+[09-16 15:16:00] start k0.5-g0.5-serial
+[09-16 15:20:15] done  k0.5-g0.5-serial rc=0
+[09-16 15:20:15] start k0.75-g0.5-split
+[09-16 15:24:26] done  k0.75-g0.5-split rc=0
+[09-16 15:24:26] start k0.75-g0.5-serial
+[09-16 15:28:45] done  k0.75-g0.5-serial rc=0
+[09-16 15:28:45] start k1-g0.5-split
+[09-16 15:32:53] done  k1-g0.5-split rc=0
+[09-16 15:32:53] start k1-g0.5-serial
+[09-16 15:37:02] done  k1-g0.5-serial rc=0
+[09-16 15:37:02] start k0-g1-split
+[09-16 15:41:09] done  k0-g1-split rc=0
+[09-16 15:41:09] start k0-g1-serial
+[09-16 15:45:10] done  k0-g1-serial rc=0
+[09-16 15:45:10] start k0.25-g1-split
+[09-16 15:49:17] done  k0.25-g1-split rc=0
+[09-16 15:49:17] start k0.25-g1-serial
+[09-16 15:53:31] done  k0.25-g1-serial rc=0
+[09-16 15:53:31] start k0.5-g1-split
+[09-16 15:57:39] done  k0.5-g1-split rc=0
+[09-16 15:57:39] start k0.5-g1-serial
+[09-16 16:01:49] done  k0.5-g1-serial rc=0
+[09-16 16:01:49] start k0.75-g1-split
+[09-16 16:06:04] done  k0.75-g1-split rc=0
+[09-16 16:06:04] start k0.75-g1-serial
+[09-16 16:10:25] done  k0.75-g1-serial rc=0
+[09-16 16:10:25] start k1-g1-split
+[09-16 16:14:34] done  k1-g1-split rc=0
+[09-16 16:14:34] start k1-g1-serial
+[09-16 16:18:43] done  k1-g1-serial rc=0
+[09-16 16:18:44] == grid3b 종료
+[09-16 16:19:00] == grid3b K(0 0.25 0.5 0.75 1) × G(0 0.5 1) × (split serial)
+[09-16 16:19:00] skip k0-g0-split
+[09-16 16:19:00] skip k0-g0-serial
+[09-16 16:19:00] skip k0.25-g0-split
+[09-16 16:19:01] start k0.25-g0-serial
+[09-16 16:19:01] FAILED k0.25-g0-serial rc=1
+[09-16 16:19:01] skip k0.5-g0-split
+[09-16 16:19:01] start k0.5-g0-serial
+[09-16 16:19:01] FAILED k0.5-g0-serial rc=1
+[09-16 16:19:01] skip k0.75-g0-split
+[09-16 16:19:01] skip k0.75-g0-serial
+[09-16 16:19:01] skip k1-g0-split
+[09-16 16:19:01] skip k1-g0-serial
+[09-16 16:19:01] skip k0-g0.5-split
+[09-16 16:19:01] skip k0-g0.5-serial
+[09-16 16:19:01] skip k0.25-g0.5-split
+[09-16 16:19:01] skip k0.25-g0.5-serial
+[09-16 16:19:01] skip k0.5-g0.5-split
+[09-16 16:19:01] skip k0.5-g0.5-serial
+[09-16 16:19:01] skip k0.75-g0.5-split
+[09-16 16:19:01] skip k0.75-g0.5-serial
+[09-16 16:19:01] skip k1-g0.5-split
+[09-16 16:19:01] skip k1-g0.5-serial
+[09-16 16:19:01] skip k0-g1-split
+[09-16 16:19:01] skip k0-g1-serial
+[09-16 16:19:01] skip k0.25-g1-split
+[09-16 16:19:01] skip k0.25-g1-serial
+[09-16 16:19:01] skip k0.5-g1-split
+[09-16 16:19:01] skip k0.5-g1-serial
+[09-16 16:19:01] skip k0.75-g1-split
+[09-16 16:19:01] skip k0.75-g1-serial
+[09-16 16:19:01] skip k1-g1-split
+[09-16 16:19:01] skip k1-g1-serial
+[09-16 16:19:01] == grid3b 종료
+[09-16 21:31:24] nsys k0.5-g0.5-fixed-nsys rc=0
+[09-16 21:36:31] nsys k0.5-g0.5-serial-nsys rc=0
+[09-16 21:36:31] == grid3b K(0.25 0.5) × G(0) × (serial)
+[09-16 21:36:31] start k0.25-g0-serial
+[09-16 21:40:41] done  k0.25-g0-serial rc=0
+[09-16 21:40:41] start k0.5-g0-serial
+[09-16 21:45:03] done  k0.5-g0-serial rc=0
+[09-16 21:45:03] == grid3b 종료
+[09-16 21:45:03] == grid3b K(0 0.25 0.5 0.75 1) × G(0.5) × (split serial)
+[09-16 21:45:03] start k0-g0.5-split
+[09-16 21:49:03] done  k0-g0.5-split rc=0
+[09-16 21:49:03] start k0-g0.5-serial
+[09-16 21:53:09] done  k0-g0.5-serial rc=0
+[09-16 21:53:09] start k0.25-g0.5-split
+[09-16 21:57:14] done  k0.25-g0.5-split rc=0
+[09-16 21:57:14] start k0.25-g0.5-serial
+[09-16 22:01:25] done  k0.25-g0.5-serial rc=0
+[09-16 22:01:25] start k0.5-g0.5-split
+[09-16 22:05:34] done  k0.5-g0.5-split rc=0
+[09-16 22:05:34] start k0.5-g0.5-serial
+[09-16 22:09:51] done  k0.5-g0.5-serial rc=0
+[09-16 22:09:51] start k0.75-g0.5-split
+[09-16 22:14:11] done  k0.75-g0.5-split rc=0
+[09-16 22:14:11] start k0.75-g0.5-serial
+[09-16 22:18:38] done  k0.75-g0.5-serial rc=0
+[09-16 22:18:38] start k1-g0.5-split
+[09-16 22:22:50] done  k1-g0.5-split rc=0
+[09-16 22:22:50] start k1-g0.5-serial
+[09-16 22:27:02] done  k1-g0.5-serial rc=0
+[09-16 22:27:02] == grid3b 종료
+[09-16 22:27:02] == after-72b 3B 보완 종료
