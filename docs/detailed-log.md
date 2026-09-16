@@ -881,6 +881,23 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 - 뒤 대기(tail_wait)는 앞 계산이 끝난 step 경계에서 완료를 확인하는 구조라 최대 한 step 늦게 반영됨(3B fixed:0.75에서 요청당 약 1.2 s).
 - nsys: kv_split(요청, head, tail), kv_tail_ready 표시가 잡힘. 3B 4k에서 fixed:0.5의 reverse 단계는 off보다 느림(90 → 99 s): 이 조건은 SSD 적재가 재계산보다 빨라 k>0이 손해인 영역이며 예상과 일치. 격자(campaign_grid3b.sh)로 경계를 잼.
 
+#### 가중치 티어 교차 배치와 prefetch 깊이 2 (72B)
+
+포크 오프로더 VLLM_OFFLOAD_TIER_LAYOUT=interleave(host layer 수는 block 배치와 같게, 위치는 80 layer에 고르게)와 prefetch_step 2. 3B(host 17 / SSD 19 layer)에서 decode forward 1.59 → 1.15 s(−28%), 둘 중 하나만으로는 1.29(깊이 2만), 1.46(교차만).
+
+72B RAM 0.5 재계산, Bailian 32건. 정적 버퍼가 한 세트(1.63 GiB) 늘어 GPU KV 자동 예산(21k 토큰)과 같이 넣으면 첫 prefill 또는 warm-up 샘플러가 OOM. 조건을 맞추려고 prefill 조각 2048(--max-num-batched-tokens)과 GPU KV 고정(--kv-batch 2.0 = 5.75 GiB, 18.8k 토큰)으로 실행.
+
+| 조건 | decode forward | prefill forward 평균 | forward 수 | 두 단계 합계 |
+|---|---|---|---|---|
+| block 배치, 깊이 1, 조각 8192, KV 21.4k (기준) | 28.4 s | 62 s | 107 | 4,350 s |
+| 교차 배치, 깊이 2, 조각 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
+| 교차 배치, 깊이 2, 조각 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (조각당) | 164 | 4,369 s |
+
+- forward 고정비는 28.4 → 22.7 s(−20%). nsys에서 본 SSD 읽기만의 시간 23.3 s와 같으며, host 복사 5.7 s가 SSD 읽기 아래로 다 숨은 값. 채널 측정의 host 저하(동시 실행 시 0.67)는 SSD 읽기 23 s 안에 host 62 GiB / 8 GB/s = 7.7 s가 들어가므로 forward 길이에는 안 나타남.
+- 두 단계 합계가 기준과 같은 것은 조각 2048과 KV 18.8k로 forward 수가 107 → 164로 는 몫이 상쇄해서. 같은 조각·KV로 맞춘 조건이 없어 wall clock 이득은 아직 미확정. 조각 8192 + KV 고정 2.0 조건을 추가 예정.
+- 0.75·조각 8192 런의 26.4 s가 22.7 s와 다른 원인은 미확립(nsys 없음).
+- 출력 토큰열 64건 동일.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
