@@ -275,7 +275,7 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 
 ### 교훈
 
-복사를 없앤다고 빨라지지 않는다는 오래된 교훈이 세 번 확인됐다. 소조각 IO에서, control plane 분해(E 대조군)에서, production trace의 store 동시성에서. 표준 프로파일러가 관측 대상을 바꿔 버리는 경우(GIL 콘보이)에는 프로파일러의 개입 자체가 진단 단서가 된다. 그리고 synthetic 벤치의 승자는 production trace 앞에서 겸손해야 한다.
+복사를 없앤다고 빨라지지 않는다는 오래된 교훈이 세 번 확인됐다. 작은 I/O에서, control plane 분해(E 대조군)에서, production trace의 store 동시성에서. 표준 프로파일러가 관측 대상을 바꿔 버리는 경우(GIL 콘보이)에는 프로파일러의 개입 자체가 진단 단서가 된다. 그리고 synthetic 벤치의 승자는 production trace 앞에서 겸손해야 한다.
 
 #### upstream 회귀 검증 (최신 main)
 
@@ -380,7 +380,7 @@ Bailian 150·600, 양 러너: seen-twice 빈도 필터가 random을 이겼다. 1
 
 ### 가중치 스트리밍과 KV 오프로드의 결합 (OPT-66B)
 
-앞선 실험(01~05)은 모델이 GPU에 통째로 올라가고 CPU 티어를 인위적으로 제한해 SSD를 필요하게 만든 설계. SSD의 당위성은 가중치가 GPU와 RAM을 넘을 때 생기므로, OPT-66B fp16 132 GB를 Quadro RTX 5000 16 GB 한 장과 RAM 125 GiB에서 돌리는 조건을 만들고 그 위에 KV 오프로드를 올렸다. 실험 폴더는 06-weight-offload(가중치 경로), 07-combined(결합), 08-cufile-bounce(cuFile 조각 크기), 09-kv-policy(배치 구성, 원인 규명, 스케줄러 수정, 저장 정책, 양자화).
+앞선 실험(01~05)은 모델이 GPU에 통째로 올라가고 CPU 티어를 인위적으로 제한해 SSD를 필요하게 만든 설계. SSD의 당위성은 가중치가 GPU와 RAM을 넘을 때 생기므로, OPT-66B fp16 132 GB를 Quadro RTX 5000 16 GB 한 장과 RAM 125 GiB에서 돌리는 조건을 만들고 그 위에 KV 오프로드를 올렸다. 실험 폴더는 06-weight-offload(가중치 경로), 07-combined(결합), 08-cufile-bounce(cuFile I/O 크기), 09-kv-policy(배치 구성, 원인 규명, 스케줄러 수정, 저장 정책, 양자화).
 
 #### 구성과 정적 버퍼
 
@@ -393,7 +393,7 @@ vLLM v0.26의 가중치 오프로드는 UVA와 Prefetch 두 백엔드뿐이고 S
 | 0.5 | 62.7 GiB | 33 | 28 | 53.2 GiB |
 | 0.85 | 106.7 GiB | 56 | 4~6 | 7.6~11.4 GiB |
 
-층의 큰 행렬 네 개(fc1 648 MiB, fc2 648 MiB, qkv 486 MiB, out_proj 162 MiB)에 맞춘 정적 버퍼 네 개를 매 층 재사용. NVMe가 GPU 메모리에 직접 DMA하려면 목적지가 BAR1 창에 매핑돼야 하는데 이 카드의 창이 256 MiB라 out_proj만 등록되고 셋은 창보다 커서 거절. 등록 실패는 POSIX로 떨어지지 않고 cuFile이 내부 캐시(128 MiB, 1 MiB 조각)로 DMA한 뒤 GPU 안에서 D2D로 옮기는 두 홉 경로를 탄다. forward당 8만 회. 이 경로의 병목은 wall clock가 아니라 CPU와 스레드 경합에 나타남(아래 조각 크기 절). VRAM 전체가 창인 데이터센터 GPU에서는 없는 문제.
+층의 큰 행렬 네 개(fc1 648 MiB, fc2 648 MiB, qkv 486 MiB, out_proj 162 MiB)에 맞춘 정적 버퍼 네 개를 매 층 재사용. NVMe가 GPU 메모리에 직접 DMA하려면 목적지가 BAR1 창에 매핑돼야 하는데 이 카드의 창이 256 MiB라 out_proj만 등록되고 셋은 창보다 커서 거절. 등록 실패는 POSIX로 떨어지지 않고 cuFile이 내부 캐시(128 MiB, 1 MiB I/O)로 DMA한 뒤 GPU 안에서 D2D로 옮기는 두 홉 경로를 탄다. forward당 8만 회. 이 경로의 병목은 wall clock가 아니라 CPU와 스레드 경합에 나타남(아래 조각 크기 절). VRAM 전체가 창인 데이터센터 GPU에서는 없는 문제.
 
 forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 옮기는 고정 비용이라 토큰 수와 거의 무관. h0.85에서 약 13초, h0.3에서 약 28초. 이 고정 비용이 이후 모든 결론의 전제.
 
@@ -440,11 +440,11 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 - decode step은 전 조건 동일. KV 경로는 prefill 적중에만 개입.
 - 다만 이 배치에서 KV 트래픽은 가중치의 0.3~3%라 총 시간 기여가 4~8%. decode step 96초는 8프롬프트 순차 forward 8회의 합.
 
-#### cuFile 조각 크기
+#### cuFile I/O 크기
 
-등록 안 된 정적 버퍼로 가는 읽기는 cuFile 내부 캐시의 조각 크기(cufile.json per_buffer_cache_size_kb, 기본 1 MiB)로 쪼개진다. 06의 ring 대신 이 값만 키워도 되는지를 06 기본 구성에서 확인. 제약은 max_device_cache_size_kb를 조각 크기로 나눈 값이 io_batchsize 이상이어야 한다는 것이며, 아니면 cuFile이 조각을 1 MiB로 되돌린다. 동기 cuFileRead만 쓰므로 io_batchsize를 32, 16, 8로 낮춤. 런마다 64 MiB 검증 읽기의 TRACE 로그로 적용을 확인.
+등록 안 된 정적 버퍼로 가는 읽기는 cuFile 내부 캐시의 조각 크기(cufile.json per_buffer_cache_size_kb, 기본 1 MiB)로 쪼개진다. 06의 ring 대신 이 값만 키워도 되는지를 06 기본 구성에서 확인. 제약은 max_device_cache_size_kb를 조각 크기로 나눈 값이 io_batchsize 이상이어야 한다는 것이며, 아니면 cuFile이 chunk를 1 MiB로 되돌린다. 동기 cuFileRead만 쓰므로 io_batchsize를 32, 16, 8로 낮춤. 런마다 64 MiB 검증 읽기의 TRACE 로그로 적용을 확인.
 
-| 조각 | step/스레드 | prefill | decode step | CPU |
+| I/O 크기 | step/스레드 | prefill | decode step | CPU |
 |---|---|---|---|---|
 | 1 MiB (06 기준 3회) | 1/4 | 30.8~31.8 s | 28.1~29.1 s | 159~178 s |
 | 4 MiB | 1/4 | 30.0 s | 27.7 s | 138 s |
@@ -453,7 +453,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 | 8 MiB | 2/8 | 실패, BAR1 부족 | | |
 | 4 MiB | 2/8 | 27.3 s | 27.0 s | 150 s |
 
-- 조각을 키워도 wall clock는 디스크 한계에 붙고 CPU만 8 MiB에서 28% 감소. ring 단독(17%)보다 큼.
+- chunk를 키워도 wall clock는 디스크 한계에 붙고 CPU만 8 MiB에서 28% 감소. ring 단독(17%)보다 큼.
 - 4 MiB에 2-layer와 스레드 8을 얹으면 27.0초로 06의 ring8 조건(26.7초)과 동급. ring 코드 없이 설정 파일로 대체 가능. 06의 "8 스레드가 1 MiB 캐시를 두고 경합" 해석이 맞음.
 - 실용 상한은 step 1에서 8 MiB, step 2에서 4 MiB. KV 쓰기까지 더해지면 8 MiB도 BAR1 부족으로 cuFileWrite 실패(dmesg no space for BAR1 mappings).
 - 1 MiB 경로가 간헐적으로 3배 느려지는 모드가 있음. 캠페인 당일 1 MiB 런 4회가 모두 66초였다가 다음 날 28초로 복귀. GPU 클럭, pinned 방식, 상주 층 수, shadow 버퍼, cuFile 경로, CPU 배치, 드라이버 버전 모두 배제. 저장장치 일시 상태가 남은 후보이며 미확립. 4 MiB 이상은 흔들리지 않아 이후 실험은 CUFILE_ENV_PATH_JSON으로 4 MiB 고정.
@@ -484,8 +484,8 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 
 - decode step은 출력이 있는 step 길이의 중앙값. 러너의 phase 라벨은 첫 토큰을 기다리는 요청이 남아 있으면 decode forward도 prefill로 적으므로 그 평균(11.3초)은 쓰지 않음.
 - host 0.3에서 0.85까지 cuFile 런은 모형과 5% 안에서 맞음. 0.85에서는 PCIe 몫이 7할, SSD 몫이 3할이라 SSD를 무한히 빠르게 해도 9.3초가 남고, 이 조건에서 SSD 대역폭은 forward의 3할만 좌우. host 비율을 내릴수록 SSD 몫이 커져 0.3에서는 9할.
-- 06의 host 0.1은 모형보다 68% 느렸으나 4 MiB 조각으로 다시 잰 기준표 절의 host 0.1은 1% 안. 06은 1 MiB 조각이라 느린 모드로 봄.
-- 1 MiB cuFile 조각 구성은 간헐적으로 2~2.5배 느려져 모형에서 벗어남. 4 MiB 조각에서는 재현되지 않음.
+- 06의 host 0.1은 모형보다 68% 느렸으나 4 MiB I/O으로 다시 잰 기준표 절의 host 0.1은 1% 안. 06은 1 MiB I/O이라 느린 모드로 봄.
+- 1 MiB cuFile I/O 구성은 간헐적으로 2~2.5배 느려져 모형에서 벗어남. 4 MiB I/O에서는 재현되지 않음.
 - 09의 손익은 이 고정비 위에서 정해짐. 적중이 아끼는 상한은 prefill forward의 토큰 몫 5초(18.7초에서 13.6초)이고, 배치가 쪼개져 forward가 2개 늘면 27초를 잃음. 이 분해를 먼저 놓았으면 경합이나 폴링 가설 이전에 손해의 크기와 상한이 정해졌을 것. 초기에 그 순서를 거꾸로 밟은 것이 09의 시행착오.
 - tools/compare_results.py가 06, 07, 09의 결과 json 전체를 이 모형과 대조하고 15% 이상 벗어난 런과 기준 런 대비 10% 이상 움직인 런을 표시. 새 결과는 이 표부터 확인.
 
@@ -513,7 +513,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 
 포크 스케줄러에 승격 검사 하나를 추가(VLLM_KV_LOAD_WAVE_GATE, 기본 꺼짐, 커밋 2998fcca0b와 b576070a77). 수준 1은 자기 로드가 끝난 요청을 함께 올라온 다른 요청의 로드가 모두 끝날 때까지 승격하지 않음. 수준 2는 로드가 없는 신규 요청도 동료가 로드 중이면 계산을 미룸. 상한 VLLM_KV_LOAD_WAVE_WAIT_S 기본 30초. 상류 PR 55724는 토큰 예산 소진 시점을 고치는 것이라 지점이 다름.
 
-같은 시스템 상태에서 연달아 측정, cuFile 4 MiB 조각, 전부 반복 워크로드.
+같은 시스템 상태에서 연달아 측정, cuFile 4 MiB I/O, 전부 반복 워크로드.
 
 | 2라운드 | 재계산 | cuFile 게이트 없음 | cuFile 게이트 1 |
 |---|---|---|---|
@@ -607,7 +607,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 
 재현 환경: env.sh 소싱, VLLM_USE_V2_MODEL_RUNNER=0, VLLM_ENABLE_V1_MULTIPROCESSING=0, host 0.85 이상은 VLLM_OFFLOAD_PIN_EXACT=1, cuFile 조각은 CUFILE_ENV_PATH_JSON으로 4 MiB 설정, 게이트는 VLLM_KV_LOAD_WAVE_GATE=2. 런마다 SSD 티어와 KV 저장소를 지우고 다시 만들므로 디스크 여유 90 GB 이상 필요. 캠페인은 setsid nohup으로 띄우고 성공 판정은 결과 json 존재로.
 
-교훈. 1 MiB cuFile 조각 구성은 단독 측정으로 결론 내지 말 것. 실험 폴더에 보고서를 따로 두지 말고 이 문서와 README에만 적을 것.
+교훈. 1 MiB cuFile I/O 구성은 단독 측정으로 결론 내지 말 것. 실험 폴더에 보고서를 따로 두지 말고 이 문서와 README에만 적을 것.
 
 ### 모델 크기와 host 비율 기준표 (실제 문서, KV는 SSD)
 
@@ -616,7 +616,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 #### 설계
 
 - 가중치는 GPU 상주 0층, pinned CPU 티어, 나머지 SSD 티어. host 비율은 오프로드되는 가중치 대비(RAM 대비가 아님). 오프로더의 offload_host_fraction은 RAM 전체 대비라 작은 모델은 어떤 값을 줘도 전부 CPU에 들어가므로, 러너가 모델 크기(12 d² × 층 수 × 2바이트)로 환산해 넘긴다.
-- KV는 GPU 작업 공간 밖으로 전부 SSD(expfs cuFile, 4 MiB 조각). GPU KV 예산은 요청 2개분(max_model_len 2,048 토큰 × 1.15)으로 모델마다 계산해 배치 2로 고정. 예산이 크면 문서 8개의 KV가 GPU에 남아 2라운드가 SSD를 읽지 않는다(opt-2.7b 시험 실행에서 확인).
+- KV는 GPU 작업 공간 밖으로 전부 SSD(expfs cuFile, 4 MiB I/O). GPU KV 예산은 요청 2개분(max_model_len 2,048 토큰 × 1.15)으로 모델마다 계산해 배치 2로 고정. 예산이 크면 문서 8개의 KV가 GPU에 남아 2라운드가 SSD를 읽지 않는다(opt-2.7b 시험 실행에서 확인).
 - 프롬프트는 03-leval 실제 문서 8개. 프리픽스 1,920토큰 + 구분자 + 질문. 1라운드는 질문 1로 저장, 2라운드는 질문 2로 프리픽스 적중. 재계산 조건은 저장 없음. decode 8토큰, 스케줄러 게이트 2.
 - 측정은 run_phase_66b.py 그대로. forward 시간은 출력이 있는 step 길이의 중앙값(러너의 phase 라벨은 첫 토큰을 기다리는 요청이 남아 있으면 decode forward도 prefill로 적으므로 평균을 쓰지 않음). prefill forward는 출력 0인 첫 step. 로드 대기는 실제 step 사이의 빈 시간.
 
@@ -629,7 +629,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 | 0.3 | 19층 36.1 GiB / 45층 85.4 GiB | 29.76 / 29.82 s | 45.30 / 30.28 s | 2.9 s | 1015.5 / 970.9 s (-4.4%) | +45.3 s | 2030 / 2032 s (+0.1%) |
 | 0.1 | 6층 11.4 GiB / 58층 110.1 GiB | 35.68 / 35.37 s | 51.16 / 35.96 s | 3.0 s | 1204.5 / 1153.2 s (-4.3%) | +66.2 s | 2409 / 2424 s (+0.6%) |
 
-- forward 고정비는 네 비율 모두 모형(CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s)과 1% 안. 06에서 host 0.1이 모형보다 68% 느렸던 것은 이번에 재현되지 않았고, 06은 1 MiB 조각이었으므로 그 느린 모드로 본다.
+- forward 고정비는 네 비율 모두 모형(CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s)과 1% 안. 06에서 host 0.1이 모형보다 68% 느렸던 것은 이번에 재현되지 않았고, 06은 1 MiB I/O이었으므로 그 느린 모드로 본다.
 - 적중이 아끼는 것은 prefill forward의 토큰 계산 몫이고 세 비율 모두 15초(3,940토큰). host 비율은 forward 고정비만 바꾸므로 이득의 절대량은 같고 비율만 줄어든다. 448토큰 난수 프롬프트에서 5초였던 몫이 1,970토큰 실제 문서에서 15초. 프리픽스가 길수록 SSD 적중이 유리하다는 01의 결론이 스트리밍 조건에서도 성립.
 - 배치당 로드 대기 2.7~3.4초는 비율과 무관. 8.4 GiB를 배치 경계에서 읽고 앞 배치의 decode와 겹치지 않는다. 앞 배치 중에 로드를 시작하면 이득이 토큰 계산 몫 전부로 커진다. 미구현.
 - 저장 라운드의 추가 시간은 위치가 잡혔다. 배치마다 prefill 직후 첫 decode forward 하나만 늘고 나머지 step은 재계산과 같다. 그 step 동안 방금 prefill한 프리픽스 8.4 GiB가 SSD에 쓰이고 같은 forward가 SSD에서 가중치를 읽는다. 늘어난 시간이 host 0.7에서 1.2초, 0.3에서 10초로 SSD 가중치 몫에 비례. KV 쓰기와 가중치 읽기의 디스크 공유가 step 단위로 관측된 첫 사례이고, 09에서 decode 구간 겹침 0초로 기각한 것은 읽기 쪽이었다. 저장을 decode 뒤나 CPU 구간으로 미루는 deferred_store(04)가 대응책이며 66B에서는 미측정.
@@ -718,7 +718,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 | 두 단계 합계 | 1,674 s | 1,992 s (+19%) |
 
 - 출력 토큰은 16요청 전부 재계산과 동일, native 오류 0. vLLM 자동 KV는 10.4 GiB(동시 2요청)이며 gpu_util 0.9에서는 첫 prefill이 OOM이라 0.85로 재시도한 값(캠페인 스크립트가 자동 재시도하고 기록).
-- 손해 자리는 앞 절과 같음. 저장 단계는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(1 MiB 조각이라 4 MiB 때보다 큼), 적중 단계는 게이트가 없어 forward 6개 증가. 같은 조건에 게이트와 4 MiB 조각만 넣으면 순이익 −1.3%였으므로 기본값과 손본 설정의 차이가 20%.
+- 손해 자리는 앞 절과 같음. 저장 단계는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(1 MiB I/O이라 4 MiB 때보다 큼), 적중 단계는 게이트가 없어 forward 6개 증가. 같은 조건에 게이트와 4 MiB I/O만 넣으면 순이익 −1.3%였으므로 기본값과 손본 설정의 차이가 20%.
 - 기본값에서는 prefill이 요청 2개를 한 forward로 묶지 않고 요청마다 따로 돌아(기본 배치 토큰 상한) prefill forward가 32초짜리 둘.
 - write-behind(cufile_fs_store_window=host: 가중치 오프로더가 SSD 티어 layer를 읽는 동안 KV 쓰기 스레드를 멈추고 host 티어 layer 구간에 재개, 상한 초과 시 강제 재개)만 켠 같은 조건. 상한 10 s는 RAM 0.5의 SSD 구간 18 s(layer 33~63 연속)보다 짧아 forward마다 강제 재개가 남았고, 상한 30 s에서 forward 안에서는 안 풀림.
 
@@ -812,7 +812,7 @@ Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batc
 
 #### Qwen2.5-72B, Bailian 트레이스에서의 정책 비교
 
-조건. 72B RAM 0.5 기본값(게이트 없음, 1 MiB 조각, GPU KV 자동 21k 토큰, gpu_util 0.85), Bailian 트레이스 offset 29,560부터 32건(hash_id → 결정적 16토큰 블록, 8,120 토큰 상한, 중앙값 6.5k, 합 154k 토큰), 창 안 프리픽스 공유 56%(트레이스 전체 66%), 고유 KV 21.7 GB. cold_fill(트레이스 순서) → settle 15 s → reverse_retrieve(역순, 다른 꼬리 8토큰). 용량 조건은 상한 8 GiB(고유량의 37%). 결과 results/qwen72b/bailian-ram0.5-*, 표는 tools/qwen72_policy_table.py.
+조건. 72B RAM 0.5 기본값(게이트 없음, 1 MiB I/O, GPU KV 자동 21k 토큰, gpu_util 0.85), Bailian 트레이스 offset 29,560부터 32건(hash_id → 결정적 16토큰 블록, 8,120 토큰 상한, 중앙값 6.5k, 합 154k 토큰), 창 안 프리픽스 공유 56%(트레이스 전체 66%), 고유 KV 21.7 GB. cold_fill(트레이스 순서) → settle 15 s → reverse_retrieve(역순, 다른 꼬리 8토큰). 용량 조건은 상한 8 GiB(고유량의 37%). 결과 results/qwen72b/bailian-ram0.5-*, 표는 tools/qwen72_policy_table.py.
 
 | 조건 | cold_fill / forward / prefill 평균 | reverse / forward / prefill 평균 | 두 단계 합계 (재계산 대비) | 읽기 | 쓰기 | 축출 |
 |---|---|---|---|---|---|---|
@@ -885,22 +885,22 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 
 포크 오프로더 VLLM_OFFLOAD_TIER_LAYOUT=interleave(host layer 수는 block 배치와 같게, 위치는 80 layer에 고르게)와 prefetch_step 2. 3B(host 17 / SSD 19 layer)에서 decode forward 1.59 → 1.15 s(−28%), 둘 중 하나만으로는 1.29(prefetch_step 2만), 1.46(교차만).
 
-72B RAM 0.5 재계산, Bailian 32건. 정적 버퍼가 한 세트(1.63 GiB) 늘어 GPU KV 자동 예산(21k 토큰)과 같이 넣으면 첫 prefill 또는 warm-up 샘플러가 OOM. 조건을 맞추려고 prefill 조각 2048(--max-num-batched-tokens)과 GPU KV 고정(--kv-batch 2.0 = 5.75 GiB, 18.8k 토큰)으로 실행.
+72B RAM 0.5 재계산, Bailian 32건. 정적 버퍼가 한 세트(1.63 GiB) 늘어 GPU KV 자동 예산(21k 토큰)과 같이 넣으면 첫 prefill 또는 warm-up 샘플러가 OOM. 조건을 맞추려고 prefill chunk 2048(--max-num-batched-tokens)과 GPU KV 고정(--kv-batch 2.0 = 5.75 GiB, 18.8k 토큰)으로 실행.
 
 | 조건 | decode forward | prefill forward 평균 | forward 수 | 두 단계 합계 |
 |---|---|---|---|---|
-| block 배치, prefetch_step 1, 조각 8192, KV 21.4k (기준) | 28.4 s | 62 s | 107 | 4,350 s |
-| 교차 배치, prefetch_step 2, 조각 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
-| 교차 배치, prefetch_step 2, 조각 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (조각당) | 164 | 4,369 s |
+| block 배치, prefetch_step 1, chunk 8192, KV 21.4k (기준) | 28.4 s | 62 s | 107 | 4,350 s |
+| 교차 배치, prefetch_step 2, chunk 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
+| 교차 배치, prefetch_step 2, chunk 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (chunk당) | 164 | 4,369 s |
 
 - forward 고정비는 28.4 → 22.7 s(−20%). nsys에서 본 SSD 읽기만의 시간 23.3 s와 같으며, host 복사 5.7 s가 SSD 읽기 아래로 다 숨은 값. 채널 측정의 host 저하(동시 실행 시 0.67)는 SSD 읽기 23 s 안에 host 62 GiB / 8 GB/s = 7.7 s가 들어가므로 forward 길이에는 안 나타남.
-- 두 단계 합계가 기준과 같은 것은 조각 2048과 KV 18.8k로 forward 수가 107 → 164로 는 몫이 상쇄해서. 같은 조각·KV로 맞춘 조건이 없어 wall clock 이득은 아직 미확정. 조각 8192 + KV 고정 2.0 조건을 추가 예정.
-- 0.75·조각 8192 런의 26.4 s가 22.7 s와 다른 원인은 미확립(nsys 없음).
+- 두 단계 합계가 기준과 같은 것은 chunk 2048과 KV 18.8k로 forward 수가 107 → 164로 는 몫이 상쇄해서. 같은 chunk·KV로 맞춘 조건이 없어 wall clock 이득은 아직 미확정. chunk 8192 + KV 고정 2.0 조건을 추가 예정.
+- 0.75·chunk 8192 런의 26.4 s가 22.7 s와 다른 원인은 미확립(nsys 없음).
 - 출력 토큰열 64건 동일.
 
-#### 정책 묶음 비교: 우리 정책 대 LMCache 카피 (72B, 조각 2048·KV 18.8k)
+#### 정책 묶음 비교: 우리 정책 대 LMCache 카피 (72B, chunk 2048·KV 18.8k)
 
-OOM을 피하려고 prefill 조각 2048과 GPU KV 고정(요청 2.0개분, 18.8k 토큰)으로 맞춘 조건. 기준 런(조각 8192, KV 21.4k)과는 forward 수가 달라 같은 조건 안에서만 비교. 결과 results/qwen72b/*-mnbt2k-kv2*.
+OOM을 피하려고 prefill chunk 2048과 GPU KV 고정(요청 2.0개분, 18.8k 토큰)으로 맞춘 조건. 기준 런(chunk 8192, KV 21.4k)과는 forward 수가 달라 같은 조건 안에서만 비교. 결과 results/qwen72b/*-mnbt2k-kv2*.
 
 | 조건 | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
 |---|---|---|---|---|
@@ -909,7 +909,7 @@ OOM을 피하려고 prefill 조각 2048과 GPU KV 고정(요청 2.0개분, 18.8k
 | B LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 3,116 s / 81 | 2,048 s / 67 | 5,164 s | 28.4 s |
 
 - A1'의 분할은 model 모드가 k=0(전부 적재)을 골라 채널 측정 예측과 같음. nsys(앞 12 forward): decode forward 23 s 안에서 SSD 가중치 읽기가 0.5 s에 시작해 끝까지, host 복사(memcpy 합집합 8.0 s, 동시 실행 저하로 5.7 → 8 s)는 전부 그 안에 겹침. forward = SSD 읽기 시간. KV 쓰기는 forward당 1.5~3.4 s, 가중치 읽기와 겹친 몫 0.9~1.8 s(SSD 구간이 forward의 95%라 write-behind가 피할 자리가 거의 없음). KV 읽기는 forward 사이, 겹침 0.
-- B는 가중치가 기본 배치라 forward 28.4 s이고, 조각 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 조각·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. 조각 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
+- B는 가중치가 기본 배치라 forward 28.4 s이고, chunk 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 chunk·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. chunk 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
 - 세 런 모두 출력 토큰열 64건 동일, 오류 0.
 
 #### 3B compute/load split parameter sweep
@@ -945,7 +945,7 @@ Qwen2.5-3B, host 0.02(가중치 host 17 / SSD 19 layer), Bailian 24건 4k, GPU K
 
 Qwen2.5-3B-Instruct(GQA, gate·up·down FFN, RMSNorm)로 오프로더와 CuFileFsSpec 스모크. 오프로더는 decoder layer 모듈 전체를 파라미터 이름 화이트리스트 없이 감싸므로 구조 의존이 없음. 36 layer, 정적 버퍼 풀 154 MB(layer 하나분)라 BAR1 등록이 4개 모두 성공(OPT-66B는 1.9 GiB라 실패). host 비율 0.02(2.51 GiB)에서 CPU 17 / SSD 19 layer, forward 1.5 s. 32문서·4k 토큰에서 reverse_retrieve wall clock 45.0 s(재계산)에서 10.2 s(SSD 적중, 읽기 833건 1.83 GiB, 오류 0). 4문서는 GPU KV 안에 다 남아 SSD 적중이 없음(축출이 있어야 SSD를 읽음). SSD 티어 런은 layer 0.144 GiB라 forward가 모형보다 26~32% 느려 소형 layer의 cuFile 유효 대역폭이 더 낮은 것으로 보이며 미확립.
 
-출력 토큰열 검사의 한계. 32문서에서 재계산 대 적중이 64건 중 1건 불일치였는데, 재계산끼리 GPU KV 예산만 바꾼 두 런도 2건이 달랐음. Qwen + TRITON_ATTN + chunked prefill에서 greedy 출력이 프리픽스 적중 길이에 따른 prefill 조각 경계에 좌우되는 부동소수점 축약 순서 문제. OPT에서는 없던 현상. 이 조건에서는 토큰열 완전 일치를 정합성 검사로 쓸 수 없고, 재계산 런 사이의 불일치 수를 기준선으로 둔다.
+출력 토큰열 검사의 한계. 32문서에서 재계산 대 적중이 64건 중 1건 불일치였는데, 재계산끼리 GPU KV 예산만 바꾼 두 런도 2건이 달랐음. Qwen + TRITON_ATTN + chunked prefill에서 greedy 출력이 프리픽스 적중 길이에 따른 prefill chunk 경계에 좌우되는 부동소수점 축약 순서 문제. OPT에서는 없던 현상. 이 조건에서는 토큰열 완전 일치를 정합성 검사로 쓸 수 없고, 재계산 런 사이의 불일치 수를 기준선으로 둔다.
 
 러너 입력. LongBench-v2 32건(양태규 패키지 데이터)을 모델 토크나이저로 토큰화해 프리픽스로 쓰고 단계별로 다른 질문 꼬리를 붙이는 longbench 소스, 02의 Bailian 트레이스 hash_id 열을 결정적 16토큰 블록으로 바꿔 프리픽스 공유 구조를 보존하는 bailian 소스(실제 텍스트·시간 간격·멀티턴 거리는 미재현), 요청별 적중 토큰과 doc별 재사용 횟수를 남기는 --profile-out.
 

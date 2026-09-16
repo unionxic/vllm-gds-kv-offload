@@ -2,7 +2,7 @@
 # Qwen2.5-72B-Instruct 기준선. host memory 비율(RAM 대비) RATIOS(기본 0.5) × 조건(none=재계산, cufile=SSD 적중, cufile-wb=SSD 적중 + write-behind 30 s).
 # 입력 LongBench-v2 32건(data/longbench-v2-10k-32.jsonl), GPU KV·block_size는 vLLM 기본(--pure). VLLM_OFFLOAD_PIN_EXACT=1과 memguard는 안전장치.
 # SRC=bailian 이면 02의 Bailian 트레이스 앞 NDOCS건(프리픽스 공유 구조 재현). CONDS에 cufile-lru|cufile-lfu(용량 CAPGB, 기본 12)|cufile-seen2(admission) 추가 가능. UTILS로 gpu_util 시도 순서.
-# KVB=2.27 이면 --pure 대신 GPU KV를 요청 2.27개분(=기준 런의 자동 예산 7.0 GiB, 21k 토큰)으로 고정. prefetch 깊이 2·조각 2048에서 자동 예산이 KV를 키워 샘플러가 OOM 나는 것을 막음.
+# KVB=2.27 이면 --pure 대신 GPU KV를 요청 2.27개분(=기준 런의 자동 예산 7.0 GiB, 21k 토큰)으로 고정. prefetch 깊이 2·chunk 2048에서 자동 예산이 KV를 키워 샘플러가 OOM 나는 것을 막음.
 # NSYS=1 이면 lib/obs/run_nsys.sh로 감싸고 NSYS_PHASE(기본 cold_fill)의 앞 NSYS_STEPS(기본 40) forward만 캡처(cudaProfilerApi 구간).
 set -u; cd "$(dirname "$0")"; source ../../env.sh
 export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_OFFLOAD_PIN_EXACT=1
