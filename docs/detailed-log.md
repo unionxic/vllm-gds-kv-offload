@@ -829,6 +829,40 @@ Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batc
 - 저장 단계 wall clock이 LFU·LRU·seen_twice에서 재계산보다 20 s 짧은 것은 저장이 줄거나 늦어져 forward 수가 54로 유지된 것이고, 쓰기 자체의 비용은 어느 조건에서도 forward 길이에 나타나지 않음(decode forward 28.2~28.4 s 동일).
 - 다음 후보. 게이트를 켠 전부 저장(예상 −11%), 축출에 신규 보호(LFU 삽입 뒤 유예 또는 2-큐)와 상한을 고유량의 60~80%로 둔 조건, 같은 창을 세 번 방문하는 설계에서 seen_twice 재평가.
 
+### 채널 대역폭과 동시 실행 (KV 소스 섞기의 상수)
+
+#### 측정
+
+experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독과 동시 실행 쌍을 잼. cuFile은 backend·gdsio와 같은 1 MiB 호출 4스레드(64 MiB 호출은 bounce 경로에서 1.7 GB/s로 느림). 결과 results/channels/rain.json. SSD 단독 읽기는 직전 쓰기 상태에 따라 2.9~3.6 GB/s로 흔들림.
+
+| 채널 | 단독 |
+|---|---|
+| host → GPU pinned | 12.3 GB/s |
+| host → GPU pageable | 11.2 GB/s |
+| GPU → host pinned | 13.2 GB/s |
+| SSD → GPU cuFile(bounce) | 2.9~3.6 GB/s |
+| GPU → SSD cuFile | 1.5~2.1 GB/s (SLC 캐시 안) |
+| GPU fp16 행렬곱 8192³ | 69 TFLOPS |
+
+| 동시 쌍 | 각 채널의 단독 대비 |
+|---|---|
+| host→GPU + SSD→GPU | host 0.65~0.67, SSD 0.8~1.0 |
+| host→GPU + GPU→host | 0.92 / 0.86 (전이중) |
+| SSD 읽기 + SSD 쓰기 | 읽기 0.28~0.54, 쓰기 0.33~0.42 |
+| host→GPU + GPU 계산 | 0.99 / 0.99 |
+| SSD→GPU + GPU 계산 | 1.0 / 0.99 |
+| host→GPU + SSD→GPU + GPU 계산 | 0.67 / 1.0 / 0.99 |
+
+- GPU 계산은 어느 전송과도 서로 영향 없음. 재계산 채널은 독립.
+- SSD→GPU는 이 카드에서 host bounce를 거치므로 GPU PCIe 링크를 같이 쓰며, 동시에 돌면 host→GPU가 12.3 → 8.0 GB/s로 줄고 SSD 쪽은 유지(SSD가 링크를 먼저 가져감). 두 채널의 합은 약 11.5 GB/s로 링크 한계. 교차 배치에서 72B decode forward가 5.7 s가 아니라 2 s만 준 이유의 후보이며, nsys의 weight_h2d 구간 길이로 확인할 것.
+- 양방향(host→GPU와 GPU→host)은 거의 독립. KV 저장(GPU→host bounce)은 가중치 host 복사와 부딪히지 않음.
+- SSD 읽기와 쓰기의 공유는 66B에서 본 3.2 → 0.3 GB/s와 같은 현상.
+- pageable 메모리는 11.2 GB/s라 느린 PCIe를 흉내 내는 수단이 못 됨.
+
+#### 소스 섞기 모형
+
+요청 프리픽스 H 청크 중 앞 k를 재계산, 나머지를 host(h)와 SSD(s)에서 동시에 적재하면 확보 시간은 max(k·토큰/R, h·바이트/B_host', s·바이트/B_ssd'). B'는 그 시각 가중치 스트리밍이 남긴 유휴 대역폭에 위 동시 실행 저하율을 곱한 값. 72B 8k 기준 R = 215 tok/s(0.07 GB/s KV 환산), B_ssd' ≈ 3.4, B_host' ≈ 8~12 GB/s라 적재가 재계산보다 바이트당 50배 이상 빨라 k ≈ 0. 섞기가 의미를 갖는 영역은 계산이 싼 작은 모델(2.7b: SSD 0.48 s 대 재계산 1.15 s)과 토큰당 KV가 큰 MHA 모델. 구현(뒤쪽 적중 적재 + 앞쪽 재계산 동시 진행, 분할 제어기 VLLM_KV_SPLIT)은 포크 진행 중.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
