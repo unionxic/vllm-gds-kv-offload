@@ -863,6 +863,24 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 
 요청 프리픽스 H 청크 중 앞 k를 재계산, 나머지를 host(h)와 SSD(s)에서 동시에 적재하면 확보 시간은 max(k·토큰/R, h·바이트/B_host', s·바이트/B_ssd'). B'는 그 시각 가중치 스트리밍이 남긴 유휴 대역폭에 위 동시 실행 저하율을 곱한 값. 72B 8k 기준 R = 215 tok/s(0.07 GB/s KV 환산), B_ssd' ≈ 3.4, B_host' ≈ 8~12 GB/s라 적재가 재계산보다 바이트당 50배 이상 빨라 k ≈ 0. 섞기가 의미를 갖는 영역은 계산이 싼 작은 모델(2.7b: SSD 0.48 s 대 재계산 1.15 s)과 토큰당 KV가 큰 MHA 모델. 구현(뒤쪽 적중 적재 + 앞쪽 재계산 동시 진행, 분할 제어기 VLLM_KV_SPLIT)은 포크 진행 중.
 
+#### KV 소스 분할: 앞 재계산과 뒤 적재의 동시 진행
+
+포크 구현(d3534f1751). 요청의 적중 프리픽스 H 청크 중 앞 k 청크는 GPU가 chunked prefill로 다시 계산하고, 뒤 H−k 청크는 같은 시간에 host·SSD 층에서 비동기 적재. 뒤 KV는 같은 프리픽스에서 나온 것이라 유효하고 앞 chunk의 attention은 뒤 블록을 보지 않으므로, 뒤는 decode 전까지만 도착하면 됨(Cake의 compute-from-front, load-from-back).
+
+| 위치 | 변경 |
+|---|---|
+| vllm/v1/kv_offload/split_policy.py | 분할 제어기. VLLM_KV_SPLIT = off, fixed:<비율>, serial:<비율>(대조군: 앞 H−k를 보통의 프리픽스 적중으로 적재한 뒤 뒤 k 계산, 겹침 없음), model(max(k·토큰/R, host 바이트/B_host, SSD 바이트/B_ssd)를 최소로 하는 k. R, B는 VLLM_KV_SPLIT_RATE_TOKS, _BW_HOST_GBS, _BW_SSD_GBS) |
+| kv_connector/v1/offloading/scheduler.py | lookup 뒤 분할 결정. 뒤 청크 수만 외부 적중으로 보고하고 요청에 head·tail·경계 기록. 적재 제출은 뒤 청크의 블록 id로만 |
+| v1/core/sched/scheduler.py | 분할 요청은 WAITING_FOR_REMOTE_KVS에 서지 않고 바로 앞 계산 시작. chunk는 경계를 넘지 않게 상한, 경계에 닿으면 뒤 적재 완료까지 RUNNING 상태로 대기, 완료 시 num_computed_tokens를 경계+tail로 올림. 적재 중 분할 요청은 선점 대상에서 제외. 게이트는 우회하되 도착으로 집계 |
+| csrc cufile_fs.cpp, cufile_fs/spec.py | 읽기 정지·재개(pause_reads)와 cufile_fs_load_window=host(가중치 SSD 읽기 중 KV SSD 읽기 정지) |
+| base.py, cufile_fs, hybrid | key_tiers(키별 host/ssd) |
+| run_obs.py | --kv-split, result.json kv_split(분할 요청 수, 재계산·적재 토큰, 뒤 대기 횟수·초) |
+
+- 단일 full-attention KV 그룹에서만 켜짐(SWA·eagle·mamba는 경계가 한 위치가 아님).
+- QA(Qwen2.5-3B, host 0.02, Bailian 24건 4k, KV 2요청): off, fixed:0.75, model, hybrid(host 1.8 GB)+fixed:0.5, off 반복 다섯 런의 출력 토큰열이 48건 전부 동일, backend 오류 0. fixed:0.75는 18요청 분할, 재계산 27,904·적재 9,600 토큰. model은 R 기본값 215 tok/s(72B)라 3B에서 k=0.
+- 뒤 대기(tail_wait)는 앞 계산이 끝난 step 경계에서 완료를 확인하는 구조라 최대 한 step 늦게 반영됨(3B fixed:0.75에서 요청당 약 1.2 s).
+- nsys: kv_split(요청, head, tail), kv_tail_ready 표시가 잡힘. 3B 4k에서 fixed:0.5의 reverse 단계는 off보다 느림(90 → 99 s): 이 조건은 SSD 적재가 재계산보다 빨라 k>0이 손해인 영역이며 예상과 일치. 격자(campaign_grid3b.sh)로 경계를 잼.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
