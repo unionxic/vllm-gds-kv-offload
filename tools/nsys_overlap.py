@@ -19,7 +19,16 @@ def inter(u1,u2):
         else: j+=1
     return tot
 ev=load(sys.argv[1]); phase=sys.argv[2]
-steps=sorted([(a,b) for a,b,n,t in ev if n==f"step:{phase}"])
+def load_memcpy(db):
+    c=sqlite3.connect(db)
+    try:
+        rows=list(c.execute("select start,end,copyKind,bytes from CUPTI_ACTIVITY_KIND_MEMCPY"))
+    except Exception:
+        return [], []
+    # copyKind 1 = HtoD, 2 = DtoH
+    return [(a,b) for a,b,k,n in rows if k==1 and n>=1<<20], [(a,b) for a,b,k,n in rows if k==2 and n>=1<<20]
+h2d_big, d2h_big = load_memcpy(sys.argv[1])
+steps=sorted([(a,b) for a,b,n,t in ev if n==f"step:{phase}" or n.startswith(f"step:{phase} ")])
 kvfiles=[(a,b) for a,b,n,t in ev if n in ("kv_store_file","kv_load_file")]
 def inside(x, ivs): return any(a<=x[0] and x[1]<=b for a,b in ivs)
 reads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b]; writes=[(a,b) for a,b,n,t in ev if n=="cuFileWrite" and b]
@@ -27,7 +36,7 @@ kvthreads={t for a,b,n,t in ev if n in ("kv_store_file","kv_load_file")}
 wreads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b and t not in kvthreads]; kreads=[(a,b) for a,b,n,t in ev if n=="cuFileRead" and b and t in kvthreads]
 marks=sorted([(a,n) for a,b,n,t in ev if n in ("ssd_window:on","ssd_window:off")])
 print(f"{phase}: steps {len(steps)}, weight cuFileRead {len(wreads)}, kv cuFileRead {len(kreads)}, cuFileWrite {len(writes)}, ssd_window marks {len(marks)}")
-print("step  dur_s  wRead_union_s  kvWrite_union_s  overlap(write∩wRead)_s  kvRead_union_s  overlap(kvRead∩wRead)_s  ssd_window_s")
+print("step  dur_s  wRead_union_s  h2d(memcpy≥1MiB)_union_s  overlap(h2d∩wRead)_s  kvWrite_union_s  overlap(write∩wRead)_s  kvRead_union_s  overlap(kvRead∩wRead)_s  ssd_window_s  wRead_first_s")
 for i,(s0,s1) in enumerate(steps):
     clip=lambda ivs: union([[max(a,s0),min(b,s1)] for a,b in ivs if b>s0 and a<s1])
     ur=clip(wreads); uw=clip(writes); uk=clip(kreads)
@@ -36,6 +45,7 @@ for i,(s0,s1) in enumerate(steps):
     for a,n in marks:
         if n=="ssd_window:on": cur=a
         elif cur is not None: win.append((cur,a)); cur=None
-    uwin=clip(win)
+    uwin=clip(win); uh=clip(h2d_big)
     f=lambda u: sum(b-a for a,b in u)/1e9
-    print(f"{i:4d} {(s1-s0)/1e9:6.1f} {f(ur):13.1f} {f(uw):16.1f} {inter(uw,ur)/1e9:23.1f} {f(uk):15.1f} {inter(uk,ur)/1e9:25.1f} {f(uwin):12.1f}")
+    first=[a for a,b in wreads if s0<=a<=s1]; fr=(min(first)-s0)/1e9 if first else -1
+    print(f"{i:4d} {(s1-s0)/1e9:6.1f} {f(ur):13.1f} {f(uh):24.1f} {inter(uh,ur)/1e9:20.1f} {f(uw):16.1f} {inter(uw,ur)/1e9:23.1f} {f(uk):15.1f} {inter(uk,ur)/1e9:25.1f} {f(uwin):12.1f} {fr:13.1f}")
