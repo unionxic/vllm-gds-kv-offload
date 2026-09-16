@@ -9,7 +9,7 @@ log "== grid3b K($KS) × G($GS) × ($MODES)"
 for g in $GS; do for k in $KS; do for mode in $MODES; do
   tag=k$k-g$g-$mode; [ -f $O/$tag/result.json ] && { log "skip $tag"; continue; }
   case $g in 0) kvt=(--kv-transport cufile);; 1) kvt=(--kv-transport cpu --kv-host-gb 8);; *) kvt=(--kv-transport hybrid --kv-host-gb $HOSTGB);; esac
-  case $k in 1) kvt=(--kv-transport none); split=off;; *) split=$mode:$k;; esac
+  case $k in 1) kvt=(--kv-transport none); split=off;; *) split=$([ "$mode" = split ] && echo fixed || echo serial):$k;; esac
   [ "$k" = 0 ] && split=off
   rm -rf $O/kv; log "start $tag"
   python run_obs.py --run-dir $O/$tag --model Qwen/Qwen2.5-3B-Instruct --prompt-source bailian --n-docs 24 --decode-tokens 8 --host-ram-fraction 0.02 \
