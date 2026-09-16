@@ -117,3 +117,7 @@
 [09-16 18:27:51] == qwen72b 종료
 [09-16 18:27:51] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=1
 [09-16 18:27:51] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys
+[09-16 19:47:28] done  bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt2k-kv2-nsys rc=0 (gpu_util 0.85)
+[09-16 19:47:28] == qwen72b 종료
+[09-16 19:47:29] == qwen72b: RAM 0.5 × (hybrid), docs 32, decode 8, NSYS=1
+[09-16 19:47:29] start bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first
