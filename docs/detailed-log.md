@@ -829,7 +829,7 @@ Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batc
 - 저장 단계 wall clock이 LFU·LRU·seen_twice에서 재계산보다 20 s 짧은 것은 저장이 줄거나 늦어져 forward 수가 54로 유지된 것이고, 쓰기 자체의 비용은 어느 조건에서도 forward 길이에 나타나지 않음(decode forward 28.2~28.4 s 동일).
 - 다음 후보. 게이트를 켠 전부 저장(예상 −11%), 축출에 신규 보호(LFU 삽입 뒤 유예 또는 2-큐)와 상한을 고유량의 60~80%로 둔 조건, 같은 창을 세 번 방문하는 설계에서 seen_twice 재평가.
 
-### 채널 대역폭과 동시 실행 (KV 소스 섞기의 상수)
+### 채널 대역폭과 동시 실행 (KV compute/load split의 상수)
 
 #### 측정
 
@@ -859,11 +859,11 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 - SSD 읽기와 쓰기의 공유는 66B에서 본 3.2 → 0.3 GB/s와 같은 현상.
 - pageable 메모리는 11.2 GB/s라 느린 PCIe를 흉내 내는 수단이 못 됨.
 
-#### 소스 섞기 모형
+#### compute/load split 모형
 
 요청 프리픽스 H 청크 중 앞 k를 재계산, 나머지를 host(h)와 SSD(s)에서 동시에 적재하면 확보 시간은 max(k·토큰/R, h·바이트/B_host', s·바이트/B_ssd'). B'는 그 시각 가중치 스트리밍이 남긴 유휴 대역폭에 위 동시 실행 저하율을 곱한 값. 72B 8k 기준 R = 215 tok/s(0.07 GB/s KV 환산), B_ssd' ≈ 3.4, B_host' ≈ 8~12 GB/s라 적재가 재계산보다 바이트당 50배 이상 빨라 k ≈ 0. 섞기가 의미를 갖는 영역은 계산이 싼 작은 모델(2.7b: SSD 0.48 s 대 재계산 1.15 s)과 토큰당 KV가 큰 MHA 모델. 구현(뒤쪽 적중 적재 + 앞쪽 재계산 동시 진행, 분할 제어기 VLLM_KV_SPLIT)은 포크 진행 중.
 
-#### KV 소스 분할: 앞 재계산과 뒤 적재의 동시 진행
+#### KV compute/load split: 앞 재계산과 뒤 적재의 동시 진행
 
 포크 구현(d3534f1751). 요청의 적중 프리픽스 H 청크 중 앞 k 청크는 GPU가 chunked prefill로 다시 계산하고, 뒤 H−k 청크는 같은 시간에 host·SSD 층에서 비동기 적재. 뒤 KV는 같은 프리픽스에서 나온 것이라 유효하고 앞 chunk의 attention은 뒤 블록을 보지 않으므로, 뒤는 decode 전까지만 도착하면 됨(Cake의 compute-from-front, load-from-back).
 
@@ -879,19 +879,19 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 - 단일 full-attention KV 그룹에서만 켜짐(SWA·eagle·mamba는 경계가 한 위치가 아님).
 - QA(Qwen2.5-3B, host 0.02, Bailian 24건 4k, KV 2요청): off, fixed:0.75, model, hybrid(host 1.8 GB)+fixed:0.5, off 반복 다섯 런의 출력 토큰열이 48건 전부 동일, backend 오류 0. fixed:0.75는 18요청 분할, 재계산 27,904·적재 9,600 토큰. model은 R 기본값 215 tok/s(72B)라 3B에서 k=0.
 - 뒤 대기(tail_wait)는 앞 계산이 끝난 step 경계에서 완료를 확인하는 구조라 최대 한 step 늦게 반영됨(3B fixed:0.75에서 요청당 약 1.2 s).
-- nsys: kv_split(요청, head, tail), kv_tail_ready 표시가 잡힘. 3B 4k에서 fixed:0.5의 reverse 단계는 off보다 느림(90 → 99 s): 이 조건은 SSD 적재가 재계산보다 빨라 k>0이 손해인 영역이며 예상과 일치. 격자(campaign_grid3b.sh)로 경계를 잼.
+- nsys: kv_split(요청, head, tail), kv_tail_ready 표시가 잡힘. 3B 4k에서 fixed:0.5의 reverse 단계는 off보다 느림(90 → 99 s): 이 조건은 SSD 적재가 재계산보다 빨라 k>0이 손해인 영역이며 예상과 일치. sweep(campaign_grid3b.sh)로 경계를 잼.
 
-#### 가중치 티어 교차 배치와 prefetch 깊이 2 (72B)
+#### 가중치 티어 교차 배치와 prefetch prefetch_step 2 (72B)
 
-포크 오프로더 VLLM_OFFLOAD_TIER_LAYOUT=interleave(host layer 수는 block 배치와 같게, 위치는 80 layer에 고르게)와 prefetch_step 2. 3B(host 17 / SSD 19 layer)에서 decode forward 1.59 → 1.15 s(−28%), 둘 중 하나만으로는 1.29(깊이 2만), 1.46(교차만).
+포크 오프로더 VLLM_OFFLOAD_TIER_LAYOUT=interleave(host layer 수는 block 배치와 같게, 위치는 80 layer에 고르게)와 prefetch_step 2. 3B(host 17 / SSD 19 layer)에서 decode forward 1.59 → 1.15 s(−28%), 둘 중 하나만으로는 1.29(prefetch_step 2만), 1.46(교차만).
 
 72B RAM 0.5 재계산, Bailian 32건. 정적 버퍼가 한 세트(1.63 GiB) 늘어 GPU KV 자동 예산(21k 토큰)과 같이 넣으면 첫 prefill 또는 warm-up 샘플러가 OOM. 조건을 맞추려고 prefill 조각 2048(--max-num-batched-tokens)과 GPU KV 고정(--kv-batch 2.0 = 5.75 GiB, 18.8k 토큰)으로 실행.
 
 | 조건 | decode forward | prefill forward 평균 | forward 수 | 두 단계 합계 |
 |---|---|---|---|---|
-| block 배치, 깊이 1, 조각 8192, KV 21.4k (기준) | 28.4 s | 62 s | 107 | 4,350 s |
-| 교차 배치, 깊이 2, 조각 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
-| 교차 배치, 깊이 2, 조각 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (조각당) | 164 | 4,369 s |
+| block 배치, prefetch_step 1, 조각 8192, KV 21.4k (기준) | 28.4 s | 62 s | 107 | 4,350 s |
+| 교차 배치, prefetch_step 2, 조각 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
+| 교차 배치, prefetch_step 2, 조각 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (조각당) | 164 | 4,369 s |
 
 - forward 고정비는 28.4 → 22.7 s(−20%). nsys에서 본 SSD 읽기만의 시간 23.3 s와 같으며, host 복사 5.7 s가 SSD 읽기 아래로 다 숨은 값. 채널 측정의 host 저하(동시 실행 시 0.67)는 SSD 읽기 23 s 안에 host 62 GiB / 8 GB/s = 7.7 s가 들어가므로 forward 길이에는 안 나타남.
 - 두 단계 합계가 기준과 같은 것은 조각 2048과 KV 18.8k로 forward 수가 107 → 164로 는 몫이 상쇄해서. 같은 조각·KV로 맞춘 조건이 없어 wall clock 이득은 아직 미확정. 조각 8192 + KV 고정 2.0 조건을 추가 예정.
@@ -904,15 +904,15 @@ OOM을 피하려고 prefill 조각 2048과 GPU KV 고정(요청 2.0개분, 18.8k
 
 | 조건 | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
 |---|---|---|---|---|
-| A0' 재계산, 교차 배치 + 깊이 2 | 2,246 s / 83 | 2,123 s / 81 | 4,369 s | 22.7 s |
-| A1' 우리 묶음: 교차 배치 + 깊이 2 + 게이트 2 + write-behind + 분할 model + 전부 저장 | 2,357 s / 81 | 1,728 s / 70 | 4,086 s (A0' 대비 −6.5%) | 22.2 s |
+| A0' 재계산, 교차 배치 + prefetch_step 2 | 2,246 s / 83 | 2,123 s / 81 | 4,369 s | 22.7 s |
+| A1' 우리 묶음: 교차 배치 + prefetch_step 2 + 게이트 2 + write-behind + 분할 model + 전부 저장 | 2,357 s / 81 | 1,728 s / 70 | 4,086 s (A0' 대비 −6.5%) | 22.2 s |
 | B LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 3,116 s / 81 | 2,048 s / 67 | 5,164 s | 28.4 s |
 
 - A1'의 분할은 model 모드가 k=0(전부 적재)을 골라 채널 측정 예측과 같음. nsys(앞 12 forward): decode forward 23 s 안에서 SSD 가중치 읽기가 0.5 s에 시작해 끝까지, host 복사(memcpy 합집합 8.0 s, 동시 실행 저하로 5.7 → 8 s)는 전부 그 안에 겹침. forward = SSD 읽기 시간. KV 쓰기는 forward당 1.5~3.4 s, 가중치 읽기와 겹친 몫 0.9~1.8 s(SSD 구간이 forward의 95%라 write-behind가 피할 자리가 거의 없음). KV 읽기는 forward 사이, 겹침 0.
 - B는 가중치가 기본 배치라 forward 28.4 s이고, 조각 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 조각·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. 조각 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
 - 세 런 모두 출력 토큰열 64건 동일, 오류 0.
 
-#### 3B 소스 분할 격자
+#### 3B compute/load split parameter sweep
 
 Qwen2.5-3B, host 0.02(가중치 host 17 / SSD 19 layer), Bailian 24건 4k, GPU KV 2요청분. 적중 단계(reverse_retrieve) wall clock(s). 각 점 1런, 런 간 편차 약 ±2 s. host 층 1.8 GB로 돌린 첫 판은 작업 집합(고유 청크 684개, 1.5 GiB)이 다 들어가 host만 조건과 같아져 results/grid3b/host1.8gb로 옮기고 0.75 GB(317 블록, host 적중 1,060 / SSD 4,050)로 다시 잼. 결과 results/grid3b, 표 tools/grid3b_table.py.
 
