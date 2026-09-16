@@ -36,7 +36,7 @@ ap.add_argument("--host-weight-fraction", type=float, default=None, help="오프
 ap.add_argument("--host-ram-fraction", type=float, default=None, help="host memory(RAM 전체) 대비 비율을 오프로더에 그대로 전달. 둘 다 없으면 오프로더 기본값 0.3")
 ap.add_argument("--pure", action="store_true", help="GPU KV 예산과 block_size를 vLLM 기본에 맡김(--kv-batch, --kv-block 무시)")
 ap.add_argument("--prefetch-step", type=int, default=1)
-ap.add_argument("--max-num-batched-tokens", type=int, default=0, help="chunked prefill 조각 상한(0=vLLM 기본). prefetch 깊이 2로 정적 버퍼가 늘어 첫 prefill이 OOM일 때 줄임")
+ap.add_argument("--max-num-batched-tokens", type=int, default=0, help="chunked prefill chunk 상한(0=vLLM 기본). prefetch 깊이 2로 정적 버퍼가 늘어 첫 prefill이 OOM일 때 줄임")
 ap.add_argument("--io-threads", type=int, default=4)
 ap.add_argument("--gpu-util", type=float, default=0.9)
 ap.add_argument("--max-model-len", type=int, default=2048)

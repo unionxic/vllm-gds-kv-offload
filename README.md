@@ -28,7 +28,7 @@
 - 한 사이클 순이익(저장 + 적중 대 재계산 2라운드)은 RAM 0.5 이상에서 1~3%. 0.3 이하는 0.
 - vLLM 스케줄러는 KV 로드가 끝난 요청부터 승격하므로 먼저 온 요청이 혼자 forward를 돌아 배치가 쪼개짐. 게이트(승격 대기)로 forward 수가 기준선으로 복귀.
 - 오프로더 버퍼를 두 세트로 두면(prefetch_step 2) prefill 계산이 전송 아래 숨어 재계산 비용이 0에 가까워지고 KV 적중이 아낄 몫이 사라짐. 16 GB에서는 배치 2와 같이 못 넣음.
-- 손대지 않은 기본값(게이트 없음, 1 MiB 조각, KV 자동)은 RAM 0.5에서 두 단계 합계 +19% 손해. 같은 조건에 게이트와 4 MiB 조각만 넣으면 −1.3%.
+- 손대지 않은 기본값(게이트 없음, 1 MiB I/O, KV 자동)은 RAM 0.5에서 두 단계 합계 +19% 손해. 같은 조건에 게이트와 4 MiB I/O만 넣으면 −1.3%.
 - Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB) RAM 0.5 기본값, LongBench-v2 8건 × 8k 토큰: SSD 적중이 두 단계 합계 3,340 → 2,896 s(−13.3%). 저장 단계 손해 0(문서 KV 2.6 GB가 SSD 쓰기 캐시 안), 적중 단계 prefill forward 67 → 29 s. 출력 토큰열 동일.
 - 같은 72B 조건에 Bailian 트레이스 32건(프리픽스 공유 56%): 전부 저장 −7.3%. LMCache에서 옮긴 용량 정책은 상한 8 GiB(고유 KV의 37%)에서 LFU −3.5%, LRU −2.3%(역순 재방문이라 캐시보다 큰 순차 스캔, 쓰기 두 배). seen_twice admission −4.2%(첫 재사용을 잃음). 다섯 조건 모두 토큰열 동일.
 - LMCache 0.5.5 GDS L1은 이 카드에서 불성립. staging 버퍼 등록이 BAR1을 넘고 cuFileReadAsync가 적중에서 멈춤. LMCache는 저장 시점·admission·가중치 층 인식이 없어 위 문제의 설계 바깥.
@@ -52,7 +52,7 @@ LEval 실제 텍스트 64문서, 재사용 라운드(W2a)
 | cuFile 지연 store | 0.637 s | 0.786 s | 1.169 s | 114 |
 | POSIX 지연 store | 0.920 s | 1.206 s | 1.168 s | 123 |
 
-OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 배치 2, 게이트 켬, 4 MiB 조각
+OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 배치 2, 게이트 켬, 4 MiB I/O
 
 | RAM 비율 | CPU / SSD layer | forward 실측 / 모형 | 적중 라운드 | 저장 추가 | 두 라운드 합계 |
 | --- | --- | --- | --- | --- | --- |
@@ -67,9 +67,9 @@ OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 
 
 | 조건 | 두 단계 합계(저장 + 적중 대 재계산) |
 | --- | --- |
-| 기본값(게이트 없음, 1 MiB 조각, KV 자동 10.4 GiB, gpu_util 0.85) | 1,674 → 1,992 s (+19%). forward 64 → 70, 저장 단계 prefill 32 → 41.5 s |
+| 기본값(게이트 없음, 1 MiB I/O, KV 자동 10.4 GiB, gpu_util 0.85) | 1,674 → 1,992 s (+19%). forward 64 → 70, 저장 단계 prefill 32 → 41.5 s |
 | 기본값 + write-behind(cufile_fs_store_window=host, 상한 30 s) | 1,674 → 1,827 s (+9.1%). decode forward 최대 53.3 → 24.6 s, 저장 단계 prefill 41.5 → 36.5 s |
-| 게이트 + 4 MiB 조각 + KV 10.4 GiB | 1,653 → 1,631 s (−1.3%) |
+| 게이트 + 4 MiB I/O + KV 10.4 GiB | 1,653 → 1,631 s (−1.3%) |
 
 Qwen2.5-72B-Instruct RAM 0.5, 기본값, 8건 × 8k 토큰(저장 + 적중, 재계산 대비)
 

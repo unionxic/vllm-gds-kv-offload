@@ -21,7 +21,7 @@ python tools/compare_results.py --ref pure-ram0.5-none results/native-66b/*/resu
 
    기준 런은 같은 host 비율, 상주 layer, GPU KV(1 GiB 단위), 프롬프트 수의 재계산(kv none) 런. 구성이 다르면 변화율이 붙지 않는다. 형식은 06·07·09·10 러너 json과 11 run_obs(result.json + steps.jsonl) 모두 지원. 새 러너가 형식을 바꾸면 extract()에 분기를 추가한 뒤에 보고한다.
 
-2. 고정비를 먼저 놓는다. 가중치 스트리밍 조건에서 forward 하나는 가중치 이동이고 모형은 CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s(layer가 0.5 GiB 미만이면 2.9). 표의 model 열과 fwd_s 열이 15% 안이면 forward 자체는 정상이고, 손익은 forward 개수와 prefill 토큰 몫에서 찾는다. 벗어나면(!) 그 런을 먼저 설명한다. 알려진 이탈은 cuFile 1 MiB 조각 느린 모드(2~2.5배), POSIX 가중치 경로(모형 대상 아님), 06의 host 0.1 런(재현 안 됨).
+2. 고정비를 먼저 놓는다. 가중치 스트리밍 조건에서 forward 하나는 가중치 이동이고 모형은 CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s(layer가 0.5 GiB 미만이면 2.9). 표의 model 열과 fwd_s 열이 15% 안이면 forward 자체는 정상이고, 손익은 forward 개수와 prefill 토큰 몫에서 찾는다. 벗어나면(!) 그 런을 먼저 설명한다. 알려진 이탈은 cuFile 1 MiB I/O 느린 모드(2~2.5배), POSIX 가중치 경로(모형 대상 아님), 06의 host 0.1 런(재현 안 됨).
 
 3. 기준 대비 변화(*)를 forward 개수, prefill forward 길이, KV 읽기·쓰기 GiB, 배치당 로드 대기로 나눠 어느 항이 움직였는지 적는다. wall clock 차이 하나로 결론 내지 않는다. 지금까지 확인된 손해 자리는 셋. 저장 단계의 KV 쓰기와 가중치 SSD 읽기의 디스크 공유(prefill 직후 decode forward 하나가 늘어남), 게이트 없는 적중 단계의 forward 개수 증가, 이중 버퍼가 없을 때 prefill 계산이 전송 위에 얹히는 것.
 
