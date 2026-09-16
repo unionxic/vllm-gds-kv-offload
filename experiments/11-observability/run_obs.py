@@ -29,7 +29,7 @@ ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS 
 ap.add_argument("--lmcache-port", type=int, default=5555)
 ap.add_argument("--lmcache-chunk", type=int, default=64, help="lmcache: 토큰 chunk. GDS staging 버퍼 = chunk KV × 4가 BAR1 안이어야 함")
 ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만)")
-ap.add_argument("--kv-batch", type=int, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15")
+ap.add_argument("--kv-batch", type=float, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15 (소수 허용: 기준 런의 자동 예산을 그대로 맞출 때)")
 ap.add_argument("--kv-threads", type=int, default=4)
 ap.add_argument("--kv-block", type=int, default=64)
 ap.add_argument("--host-weight-fraction", type=float, default=None, help="오프로드 가중치 대비 CPU 비율(환산). 미지정이면 --host-ram-fraction")
