@@ -26,7 +26,7 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
   log "start $tag"
   for util in ${UTILS:-0.9 0.85}; do
     "${wrap[@]}" python run_obs.py --run-dir $O/$tag --model $MODEL --prompt-source ${SRC:-longbench} --bailian-offset ${BOFF:-0} --n-docs ${NDOCS:-32} --decode-tokens ${DECODE:-8} --max-model-len ${MAXLEN:-12288} \
-      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --max-num-batched-tokens ${MNBT:-0} --kv-split ${SPLIT:-off} ${KVB:+--kv-batch $KVB --kv-block 64} ${KVB:---pure} --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
+      --host-ram-fraction $f --prefetch-step ${PSTEP:-1} --max-num-batched-tokens ${MNBT:-0} --kv-split ${SPLIT:-off} $([ -n "${KVB:-}" ] && echo "--kv-batch $KVB --kv-block 64" || echo --pure) --poll-sleep-ms 0 --gpu-util $util --kv-transport $kvt --settle-sec 15 --final-settle-sec 15 \
       --profile-out $O/$tag-profile.json --ssd-root $O/ssd-72b --kv-root $O/kv-72b "${extra[@]}" > $O/$tag.log 2>&1
     rc=$?
     [ -f $O/$tag/result.json ] && break
