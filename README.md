@@ -132,7 +132,7 @@ Qwen2.5-72B RAM 0.5, 기본값, Bailian 32건 × 8k 상한(저장 + 적중, 재�
 | `experiments/05-upstream/` | 종료 race와 /dev/shm 누출 upstream 검증 |
 | `experiments/06-weight-offload/` | 66B 가중치 3단 스트리밍, cuFile 대 POSIX, prefetch, host 비율 |
 | `experiments/07-combined/` | 가중치 스트리밍 + KV SSD 결합, pinned 정확 등록, 워치독 |
-| `experiments/08-cufile-bounce/` | cuFile 미등록 경로의 조각 크기 |
+| `experiments/08-cufile-bounce/` | cuFile 미등록 경로의 I/O 크기 |
 | `experiments/09-kv-policy/` | 배치 구성, 구간 계측, 게이트 A/B, 저장 정책, int8 |
 | `experiments/10-model-host-baseline/` | 모델 크기 × host 비율 기준표 |
 | `experiments/11-observability/` | 관측 계층 러너, 기본값 런, LMCache 비교 시도 |
