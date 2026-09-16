@@ -74,7 +74,7 @@ GDS를 2차 티어로 넣을 수 없는 이유가 셋 있다. 2차 티어는 스
 
 #### GPU 배치는 러너에 따라 갈린다
 
-이 빌드에는 model runner가 두 벌 공존한다. 기본인 V2 러너는 cross-layer 배치가 미구현이라 게이트 조건이 전부 참이어도 레이어별 분산 텐서를 쓰고, VLLM_USE_V2_MODEL_RUNNER=0으로 고르는 V1 러너는 전 레이어를 한 스토리지에 넣어 블록당 단일 연속 span을 만든다. opt-125m 실측으로 확인했다. V2에서는 chunk가 12개의 48KiB 조각, V1에서는 576KiB 연속 span 하나다. 러너 선택이 1급 실험 변수이며, 러너 차이는 연산에도 영향을 주므로 비교는 항상 같은 러너 안에서만 한다.
+이 빌드에는 model runner가 두 벌 공존한다. 기본인 V2 러너는 cross-layer 배치가 미구현이라 게이트 조건이 전부 참이어도 레이어별 분산 텐서를 쓰고, VLLM_USE_V2_MODEL_RUNNER=0으로 고르는 V1 러너는 전 레이어를 한 스토리지에 넣어 블록당 단일 연속 span을 만든다. opt-125m 실측으로 확인했다. V2에서는 chunk가 48KiB span 12개, V1에서는 576KiB 연속 span 하나다. 러너 선택이 1급 실험 변수이며, 러너 차이는 연산에도 영향을 주므로 비교는 항상 같은 러너 안에서만 한다.
 
 핵심 가설. 현재 runtime의 실제 GPU span 기하에서, pinned CPU staging이 제공하는 비동기성과 수명 분리, 그리고 GDS가 제공하는 CPU 우회의 손익을 비교한다. CPU 홉의 역할은 코얼레싱만이 아니라 GPU 블록을 빨리 놓아주는 수명 분리이기도 하다.
 
@@ -112,7 +112,7 @@ opt-2.7b 결과. prefix 2032에서 재계산 1.155초 대 SSD hit 0.483초로 2.
 
 함정 둘. cuda-python의 cufile 바인딩은 pip 휠 libcufile을 dlopen해 시스템 라이브러리와 이중 로드되고 비결정 segfault를 낸다. 해법은 시스템 libcufile만 ctypes로 단일 로드하는 gdslib.py. 또 rain의 nvidia-fs는 IO 통계가 꺼져 있어 per-IO 카운터가 0에 고정된다. 대체 증거로 Bar1 매핑 카운터와 cufile.log TRACE 분류기를 쓴다. 분류 결과 등록 IO는 direct, 미등록 write는 nvidia-fs 내부 바운스, 미등록 read는 direct, compat POSIX 폴백은 전무.
 
-행렬 결과(27개 기하 x 4개 transport x 읽기/쓰기, 체크섬 전건 통과). 등록 실패 없음. op별로 필요한 쪽만 등록하면 BAR1 256MB에서 128MiB span까지 등록된다. 단일 span 기하에서 등록 GDS가 posix 대비 쓰기 14%, 읽기 22% 빠르고(최대 3.3GiB/s), 작은 조각의 다중 span에서는 posix 코얼레싱이 이긴다. crossover는 span 조각 1MiB 부근. CPU 사용률은 GDS 쪽이 3할가량 낮고 host 메모리 왕복이 없다. staging 경유는 전 구간 최하위. 게이트 통과.
+행렬 결과(27개 기하 x 4개 transport x 읽기/쓰기, 체크섬 전건 통과). 등록 실패 없음. op별로 필요한 쪽만 등록하면 BAR1 256MB에서 128MiB span까지 등록된다. 단일 span 기하에서 등록 GDS가 posix 대비 쓰기 14%, 읽기 22% 빠르고(최대 3.3GiB/s), 작은 span 여러 개에서는 posix 코얼레싱이 이긴다. crossover는 span 조각 1MiB 부근. CPU 사용률은 GDS 쪽이 3할가량 낮고 host 메모리 왕복이 없다. staging 경유는 전 구간 최하위. 게이트 통과.
 
 #### expfs 검증
 
@@ -393,7 +393,7 @@ vLLM v0.26의 가중치 오프로드는 UVA와 Prefetch 두 백엔드뿐이고 S
 | 0.5 | 62.7 GiB | 33 | 28 | 53.2 GiB |
 | 0.85 | 106.7 GiB | 56 | 4~6 | 7.6~11.4 GiB |
 
-층의 큰 행렬 네 개(fc1 648 MiB, fc2 648 MiB, qkv 486 MiB, out_proj 162 MiB)에 맞춘 정적 버퍼 네 개를 매 층 재사용. NVMe가 GPU 메모리에 직접 DMA하려면 목적지가 BAR1 창에 매핑돼야 하는데 이 카드의 창이 256 MiB라 out_proj만 등록되고 셋은 창보다 커서 거절. 등록 실패는 POSIX로 떨어지지 않고 cuFile이 내부 캐시(128 MiB, 1 MiB I/O)로 DMA한 뒤 GPU 안에서 D2D로 옮기는 두 홉 경로를 탄다. forward당 8만 회. 이 경로의 병목은 wall clock가 아니라 CPU와 스레드 경합에 나타남(아래 조각 크기 절). VRAM 전체가 창인 데이터센터 GPU에서는 없는 문제.
+층의 큰 행렬 네 개(fc1 648 MiB, fc2 648 MiB, qkv 486 MiB, out_proj 162 MiB)에 맞춘 정적 버퍼 네 개를 매 층 재사용. NVMe가 GPU 메모리에 직접 DMA하려면 목적지가 BAR1 창에 매핑돼야 하는데 이 카드의 창이 256 MiB라 out_proj만 등록되고 셋은 창보다 커서 거절. 등록 실패는 POSIX로 떨어지지 않고 cuFile이 내부 캐시(128 MiB, 1 MiB I/O)로 DMA한 뒤 GPU 안에서 D2D로 옮기는 두 홉 경로를 탄다. forward당 8만 회. 이 경로의 병목은 wall clock가 아니라 CPU와 스레드 경합에 나타남(아래 I/O 크기 절). VRAM 전체가 창인 데이터센터 GPU에서는 없는 문제.
 
 forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 옮기는 고정 비용이라 토큰 수와 거의 무관. h0.85에서 약 13초, h0.3에서 약 28초. 이 고정 비용이 이후 모든 결론의 전제.
 
@@ -442,7 +442,7 @@ forward 하나는 host에서 GPU로 106 GiB(h0.85)와 SSD에서 층 몇 개를 �
 
 #### cuFile I/O 크기
 
-등록 안 된 정적 버퍼로 가는 읽기는 cuFile 내부 캐시의 조각 크기(cufile.json per_buffer_cache_size_kb, 기본 1 MiB)로 쪼개진다. 06의 ring 대신 이 값만 키워도 되는지를 06 기본 구성에서 확인. 제약은 max_device_cache_size_kb를 조각 크기로 나눈 값이 io_batchsize 이상이어야 한다는 것이며, 아니면 cuFile이 chunk를 1 MiB로 되돌린다. 동기 cuFileRead만 쓰므로 io_batchsize를 32, 16, 8로 낮춤. 런마다 64 MiB 검증 읽기의 TRACE 로그로 적용을 확인.
+등록 안 된 정적 버퍼로 가는 읽기는 cuFile 내부 캐시의 I/O 크기(cufile.json per_buffer_cache_size_kb, 기본 1 MiB)로 쪼개진다. 06의 ring 대신 이 값만 키워도 되는지를 06 기본 구성에서 확인. 제약은 max_device_cache_size_kb를 I/O 크기로 나눈 값이 io_batchsize 이상이어야 한다는 것이며, 아니면 cuFile이 chunk를 1 MiB로 되돌린다. 동기 cuFileRead만 쓰므로 io_batchsize를 32, 16, 8로 낮춤. 런마다 64 MiB 검증 읽기의 TRACE 로그로 적용을 확인.
 
 | I/O 크기 | step/스레드 | prefill | decode step | CPU |
 |---|---|---|---|---|
@@ -592,7 +592,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 |---|---|
 | experiments/06-weight-offload | run_66b.py와 run_66b.sh(가중치 경로 매트릭스), campaign.sh, run_qa.sh와 smoke_*.py(opt-2.7b QA), repro_wrap.sh(prefetch 버그 재현), summarize_66b.py |
 | experiments/07-combined | run_combo_66b.py(결합 러너, generate 두 번 방식이라 decode 지표 불신), campaign07.sh, memguard.sh, pin_exact_test.py, summarize_07.py |
-| experiments/08-cufile-bounce | cufile-pb{4096,8192,16384}.json, check_props.py(적용된 조각 크기 확인), bench_bounce.py(읽기 패턴 마이크로벤치), campaign08.sh와 b~e, summarize_08.py |
+| experiments/08-cufile-bounce | cufile-pb{4096,8192,16384}.json, check_props.py(적용된 I/O 크기 확인), bench_bounce.py(읽기 패턴 마이크로벤치), campaign08.sh와 b~e, summarize_08.py |
 | experiments/09-kv-policy | run_phase_66b.py(구간 계측 러너, staged와 q8 전송, 반복과 1회성 워크로드), run_policy_66b.py(초기 러너), campaign09.sh와 09b, 09c(배치 구성, 정책, 프리픽스 1700), campaign10.sh(비용 분해), 11과 12(구간 분리), 13(admission), 14~16(게이트), 17(양자화) |
 | results/weight-offload/opt66b | 06 결과 json과 로그, nsys csv |
 | results/combined | 07 결과 |
@@ -605,7 +605,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 | lib/expfs.py | CuFileQ8Transport 추가 |
 | ~/vllm weight-ssd-offload | SSD 티어(2fbceeb103, 1c86373b60, fbfc637cb0), prefetch 경계 수정(3fc4433b62), 정확 등록(2f050f7fd5), 스케줄러 게이트(2998fcca0b, b576070a77), 등록 총량 상한(929df037b9) |
 
-재현 환경: env.sh 소싱, VLLM_USE_V2_MODEL_RUNNER=0, VLLM_ENABLE_V1_MULTIPROCESSING=0, host 0.85 이상은 VLLM_OFFLOAD_PIN_EXACT=1, cuFile 조각은 CUFILE_ENV_PATH_JSON으로 4 MiB 설정, 게이트는 VLLM_KV_LOAD_WAVE_GATE=2. 런마다 SSD 티어와 KV 저장소를 지우고 다시 만들므로 디스크 여유 90 GB 이상 필요. 캠페인은 setsid nohup으로 띄우고 성공 판정은 결과 json 존재로.
+재현 환경: env.sh 소싱, VLLM_USE_V2_MODEL_RUNNER=0, VLLM_ENABLE_V1_MULTIPROCESSING=0, host 0.85 이상은 VLLM_OFFLOAD_PIN_EXACT=1, cuFile I/O 크기은 CUFILE_ENV_PATH_JSON으로 4 MiB 설정, 게이트는 VLLM_KV_LOAD_WAVE_GATE=2. 런마다 SSD 티어와 KV 저장소를 지우고 다시 만들므로 디스크 여유 90 GB 이상 필요. 캠페인은 setsid nohup으로 띄우고 성공 판정은 결과 json 존재로.
 
 교훈. 1 MiB cuFile I/O 구성은 단독 측정으로 결론 내지 말 것. 실험 폴더에 보고서를 따로 두지 말고 이 문서와 README에만 적을 것.
 
