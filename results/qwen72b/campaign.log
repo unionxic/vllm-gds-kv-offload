@@ -157,3 +157,17 @@
 [09-17 10:38:22] done  bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2 rc=0 (gpu_util 0.85)
 [09-17 10:38:22] == qwen72b 종료
 [09-17 10:38:22] == ours-fix 종료
+[09-17 11:05:06] == qwen72b: RAM 0.72 × (none), docs 32, decode 8, NSYS=1
+[09-17 11:05:06] start bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-nsys
+[09-17 13:17:03] done  bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-nsys rc=143 (gpu_util 0.85)
+[09-17 13:17:03] == qwen72b 종료
+[09-17 13:17:07] done  bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-nsys (result.json 있음, nsys 리포트는 후처리 중 임시 폴더 삭제로 유실)
+[09-17 13:17:07] == qwen72b: RAM 0.72 × (none), docs 8, decode 8, NSYS=1
+[09-17 13:17:07] start bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-cap8
+[09-17 13:46:18] done  bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-cap8 rc=0 (gpu_util 0.85)
+[09-17 13:46:18] == qwen72b 종료
+[09-17 13:46:55] == qwen72b: RAM 0.72 × (cufile-wb), docs 32, decode 8, NSYS=1
+[09-17 13:46:55] start bailian-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2-final-nsys
+[09-17 14:39:49] done  bailian-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2-final-nsys rc=0 (gpu_util 0.85)
+[09-17 14:39:49] == qwen72b 종료
+[09-17 14:39:49] == final-nsys 종료
