@@ -1,0 +1,383 @@
+{"kind": "run_start", "wall_ns": 1789670966956319211, "mono_ns": 826129412544729, "tid": 139984012668288, "args": {"run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.72-cufile-wb-lru-interleave-p2-split-stream-ts450-c4-ours", "model": "Qwen/Qwen2.5-72B-Instruct", "n_docs": 128, "leval_workload": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json", "prompt_source": "bailian", "longbench_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl", "bailian_trace": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl", "bailian_offset": 29560, "bailian_block": 16, "prompt_cap": 0, "profile_out": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.72-cufile-wb-lru-interleave-p2-split-stream-ts450-c4-ours-profile.json", "kv_transport": "cufile", "kv_host_gb": 8.0, "lmcache_l1_gb": 40.0, "lmcache_port": 5555, "lmcache_chunk": 64, "register_tensors": false, "kv_batch": 2.0, "kv_threads": 4, "kv_block": 64, "host_weight_fraction": null, "host_ram_fraction": 0.72, "pure": false, "prefetch_step": 2, "max_num_batched_tokens": 4096, "io_threads": 4, "gpu_util": 0.85, "max_model_len": 8192, "decode_tokens": 8, "mode": "stream", "time_scale": 450.0, "max_concurrency": 4, "arrival_gap_s": 0.0, "settle_sec": 15.0, "final_settle_sec": 15.0, "poll_sleep_ms": 0.0, "ssd_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/ssd-72b", "kv_root": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/kv-72b", "no_monitors": false, "kv_split": "model", "kv_split_rate_toks": null, "kv_extra": "{\"cufile_fs_store_window\": \"host\", \"cufile_fs_store_window_max_s\": 30, \"cufile_fs_capacity_gb\": 100, \"cufile_fs_policy\": \"lru\"}", "no_weight_offload": false, "kv_load_failure_policy": "fail", "nsys_phase": "", "nsys_steps": 0}, "kv_gib": 5.75, "host_fraction": 0.72, "pid": 2317662}
+{"kind": "phase", "wall_ns": 1789670970695515079, "mono_ns": 826133151740906, "tid": 139984012668288, "name": "model_load_begin"}
+{"kind": "phase", "wall_ns": 1789671398336615767, "mono_ns": 826560792840826, "tid": 139984012668288, "name": "model_load_end", "load_s": 427.6}
+{"kind": "tiers", "wall_ns": 1789671398336862464, "mono_ns": 826560793087285, "tid": 139984012668288, "n_modules": 80, "n_ssd": 25, "host_tier_gib": 89.91, "ssd_tier_gib": 40.87}
+{"kind": "kv_worker", "wall_ns": 1789671398336906981, "mono_ns": 826560793131763, "tid": 139984012668288, "registered_tensors": 0, "register_err": 0, "chunk_bytes": 20971520}
+{"kind": "bailian_trace", "wall_ns": 1789671398832772260, "mono_ns": 826561288997284, "tid": 139984012668288, "offset": 29560, "rows": 128, "block": 16, "blocks_kept": 507, "vocab": 151643, "unique_hashes": 22739, "total_hash_refs": 47150}
+{"kind": "stream_plan", "wall_ns": 1789671398833854939, "mono_ns": 826561290079944, "tid": 139984012668288, "n_requests": 128, "time_scale": 450.0, "max_concurrency": 4, "arrival_span_s": 10093.5, "median_gap_s": 55.35, "arrival_gap_s": 0.0, "prompt_source": "bailian", "bailian_offset": 29560}
+{"kind": "phase", "wall_ns": 1789671398833907203, "mono_ns": 826561290131953, "tid": 139984012668288, "name": "stream", "requests": 128}
+{"kind": "kv_w_submit", "wall_ns": 1789671433072156698, "mono_ns": 826595528381499, "tid": 139984012668288, "job": 0, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789671472203431691, "mono_ns": 826634659656446, "tid": 139984012668288, "job": 0, "ok": true, "bytes": 1342177280, "dur_ms": 39131.3}
+{"kind": "kv_w_submit", "wall_ns": 1789671472204793644, "mono_ns": 826634661018449, "tid": 139984012668288, "job": 1, "chunks": 38, "bytes": 796917760}
+{"kind": "kv_w_end", "wall_ns": 1789671501954497784, "mono_ns": 826664410722607, "tid": 139984012668288, "job": 1, "ok": true, "bytes": 796917760, "dur_ms": 29749.7}
+{"kind": "kv_w_submit", "wall_ns": 1789671643688877153, "mono_ns": 826806145101927, "tid": 139984012668288, "job": 2, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789671711800202837, "mono_ns": 826874256427599, "tid": 139984012668288, "job": 2, "ok": true, "bytes": 1342177280, "dur_ms": 68111.3}
+{"kind": "kv_w_submit", "wall_ns": 1789671713940691776, "mono_ns": 826876396916566, "tid": 139984012668288, "job": 3, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_end", "wall_ns": 1789671737832391974, "mono_ns": 826900288616768, "tid": 139984012668288, "job": 3, "ok": true, "bytes": 1300234240, "dur_ms": 23891.7}
+{"kind": "kv_w_submit", "wall_ns": 1789671737848240762, "mono_ns": 826900304465605, "tid": 139984012668288, "job": 4, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_w_submit", "wall_ns": 1789671737848335959, "mono_ns": 826900304560746, "tid": 139984012668288, "job": 5, "chunks": 11, "bytes": 230686720}
+{"kind": "kv_w_end", "wall_ns": 1789671752665199037, "mono_ns": 826915121423856, "tid": 139984012668288, "job": 4, "ok": true, "bytes": 83886080, "dur_ms": 14817.0}
+{"kind": "kv_w_end", "wall_ns": 1789671752665247087, "mono_ns": 826915121471809, "tid": 139984012668288, "job": 5, "ok": true, "bytes": 230686720, "dur_ms": 14816.9}
+{"kind": "kv_w_submit", "wall_ns": 1789671869162093327, "mono_ns": 827031618318117, "tid": 139984012668288, "job": 6, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789671937211520028, "mono_ns": 827099667744797, "tid": 139984012668288, "job": 6, "ok": true, "bytes": 1342177280, "dur_ms": 68049.4}
+{"kind": "kv_w_submit", "wall_ns": 1789671937215416786, "mono_ns": 827099671641631, "tid": 139984012668288, "job": 7, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_end", "wall_ns": 1789671953453338741, "mono_ns": 827115909563517, "tid": 139984012668288, "job": 7, "ok": true, "bytes": 1300234240, "dur_ms": 16237.9}
+{"kind": "kv_w_submit", "wall_ns": 1789672098642656515, "mono_ns": 827261098881287, "tid": 139984012668288, "job": 8, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789672123744121476, "mono_ns": 827286200346249, "tid": 139984012668288, "job": 8, "ok": true, "bytes": 1342177280, "dur_ms": 25101.5}
+{"kind": "kv_w_submit", "wall_ns": 1789672123745438543, "mono_ns": 827286201663339, "tid": 139984012668288, "job": 9, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_submit", "wall_ns": 1789672123745534455, "mono_ns": 827286201759265, "tid": 139984012668288, "job": 10, "chunks": 6, "bytes": 125829120}
+{"kind": "kv_w_submit", "wall_ns": 1789672123745600175, "mono_ns": 827286201824968, "tid": 139984012668288, "job": 11, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_w_end", "wall_ns": 1789672138383867537, "mono_ns": 827300840092340, "tid": 139984012668288, "job": 9, "ok": true, "bytes": 209715200, "dur_ms": 14638.4}
+{"kind": "kv_w_end", "wall_ns": 1789672138383936183, "mono_ns": 827300840160942, "tid": 139984012668288, "job": 10, "ok": true, "bytes": 125829120, "dur_ms": 14638.4}
+{"kind": "kv_w_end", "wall_ns": 1789672138383949368, "mono_ns": 827300840174129, "tid": 139984012668288, "job": 11, "ok": true, "bytes": 83886080, "dur_ms": 14638.3}
+{"kind": "kv_w_submit", "wall_ns": 1789672182853775159, "mono_ns": 827345310000005, "tid": 139984012668288, "job": 12, "chunks": 22, "bytes": 461373440}
+{"kind": "kv_w_end", "wall_ns": 1789672196934584067, "mono_ns": 827359390808833, "tid": 139984012668288, "job": 12, "ok": true, "bytes": 461373440, "dur_ms": 14080.8}
+{"kind": "kv_w_submit", "wall_ns": 1789672559661310902, "mono_ns": 827722117535743, "tid": 139984012668288, "job": 13, "chunks": 47, "bytes": 985661440}
+{"kind": "kv_r_submit", "wall_ns": 1789672575023523502, "mono_ns": 827737479748384, "tid": 139984012668288, "job": 14, "chunks": 14, "bytes": 293601280}
+{"kind": "kv_r_end", "wall_ns": 1789672593307079940, "mono_ns": 827755763304721, "tid": 139984012668288, "job": 14, "ok": true, "bytes": 293601280, "dur_ms": 18283.6}
+{"kind": "kv_w_end", "wall_ns": 1789672593307125154, "mono_ns": 827755763349915, "tid": 139984012668288, "job": 13, "ok": true, "bytes": 985661440, "dur_ms": 33645.8}
+{"kind": "kv_w_submit", "wall_ns": 1789672593310884742, "mono_ns": 827755767109538, "tid": 139984012668288, "job": 15, "chunks": 28, "bytes": 587202560}
+{"kind": "kv_w_end", "wall_ns": 1789672607668390464, "mono_ns": 827770124615271, "tid": 139984012668288, "job": 15, "ok": true, "bytes": 587202560, "dur_ms": 14357.5}
+{"kind": "kv_r_submit", "wall_ns": 1789672607674785994, "mono_ns": 827770131010860, "tid": 139984012668288, "job": 16, "chunks": 11, "bytes": 230686720}
+{"kind": "kv_r_end", "wall_ns": 1789672622385033691, "mono_ns": 827784841258465, "tid": 139984012668288, "job": 16, "ok": true, "bytes": 230686720, "dur_ms": 14710.2}
+{"kind": "kv_w_submit", "wall_ns": 1789672694452934681, "mono_ns": 827856909159510, "tid": 139984012668288, "job": 17, "chunks": 16, "bytes": 335544320}
+{"kind": "kv_w_end", "wall_ns": 1789672708507468250, "mono_ns": 827870963693026, "tid": 139984012668288, "job": 17, "ok": true, "bytes": 335544320, "dur_ms": 14054.5}
+{"kind": "kv_w_submit", "wall_ns": 1789672875035347893, "mono_ns": 828037491572742, "tid": 139984012668288, "job": 18, "chunks": 38, "bytes": 796917760}
+{"kind": "kv_w_end", "wall_ns": 1789672903803834269, "mono_ns": 828066260059087, "tid": 139984012668288, "job": 18, "ok": true, "bytes": 796917760, "dur_ms": 28768.5}
+{"kind": "kv_w_submit", "wall_ns": 1789673077432572564, "mono_ns": 828239888797499, "tid": 139984012668288, "job": 19, "chunks": 3, "bytes": 62914560}
+{"kind": "kv_w_end", "wall_ns": 1789673091329067514, "mono_ns": 828253785292279, "tid": 139984012668288, "job": 19, "ok": true, "bytes": 62914560, "dur_ms": 13896.5}
+{"kind": "kv_w_submit", "wall_ns": 1789673338387769873, "mono_ns": 828500843994658, "tid": 139984012668288, "job": 20, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789673362559389273, "mono_ns": 828525015614060, "tid": 139984012668288, "job": 20, "ok": true, "bytes": 1342177280, "dur_ms": 24171.6}
+{"kind": "kv_w_submit", "wall_ns": 1789673362563532137, "mono_ns": 828525019756951, "tid": 139984012668288, "job": 21, "chunks": 16, "bytes": 335544320}
+{"kind": "kv_w_submit", "wall_ns": 1789673362563661449, "mono_ns": 828525019886269, "tid": 139984012668288, "job": 22, "chunks": 8, "bytes": 167772160}
+{"kind": "kv_w_end", "wall_ns": 1789673377703923482, "mono_ns": 828540160148266, "tid": 139984012668288, "job": 21, "ok": true, "bytes": 335544320, "dur_ms": 15140.4}
+{"kind": "kv_w_end", "wall_ns": 1789673377703988508, "mono_ns": 828540160213326, "tid": 139984012668288, "job": 22, "ok": true, "bytes": 167772160, "dur_ms": 15140.3}
+{"kind": "kv_r_submit", "wall_ns": 1789673474892598613, "mono_ns": 828637348823500, "tid": 139984012668288, "job": 23, "chunks": 68, "bytes": 1426063360}
+{"kind": "kv_r_end", "wall_ns": 1789673475784501431, "mono_ns": 828638240726190, "tid": 139984012668288, "job": 23, "ok": true, "bytes": 1426063360, "dur_ms": 891.9}
+{"kind": "kv_w_submit", "wall_ns": 1789673515835494254, "mono_ns": 828678291719099, "tid": 139984012668288, "job": 24, "chunks": 38, "bytes": 796917760}
+{"kind": "kv_w_end", "wall_ns": 1789673530852229828, "mono_ns": 828693308454607, "tid": 139984012668288, "job": 24, "ok": true, "bytes": 796917760, "dur_ms": 15016.7}
+{"kind": "kv_r_submit", "wall_ns": 1789673684836349318, "mono_ns": 828847292574256, "tid": 139984012668288, "job": 25, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_r_end", "wall_ns": 1789673684872757619, "mono_ns": 828847328982382, "tid": 139984012668288, "job": 25, "ok": true, "bytes": 83886080, "dur_ms": 36.4}
+{"kind": "kv_w_submit", "wall_ns": 1789673699027183827, "mono_ns": 828861483408627, "tid": 139984012668288, "job": 26, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_w_end", "wall_ns": 1789673713160970697, "mono_ns": 828875617195487, "tid": 139984012668288, "job": 26, "ok": true, "bytes": 146800640, "dur_ms": 14133.8}
+{"kind": "kv_r_submit", "wall_ns": 1789673754660515047, "mono_ns": 828917116739925, "tid": 139984012668288, "job": 27, "chunks": 20, "bytes": 419430400}
+{"kind": "kv_r_end", "wall_ns": 1789673768596535337, "mono_ns": 828931052760176, "tid": 139984012668288, "job": 27, "ok": true, "bytes": 419430400, "dur_ms": 13936.0}
+{"kind": "kv_w_submit", "wall_ns": 1789673843242583593, "mono_ns": 829005698808492, "tid": 139984012668288, "job": 28, "chunks": 54, "bytes": 1132462080}
+{"kind": "kv_w_end", "wall_ns": 1789673873793959135, "mono_ns": 829036250183928, "tid": 139984012668288, "job": 28, "ok": true, "bytes": 1132462080, "dur_ms": 30551.4}
+{"kind": "kv_w_submit", "wall_ns": 1789673935062379919, "mono_ns": 829097518604772, "tid": 139984012668288, "job": 29, "chunks": 33, "bytes": 692060160}
+{"kind": "kv_w_end", "wall_ns": 1789673949377447920, "mono_ns": 829111833672708, "tid": 139984012668288, "job": 29, "ok": true, "bytes": 692060160, "dur_ms": 14315.1}
+{"kind": "kv_w_submit", "wall_ns": 1789673967865151258, "mono_ns": 829130321376202, "tid": 139984012668288, "job": 30, "chunks": 28, "bytes": 587202560}
+{"kind": "kv_w_end", "wall_ns": 1789673982201739294, "mono_ns": 829144657964096, "tid": 139984012668288, "job": 30, "ok": true, "bytes": 587202560, "dur_ms": 14336.6}
+{"kind": "kv_w_submit", "wall_ns": 1789674015702922147, "mono_ns": 829178159146936, "tid": 139984012668288, "job": 31, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789674039076021479, "mono_ns": 829201532246263, "tid": 139984012668288, "job": 31, "ok": true, "bytes": 1342177280, "dur_ms": 23373.1}
+{"kind": "kv_w_submit", "wall_ns": 1789674039077362550, "mono_ns": 829201533587347, "tid": 139984012668288, "job": 32, "chunks": 17, "bytes": 356515840}
+{"kind": "kv_w_end", "wall_ns": 1789674053976098654, "mono_ns": 829216432323453, "tid": 139984012668288, "job": 32, "ok": true, "bytes": 356515840, "dur_ms": 14898.7}
+{"kind": "kv_r_submit", "wall_ns": 1789674213139002855, "mono_ns": 829375595227901, "tid": 139984012668288, "job": 33, "chunks": 15, "bytes": 314572800}
+{"kind": "kv_r_end", "wall_ns": 1789674213252617995, "mono_ns": 829375708842772, "tid": 139984012668288, "job": 33, "ok": true, "bytes": 314572800, "dur_ms": 113.6}
+{"kind": "kv_w_submit", "wall_ns": 1789674253308645563, "mono_ns": 829415764870344, "tid": 139984012668288, "job": 34, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789674309342742139, "mono_ns": 829471798966967, "tid": 139984012668288, "job": 34, "ok": true, "bytes": 1342177280, "dur_ms": 56034.1}
+{"kind": "kv_w_submit", "wall_ns": 1789674309344873563, "mono_ns": 829471801098355, "tid": 139984012668288, "job": 35, "chunks": 47, "bytes": 985661440}
+{"kind": "kv_w_end", "wall_ns": 1789674325336520323, "mono_ns": 829487792745123, "tid": 139984012668288, "job": 35, "ok": true, "bytes": 985661440, "dur_ms": 15991.6}
+{"kind": "kv_w_submit", "wall_ns": 1789674325345547865, "mono_ns": 829487801772663, "tid": 139984012668288, "job": 36, "chunks": 5, "bytes": 104857600}
+{"kind": "kv_w_end", "wall_ns": 1789674340762107092, "mono_ns": 829503218331913, "tid": 139984012668288, "job": 36, "ok": true, "bytes": 104857600, "dur_ms": 15416.6}
+{"kind": "kv_w_submit", "wall_ns": 1789674340767668033, "mono_ns": 829503223892836, "tid": 139984012668288, "job": 37, "chunks": 14, "bytes": 293601280}
+{"kind": "kv_r_submit", "wall_ns": 1789674340768974587, "mono_ns": 829503225199452, "tid": 139984012668288, "job": 38, "chunks": 121, "bytes": 2537553920}
+{"kind": "kv_w_end", "wall_ns": 1789674355280084880, "mono_ns": 829517736309692, "tid": 139984012668288, "job": 37, "ok": true, "bytes": 293601280, "dur_ms": 14512.4}
+{"kind": "kv_r_end", "wall_ns": 1789674355280133284, "mono_ns": 829517736358023, "tid": 139984012668288, "job": 38, "ok": true, "bytes": 2537553920, "dur_ms": 14511.2}
+{"kind": "kv_w_submit", "wall_ns": 1789674459260657130, "mono_ns": 829621716881926, "tid": 139984012668288, "job": 39, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789674525643428607, "mono_ns": 829688099653399, "tid": 139984012668288, "job": 39, "ok": true, "bytes": 1342177280, "dur_ms": 66382.8}
+{"kind": "kv_w_submit", "wall_ns": 1789674525645035901, "mono_ns": 829688101260854, "tid": 139984012668288, "job": 40, "chunks": 61, "bytes": 1279262720}
+{"kind": "kv_w_end", "wall_ns": 1789674556786671388, "mono_ns": 829719242896169, "tid": 139984012668288, "job": 40, "ok": true, "bytes": 1279262720, "dur_ms": 31141.6}
+{"kind": "kv_r_submit", "wall_ns": 1789674626012458443, "mono_ns": 829788468683311, "tid": 139984012668288, "job": 41, "chunks": 11, "bytes": 230686720}
+{"kind": "kv_r_end", "wall_ns": 1789674626246621735, "mono_ns": 829788702846740, "tid": 139984012668288, "job": 41, "ok": true, "bytes": 230686720, "dur_ms": 234.2}
+{"kind": "kv_w_submit", "wall_ns": 1789674686955711465, "mono_ns": 829849411936275, "tid": 139984012668288, "job": 42, "chunks": 29, "bytes": 608174080}
+{"kind": "kv_w_end", "wall_ns": 1789674701084840795, "mono_ns": 829863541065638, "tid": 139984012668288, "job": 42, "ok": true, "bytes": 608174080, "dur_ms": 14129.1}
+{"kind": "kv_w_submit", "wall_ns": 1789674734207869618, "mono_ns": 829896664094444, "tid": 139984012668288, "job": 43, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789674762537220281, "mono_ns": 829924993445099, "tid": 139984012668288, "job": 43, "ok": true, "bytes": 1342177280, "dur_ms": 28329.3}
+{"kind": "kv_w_submit", "wall_ns": 1789674762538659454, "mono_ns": 829924994884309, "tid": 139984012668288, "job": 44, "chunks": 24, "bytes": 503316480}
+{"kind": "kv_w_end", "wall_ns": 1789674777549693538, "mono_ns": 829940005918342, "tid": 139984012668288, "job": 44, "ok": true, "bytes": 503316480, "dur_ms": 15011.0}
+{"kind": "kv_w_submit", "wall_ns": 1789674819395398362, "mono_ns": 829981851623162, "tid": 139984012668288, "job": 45, "chunks": 17, "bytes": 356515840}
+{"kind": "kv_w_submit", "wall_ns": 1789674819395520822, "mono_ns": 829981851745613, "tid": 139984012668288, "job": 46, "chunks": 47, "bytes": 985661440}
+{"kind": "kv_w_end", "wall_ns": 1789674879936320293, "mono_ns": 830042392545117, "tid": 139984012668288, "job": 45, "ok": true, "bytes": 356515840, "dur_ms": 60540.9}
+{"kind": "kv_w_end", "wall_ns": 1789674879936370193, "mono_ns": 830042392594963, "tid": 139984012668288, "job": 46, "ok": true, "bytes": 985661440, "dur_ms": 60540.8}
+{"kind": "kv_w_submit", "wall_ns": 1789674879939122482, "mono_ns": 830042395347265, "tid": 139984012668288, "job": 47, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789674907213918540, "mono_ns": 830069670143349, "tid": 139984012668288, "job": 47, "ok": true, "bytes": 1342177280, "dur_ms": 27274.8}
+{"kind": "kv_w_submit", "wall_ns": 1789674907218078442, "mono_ns": 830069674303260, "tid": 139984012668288, "job": 48, "chunks": 14, "bytes": 293601280}
+{"kind": "kv_w_end", "wall_ns": 1789674922126981299, "mono_ns": 830084583206138, "tid": 139984012668288, "job": 48, "ok": true, "bytes": 293601280, "dur_ms": 14908.9}
+{"kind": "kv_w_submit", "wall_ns": 1789674982990408093, "mono_ns": 830145446632896, "tid": 139984012668288, "job": 49, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789675051069035856, "mono_ns": 830213525260665, "tid": 139984012668288, "job": 49, "ok": true, "bytes": 1342177280, "dur_ms": 68078.6}
+{"kind": "kv_w_submit", "wall_ns": 1789675051070547326, "mono_ns": 830213526772111, "tid": 139984012668288, "job": 50, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_end", "wall_ns": 1789675081699170883, "mono_ns": 830244155395703, "tid": 139984012668288, "job": 50, "ok": true, "bytes": 1300234240, "dur_ms": 30628.6}
+{"kind": "kv_w_submit", "wall_ns": 1789675121733753471, "mono_ns": 830284189978361, "tid": 139984012668288, "job": 51, "chunks": 48, "bytes": 1006632960}
+{"kind": "kv_w_submit", "wall_ns": 1789675121733920501, "mono_ns": 830284190145319, "tid": 139984012668288, "job": 52, "chunks": 8, "bytes": 167772160}
+{"kind": "kv_w_end", "wall_ns": 1789675151094459239, "mono_ns": 830313550684064, "tid": 139984012668288, "job": 51, "ok": true, "bytes": 1006632960, "dur_ms": 29360.7}
+{"kind": "kv_w_end", "wall_ns": 1789675151094507192, "mono_ns": 830313550731972, "tid": 139984012668288, "job": 52, "ok": true, "bytes": 167772160, "dur_ms": 29360.6}
+{"kind": "kv_w_submit", "wall_ns": 1789675165498269523, "mono_ns": 830327954494384, "tid": 139984012668288, "job": 53, "chunks": 6, "bytes": 125829120}
+{"kind": "kv_w_end", "wall_ns": 1789675179412196330, "mono_ns": 830341868421124, "tid": 139984012668288, "job": 53, "ok": true, "bytes": 125829120, "dur_ms": 13913.9}
+{"kind": "kv_w_submit", "wall_ns": 1789675226193168724, "mono_ns": 830388649393539, "tid": 139984012668288, "job": 54, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789675272805476679, "mono_ns": 830435261701466, "tid": 139984012668288, "job": 54, "ok": true, "bytes": 1342177280, "dur_ms": 46612.3}
+{"kind": "kv_w_submit", "wall_ns": 1789675272806824068, "mono_ns": 830435263048892, "tid": 139984012668288, "job": 55, "chunks": 45, "bytes": 943718400}
+{"kind": "kv_w_end", "wall_ns": 1789675288433172921, "mono_ns": 830450889397682, "tid": 139984012668288, "job": 55, "ok": true, "bytes": 943718400, "dur_ms": 15626.3}
+{"kind": "kv_w_submit", "wall_ns": 1789675336202040639, "mono_ns": 830498658265417, "tid": 139984012668288, "job": 56, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_r_submit", "wall_ns": 1789675336203610440, "mono_ns": 830498659835298, "tid": 139984012668288, "job": 57, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_r_end", "wall_ns": 1789675359264342712, "mono_ns": 830521720567504, "tid": 139984012668288, "job": 57, "ok": true, "bytes": 83886080, "dur_ms": 23060.7}
+{"kind": "kv_w_end", "wall_ns": 1789675359264387221, "mono_ns": 830521720611975, "tid": 139984012668288, "job": 56, "ok": true, "bytes": 1342177280, "dur_ms": 23062.4}
+{"kind": "kv_w_submit", "wall_ns": 1789675359266664278, "mono_ns": 830521722889085, "tid": 139984012668288, "job": 58, "chunks": 16, "bytes": 335544320}
+{"kind": "kv_w_end", "wall_ns": 1789675373979726811, "mono_ns": 830536435951634, "tid": 139984012668288, "job": 58, "ok": true, "bytes": 335544320, "dur_ms": 14713.1}
+{"kind": "kv_w_submit", "wall_ns": 1789675409083035866, "mono_ns": 830571539260660, "tid": 139984012668288, "job": 59, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789675431933777496, "mono_ns": 830594390002285, "tid": 139984012668288, "job": 59, "ok": true, "bytes": 1321205760, "dur_ms": 22850.7}
+{"kind": "kv_w_submit", "wall_ns": 1789675431935229004, "mono_ns": 830594391453857, "tid": 139984012668288, "job": 60, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_submit", "wall_ns": 1789675431935329745, "mono_ns": 830594391554545, "tid": 139984012668288, "job": 61, "chunks": 19, "bytes": 398458880}
+{"kind": "kv_w_end", "wall_ns": 1789675446839485176, "mono_ns": 830609295709941, "tid": 139984012668288, "job": 60, "ok": true, "bytes": 209715200, "dur_ms": 14904.3}
+{"kind": "kv_w_end", "wall_ns": 1789675446839535979, "mono_ns": 830609295760720, "tid": 139984012668288, "job": 61, "ok": true, "bytes": 398458880, "dur_ms": 14904.2}
+{"kind": "kv_r_submit", "wall_ns": 1789675502376928150, "mono_ns": 830664833153061, "tid": 139984012668288, "job": 62, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_r_end", "wall_ns": 1789675516224899611, "mono_ns": 830678681124387, "tid": 139984012668288, "job": 62, "ok": true, "bytes": 83886080, "dur_ms": 13848.0}
+{"kind": "kv_w_submit", "wall_ns": 1789675565003263574, "mono_ns": 830727459488422, "tid": 139984012668288, "job": 63, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789675625396464974, "mono_ns": 830787852689801, "tid": 139984012668288, "job": 63, "ok": true, "bytes": 1342177280, "dur_ms": 60393.2}
+{"kind": "kv_w_submit", "wall_ns": 1789675625399104142, "mono_ns": 830787855328910, "tid": 139984012668288, "job": 64, "chunks": 53, "bytes": 1111490560}
+{"kind": "kv_w_submit", "wall_ns": 1789675625399266345, "mono_ns": 830787855491120, "tid": 139984012668288, "job": 65, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_end", "wall_ns": 1789675665921151041, "mono_ns": 830828377375829, "tid": 139984012668288, "job": 64, "ok": true, "bytes": 1111490560, "dur_ms": 40522.0}
+{"kind": "kv_w_end", "wall_ns": 1789675665921200811, "mono_ns": 830828377425569, "tid": 139984012668288, "job": 65, "ok": true, "bytes": 209715200, "dur_ms": 40521.9}
+{"kind": "kv_w_submit", "wall_ns": 1789675665933498154, "mono_ns": 830828389722973, "tid": 139984012668288, "job": 66, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789675728323972013, "mono_ns": 830890780196820, "tid": 139984012668288, "job": 66, "ok": true, "bytes": 1342177280, "dur_ms": 62390.5}
+{"kind": "kv_w_submit", "wall_ns": 1789675728326814071, "mono_ns": 830890783038894, "tid": 139984012668288, "job": 67, "chunks": 52, "bytes": 1090519040}
+{"kind": "kv_w_submit", "wall_ns": 1789675728326976479, "mono_ns": 830890783201297, "tid": 139984012668288, "job": 68, "chunks": 11, "bytes": 230686720}
+{"kind": "kv_w_end", "wall_ns": 1789675750933656538, "mono_ns": 830913389881314, "tid": 139984012668288, "job": 67, "ok": true, "bytes": 1090519040, "dur_ms": 22606.8}
+{"kind": "kv_w_end", "wall_ns": 1789675750933701278, "mono_ns": 830913389926040, "tid": 139984012668288, "job": 68, "ok": true, "bytes": 230686720, "dur_ms": 22606.7}
+{"kind": "kv_w_submit", "wall_ns": 1789675750941642522, "mono_ns": 830913397867310, "tid": 139984012668288, "job": 69, "chunks": 27, "bytes": 566231040}
+{"kind": "kv_w_end", "wall_ns": 1789675765849894530, "mono_ns": 830928306119322, "tid": 139984012668288, "job": 69, "ok": true, "bytes": 566231040, "dur_ms": 14908.2}
+{"kind": "kv_r_submit", "wall_ns": 1789675821284190531, "mono_ns": 830983740415501, "tid": 139984012668288, "job": 70, "chunks": 68, "bytes": 1426063360}
+{"kind": "kv_r_end", "wall_ns": 1789675835462890080, "mono_ns": 830997919114837, "tid": 139984012668288, "job": 70, "ok": true, "bytes": 1426063360, "dur_ms": 14178.7}
+{"kind": "kv_w_submit", "wall_ns": 1789675898170243452, "mono_ns": 831060626468410, "tid": 139984012668288, "job": 71, "chunks": 46, "bytes": 964689920}
+{"kind": "kv_w_end", "wall_ns": 1789675913555095139, "mono_ns": 831076011319938, "tid": 139984012668288, "job": 71, "ok": true, "bytes": 964689920, "dur_ms": 15384.8}
+{"kind": "kv_w_submit", "wall_ns": 1789675942480255985, "mono_ns": 831104936480775, "tid": 139984012668288, "job": 72, "chunks": 9, "bytes": 188743680}
+{"kind": "kv_w_end", "wall_ns": 1789675975696912706, "mono_ns": 831138153137514, "tid": 139984012668288, "job": 72, "ok": true, "bytes": 188743680, "dur_ms": 33216.7}
+{"kind": "kv_w_submit", "wall_ns": 1789675975702131764, "mono_ns": 831138158356571, "tid": 139984012668288, "job": 73, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789676002017208736, "mono_ns": 831164473433558, "tid": 139984012668288, "job": 73, "ok": true, "bytes": 1321205760, "dur_ms": 26315.1}
+{"kind": "kv_w_submit", "wall_ns": 1789676002019288574, "mono_ns": 831164475513373, "tid": 139984012668288, "job": 74, "chunks": 21, "bytes": 440401920}
+{"kind": "kv_w_end", "wall_ns": 1789676017423394735, "mono_ns": 831179879619551, "tid": 139984012668288, "job": 74, "ok": true, "bytes": 440401920, "dur_ms": 15404.1}
+{"kind": "kv_r_submit", "wall_ns": 1789676045247907449, "mono_ns": 831207704132411, "tid": 139984012668288, "job": 75, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789676059747584398, "mono_ns": 831222203809204, "tid": 139984012668288, "job": 75, "ok": true, "bytes": 2642411520, "dur_ms": 14499.7}
+{"kind": "kv_w_submit", "wall_ns": 1789676089402422794, "mono_ns": 831251858647576, "tid": 139984012668288, "job": 76, "chunks": 9, "bytes": 188743680}
+{"kind": "kv_w_end", "wall_ns": 1789676106824107836, "mono_ns": 831269280332600, "tid": 139984012668288, "job": 76, "ok": true, "bytes": 188743680, "dur_ms": 17421.7}
+{"kind": "kv_w_submit", "wall_ns": 1789676106832268984, "mono_ns": 831269288493857, "tid": 139984012668288, "job": 77, "chunks": 22, "bytes": 461373440}
+{"kind": "kv_w_end", "wall_ns": 1789676120898717881, "mono_ns": 831283354942658, "tid": 139984012668288, "job": 77, "ok": true, "bytes": 461373440, "dur_ms": 14066.4}
+{"kind": "kv_w_submit", "wall_ns": 1789676136183304425, "mono_ns": 831298639529271, "tid": 139984012668288, "job": 78, "chunks": 14, "bytes": 293601280}
+{"kind": "kv_w_end", "wall_ns": 1789676150205864462, "mono_ns": 831312662089254, "tid": 139984012668288, "job": 78, "ok": true, "bytes": 293601280, "dur_ms": 14022.6}
+{"kind": "kv_w_submit", "wall_ns": 1789676234184818491, "mono_ns": 831396641043393, "tid": 139984012668288, "job": 79, "chunks": 56, "bytes": 1174405120}
+{"kind": "kv_w_end", "wall_ns": 1789676263646644628, "mono_ns": 831426102869459, "tid": 139984012668288, "job": 79, "ok": true, "bytes": 1174405120, "dur_ms": 29461.8}
+{"kind": "kv_w_submit", "wall_ns": 1789676366070784474, "mono_ns": 831528527009298, "tid": 139984012668288, "job": 80, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789676434264306212, "mono_ns": 831596720531036, "tid": 139984012668288, "job": 80, "ok": true, "bytes": 1342177280, "dur_ms": 68193.5}
+{"kind": "kv_w_submit", "wall_ns": 1789676434267611958, "mono_ns": 831596723836746, "tid": 139984012668288, "job": 81, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_submit", "wall_ns": 1789676434267802213, "mono_ns": 831596724026997, "tid": 139984012668288, "job": 82, "chunks": 1, "bytes": 20971520}
+{"kind": "kv_w_end", "wall_ns": 1789676473769752161, "mono_ns": 831636225976982, "tid": 139984012668288, "job": 81, "ok": true, "bytes": 1300234240, "dur_ms": 39502.1}
+{"kind": "kv_w_end", "wall_ns": 1789676473769807946, "mono_ns": 831636226032693, "tid": 139984012668288, "job": 82, "ok": true, "bytes": 20971520, "dur_ms": 39502.0}
+{"kind": "kv_w_submit", "wall_ns": 1789676473779328038, "mono_ns": 831636235552838, "tid": 139984012668288, "job": 83, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_r_submit", "wall_ns": 1789676473780749428, "mono_ns": 831636236974331, "tid": 139984012668288, "job": 84, "chunks": 2, "bytes": 41943040}
+{"kind": "kv_r_end", "wall_ns": 1789676536328470594, "mono_ns": 831698784695392, "tid": 139984012668288, "job": 84, "ok": true, "bytes": 41943040, "dur_ms": 62547.7}
+{"kind": "kv_w_end", "wall_ns": 1789676536328532844, "mono_ns": 831698784757601, "tid": 139984012668288, "job": 83, "ok": true, "bytes": 1342177280, "dur_ms": 62549.2}
+{"kind": "kv_w_submit", "wall_ns": 1789676536330194966, "mono_ns": 831698786419772, "tid": 139984012668288, "job": 85, "chunks": 55, "bytes": 1153433600}
+{"kind": "kv_w_end", "wall_ns": 1789676552313955713, "mono_ns": 831714770180536, "tid": 139984012668288, "job": 85, "ok": true, "bytes": 1153433600, "dur_ms": 15983.8}
+{"kind": "kv_w_submit", "wall_ns": 1789676568464480608, "mono_ns": 831730920705417, "tid": 139984012668288, "job": 86, "chunks": 16, "bytes": 335544320}
+{"kind": "kv_w_end", "wall_ns": 1789676582538775801, "mono_ns": 831744995000614, "tid": 139984012668288, "job": 86, "ok": true, "bytes": 335544320, "dur_ms": 14074.3}
+{"kind": "kv_r_submit", "wall_ns": 1789676624234058471, "mono_ns": 831786690283357, "tid": 139984012668288, "job": 87, "chunks": 99, "bytes": 2076180480}
+{"kind": "kv_r_end", "wall_ns": 1789676638515807775, "mono_ns": 831800972032566, "tid": 139984012668288, "job": 87, "ok": true, "bytes": 2076180480, "dur_ms": 14281.7}
+{"kind": "kv_w_submit", "wall_ns": 1789676727439713400, "mono_ns": 831889895938238, "tid": 139984012668288, "job": 88, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789676795664270053, "mono_ns": 831958120494861, "tid": 139984012668288, "job": 88, "ok": true, "bytes": 1321205760, "dur_ms": 68224.6}
+{"kind": "kv_w_submit", "wall_ns": 1789676795667290077, "mono_ns": 831958123514890, "tid": 139984012668288, "job": 89, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789676826629416907, "mono_ns": 831989085641741, "tid": 139984012668288, "job": 89, "ok": true, "bytes": 1321205760, "dur_ms": 30962.1}
+{"kind": "kv_w_submit", "wall_ns": 1789676887467859351, "mono_ns": 832049924084119, "tid": 139984012668288, "job": 90, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789676922103040909, "mono_ns": 832084559265709, "tid": 139984012668288, "job": 90, "ok": true, "bytes": 1342177280, "dur_ms": 34635.2}
+{"kind": "kv_w_submit", "wall_ns": 1789676922105281335, "mono_ns": 832084561506162, "tid": 139984012668288, "job": 91, "chunks": 29, "bytes": 608174080}
+{"kind": "kv_w_submit", "wall_ns": 1789676922105420619, "mono_ns": 832084561645391, "tid": 139984012668288, "job": 92, "chunks": 15, "bytes": 314572800}
+{"kind": "kv_w_end", "wall_ns": 1789676952036643074, "mono_ns": 832114492867906, "tid": 139984012668288, "job": 91, "ok": true, "bytes": 608174080, "dur_ms": 29931.4}
+{"kind": "kv_w_end", "wall_ns": 1789676952036695167, "mono_ns": 832114492919907, "tid": 139984012668288, "job": 92, "ok": true, "bytes": 314572800, "dur_ms": 29931.3}
+{"kind": "kv_r_submit", "wall_ns": 1789676952041571229, "mono_ns": 832114497796091, "tid": 139984012668288, "job": 93, "chunks": 69, "bytes": 1447034880}
+{"kind": "kv_r_end", "wall_ns": 1789676966227623342, "mono_ns": 832128683848115, "tid": 139984012668288, "job": 93, "ok": true, "bytes": 1447034880, "dur_ms": 14186.0}
+{"kind": "kv_w_submit", "wall_ns": 1789676995930993701, "mono_ns": 832158387218552, "tid": 139984012668288, "job": 94, "chunks": 12, "bytes": 251658240}
+{"kind": "kv_w_end", "wall_ns": 1789677010037512905, "mono_ns": 832172493737679, "tid": 139984012668288, "job": 94, "ok": true, "bytes": 251658240, "dur_ms": 14106.5}
+{"kind": "kv_w_submit", "wall_ns": 1789677070099324589, "mono_ns": 832232555549389, "tid": 139984012668288, "job": 95, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_end", "wall_ns": 1789677090797725272, "mono_ns": 832253253950101, "tid": 139984012668288, "job": 95, "ok": true, "bytes": 1300234240, "dur_ms": 20698.4}
+{"kind": "kv_w_submit", "wall_ns": 1789677090802281411, "mono_ns": 832253258506227, "tid": 139984012668288, "job": 96, "chunks": 30, "bytes": 629145600}
+{"kind": "kv_w_end", "wall_ns": 1789677104959025073, "mono_ns": 832267415249887, "tid": 139984012668288, "job": 96, "ok": true, "bytes": 629145600, "dur_ms": 14156.7}
+{"kind": "kv_w_submit", "wall_ns": 1789677146852921834, "mono_ns": 832309309146685, "tid": 139984012668288, "job": 97, "chunks": 4, "bytes": 83886080}
+{"kind": "kv_w_end", "wall_ns": 1789677160797964455, "mono_ns": 832323254189266, "tid": 139984012668288, "job": 97, "ok": true, "bytes": 83886080, "dur_ms": 13945.0}
+{"kind": "kv_w_submit", "wall_ns": 1789677193832838363, "mono_ns": 832356289063194, "tid": 139984012668288, "job": 98, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789677232199065592, "mono_ns": 832394655290362, "tid": 139984012668288, "job": 98, "ok": true, "bytes": 1342177280, "dur_ms": 38366.2}
+{"kind": "kv_w_submit", "wall_ns": 1789677232200854419, "mono_ns": 832394657079432, "tid": 139984012668288, "job": 99, "chunks": 36, "bytes": 754974720}
+{"kind": "kv_w_end", "wall_ns": 1789677261744673415, "mono_ns": 832424200898214, "tid": 139984012668288, "job": 99, "ok": true, "bytes": 754974720, "dur_ms": 29543.8}
+{"kind": "kv_w_submit", "wall_ns": 1789677454451958445, "mono_ns": 832616908183260, "tid": 139984012668288, "job": 100, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789677515757140171, "mono_ns": 832678213364990, "tid": 139984012668288, "job": 100, "ok": true, "bytes": 1342177280, "dur_ms": 61305.2}
+{"kind": "kv_w_submit", "wall_ns": 1789677515758469962, "mono_ns": 832678214694774, "tid": 139984012668288, "job": 101, "chunks": 57, "bytes": 1195376640}
+{"kind": "kv_w_end", "wall_ns": 1789677549120165165, "mono_ns": 832711576390006, "tid": 139984012668288, "job": 101, "ok": true, "bytes": 1195376640, "dur_ms": 33361.7}
+{"kind": "kv_w_submit", "wall_ns": 1789677549121519467, "mono_ns": 832711577744262, "tid": 139984012668288, "job": 102, "chunks": 19, "bytes": 398458880}
+{"kind": "kv_w_end", "wall_ns": 1789677563157211490, "mono_ns": 832725613436265, "tid": 139984012668288, "job": 102, "ok": true, "bytes": 398458880, "dur_ms": 14035.7}
+{"kind": "kv_w_submit", "wall_ns": 1789677596036431032, "mono_ns": 832758492655905, "tid": 139984012668288, "job": 103, "chunks": 31, "bytes": 650117120}
+{"kind": "kv_w_end", "wall_ns": 1789677624901434562, "mono_ns": 832787357659358, "tid": 139984012668288, "job": 103, "ok": true, "bytes": 650117120, "dur_ms": 28865.0}
+{"kind": "kv_w_submit", "wall_ns": 1789677639803648146, "mono_ns": 832802259872918, "tid": 139984012668288, "job": 104, "chunks": 11, "bytes": 230686720}
+{"kind": "kv_w_end", "wall_ns": 1789677653894309124, "mono_ns": 832816350533894, "tid": 139984012668288, "job": 104, "ok": true, "bytes": 230686720, "dur_ms": 14090.7}
+{"kind": "kv_w_submit", "wall_ns": 1789677653896322919, "mono_ns": 832816352547712, "tid": 139984012668288, "job": 105, "chunks": 3, "bytes": 62914560}
+{"kind": "kv_w_end", "wall_ns": 1789677667763744323, "mono_ns": 832830219969146, "tid": 139984012668288, "job": 105, "ok": true, "bytes": 62914560, "dur_ms": 13867.4}
+{"kind": "kv_w_submit", "wall_ns": 1789677682900860975, "mono_ns": 832845357085837, "tid": 139984012668288, "job": 106, "chunks": 12, "bytes": 251658240}
+{"kind": "kv_w_end", "wall_ns": 1789677696835995254, "mono_ns": 832859292220070, "tid": 139984012668288, "job": 106, "ok": true, "bytes": 251658240, "dur_ms": 13935.1}
+{"kind": "kv_r_submit", "wall_ns": 1789677710690531825, "mono_ns": 832873146756702, "tid": 139984012668288, "job": 107, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789677725072416471, "mono_ns": 832887528641308, "tid": 139984012668288, "job": 107, "ok": true, "bytes": 2642411520, "dur_ms": 14381.9}
+{"kind": "kv_w_submit", "wall_ns": 1789677939755551945, "mono_ns": 833102211776740, "tid": 139984012668288, "job": 108, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789677994741085664, "mono_ns": 833157197310455, "tid": 139984012668288, "job": 108, "ok": true, "bytes": 1342177280, "dur_ms": 54985.5}
+{"kind": "kv_w_submit", "wall_ns": 1789677994742384919, "mono_ns": 833157198609753, "tid": 139984012668288, "job": 109, "chunks": 52, "bytes": 1090519040}
+{"kind": "kv_w_end", "wall_ns": 1789678025268697357, "mono_ns": 833187724922206, "tid": 139984012668288, "job": 109, "ok": true, "bytes": 1090519040, "dur_ms": 30526.3}
+{"kind": "kv_r_submit", "wall_ns": 1789678147486617641, "mono_ns": 833309942842503, "tid": 139984012668288, "job": 110, "chunks": 2, "bytes": 41943040}
+{"kind": "kv_r_end", "wall_ns": 1789678147529710721, "mono_ns": 833309985935507, "tid": 139984012668288, "job": 110, "ok": true, "bytes": 41943040, "dur_ms": 43.1}
+{"kind": "kv_w_submit", "wall_ns": 1789678161073567608, "mono_ns": 833323529792406, "tid": 139984012668288, "job": 111, "chunks": 1, "bytes": 20971520}
+{"kind": "kv_w_end", "wall_ns": 1789678193952802273, "mono_ns": 833356409027093, "tid": 139984012668288, "job": 111, "ok": true, "bytes": 20971520, "dur_ms": 32879.2}
+{"kind": "kv_w_submit", "wall_ns": 1789678193955863436, "mono_ns": 833356412088265, "tid": 139984012668288, "job": 112, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789678261895457325, "mono_ns": 833424351682138, "tid": 139984012668288, "job": 112, "ok": true, "bytes": 1321205760, "dur_ms": 67939.6}
+{"kind": "kv_w_submit", "wall_ns": 1789678261899934103, "mono_ns": 833424356158860, "tid": 139984012668288, "job": 113, "chunks": 62, "bytes": 1300234240}
+{"kind": "kv_w_end", "wall_ns": 1789678293380482474, "mono_ns": 833455836707273, "tid": 139984012668288, "job": 113, "ok": true, "bytes": 1300234240, "dur_ms": 31480.5}
+{"kind": "kv_w_submit", "wall_ns": 1789678293389123583, "mono_ns": 833455845348353, "tid": 139984012668288, "job": 114, "chunks": 52, "bytes": 1090519040}
+{"kind": "kv_w_submit", "wall_ns": 1789678293389286730, "mono_ns": 833455845511554, "tid": 139984012668288, "job": 115, "chunks": 12, "bytes": 251658240}
+{"kind": "kv_w_end", "wall_ns": 1789678309291613422, "mono_ns": 833471747838253, "tid": 139984012668288, "job": 114, "ok": true, "bytes": 1090519040, "dur_ms": 15902.5}
+{"kind": "kv_w_end", "wall_ns": 1789678309291663269, "mono_ns": 833471747888012, "tid": 139984012668288, "job": 115, "ok": true, "bytes": 251658240, "dur_ms": 15902.4}
+{"kind": "kv_w_submit", "wall_ns": 1789678309296200093, "mono_ns": 833471752424925, "tid": 139984012668288, "job": 116, "chunks": 8, "bytes": 167772160}
+{"kind": "kv_w_end", "wall_ns": 1789678323328365652, "mono_ns": 833485784590440, "tid": 139984012668288, "job": 116, "ok": true, "bytes": 167772160, "dur_ms": 14032.2}
+{"kind": "kv_r_submit", "wall_ns": 1789678392724838785, "mono_ns": 833555181063697, "tid": 139984012668288, "job": 117, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789678407115711868, "mono_ns": 833569571936669, "tid": 139984012668288, "job": 117, "ok": true, "bytes": 2642411520, "dur_ms": 14390.9}
+{"kind": "kv_w_submit", "wall_ns": 1789678440551080212, "mono_ns": 833603007304986, "tid": 139984012668288, "job": 118, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789678509000779780, "mono_ns": 833671457004590, "tid": 139984012668288, "job": 118, "ok": true, "bytes": 1321205760, "dur_ms": 68449.7}
+{"kind": "kv_w_submit", "wall_ns": 1789678509010569400, "mono_ns": 833671466794215, "tid": 139984012668288, "job": 119, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789678540049949674, "mono_ns": 833702506174475, "tid": 139984012668288, "job": 119, "ok": true, "bytes": 1321205760, "dur_ms": 31039.4}
+{"kind": "kv_w_submit", "wall_ns": 1789678635259211045, "mono_ns": 833797715435832, "tid": 139984012668288, "job": 120, "chunks": 48, "bytes": 1006632960}
+{"kind": "kv_r_submit", "wall_ns": 1789678635260411866, "mono_ns": 833797716636688, "tid": 139984012668288, "job": 121, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_r_end", "wall_ns": 1789678650127748815, "mono_ns": 833812583973657, "tid": 139984012668288, "job": 121, "ok": true, "bytes": 146800640, "dur_ms": 14867.3}
+{"kind": "kv_w_end", "wall_ns": 1789678650127802425, "mono_ns": 833812584027188, "tid": 139984012668288, "job": 120, "ok": true, "bytes": 1006632960, "dur_ms": 14868.6}
+{"kind": "kv_w_submit", "wall_ns": 1789678700537397861, "mono_ns": 833862993622621, "tid": 139984012668288, "job": 122, "chunks": 63, "bytes": 1321205760}
+{"kind": "kv_w_end", "wall_ns": 1789678764863345259, "mono_ns": 833927319570060, "tid": 139984012668288, "job": 122, "ok": true, "bytes": 1321205760, "dur_ms": 64325.9}
+{"kind": "kv_w_submit", "wall_ns": 1789678764866855667, "mono_ns": 833927323080462, "tid": 139984012668288, "job": 123, "chunks": 56, "bytes": 1174405120}
+{"kind": "kv_w_submit", "wall_ns": 1789678764867029683, "mono_ns": 833927323254499, "tid": 139984012668288, "job": 124, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_w_end", "wall_ns": 1789678804376785614, "mono_ns": 833966833010439, "tid": 139984012668288, "job": 123, "ok": true, "bytes": 1174405120, "dur_ms": 39509.9}
+{"kind": "kv_w_end", "wall_ns": 1789678804376842435, "mono_ns": 833966833067176, "tid": 139984012668288, "job": 124, "ok": true, "bytes": 146800640, "dur_ms": 39509.8}
+{"kind": "kv_w_submit", "wall_ns": 1789678804386400462, "mono_ns": 833966842625275, "tid": 139984012668288, "job": 125, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789678832635519670, "mono_ns": 833995091744446, "tid": 139984012668288, "job": 125, "ok": true, "bytes": 1342177280, "dur_ms": 28249.1}
+{"kind": "kv_w_submit", "wall_ns": 1789678832637510460, "mono_ns": 833995093735266, "tid": 139984012668288, "job": 126, "chunks": 23, "bytes": 482344960}
+{"kind": "kv_w_end", "wall_ns": 1789678848160203996, "mono_ns": 834010616428778, "tid": 139984012668288, "job": 126, "ok": true, "bytes": 482344960, "dur_ms": 15522.7}
+{"kind": "kv_r_submit", "wall_ns": 1789678862044441870, "mono_ns": 834024500666796, "tid": 139984012668288, "job": 127, "chunks": 18, "bytes": 377487360}
+{"kind": "kv_r_end", "wall_ns": 1789678876055471609, "mono_ns": 834038511696373, "tid": 139984012668288, "job": 127, "ok": true, "bytes": 377487360, "dur_ms": 14011.0}
+{"kind": "kv_w_submit", "wall_ns": 1789678905756105454, "mono_ns": 834068212330231, "tid": 139984012668288, "job": 128, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_end", "wall_ns": 1789678919731147570, "mono_ns": 834082187372389, "tid": 139984012668288, "job": 128, "ok": true, "bytes": 209715200, "dur_ms": 13975.0}
+{"kind": "kv_r_submit", "wall_ns": 1789678919737979373, "mono_ns": 834082194204313, "tid": 139984012668288, "job": 129, "chunks": 3, "bytes": 62914560}
+{"kind": "kv_r_end", "wall_ns": 1789678933636502205, "mono_ns": 834096092726975, "tid": 139984012668288, "job": 129, "ok": true, "bytes": 62914560, "dur_ms": 13898.5}
+{"kind": "kv_w_submit", "wall_ns": 1789678978229872786, "mono_ns": 834140686097607, "tid": 139984012668288, "job": 130, "chunks": 56, "bytes": 1174405120}
+{"kind": "kv_w_submit", "wall_ns": 1789678978230071063, "mono_ns": 834140686295882, "tid": 139984012668288, "job": 131, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_w_end", "wall_ns": 1789679016005223183, "mono_ns": 834178461448023, "tid": 139984012668288, "job": 130, "ok": true, "bytes": 1174405120, "dur_ms": 37775.3}
+{"kind": "kv_w_end", "wall_ns": 1789679016005275539, "mono_ns": 834178461500280, "tid": 139984012668288, "job": 131, "ok": true, "bytes": 146800640, "dur_ms": 37775.2}
+{"kind": "kv_w_submit", "wall_ns": 1789679016011001705, "mono_ns": 834178467226495, "tid": 139984012668288, "job": 132, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789679078139181618, "mono_ns": 834240595406493, "tid": 139984012668288, "job": 132, "ok": true, "bytes": 1342177280, "dur_ms": 62128.2}
+{"kind": "kv_w_submit", "wall_ns": 1789679078141020626, "mono_ns": 834240597245438, "tid": 139984012668288, "job": 133, "chunks": 55, "bytes": 1153433600}
+{"kind": "kv_w_end", "wall_ns": 1789679094036524383, "mono_ns": 834256492749195, "tid": 139984012668288, "job": 133, "ok": true, "bytes": 1153433600, "dur_ms": 15895.5}
+{"kind": "kv_w_submit", "wall_ns": 1789679108644974747, "mono_ns": 834271101199584, "tid": 139984012668288, "job": 134, "chunks": 8, "bytes": 167772160}
+{"kind": "kv_w_end", "wall_ns": 1789679122545358549, "mono_ns": 834285001583355, "tid": 139984012668288, "job": 134, "ok": true, "bytes": 167772160, "dur_ms": 13900.4}
+{"kind": "kv_r_submit", "wall_ns": 1789679242789358225, "mono_ns": 834405245583176, "tid": 139984012668288, "job": 135, "chunks": 119, "bytes": 2495610880}
+{"kind": "kv_r_end", "wall_ns": 1789679243542530834, "mono_ns": 834405998755675, "tid": 139984012668288, "job": 135, "ok": true, "bytes": 2495610880, "dur_ms": 753.2}
+{"kind": "kv_w_submit", "wall_ns": 1789679262882736973, "mono_ns": 834425338961751, "tid": 139984012668288, "job": 136, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_w_end", "wall_ns": 1789679278314519832, "mono_ns": 834440770744661, "tid": 139984012668288, "job": 136, "ok": true, "bytes": 146800640, "dur_ms": 15431.8}
+{"kind": "kv_w_submit", "wall_ns": 1789679278322110507, "mono_ns": 834440778335331, "tid": 139984012668288, "job": 137, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_end", "wall_ns": 1789679292290835198, "mono_ns": 834454747059966, "tid": 139984012668288, "job": 137, "ok": true, "bytes": 209715200, "dur_ms": 13968.7}
+{"kind": "kv_r_submit", "wall_ns": 1789679333974614776, "mono_ns": 834496430839668, "tid": 139984012668288, "job": 138, "chunks": 120, "bytes": 2516582400}
+{"kind": "kv_r_end", "wall_ns": 1789679348408382258, "mono_ns": 834510864607040, "tid": 139984012668288, "job": 138, "ok": true, "bytes": 2516582400, "dur_ms": 14433.8}
+{"kind": "kv_w_submit", "wall_ns": 1789679399233432124, "mono_ns": 834561689656968, "tid": 139984012668288, "job": 139, "chunks": 41, "bytes": 859832320}
+{"kind": "kv_w_end", "wall_ns": 1789679428414954832, "mono_ns": 834590871179623, "tid": 139984012668288, "job": 139, "ok": true, "bytes": 859832320, "dur_ms": 29181.5}
+{"kind": "kv_w_submit", "wall_ns": 1789679446966061524, "mono_ns": 834609422286345, "tid": 139984012668288, "job": 140, "chunks": 28, "bytes": 587202560}
+{"kind": "kv_w_end", "wall_ns": 1789679476019295810, "mono_ns": 834638475520639, "tid": 139984012668288, "job": 140, "ok": true, "bytes": 587202560, "dur_ms": 29053.2}
+{"kind": "kv_r_submit", "wall_ns": 1789679503822439643, "mono_ns": 834666278664513, "tid": 139984012668288, "job": 141, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789679518188782792, "mono_ns": 834680645007603, "tid": 139984012668288, "job": 141, "ok": true, "bytes": 2642411520, "dur_ms": 14366.3}
+{"kind": "kv_w_submit", "wall_ns": 1789679603764159597, "mono_ns": 834766220384436, "tid": 139984012668288, "job": 142, "chunks": 58, "bytes": 1216348160}
+{"kind": "kv_w_end", "wall_ns": 1789679638663848753, "mono_ns": 834801120073541, "tid": 139984012668288, "job": 142, "ok": true, "bytes": 1216348160, "dur_ms": 34899.7}
+{"kind": "kv_w_submit", "wall_ns": 1789679638670632510, "mono_ns": 834801126857336, "tid": 139984012668288, "job": 143, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789679675017646175, "mono_ns": 834837473871003, "tid": 139984012668288, "job": 143, "ok": true, "bytes": 1342177280, "dur_ms": 36347.0}
+{"kind": "kv_w_submit", "wall_ns": 1789679675019611961, "mono_ns": 834837475836752, "tid": 139984012668288, "job": 144, "chunks": 34, "bytes": 713031680}
+{"kind": "kv_w_end", "wall_ns": 1789679689905208295, "mono_ns": 834852361433057, "tid": 139984012668288, "job": 144, "ok": true, "bytes": 713031680, "dur_ms": 14885.6}
+{"kind": "kv_w_submit", "wall_ns": 1789679745969474912, "mono_ns": 834908425699790, "tid": 139984012668288, "job": 145, "chunks": 55, "bytes": 1153433600}
+{"kind": "kv_w_end", "wall_ns": 1789679775580637079, "mono_ns": 834938036861901, "tid": 139984012668288, "job": 145, "ok": true, "bytes": 1153433600, "dur_ms": 29611.2}
+{"kind": "kv_r_submit", "wall_ns": 1789679830957397160, "mono_ns": 834993413622091, "tid": 139984012668288, "job": 146, "chunks": 3, "bytes": 62914560}
+{"kind": "kv_r_end", "wall_ns": 1789679844823184445, "mono_ns": 835007279409274, "tid": 139984012668288, "job": 146, "ok": true, "bytes": 62914560, "dur_ms": 13865.8}
+{"kind": "kv_w_submit", "wall_ns": 1789679859265512064, "mono_ns": 835021721736899, "tid": 139984012668288, "job": 147, "chunks": 6, "bytes": 125829120}
+{"kind": "kv_w_end", "wall_ns": 1789679873121773625, "mono_ns": 835035577998426, "tid": 139984012668288, "job": 147, "ok": true, "bytes": 125829120, "dur_ms": 13856.3}
+{"kind": "kv_w_submit", "wall_ns": 1789679992264626991, "mono_ns": 835154720851784, "tid": 139984012668288, "job": 148, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789680057087176858, "mono_ns": 835219543401663, "tid": 139984012668288, "job": 148, "ok": true, "bytes": 1342177280, "dur_ms": 64822.5}
+{"kind": "kv_w_submit", "wall_ns": 1789680057091891496, "mono_ns": 835219548116274, "tid": 139984012668288, "job": 149, "chunks": 56, "bytes": 1174405120}
+{"kind": "kv_w_submit", "wall_ns": 1789680057092070841, "mono_ns": 835219548295638, "tid": 139984012668288, "job": 150, "chunks": 8, "bytes": 167772160}
+{"kind": "kv_w_end", "wall_ns": 1789680087066420973, "mono_ns": 835249522645779, "tid": 139984012668288, "job": 149, "ok": true, "bytes": 1174405120, "dur_ms": 29974.5}
+{"kind": "kv_w_end", "wall_ns": 1789680087066478148, "mono_ns": 835249522702914, "tid": 139984012668288, "job": 150, "ok": true, "bytes": 167772160, "dur_ms": 29974.4}
+{"kind": "kv_w_submit", "wall_ns": 1789680087075984173, "mono_ns": 835249532208974, "tid": 139984012668288, "job": 151, "chunks": 28, "bytes": 587202560}
+{"kind": "kv_w_submit", "wall_ns": 1789680087076108210, "mono_ns": 835249532333033, "tid": 139984012668288, "job": 152, "chunks": 35, "bytes": 734003200}
+{"kind": "kv_w_end", "wall_ns": 1789680140755791794, "mono_ns": 835303212016565, "tid": 139984012668288, "job": 151, "ok": true, "bytes": 587202560, "dur_ms": 53679.8}
+{"kind": "kv_w_end", "wall_ns": 1789680140755845646, "mono_ns": 835303212070407, "tid": 139984012668288, "job": 152, "ok": true, "bytes": 734003200, "dur_ms": 53679.7}
+{"kind": "kv_w_submit", "wall_ns": 1789680140760034338, "mono_ns": 835303216259118, "tid": 139984012668288, "job": 153, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789680164329884087, "mono_ns": 835326786108897, "tid": 139984012668288, "job": 153, "ok": true, "bytes": 1342177280, "dur_ms": 23569.8}
+{"kind": "kv_w_submit", "wall_ns": 1789680164331705161, "mono_ns": 835326787929964, "tid": 139984012668288, "job": 154, "chunks": 12, "bytes": 251658240}
+{"kind": "kv_w_end", "wall_ns": 1789680179070571091, "mono_ns": 835341526795919, "tid": 139984012668288, "job": 154, "ok": true, "bytes": 251658240, "dur_ms": 14738.9}
+{"kind": "kv_w_submit", "wall_ns": 1789680257848276554, "mono_ns": 835420304501402, "tid": 139984012668288, "job": 155, "chunks": 18, "bytes": 377487360}
+{"kind": "kv_w_submit", "wall_ns": 1789680257848429437, "mono_ns": 835420304654225, "tid": 139984012668288, "job": 156, "chunks": 35, "bytes": 734003200}
+{"kind": "kv_r_submit", "wall_ns": 1789680257849701318, "mono_ns": 835420305926222, "tid": 139984012668288, "job": 157, "chunks": 68, "bytes": 1426063360}
+{"kind": "kv_r_end", "wall_ns": 1789680272406189972, "mono_ns": 835434862414796, "tid": 139984012668288, "job": 157, "ok": true, "bytes": 1426063360, "dur_ms": 14556.5}
+{"kind": "kv_w_end", "wall_ns": 1789680272406239009, "mono_ns": 835434862463797, "tid": 139984012668288, "job": 155, "ok": true, "bytes": 377487360, "dur_ms": 14558.0}
+{"kind": "kv_w_end", "wall_ns": 1789680272406252015, "mono_ns": 835434862476758, "tid": 139984012668288, "job": 156, "ok": true, "bytes": 734003200, "dur_ms": 14557.8}
+{"kind": "kv_w_submit", "wall_ns": 1789680350708349708, "mono_ns": 835513164574501, "tid": 139984012668288, "job": 158, "chunks": 58, "bytes": 1216348160}
+{"kind": "kv_w_end", "wall_ns": 1789680366678635132, "mono_ns": 835529134859954, "tid": 139984012668288, "job": 158, "ok": true, "bytes": 1216348160, "dur_ms": 15970.3}
+{"kind": "kv_r_submit", "wall_ns": 1789680422228072353, "mono_ns": 835584684297247, "tid": 139984012668288, "job": 159, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789680436670535435, "mono_ns": 835599126760194, "tid": 139984012668288, "job": 159, "ok": true, "bytes": 2642411520, "dur_ms": 14442.5}
+{"kind": "kv_r_submit", "wall_ns": 1789680465029462115, "mono_ns": 835627485686929, "tid": 139984012668288, "job": 160, "chunks": 120, "bytes": 2516582400}
+{"kind": "kv_r_end", "wall_ns": 1789680479469415338, "mono_ns": 835641925640096, "tid": 139984012668288, "job": 160, "ok": true, "bytes": 2516582400, "dur_ms": 14439.9}
+{"kind": "kv_r_submit", "wall_ns": 1789680493441774794, "mono_ns": 835655897999709, "tid": 139984012668288, "job": 161, "chunks": 1, "bytes": 20971520}
+{"kind": "kv_r_end", "wall_ns": 1789680507986499502, "mono_ns": 835670442724314, "tid": 139984012668288, "job": 161, "ok": true, "bytes": 20971520, "dur_ms": 14544.7}
+{"kind": "kv_w_submit", "wall_ns": 1789680538884493381, "mono_ns": 835701340718192, "tid": 139984012668288, "job": 162, "chunks": 22, "bytes": 461373440}
+{"kind": "kv_w_end", "wall_ns": 1789680552981986684, "mono_ns": 835715438211472, "tid": 139984012668288, "job": 162, "ok": true, "bytes": 461373440, "dur_ms": 14097.5}
+{"kind": "kv_w_submit", "wall_ns": 1789680642143497925, "mono_ns": 835804599722686, "tid": 139984012668288, "job": 163, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789680705934364589, "mono_ns": 835868390589399, "tid": 139984012668288, "job": 163, "ok": true, "bytes": 1342177280, "dur_ms": 63790.9}
+{"kind": "kv_w_submit", "wall_ns": 1789680705936275993, "mono_ns": 835868392500802, "tid": 139984012668288, "job": 164, "chunks": 18, "bytes": 377487360}
+{"kind": "kv_w_submit", "wall_ns": 1789680705936398856, "mono_ns": 835868392623637, "tid": 139984012668288, "job": 165, "chunks": 46, "bytes": 964689920}
+{"kind": "kv_w_end", "wall_ns": 1789680733001810867, "mono_ns": 835895458035660, "tid": 139984012668288, "job": 164, "ok": true, "bytes": 377487360, "dur_ms": 27065.5}
+{"kind": "kv_w_end", "wall_ns": 1789680733001873694, "mono_ns": 835895458098464, "tid": 139984012668288, "job": 165, "ok": true, "bytes": 964689920, "dur_ms": 27065.5}
+{"kind": "kv_w_submit", "wall_ns": 1789680733008159729, "mono_ns": 835895464384636, "tid": 139984012668288, "job": 166, "chunks": 13, "bytes": 272629760}
+{"kind": "kv_w_end", "wall_ns": 1789680747792083481, "mono_ns": 835910248308280, "tid": 139984012668288, "job": 166, "ok": true, "bytes": 272629760, "dur_ms": 14783.9}
+{"kind": "kv_w_submit", "wall_ns": 1789680792356772256, "mono_ns": 835954812997055, "tid": 139984012668288, "job": 167, "chunks": 7, "bytes": 146800640}
+{"kind": "kv_w_submit", "wall_ns": 1789680792356877995, "mono_ns": 835954813102770, "tid": 139984012668288, "job": 168, "chunks": 57, "bytes": 1195376640}
+{"kind": "kv_w_end", "wall_ns": 1789680808124990975, "mono_ns": 835970581215740, "tid": 139984012668288, "job": 167, "ok": true, "bytes": 146800640, "dur_ms": 15768.2}
+{"kind": "kv_w_submit", "wall_ns": 1789680808126937955, "mono_ns": 835970583162785, "tid": 139984012668288, "job": 169, "chunks": 1, "bytes": 20971520}
+{"kind": "kv_w_end", "wall_ns": 1789680822331527311, "mono_ns": 835984787752104, "tid": 139984012668288, "job": 169, "ok": true, "bytes": 20971520, "dur_ms": 14204.6}
+{"kind": "kv_w_end", "wall_ns": 1789680822331570739, "mono_ns": 835984787795494, "tid": 139984012668288, "job": 168, "ok": true, "bytes": 1195376640, "dur_ms": 29974.7}
+{"kind": "kv_w_submit", "wall_ns": 1789680897730320546, "mono_ns": 836060186545362, "tid": 139984012668288, "job": 170, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789680964895121269, "mono_ns": 836127351346043, "tid": 139984012668288, "job": 170, "ok": true, "bytes": 1342177280, "dur_ms": 67164.8}
+{"kind": "kv_w_submit", "wall_ns": 1789680964899473970, "mono_ns": 836127355698769, "tid": 139984012668288, "job": 171, "chunks": 61, "bytes": 1279262720}
+{"kind": "kv_w_submit", "wall_ns": 1789680964899654839, "mono_ns": 836127355879651, "tid": 139984012668288, "job": 172, "chunks": 3, "bytes": 62914560}
+{"kind": "kv_w_end", "wall_ns": 1789680984519927134, "mono_ns": 836146976151967, "tid": 139984012668288, "job": 171, "ok": true, "bytes": 1279262720, "dur_ms": 19620.4}
+{"kind": "kv_w_end", "wall_ns": 1789680984519978088, "mono_ns": 836146976202844, "tid": 139984012668288, "job": 172, "ok": true, "bytes": 62914560, "dur_ms": 19620.3}
+{"kind": "kv_w_submit", "wall_ns": 1789680984533887573, "mono_ns": 836146990112352, "tid": 139984012668288, "job": 173, "chunks": 15, "bytes": 314572800}
+{"kind": "kv_w_end", "wall_ns": 1789681011271192118, "mono_ns": 836173727416953, "tid": 139984012668288, "job": 173, "ok": true, "bytes": 314572800, "dur_ms": 26737.3}
+{"kind": "kv_w_submit", "wall_ns": 1789681011280740148, "mono_ns": 836173736964957, "tid": 139984012668288, "job": 174, "chunks": 51, "bytes": 1069547520}
+{"kind": "kv_w_end", "wall_ns": 1789681044886111199, "mono_ns": 836207342335979, "tid": 139984012668288, "job": 174, "ok": true, "bytes": 1069547520, "dur_ms": 33605.4}
+{"kind": "kv_w_submit", "wall_ns": 1789681044893076737, "mono_ns": 836207349301481, "tid": 139984012668288, "job": 175, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789681060643503158, "mono_ns": 836223099727929, "tid": 139984012668288, "job": 175, "ok": true, "bytes": 1342177280, "dur_ms": 15750.4}
+{"kind": "kv_w_submit", "wall_ns": 1789681060645213521, "mono_ns": 836223101438392, "tid": 139984012668288, "job": 176, "chunks": 2, "bytes": 41943040}
+{"kind": "kv_w_end", "wall_ns": 1789681074534384753, "mono_ns": 836236990609583, "tid": 139984012668288, "job": 176, "ok": true, "bytes": 41943040, "dur_ms": 13889.2}
+{"kind": "kv_w_submit", "wall_ns": 1789681149176586886, "mono_ns": 836311632811695, "tid": 139984012668288, "job": 177, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789681169481738471, "mono_ns": 836331937963262, "tid": 139984012668288, "job": 177, "ok": true, "bytes": 1342177280, "dur_ms": 20305.1}
+{"kind": "kv_w_submit", "wall_ns": 1789681169487418377, "mono_ns": 836331943643156, "tid": 139984012668288, "job": 178, "chunks": 9, "bytes": 188743680}
+{"kind": "kv_w_submit", "wall_ns": 1789681169487533698, "mono_ns": 836331943758525, "tid": 139984012668288, "job": 179, "chunks": 6, "bytes": 125829120}
+{"kind": "kv_r_submit", "wall_ns": 1789681169488747512, "mono_ns": 836331944972425, "tid": 139984012668288, "job": 180, "chunks": 126, "bytes": 2642411520}
+{"kind": "kv_r_end", "wall_ns": 1789681184101775757, "mono_ns": 836346558000528, "tid": 139984012668288, "job": 180, "ok": true, "bytes": 2642411520, "dur_ms": 14613.0}
+{"kind": "kv_w_end", "wall_ns": 1789681184101824406, "mono_ns": 836346558049150, "tid": 139984012668288, "job": 178, "ok": true, "bytes": 188743680, "dur_ms": 14614.4}
+{"kind": "kv_w_end", "wall_ns": 1789681184101837911, "mono_ns": 836346558062647, "tid": 139984012668288, "job": 179, "ok": true, "bytes": 125829120, "dur_ms": 14614.3}
+{"kind": "kv_r_submit", "wall_ns": 1789681282093816698, "mono_ns": 836444550041587, "tid": 139984012668288, "job": 181, "chunks": 52, "bytes": 1090519040}
+{"kind": "kv_r_end", "wall_ns": 1789681296228077358, "mono_ns": 836458684302117, "tid": 139984012668288, "job": 181, "ok": true, "bytes": 1090519040, "dur_ms": 14134.3}
+{"kind": "kv_w_submit", "wall_ns": 1789681371728060331, "mono_ns": 836534184285123, "tid": 139984012668288, "job": 182, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789681396708316971, "mono_ns": 836559164541766, "tid": 139984012668288, "job": 182, "ok": true, "bytes": 1342177280, "dur_ms": 24980.3}
+{"kind": "kv_w_submit", "wall_ns": 1789681396709601399, "mono_ns": 836559165826207, "tid": 139984012668288, "job": 183, "chunks": 10, "bytes": 209715200}
+{"kind": "kv_w_end", "wall_ns": 1789681411039343536, "mono_ns": 836573495568320, "tid": 139984012668288, "job": 183, "ok": true, "bytes": 209715200, "dur_ms": 14329.7}
+{"kind": "kv_w_submit", "wall_ns": 1789681528022121948, "mono_ns": 836690478346829, "tid": 139984012668288, "job": 184, "chunks": 64, "bytes": 1342177280}
+{"kind": "kv_w_end", "wall_ns": 1789681589899045382, "mono_ns": 836752355270187, "tid": 139984012668288, "job": 184, "ok": true, "bytes": 1342177280, "dur_ms": 61876.9}
+{"kind": "kv_w_submit", "wall_ns": 1789681589900483933, "mono_ns": 836752356708757, "tid": 139984012668288, "job": 185, "chunks": 58, "bytes": 1216348160}
+{"kind": "kv_w_end", "wall_ns": 1789681620707493377, "mono_ns": 836783163718171, "tid": 139984012668288, "job": 185, "ok": true, "bytes": 1216348160, "dur_ms": 30807.0}
+{"kind": "phase", "wall_ns": 1789681690094595174, "mono_ns": 836852550820181, "tid": 139984012668288, "name": "stream_end", "wall_s": 10291.26, "matched_tokens": 279728, "drain_s": 0.0}
+{"kind": "phase", "wall_ns": 1789681690094961556, "mono_ns": 836852551186370, "tid": 139984012668288, "name": "final_settle"}
+{"kind": "phase", "wall_ns": 1789681705203994656, "mono_ns": 836867660219620, "tid": 139984012668288, "name": "complete"}

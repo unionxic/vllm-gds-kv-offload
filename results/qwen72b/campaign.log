@@ -194,3 +194,11 @@
 [09-18 00:37:56] == stream 종료
 [09-18 00:38:10] == qwen72b: RAM 0.5 × (none), docs 128, decode 8, NSYS=0, MODE=stream-stream-ts450-c4
 [09-18 00:38:10] start bailian-ram0.5-none-stream-ts450-c4-vllm-default
+[09-18 03:48:31] done  bailian-ram0.5-none-stream-ts450-c4-vllm-default rc=0 (gpu_util 0.8)
+[09-18 03:48:31] == qwen72b 종료
+[09-18 03:48:31] == stream-default 종료
+[09-18 03:49:19] == qwen72b: RAM 0.72 × (cufile-wb-lru), docs 128, decode 8, NSYS=0, MODE=stream-stream-ts450-c4
+[09-18 03:49:19] start bailian-ram0.72-cufile-wb-lru-interleave-p2-split-stream-ts450-c4-ours
+[09-18 06:48:43] done  bailian-ram0.72-cufile-wb-lru-interleave-p2-split-stream-ts450-c4-ours rc=0 (gpu_util 0.85)
+[09-18 06:48:43] == qwen72b 종료
+[09-18 06:48:43] == stream-ours2 종료
