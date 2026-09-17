@@ -1,5 +1,7 @@
-"""관측 체계(lib/obs)를 붙인 3단계 워크로드 러너.
-   단계: cold_fill(문서 N개, 질문 0) → settle → reverse_retrieve(역순, 질문 1) → final_settle
+"""관측 체계(lib/obs)를 붙인 워크로드 러너.
+   --mode phases(기본): cold_fill(문서 N개, 질문 0) → settle → reverse_retrieve(역순, 질문 1) → final_settle
+   --mode stream: trace 순서 한 줄 스트림. 도착 시각 = (timestamp - timestamp0) x --time-scale, open loop(도착하면 제출).
+     --time-scale 0은 closed loop(전부 즉시 제출, trace 순서), --max-concurrency K는 미완료 요청 K개로 제한(대기시간은 queue_s)
    가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 in-tree CuFileFsSpec(native cuFile)으로 SSD. 외부 파이썬 전송 코드 없음. 엔진 step을 직접 돌려 step 단위 기록.
    산출물(RUN_DIR): environment.txt, capacity.json, events.jsonl(KV IO와 phase 마커), requests.jsonl(요청별 시각),
      steps.jsonl, tier_samples.jsonl(nvidia-fs·프로세스·캐시 파일 1초), hostmon 파일들, result.json, summary.csv
@@ -41,6 +43,14 @@ ap.add_argument("--io-threads", type=int, default=4)
 ap.add_argument("--gpu-util", type=float, default=0.9)
 ap.add_argument("--max-model-len", type=int, default=2048)
 ap.add_argument("--decode-tokens", type=int, default=8)
+ap.add_argument("--mode", default="phases", choices=["phases", "stream"],
+                help="phases: cold_fill/reverse_retrieve 2단계(기본). stream: trace 순서 한 줄 스트림 + open loop 도착")
+ap.add_argument("--time-scale", type=float, default=1.0,
+                help="stream: 도착 간격 배율. 20이면 trace를 20배 느리게. 0이면 closed loop(전부 즉시 제출)")
+ap.add_argument("--max-concurrency", type=int, default=0,
+                help="stream: 제출됐지만 끝나지 않은 요청의 상한(0=무제한). 초과 도착은 FIFO로 대기, 대기 시간은 queue_s")
+ap.add_argument("--arrival-gap-s", type=float, default=0.0,
+                help="stream + longbench/leval: timestamp가 없어 합성 도착 간격(초, 0=전부 즉시)")
 ap.add_argument("--settle-sec", type=float, default=15.0)
 ap.add_argument("--final-settle-sec", type=float, default=15.0)
 ap.add_argument("--poll-sleep-ms", type=float, default=1.0)
@@ -205,6 +215,7 @@ try:
         KVW.submit_store, KVW.submit_load, KVW.get_finished = submit_store, submit_load, get_finished
     def kvstat():
         return KVW.stats() if KVW is not None else {}
+    doc_meta = []  # bailian일 때만 채움(chat_id/turn/input_length/timestamp)
     if args.prompt_source == "longbench":
         # 실제 문서 텍스트를 모델 토크나이저로. 프리픽스 = 문서 토큰(상한까지), 단계별 꼬리 = 다른 질문 문장 → 프리픽스 적중
         from transformers import AutoTokenizer
@@ -238,11 +249,12 @@ try:
                 rng = random.Random(0xB10C0000 + h)
                 _bcache[h] = [rng.randrange(_lo, _hi) for _ in range(args.bailian_block)]
             return _bcache[h]
-        docs, doc_meta = [], []
+        docs = []
         for r in rows:
             toks = []
             for h in r["hash_ids"][:nblk]: toks.extend(_block(h))
-            docs.append(toks[:cap]); doc_meta.append(dict(chat_id=r.get("chat_id"), turn=r.get("turn"), input_length=r.get("input_length"), n_hash=len(r["hash_ids"])))
+            docs.append(toks[:cap]); doc_meta.append(dict(chat_id=r.get("chat_id"), turn=r.get("turn"), input_length=r.get("input_length"),
+                                 timestamp=r.get("timestamp"), n_hash=len(r["hash_ids"])))
         EV.emit("bailian_trace", offset=args.bailian_offset, rows=len(docs), block=args.bailian_block, blocks_kept=nblk, vocab=_vocab,
                 unique_hashes=len(_bcache), total_hash_refs=sum(m["n_hash"] for m in doc_meta))
         _tail = {q: [random.Random(0x7A11 + q).randrange(_lo, _hi) for _ in range(8)] for q in range(4)}
@@ -273,13 +285,46 @@ try:
         if v is None:
             v = [m for k, ms in matched_req.items() if k.startswith(rid + "-") for m in ms]
         return (max(v) if v else 0), len(v)
+    def _engine_step(name, st, cap, on_finish):
+        """엔진 step 1회 + steps.jsonl 기록. cap은 nsys 캡처 상태(on/n_fwd/n_step). 반환 (n_out, got_first)."""
+        pre_w = wstat(); pre_k = kvstat(); s0 = time.monotonic(); w0 = time.time()
+        torch.cuda.nvtx.range_push(f"step:{name} #{cap['n_step']} running={sum(1 for v in st.values() if v['first_mono'] is None or v['finish_mono'] is None)}")
+        outs = eng.step(); torch.cuda.nvtx.range_pop(); cap["n_step"] += 1
+        s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
+        if cap["on"] and s1 - s0 > 0.3:
+            cap["n_fwd"] += 1
+            if args.nsys_steps and cap["n_fwd"] >= args.nsys_steps:
+                torch.cuda.profiler.stop(); cap["on"] = False; EV.emit("nsys", msg=f"capture stop {name} after {cap['n_fwd']} forwards")
+        got_first = False
+        for o in outs:
+            v = st.get(o.request_id)
+            if v is None: continue
+            if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True; torch.cuda.nvtx.mark(f"req_first_token {o.request_id}")
+            if o.outputs: v["ntok"] = len(o.outputs[0].token_ids); v["ids"] = list(o.outputs[0].token_ids)
+            if o.finished:
+                v["finish_mono"] = s1; v["finish_wall"] = time.time(); torch.cuda.nvtx.mark(f"req_finish {o.request_id}")
+                on_finish(o.request_id, v)
+        n_out = len(outs); n_tok = sum(len(o.outputs[0].token_ids) for o in outs if o.outputs)
+        if s1 - s0 > 0.3 or n_out:
+            kd = {k: post_k[k] - pre_k[k] for k in ("reads", "writes", "read_bytes", "write_bytes")} if post_k else {}
+            steps_f.write(json.dumps(dict(phase=name, mono0=round(s0, 4), mono1=round(s1, 4), wall0=w0, dur=round(s1 - s0, 4),
+                kind="prefill" if (got_first or (n_out == 0 and any(v["first_mono"] is None for v in st.values()))) else "decode",
+                n_out=n_out, n_tok=n_tok, w_reads=post_w[0] - pre_w[0], w_bytes=post_w[1] - pre_w[1],
+                kv_out_r=post_k.get("outstanding_reads", 0), kv_out_w=post_k.get("outstanding_writes", 0), **{"kv_" + k: v for k, v in kd.items()})) + "\n")
+        elif args.poll_sleep_ms and not outs:
+            time.sleep(args.poll_sleep_ms / 1000.0)
+        return n_out, got_first
     def run_phase(name, order, q):
         matched[0] = 0; matched_req.clear()
         EV.phase(name, requests=len(order))
-        capture = name in NSYS_PHASES; n_fwd = 0; n_step = 0
-        if capture: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
+        cap = dict(on=name in NSYS_PHASES, n_fwd=0, n_step=0)
+        if cap["on"]: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
         torch.cuda.nvtx.range_push(f"phase:{name}")
         st = {}
+        def on_finish(rid, v):
+            reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
+            _m, _n = matched_of(rid)
+            prof.append(dict(phase=name, rid=rid, doc=v["doc"], q=q, tokens=v["tokens"], matched=_m, lookups=_n))
         for i in order:
             rid = f"{name}-{i}"; toks = prompt(i, q)
             eng.add_request(rid, {"prompt_token_ids": toks}, sp); torch.cuda.nvtx.mark(f"req_submit {rid} {len(toks)}tok")
@@ -287,50 +332,90 @@ try:
         tS = time.monotonic()
         while any(v["finish_mono"] is None for v in st.values()):
             if time.monotonic() - tS > 3 * 3600: EV.emit("warn", msg=f"{name} 3시간 초과"); break
-            pre_w = wstat(); pre_k = kvstat(); s0 = time.monotonic(); w0 = time.time()
-            torch.cuda.nvtx.range_push(f"step:{name} #{n_step} running={sum(1 for v in st.values() if v['first_mono'] is None or v['finish_mono'] is None)}"); outs = eng.step(); torch.cuda.nvtx.range_pop(); n_step += 1
-            s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
-            if capture and s1 - s0 > 0.3:
-                n_fwd += 1
-                if args.nsys_steps and n_fwd >= args.nsys_steps:
-                    torch.cuda.profiler.stop(); capture = False; EV.emit("nsys", msg=f"capture stop {name} after {n_fwd} forwards")
-            got_first = False
-            for o in outs:
-                v = st.get(o.request_id)
-                if v is None: continue
-                if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True; torch.cuda.nvtx.mark(f"req_first_token {o.request_id}")
-                if o.outputs: v["ntok"] = len(o.outputs[0].token_ids); v["ids"] = list(o.outputs[0].token_ids)
-                if o.finished:
-                    v["finish_mono"] = s1; v["finish_wall"] = time.time(); torch.cuda.nvtx.mark(f"req_finish {o.request_id}")
-                    reqs_f.write(json.dumps(dict(phase=name, rid=o.request_id, **v)) + "\n")
-                    _m, _n = matched_of(o.request_id)
-                    prof.append(dict(phase=name, rid=o.request_id, doc=v["doc"], q=q, tokens=v["tokens"],
-                                     matched=_m, lookups=_n))
-            n_out = len(outs); n_tok = sum(len(o.outputs[0].token_ids) for o in outs if o.outputs)
-            if s1 - s0 > 0.3 or n_out:
-                kd = {k: post_k[k] - pre_k[k] for k in ("reads", "writes", "read_bytes", "write_bytes")} if post_k else {}
-                steps_f.write(json.dumps(dict(phase=name, mono0=round(s0, 4), mono1=round(s1, 4), wall0=w0, dur=round(s1 - s0, 4),
-                    kind="prefill" if (got_first or (n_out == 0 and any(v["first_mono"] is None for v in st.values()))) else "decode",
-                    n_out=n_out, n_tok=n_tok, w_reads=post_w[0] - pre_w[0], w_bytes=post_w[1] - pre_w[1],
-                    kv_out_r=post_k.get("outstanding_reads", 0), kv_out_w=post_k.get("outstanding_writes", 0), **{"kv_" + k: v for k, v in kd.items()})) + "\n")
-            elif args.poll_sleep_ms and not outs:
-                time.sleep(args.poll_sleep_ms / 1000.0)
+            _engine_step(name, st, cap, on_finish)
         d = drain()
         torch.cuda.nvtx.range_pop()
-        if capture: torch.cuda.profiler.stop(); EV.emit("nsys", msg=f"capture stop {name} at phase end")
+        if cap["on"]: torch.cuda.profiler.stop(); EV.emit("nsys", msg=f"capture stop {name} at phase end")
         EV.phase(name + "_end", wall_s=round(time.monotonic() - tS, 3), matched_tokens=matched[0], drain_s=d)
         return dict(wall_s=round(time.monotonic() - tS, 3), matched=matched[0], drain_s=d,
                     ttft=[round(v["first_mono"] - v["submit_mono"], 3) for v in st.values() if v["first_mono"]],
                     e2e=[round(v["finish_mono"] - v["submit_mono"], 3) for v in st.values() if v["finish_mono"]])
+    def arrival_times(n):
+        """도착 시각(초, 첫 요청 기준 0). bailian은 trace timestamp x --time-scale, 그 외는 --arrival-gap-s 균등."""
+        if args.prompt_source == "bailian" and doc_meta and doc_meta[0].get("timestamp") is not None:
+            ts = [float(m["timestamp"]) for m in doc_meta[:n]]
+            return [max(0.0, (t - ts[0]) * args.time_scale) for t in ts]
+        return [i * max(0.0, args.arrival_gap_s) for i in range(n)]
+    def run_stream(name="stream"):
+        """trace 순서 한 줄 스트림. 도착하면 제출(open loop), --max-concurrency로 동시 미완료 수 제한."""
+        from collections import deque
+        matched[0] = 0; matched_req.clear()
+        n = len(docs); arr = arrival_times(n)
+        gaps = sorted(arr[i + 1] - arr[i] for i in range(n - 1))
+        med_gap = gaps[len(gaps) // 2] if gaps else 0.0
+        EV.emit("stream_plan", n_requests=n, time_scale=args.time_scale, max_concurrency=args.max_concurrency,
+                arrival_span_s=round(arr[-1], 3) if arr else 0.0, median_gap_s=round(med_gap, 4),
+                arrival_gap_s=args.arrival_gap_s, prompt_source=args.prompt_source, bailian_offset=args.bailian_offset)
+        print(f"stream plan: {n} req, span {arr[-1] if arr else 0:.1f} s, median gap {med_gap:.3f} s, "
+              f"time_scale {args.time_scale}, max_concurrency {args.max_concurrency}", flush=True)
+        EV.phase(name, requests=n)
+        cap = dict(on=name in NSYS_PHASES, n_fwd=0, n_step=0)
+        if cap["on"]: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
+        torch.cuda.nvtx.range_push(f"phase:{name}")
+        st = {}; live = [0]
+        def on_finish(rid, v):
+            live[0] -= 1
+            _m, _n = matched_of(rid)
+            v["matched_of"] = _m; v["lookups"] = _n
+            reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
+            prof.append(dict(phase=name, rid=rid, doc=v["doc"], q=0, tokens=v["tokens"], matched=_m, lookups=_n))
+        pend = deque(range(n)); hold = deque()
+        tS = time.monotonic(); wS = time.time()
+        while True:
+            if time.monotonic() - tS > 3 * 3600: EV.emit("warn", msg=f"{name} 3시간 초과"); break
+            now = time.monotonic() - tS
+            while pend and arr[pend[0]] <= now: hold.append(pend.popleft())
+            while hold and (args.max_concurrency <= 0 or live[0] < args.max_concurrency):
+                i = hold.popleft(); rid = f"{name}-{i}"; toks = prompt(i, 0)
+                sm = time.monotonic()
+                eng.add_request(rid, {"prompt_token_ids": toks}, sp); torch.cuda.nvtx.mark(f"req_submit {rid} {len(toks)}tok")
+                meta = doc_meta[i] if (args.prompt_source == "bailian" and i < len(doc_meta)) else {}
+                st[rid] = dict(doc=i, chat_id=meta.get("chat_id"), turn=meta.get("turn"), input_length=meta.get("input_length"),
+                               trace_ts=meta.get("timestamp"), tokens=len(toks), arrival_s=round(arr[i], 4),
+                               arrival_wall=round(wS + arr[i], 4), submit_mono=sm, submit_wall=time.time(),
+                               queue_s=round(max(0.0, (sm - tS) - arr[i]), 4), first_mono=None, finish_mono=None, ntok=0)
+                live[0] += 1
+            if live[0] == 0:
+                if hold: continue
+                if pend:
+                    time.sleep(min(1.0, max(0.0, arr[pend[0]] - (time.monotonic() - tS)))); continue
+                break
+            _engine_step(name, st, cap, on_finish)
+        d = drain()
+        torch.cuda.nvtx.range_pop()
+        if cap["on"]: torch.cuda.profiler.stop(); EV.emit("nsys", msg=f"capture stop {name} at phase end")
+        fin = [v["finish_mono"] for v in st.values() if v["finish_mono"]]
+        wall = round((max(fin) - tS) if fin else (time.monotonic() - tS), 3)  # 첫 도착 → 마지막 완료
+        EV.phase(name + "_end", wall_s=wall, matched_tokens=matched[0], drain_s=d)
+        return dict(wall_s=wall, n_requests=n, matched_tokens=matched[0], matched=matched[0], drain_s=d,
+                    hit_requests=sum(1 for v in st.values() if v.get("matched_of", 0) > 0),
+                    arrival_span_s=round(arr[-1], 3) if arr else 0.0, time_scale=args.time_scale,
+                    max_concurrency=args.max_concurrency, submitted=len(st),
+                    ttft=[round(v["first_mono"] - v["submit_mono"], 3) for v in st.values() if v["first_mono"]],
+                    e2e=[round(v["finish_mono"] - v["submit_mono"], 3) for v in st.values() if v["finish_mono"]],
+                    queue_s=[v["queue_s"] for v in st.values()])
     try:
         cc = llm.llm_engine.vllm_config.cache_config
         kv_alloc_gib = round(cc.num_gpu_blocks * cc.block_size * (2 * n_layer * d_model * 2) / 2**30, 2)
     except Exception: kv_alloc_gib = kv_gib
     res = dict(args=vars(args), kv_gib=kv_gib, kv_alloc_gib=kv_alloc_gib, host_fraction=host_fraction, tiers=tiers, phases={})
     N = len(docs)
-    res["phases"]["cold_fill"] = run_phase("cold_fill", list(range(N)), 0)
-    EV.phase("settle"); time.sleep(args.settle_sec)
-    res["phases"]["reverse_retrieve"] = run_phase("reverse_retrieve", list(reversed(range(N))), 1)
+    if args.mode == "stream":
+        res["phases"]["stream"] = run_stream("stream")
+    else:
+        res["phases"]["cold_fill"] = run_phase("cold_fill", list(range(N)), 0)
+        EV.phase("settle"); time.sleep(args.settle_sec)
+        res["phases"]["reverse_retrieve"] = run_phase("reverse_retrieve", list(reversed(range(N))), 1)
     EV.phase("final_settle"); time.sleep(args.final_settle_sec)
     ks = kvstat()
     res["kv_io"] = dict(read_n=ks.get("reads", 0), read_gib=round(ks.get("read_bytes", 0) / 2**30, 2), write_n=ks.get("writes", 0),
@@ -381,7 +466,7 @@ try:
     EV.phase("complete")
     open(os.path.join(R, "workload.exitcode"), "w").write("0\n")
     print("RESULT", json.dumps({k: res[k] for k in ("tiers", "kv_io", "gpu_max_gib")}), flush=True)
-    for ph, v in res["phases"].items(): print(f"  {ph}: wall {v['wall_s']} s, ttft median {sorted(v['ttft'])[len(v['ttft'])//2] if v['ttft'] else None}, matched {v['matched']}", flush=True)
+    for ph, v in res["phases"].items(): print(f"  {ph}: wall {v['wall_s']} s, ttft median {sorted(v['ttft'])[len(v['ttft'])//2] if v['ttft'] else None}, matched {v.get('matched', v.get('matched_tokens', 0))}", flush=True)
     try: llm.llm_engine.engine_core.shutdown()
     except Exception as e: print("shutdown:", e)
 except BaseException as e:
