@@ -28,7 +28,7 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
     hybrid) kvt=hybrid; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"hybrid_host_policy\": \"${CPUPOL:-lru}\", \"hybrid_placement\": \"${PLACEMENT:-host_first}\"${PROFILE:+, \"hybrid_profile\": \"$PROFILE\"}}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru}-${PLACEMENT:-host_first};;
     cpu) kvt=cpu; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"eviction_policy\": \"${CPUPOL:-lru}\"}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru};;
     *) log "unknown cond $cond"; continue;; esac
-  rm -rf $O/kv-72b; ../07-combined/memguard.sh $tag $O/memguard.log & g=$!
+  rm -rf $O/kv-72b; ../../lib/obs/memguard.sh $tag $O/memguard.log & g=$!
   wrap=(); [ "${NSYS:-0}" = 1 ] && { wrap=(../../lib/obs/run_nsys.sh $O/$tag-nsys --); export NSYS_CAPTURE=cudaProfilerApi; extra+=(--nsys-phase "${NSYS_PHASE:-cold_fill}" --nsys-steps "${NSYS_STEPS:-40}"); mkdir -p $O/$tag-nsys; }
   avail_gb=$(df -BG --output=avail $O | tail -1 | tr -dc 0-9); [ "${avail_gb:-0}" -lt 60 ] && { log "SKIP $tag: 디스크 여유 ${avail_gb} GB < 60 GB"; kill $g 2>/dev/null; continue; }
   log "start $tag"

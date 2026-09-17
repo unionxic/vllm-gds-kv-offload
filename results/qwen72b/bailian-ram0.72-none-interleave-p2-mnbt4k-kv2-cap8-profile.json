@@ -1,0 +1,290 @@
+{
+ "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.72-none-interleave-p2-mnbt4k-kv2-cap8",
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "prompt_source": "bailian",
+ "kv_transport": "none",
+ "n_docs": 8,
+ "input_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../02-bailian/replay600/trace/qwen_coder.jsonl",
+ "requests": [
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-0",
+   "doc": 0,
+   "q": 0,
+   "tokens": 6536,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-1",
+   "doc": 1,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-2",
+   "doc": 2,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-3",
+   "doc": 3,
+   "q": 0,
+   "tokens": 312,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-4",
+   "doc": 4,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-5",
+   "doc": 5,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-6",
+   "doc": 6,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-7",
+   "doc": 7,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-7",
+   "doc": 7,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-6",
+   "doc": 6,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-5",
+   "doc": 5,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-4",
+   "doc": 4,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-3",
+   "doc": 3,
+   "q": 1,
+   "tokens": 312,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-2",
+   "doc": 2,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-1",
+   "doc": 1,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-0",
+   "doc": 0,
+   "q": 1,
+   "tokens": 6536,
+   "matched": 0,
+   "lookups": 0
+  }
+ ],
+ "docs": [
+  {
+   "doc": 0,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 6536,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29560,
+    "turn": 1,
+    "input_length": 6521,
+    "n_hash": 408
+   }
+  },
+  {
+   "doc": 1,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29561,
+    "turn": 1,
+    "input_length": 12627,
+    "n_hash": 790
+   }
+  },
+  {
+   "doc": 2,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29562,
+    "turn": 1,
+    "input_length": 13443,
+    "n_hash": 841
+   }
+  },
+  {
+   "doc": 3,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 312,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29563,
+    "turn": 1,
+    "input_length": 297,
+    "n_hash": 19
+   }
+  },
+  {
+   "doc": 4,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29564,
+    "turn": 1,
+    "input_length": 12092,
+    "n_hash": 756
+   }
+  },
+  {
+   "doc": 5,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29565,
+    "turn": 2,
+    "input_length": 12480,
+    "n_hash": 780
+   }
+  },
+  {
+   "doc": 6,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29566,
+    "turn": 1,
+    "input_length": 11834,
+    "n_hash": 740
+   }
+  },
+  {
+   "doc": 7,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29567,
+    "turn": 1,
+    "input_length": 13040,
+    "n_hash": 815
+   }
+  }
+ ],
+ "totals": {
+  "requests": 16,
+  "prompt_tokens": 111136,
+  "matched_tokens": 0,
+  "reused_docs": 8
+ }
+}

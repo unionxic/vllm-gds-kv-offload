@@ -5,7 +5,7 @@
    가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 in-tree CuFileFsSpec(native cuFile)으로 SSD. 외부 파이썬 전송 코드 없음. 엔진 step을 직접 돌려 step 단위 기록.
    산출물(RUN_DIR): environment.txt, capacity.json, events.jsonl(KV IO와 phase 마커), requests.jsonl(요청별 시각),
      steps.jsonl, tier_samples.jsonl(nvidia-fs·프로세스·캐시 파일 1초), hostmon 파일들, result.json, summary.csv
-   프롬프트 소스: --prompt-source leval(03-leval OPT 토큰열) | longbench(문서 텍스트 → 모델 토크나이저) | bailian(02-bailian trace 프리픽스 구조)
+   프롬프트 소스: --prompt-source leval(OPT 토큰열, 구 실험 재현용) | longbench(문서 텍스트 → 모델 토크나이저) | bailian(02-bailian trace 프리픽스 구조)
    --profile-out PATH를 주면 재사용 프로파일(요청별 doc·phase·프롬프트 토큰·적중 토큰, doc별 재사용 횟수)을 따로 남김
    usage: python run_obs.py --run-dir DIR --model facebook/opt-13b --n-docs 32 --kv-batch 6 ..."""
 import argparse, json, os, subprocess, sys, threading, time
@@ -13,13 +13,13 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--run-dir", required=True)
 ap.add_argument("--model", default="facebook/opt-13b")
 ap.add_argument("--n-docs", type=int, default=32)
-ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "03-leval", "workload.json"))
+ap.add_argument("--leval-workload", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "leval-opt-workload.json"))
 ap.add_argument("--prompt-source", default="leval", choices=["leval", "longbench", "bailian"],
-                help="leval: 03-leval 토큰열(OPT 토크나이저 전용). longbench: data/longbench-v2-10k-32.jsonl 텍스트를 모델 토크나이저로. "
-                     "bailian: 02-bailian trace(qwen_coder.jsonl)의 hash_ids 프리픽스 구조만 합성 토큰으로 재현")
+                help="leval: OPT 토큰열(OPT 토크나이저 전용). longbench: data/longbench-v2-10k-32.jsonl 텍스트를 모델 토크나이저로. "
+                     "bailian: Bailian trace(data/bailian-qwen_coder.jsonl)의 hash_ids 프리픽스 구조만 합성 토큰으로 재현")
 ap.add_argument("--longbench-file", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "longbench-v2-10k-32.jsonl"))
-ap.add_argument("--bailian-trace", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "02-bailian", "replay600", "trace", "qwen_coder.jsonl"),
-                help="bailian trace jsonl(chat_id, turn, input_length, hash_ids). 02-bailian/replay600/replay.py와 같은 파일")
+ap.add_argument("--bailian-trace", default=os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "bailian-qwen_coder.jsonl"),
+                help="bailian trace jsonl(chat_id, turn, input_length, hash_ids). Alibaba Bailian 공개 트레이스")
 ap.add_argument("--bailian-offset", type=int, default=0, help="bailian: trace 앞에서 건너뛸 행 수(재사용 비율이 평균에 가까운 창을 고를 때)")
 ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
 ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
@@ -230,7 +230,7 @@ try:
             return docs[i] + tails[q % len(tails)]
     elif args.prompt_source == "bailian":
         # trace의 hash_ids만 사용. hash_id 하나 = 결정적 16토큰 블록(시드=hash) → 같은 hash = 같은 토큰열이므로
-        # trace의 프리픽스 공유 구조(hit/miss 패턴)가 그대로 재현됨. 02-bailian/replay600/replay.py와 같은 방식.
+        # trace의 프리픽스 공유 구조(hit/miss 패턴)가 그대로 재현됨. 
         import random
         _vocab = int(getattr(llm.get_tokenizer(), "vocab_size", 0) or hc.vocab_size)
         _lo, _hi = 1000, _vocab - 1000

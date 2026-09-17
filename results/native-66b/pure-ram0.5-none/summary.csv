@@ -1,3 +1,0 @@
-phase,count,ttft_p50,ttft_p95,e2e_p50,e2e_p95,e2e_max,phase_wall_s
-cold_fill,8,487.96,699.14,634.64,845.88,845.88,845.9
-reverse_retrieve,8,470.19,681.67,616.90,828.44,828.44,828.5

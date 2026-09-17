@@ -1,11 +1,0 @@
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Loading pt checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
-Loading pt checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.41s/it]
-Loading pt checkpoint shards: 100% Completed | 1/1 [00:03<00:00,  3.41s/it]
-
-<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
-<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
-Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 399.70it/s]
-Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:  25%|██▌       | 1/4 [00:34<01:42, 34.15s/it, est. speed input: 0.18 toks/s, output: 0.70 toks/s]Processed prompts: 100%|██████████| 4/4 [00:34<00:00, 34.15s/it, est. speed input: 0.94 toks/s, output: 2.81 toks/s]Processed prompts: 100%|██████████| 4/4 [00:34<00:00,  8.54s/it, est. speed input: 0.94 toks/s, output: 2.81 toks/s]
-Rendering prompts:   0%|          | 0/4 [00:00<?, ?it/s]Rendering prompts: 100%|██████████| 4/4 [00:00<00:00, 1742.00it/s]
-Processed prompts:   0%|          | 0/4 [00:00<?, ?it/s, est. speed input: 0.00 toks/s, output: 0.00 toks/s]Processed prompts:  25%|██▌       | 1/4 [00:46<02:19, 46.60s/it, est. speed input: 0.13 toks/s, output: 0.69 toks/s]Processed prompts: 100%|██████████| 4/4 [00:46<00:00, 46.60s/it, est. speed input: 0.45 toks/s, output: 2.75 toks/s]Processed prompts: 100%|██████████| 4/4 [00:46<00:00, 11.65s/it, est. speed input: 0.45 toks/s, output: 2.75 toks/s]

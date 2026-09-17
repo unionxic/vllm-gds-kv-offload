@@ -17,9 +17,6 @@ experiments/03-leval/mixed_workload.json
 results/leval/raw/**/kv*
 cufile.log
 # 프로파일러 대용량 산출물
-results/bailian/prof/*.nsys-rep
-results/bailian/prof/*.sqlite
-results/bailian/prof/*.speedscope.json
 # verify/smoke 부산물
 experiments/01-feasibility/expfs-smoke/vs_*.json
 experiments/01-feasibility/expfs-smoke/vs_*.log
@@ -28,16 +25,8 @@ experiments/01-feasibility/expfs-smoke/nb_*.log
 experiments/01-feasibility/expfs-smoke/pstaged_smoke.log
 .claude/worktrees/
 # 06-weight-offload 산출물(대용량)
-results/weight-offload/**/*.nsys-rep
-results/weight-offload/**/*-cufile.log
-results/weight-offload/smoke-ssd/
-results/weight-offload/qa-ssd/*/
 experiments/06-weight-offload/*.log
 # 07-combined 산출물(대용량: 가중치 SSD 티어·KV 파일)
-results/combined/smoke/*/
-results/combined/smoke/wssd-*/
-results/combined/smoke/kv-*/
-results/combined/kv-66b/
 results/**/*.nsys-rep
 # 10-model-host-baseline 산출물(가중치 SSD 티어·KV 저장소, 런마다 재생성)
 results/model-host-baseline/ssd-*/
@@ -48,3 +37,7 @@ results/**/kv-*/
 results/**/nsys-tmp/
 results/qwen72b/**/*.nsys-rep
 results/qwen72b/**/*.sqlite
+# 큰 입력·실패 런 원본(로컬에만)
+experiments/11-observability/data/bailian-qwen_coder.jsonl
+experiments/11-observability/data/leval-opt-workload.json
+results/qwen72b/stalled/
