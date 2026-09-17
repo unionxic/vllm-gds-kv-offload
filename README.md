@@ -1,155 +1,97 @@
-### vLLM + GDS KV 오프로드 실험
+### vLLM 가중치 스트리밍 + GDS KV 오프로드
 
-목적: 재사용 프리픽스가 GPU와 CPU 메모리를 넘는 워크로드에서 SSD KV 오프로드가 언제 이득인지, 그리고 가중치까지 GPU와 RAM을 넘쳐 SSD에서 스트리밍되는 조건에서는 그 손익이 어떻게 바뀌는지를 단일 노드에서 실측.
+16 GB GPU 한 장으로 145 GB 모델(Qwen2.5-72B-Instruct)을 돌리는 조건에서, 가중치를 host memory와 NVMe에서 매 forward 스트리밍하고 KV를 NVMe에 저장·적중시키는 실험. vLLM 포크(~/vllm, weight-ssd-offload) 안에 구현하고 외부 코드는 쓰지 않음.
 
 | 항목 | 값 |
 | --- | --- |
-| GPU | Quadro RTX 5000 16 GB. BAR1 256 MiB(카드 최대, Resizable BAR 레지스터로 확인) |
-| RAM, SSD | 125 GiB, Samsung 970 EVO 500 GB(OS와 같은 디스크). cuFile 읽기 3.2 GiB/s, 지속 쓰기 0.3~0.7 GB/s(빈 공간에 좌우), pinned H2D 12.3 GB/s |
-| 소프트웨어 | CUDA 12.8, 드라이버 570, cuFile 1.13, nvidia-fs 2.25.7, vLLM 0.26.1 기반 포크(~/vllm, weight-ssd-offload) |
-| 모델 | opt-2.7b, 6.7b, 13b, 30b, 66b, Qwen2.5-72B-Instruct. KV 경로는 expfs(01~10) 또는 포크 in-tree CuFileFsSpec(11) |
+| GPU | Quadro RTX 5000 16 GB. BAR1 256 MiB(카드 최대)라 cuFile은 드라이버 bounce 경로 |
+| RAM, SSD | 125 GiB, Samsung 970 EVO 500 GB(OS와 공유). host→GPU 12.3 GB/s, SSD→GPU 3.4 GB/s, 둘을 동시에 쓰면 host 8.5 GB/s |
+| 소프트웨어 | CUDA 12.8, 드라이버 570, cuFile 1.13, nvidia-fs 2.25.7, vLLM 0.26.1 기반 포크, nsys 2025.3 |
+| 모델 | Qwen2.5-72B-Instruct fp16(145 GB, 80 layer × 1.63 GiB, KV 토큰당 328 KB). 소형 검증은 Qwen2.5-3B |
+| 입력 | Bailian 트레이스 32건(프리픽스 공유 56%, 8k 상한), LongBench-v2 32건(8k), 트레이스 시간 순서 리플레이 128건 |
 
 #### 핵심 결론
 
-가중치가 GPU에 들어가는 조건(opt-2.7b, 01~05)
-
-- SSD KV 적중은 프리픽스 1,024토큰 이상에서 재계산보다 빠름. 2,032토큰에서 재계산 1.155 s, SSD 0.483 s, CPU 0.110 s.
-- 전송 API(cuFile 대 POSIX)는 결정 요인이 아님. 같은 제어 구조에서 foreground 성능 동일.
-- tail의 원인은 store 실행 구조. CUDA event 스핀 대기(blocking event로 CPU 9배 감소)와 store가 GPU 원본 블록을 쓰기 완료까지 붙잡는 것. GPU staging ring과 비차단 admission으로 p95 5 s에서 1.3 s.
-- 저장 admission의 최적해는 워크로드 의존. 반복형은 seen-twice가 이기고 먼 거리 1회 재사용은 1번째 저장만 잡음.
-
-가중치가 SSD에서 스트리밍되는 조건(OPT-66B, 06~11)
-
-- forward 하나는 가중치 이동이고 CPU 티어/12.3 GB/s + SSD 티어/3.44 GB/s로 실측과 1~3% 안. layer가 0.5 GiB 미만이면 SSD 2.9 GB/s.
-- SSD KV 적중이 아끼는 것은 prefill의 토큰 계산 몫뿐. 66B 3,940토큰에서 15.5 s, host 비율과 무관. 모델 크기에 비례(6.7b 2 s, 13b 4 s, 30b 8 s).
-- 저장 라운드 손해는 KV 쓰기와 가중치 SSD 읽기의 디스크 공유. 쓰기 중 가중치 읽기가 3.2에서 0.3 GB/s로 떨어짐(nvme 1초 샘플). SSD 가중치 몫에 비례해 RAM 0.7에서 +6 s, 0.1에서 +66 s.
-- KV 쓰기 속도는 backend가 아니라 SSD의 지속 쓰기 상한이 정함. 970 EVO는 SLC 캐시 약 4 GB 뒤 0.33 GB/s(디스크 94% 사용) 또는 0.70 GB/s(36% 사용). 같은 경로의 읽기는 3.5 GB/s. 66B 배치당 KV 8.4 GiB가 캐시보다 커서 쓰기가 forward 여러 개에 걸침.
-- write-behind(SSD 티어 layer 읽는 동안 KV 쓰기 정지, host 티어 구간에 재개)는 기본값 손해를 +19%에서 +9.1%로 줄임. 쓰기를 decode forward에서 빼내 다음 배치의 prefill forward로 옮긴 것이며 쓰는 양은 그대로.
-- 한 사이클 순이익(저장 + 적중 대 재계산 2라운드)은 RAM 0.5 이상에서 1~3%. 0.3 이하는 0.
-- vLLM 스케줄러는 KV 로드가 끝난 요청부터 승격하므로 먼저 온 요청이 혼자 forward를 돌아 배치가 쪼개짐. 게이트(승격 대기)로 forward 수가 기준선으로 복귀.
-- 오프로더 버퍼를 두 세트로 두면(prefetch_step 2) prefill 계산이 전송 아래 숨어 재계산 비용이 0에 가까워지고 KV 적중이 아낄 몫이 사라짐. 16 GB에서는 배치 2와 같이 못 넣음.
-- 손대지 않은 기본값(게이트 없음, 1 MiB I/O, KV 자동)은 RAM 0.5에서 두 단계 합계 +19% 손해. 같은 조건에 게이트와 4 MiB I/O만 넣으면 −1.3%.
-- Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB) RAM 0.5 기본값, LongBench-v2 8건 × 8k 토큰: SSD 적중이 두 단계 합계 3,340 → 2,896 s(−13.3%). 저장 단계 손해 0(문서 KV 2.6 GB가 SSD 쓰기 캐시 안), 적중 단계 prefill forward 67 → 29 s. 출력 토큰열 동일.
-- 72B Bailian 32건, chunk 4096·KV 18.8k에서 정책 조합(가중치 티어 교차 배치 + prefetch_step 2, 스케줄러 게이트 2, write-behind, compute/load split, 전부 저장)이 RAM 0.5에서 3,078 s, 티어 비율을 전송 대역폭 비율에 맞춘 RAM 0.72(host 55 : SSD 25 layer)에서 2,448 s. 기준 재계산 4,350 s 대비 −44%, 기준 SSD 전부 저장 4,032 s 대비 −39%. decode forward 28.4 → 14.0 s. 가장 큰 몫은 교차 배치 + prefetch_step 2(decode forward 28.4 → 22.2 s, host 복사가 SSD 읽기 아래로 숨음), 다음이 게이트(적중 forward 67 → 50), 다음이 전부 저장. LMCache 방식 카피(host 8 GB LRU + SSD)는 같은 조건에서 SSD 전부 저장과 차이 없음.
-- 같은 72B 조건에 Bailian 트레이스 32건(프리픽스 공유 56%): 전부 저장 −7.3%. LMCache에서 옮긴 용량 정책은 상한 8 GiB(고유 KV의 37%)에서 LFU −3.5%, LRU −2.3%(역순 재방문이라 캐시보다 큰 순차 스캔, 쓰기 두 배). seen_twice admission −4.2%(첫 재사용을 잃음). 다섯 조건 모두 토큰열 동일.
-- LMCache 0.5.5 GDS L1은 이 카드에서 불성립. staging 버퍼 등록이 BAR1을 넘고 cuFileReadAsync가 적중에서 멈춤. LMCache는 저장 시점·admission·가중치 층 인식이 없어 위 문제의 설계 바깥.
+- forward 하나는 가중치 이동이다. 오프로드된 131 GiB가 매 forward GPU로 들어오며, 기본 배치(host layer 앞, SSD layer 뒤, prefetch_step 1)에서는 host 복사 5.7 s와 SSD 읽기 23.3 s가 차례로 일어나 decode forward 28.4 s.
+- 가중치 티어 교차 배치 + prefetch_step 2: host layer를 SSD layer 사이에 고르게 끼워 넣고 다음 두 layer를 동시에 가져오면 host 복사(PCIe)와 SSD 읽기(NVMe)가 같이 흘러 forward = 둘 중 긴 쪽. RAM 0.5에서 22.2 s.
+- host 비율을 전송 대역폭 비율(8.5 : 3.4)에 맞춤: RAM 0.72(host 55 : SSD 25 layer)에서 host 복사 11.3 s와 SSD 읽기 13.7 s가 같이 끝나 decode forward 14.0 s. 16 GB 링크로 131 GiB를 옮기는 하한이 11.7 s.
+- KV는 GPU에서 NVMe로 바로 저장하고 적중 시 바로 읽음. 적중이 아끼는 것은 prefill 계산뿐이며, 요청 하나의 KV 2.6 GB 쓰기가 SSD 쓰기 캐시(약 4 GB) 안에 들어가 저장 비용은 0. 스케줄러 wave gate가 적재 완료 요청을 한 forward에 묶어 적중 단계 forward 67 → 50.
+- 정책 조합(교차 배치 + prefetch_step 2 + RAM 0.72 + wave gate + write-behind + 전부 저장): Bailian 32건 두 단계 합계 4,350 → 2,448 s(−44%), LongBench 32건 12,652 → 6,527 s(−48%). 출력 토큰열은 재계산과 동일(LongBench 64건 중 1건은 근소 차 토큰 순서 뒤바뀜).
+- 이득이 없던 것: host memory를 KV에 주는 것(가중치가 SSD로 밀려 forward +2 s), SSD 용량 상한 축출(LRU/LFU, 역순 재방문에서 쓰기 2배), seen_twice admission(첫 재사용을 잃음), LMCache 방식 host 8 GB 층(SSD 전부 저장과 4 s 차이), compute/load split(적재가 재계산보다 20배 빨라 최적 k=0).
 
 #### 측정
 
-프리픽스 길이별 SSD 정당성(opt-2.7b, 단일 프로세스)
-
-| 프리픽스 | 재계산 | SSD 읽기 | CPU 읽기 |
-| --- | ---: | ---: | ---: |
-| 2,032 | 1.155 s | 0.483 s | 0.110 s |
-| 1,024 | 0.365 s | 0.256 s | 0.070 s |
-| 512 | 0.145 s | 0.146 s | 0.049 s |
-
-LEval 실제 텍스트 64문서, 재사용 라운드(W2a)
-
-| 구성 | 재사용 p50 | 재사용 p95 | cold p95 | CPU (s/런) |
-| --- | ---: | ---: | ---: | ---: |
-| 재계산 | 1.090 s | 1.161 s | 1.141 s | 5 |
-| 기존 tiering (block 16) | 0.977 s | 4.908 s | 4.474 s | 144 |
-| cuFile 지연 store | 0.637 s | 0.786 s | 1.169 s | 114 |
-| POSIX 지연 store | 0.920 s | 1.206 s | 1.168 s | 123 |
-
-OPT-66B, host memory 비율(RAM 대비), LEval 문서 8개, 프리픽스 1,920, 배치 2, 게이트 켬, 4 MiB I/O
-
-| RAM 비율 | CPU / SSD layer | forward 실측 / 모형 | 적중 라운드 | 저장 추가 | 두 라운드 합계 |
-| --- | --- | --- | --- | --- | --- |
-| 0.1 | 6 / 58 | 35.7 / 35.4 s | −4.3% | +66 s | +0.6% |
-| 0.3 | 19 / 45 | 29.8 / 29.8 s | −4.4% | +45 s | +0.1% |
-| 0.5 | 33 / 31 | 23.9 / 23.8 s | −6.1% | +28 s | −1.3% |
-| 0.6 | 39 / 25 | 21.4 / 21.3 s | −6.9% | +15 s | −2.4% |
-| 0.7 | 46 / 18 | 18.5 / 18.3 s | −7.9% | +24 s | −2.1% |
-| 0.8 | 52 / 12 | 16.1 / 15.7 s | −8.8% | +14 s | −3.2% |
-
-같은 66B RAM 0.5, 설정 차이
-
-| 조건 | 두 단계 합계(저장 + 적중 대 재계산) |
-| --- | --- |
-| 기본값(게이트 없음, 1 MiB I/O, KV 자동 10.4 GiB, gpu_util 0.85) | 1,674 → 1,992 s (+19%). forward 64 → 70, 저장 단계 prefill 32 → 41.5 s |
-| 기본값 + write-behind(cufile_fs_store_window=host, 상한 30 s) | 1,674 → 1,827 s (+9.1%). decode forward 최대 53.3 → 24.6 s, 저장 단계 prefill 41.5 → 36.5 s |
-| 게이트 + 4 MiB I/O + KV 10.4 GiB | 1,653 → 1,631 s (−1.3%) |
-
-Qwen2.5-72B-Instruct RAM 0.5, 기본값, 8건 × 8k 토큰(저장 + 적중, 재계산 대비)
-
-| 조건 | cold_fill(저장) | reverse_retrieve(적중) | 두 단계 합계 |
-| --- | --- | --- | --- |
-| 재계산 | 1,800 s | 1,539 s | 3,340 s |
-| SSD 적중 | 1,795 s | 1,101 s | 2,896 s (−13.3%) |
-| SSD 적중 + write-behind 30 s | 1,773 s | 1,076 s | 2,849 s (−14.7%) |
-
-Qwen2.5-72B RAM 0.5, 기본값, Bailian 32건 × 8k 상한(저장 + 적중, 재계산 대비). 정책은 포크 CuFileFsManager(LMCache 이식)
-
-| 조건 | 두 단계 합계 | 읽기 / 쓰기 |
-| --- | --- | --- |
-| 재계산 | 4,350 s | 0 |
-| SSD 적중, 전부 저장 | 4,032 s (−7.3%) | 20.3 / 20.6 GiB |
-| LFU 상한 8 GiB | 4,196 s (−3.5%) | 2.6 / 38.3 GiB |
-| LRU 상한 8 GiB | 4,249 s (−2.3%) | 2.2 / 37.6 GiB |
-| seen_twice admission | 4,169 s (−4.2%) | 5.9 / 20.6 GiB |
-
-Qwen2.5-72B RAM 0.5, Bailian 32건, chunk 4096·GPU KV 18.8k 고정(같은 조건 네 개)
+Qwen2.5-72B, RAM 0.5, Bailian 32건, vLLM 기본값(chunk 8192, GPU KV 자동 21.4k)
 
 | 조건 | 저장 단계 | 적중 단계 | 두 단계 합계 |
 | --- | --- | --- | --- |
-| 재계산, 교차 배치 + prefetch_step 2 | 2,000 s / 69 fwd | 1,880 s / 68 fwd | 3,880 s |
-| SSD 전부 저장, 기본 배치 | 2,630 s / 69 fwd | 1,910 s / 67 fwd | 4,541 s |
-| LMCache 카피(host 8 GB LRU + SSD) | 2,630 s / 69 fwd | 1,907 s / 67 fwd | 4,537 s |
-| 정책 조합(교차 배치 + prefetch_step 2 + 게이트 2 + write-behind + split + 전부 저장) | 1,963 s / 69 fwd | 1,115 s / 50 fwd | 3,078 s |
-| 재계산, 교차 배치 + prefetch_step 2, RAM 0.72 | 1,910 s / 69 fwd | 1,657 s / 68 fwd | 3,567 s |
-| 정책 조합, RAM 0.72 | 1,635 s / 69 fwd | 812 s / 50 fwd | 2,448 s |
+| 재계산 (기준) | 2,280 s / 54 fwd | 2,070 s / 53 fwd | 4,350 s |
+| SSD 전부 저장 | 2,355 s / 59 fwd | 1,677 s / 59 fwd | 4,032 s (−7.3%) |
+| LFU 8 GiB 상한 | 2,262 s | 1,934 s | 4,196 s |
+| LRU 8 GiB 상한 | 2,260 s | 1,989 s | 4,249 s |
+| seen_twice admission | 2,251 s | 1,919 s | 4,169 s |
+| host memory 8 GB를 KV에 (가중치 54.7 GB) | 2,374 s | 2,104 s | 4,478 s (+2.9%) |
 
-이중 버퍼(66B RAM 0.7, 배치 1, 재계산)
+Qwen2.5-72B, Bailian 32건, chunk 4096·GPU KV 18.8k 고정(prefetch_step 2가 들어가는 조건)
 
-| prefetch_step | prefill forward | decode forward | 8요청 wall clock |
-| --- | ---: | ---: | ---: |
-| 1 | 25.5 s | 18.3 s | 1,233 s |
-| 2 | 17.8 s | 17.6 s | 1,128 s |
+| 조건 | 저장 단계 | 적중 단계 | 두 단계 합계 | decode forward |
+| --- | --- | --- | --- | --- |
+| 재계산, 교차 배치 + prefetch_step 2, RAM 0.5 | 2,000 s / 69 fwd | 1,880 s / 68 fwd | 3,880 s | 22.2 s |
+| SSD 전부 저장, 기본 배치 | 2,630 s / 69 fwd | 1,910 s / 67 fwd | 4,541 s | 28.3 s |
+| LMCache 방식 카피(host 8 GB LRU + SSD write-through) | 2,630 s / 69 fwd | 1,907 s / 67 fwd | 4,537 s | 28.3 s |
+| 정책 조합, RAM 0.5 | 1,963 s / 69 fwd | 1,115 s / 50 fwd | 3,078 s | 22.1 s |
+| 재계산, 교차 배치 + prefetch_step 2, RAM 0.72 | 1,910 s / 69 fwd | 1,657 s / 68 fwd | 3,567 s | 14.7 s |
+| 정책 조합, RAM 0.72 | 1,635 s / 69 fwd | 812 s / 50 fwd | 2,448 s | 14.0 s |
 
-작은 모델(6.7b, 13b, 30b × host 비율 5점)과 09의 배치·정책·양자화 결과, nsys 관측은 docs/detailed-log.md.
+Qwen2.5-72B, LongBench-v2 32건(실제 문서, 8k), chunk 4096·KV 18.8k, RAM 0.72
+
+| 조건 | 저장 단계 | 적중 단계 | 두 단계 합계 | decode forward |
+| --- | --- | --- | --- | --- |
+| 재계산, 기본 배치, prefetch_step 1 | 6,446 s / 161 fwd | 6,206 s / 159 fwd | 12,652 s | 21.5 s |
+| 정책 조합 | 4,686 s / 161 fwd | 1,841 s / 128 fwd | 6,527 s (−48%) | 14.0 s |
+
+전송 대역폭(experiments/12-channels, 4 GiB 버퍼)
+
+| 경로 | 단독 | 동시 실행 |
+| --- | --- | --- |
+| host→GPU pinned | 12.3 GB/s | SSD 읽기와 같이 쓰면 8.0~8.5 GB/s(같은 PCIe 링크를 bounce가 공유) |
+| SSD→GPU cuFile | 2.9~3.6 GB/s | 유지 |
+| SSD 읽기 + 쓰기 | | 읽기 0.28~0.54배, 쓰기 0.33배 |
+| GPU 계산 | 69 TFLOPS | 어느 전송과도 독립 |
+
+Qwen2.5-3B compute/load split parameter sweep(적중 단계 wall clock, s): 같은 재계산 비율 k에서 겹침(split)이 직렬(serial)보다 8~16 s 빠르나 최적은 k=0. 표는 docs/detailed-log.md.
 
 #### 구현
 
 | 위치 | 내용 |
 | --- | --- |
-| 포크 offloader/prefetch.py, ssd_tier.py | 가중치 3단 스트리밍(GPU 정적 버퍼, pinned host, SSD cuFile). 정확 pinned 등록(VLLM_OFFLOAD_PIN_EXACT), 등록 총량 상한(VLLM_OFFLOAD_SSD_REGISTER_MAX_MB), cuFile 캐시 워밍업, SSD 창 신호(IoWindow) |
-| 포크 v1/core/sched/scheduler.py | 승격 대기 게이트 VLLM_KV_LOAD_WAVE_GATE(1: 로드 완료 요청, 2: 신규 요청도), VLLM_KV_LOAD_WAVE_WAIT_S |
-| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec. manager에 용량 상한·LRU/LFU 축출·seen_twice admission(LMCache 정책 이식), write-behind. GPU KV 블록을 cuFile로 파일에 직접 저장·로드하는 C++ backend. 쓰기 일시정지(cufile_fs_store_window=host), admission(cufile_fs_admission=all/never/profile). 출력이 재계산과 동일함을 확인 |
-| lib/obs | 관측 계층. host 지표, nvidia-fs·프로세스·캐시 파일 1초 샘플, 이벤트 jsonl(wall과 monotonic), 환경 기록, 용량 검사, nsys 래퍼, 요약 |
-| experiments/11-observability/run_obs.py | cold_fill → settle → reverse_retrieve 러너. kv-transport cufile/none/lmcache, 기본값 런(--pure), 출력 토큰열 기록 |
-| tools/compare_results.py, baseline_table.py | 전 결과를 고정비 모형과 대조, 기준 런 대비 변화율, 순이익 표 |
-| lib/expfs.py | 01~10 결과 재현용 파이썬 backend. 새 실험에는 쓰지 않음 |
+| 포크 model_executor/offloader/prefetch.py, ssd_tier.py | 가중치 3단 스트리밍(GPU 정적 버퍼 prefetch_step, pinned host 티어, SSD 티어 cuFile). VLLM_OFFLOAD_TIER_LAYOUT=interleave(교차 배치), IoWindow(SSD 읽기 진행 신호) |
+| 포크 v1/core/sched/scheduler.py | VLLM_KV_LOAD_WAVE_GATE(적재 완료 요청 묶기), compute/load split의 앞 계산·뒤 적재 동시 진행, 비동기 적재 admit의 head-of-line 교착 수정 |
+| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/ | CuFileFsSpec: GPU KV 블록 ↔ 파일 cuFile C++ backend(읽기·쓰기 스레드, 쓰기·읽기 정지/재개), manager(admission all/seen_twice/profile, 용량 상한 LRU/LFU, write-behind cufile_fs_store_window) |
+| 포크 v1/kv_offload/hybrid/ | HybridSpec: pinned host KV 층 + GDS SSD 층(write-through), LMCache 방식 비교용 |
+| 포크 v1/kv_offload/split_policy.py | VLLM_KV_SPLIT off/fixed/serial/model |
+| lib/obs | 관측: hostmon(nvidia-smi, vmstat, diskstats 1 s, bpftrace 블록 I/O), observe(nvidia-fs 카운터), events, run_nsys(gds trace, 캡처 구간, nsys.done), memguard |
+| experiments/11-observability/run_obs.py | 러너: cold_fill → settle → reverse_retrieve, 또는 --mode stream(트레이스 시간 순서 open-loop). 입력 longbench/bailian/leval. 산출물 result.json, steps.jsonl, requests.jsonl, events.jsonl |
+| experiments/11-observability/campaign_qwen72.sh, campaign_grid3b.sh | 조건 조합 캠페인(RATIOS, CONDS, LAYOUT, PSTEP, GATE, SPLIT, MNBT, KVB, MODE, NSYS) |
+| experiments/12-channels/bench_channels.py | 전송 대역폭 단독·동시 실행 측정 |
+| tools/ | compare_results.py(고정비 모형 대조), qwen72_policy_table.py, grid3b_table.py, nsys_overlap.py(forward 안 겹침 분석) |
 
-#### 한계와 미해결
+#### 한계
 
-- 카드 한 장, SSD 한 장(OS와 공유), BAR1 256 MiB. KV 텐서 등록이 안 되어 KV 경로는 cuFile bounce 두 홉. 데이터센터 GPU에서는 같은 코드가 등록 직접 DMA.
-- 이중 버퍼 조건에서 KV 오프로드 손익, write-behind와 게이트를 같이 켠 조합, host KV 층과 host 배분(layer 1개 = forward당 0.43 s 환율)은 미측정. OPT-66B 가중치는 삭제해 66B 추가 런은 없음.
-- write-behind가 보는 SSD 구간 표시는 prefetch 발행 시점이라 실제 SSD 읽기보다 약 5.5 s 앞섬(72B nsys). 실제 읽기 시작에 맞추는 수정은 미적용.
-- 게이트의 일반성은 forward가 비싼 조건에서만 검증. GPU 상주 모델에서는 이득이 ms 단위.
-- 다음 모델은 Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB). 입력은 LongBench-v2 32건과 Bailian 트레이스. SSD 쓰기 상한 때문에 디스크는 20% 이상 비워 둠.
+- 카드 한 장, SSD 한 장(OS와 공유), BAR1 256 MiB. KV·가중치 버퍼 등록이 안 되어 cuFile은 bounce 두 홉이고 SSD 읽기가 GPU PCIe 링크를 같이 씀. 등록 직접 DMA는 BAR1 8 GiB 이상(사실상 VRAM 전체) 카드에서만.
+- prefetch_step 2의 정적 버퍼 1.6 GiB 때문에 chunk 8192가 안 들어가 chunk 4096·GPU KV 18.8k로 맞춤. forward 수가 기준선보다 많음.
+- 재방문이 역순인 2단계 워크로드는 저장소 적중을 최대로 만드는 조건. 트레이스 시간 순서 리플레이(--mode stream)로 재측정 중.
+- 출력 토큰열 검사는 Qwen + chunked prefill에서 근소 차 토큰이 뒤바뀌는 경우가 있어 완전 일치를 기준으로 못 씀.
 
 #### Directory
 
 | 경로 | 내용 |
 | --- | --- |
 | `env.sh` | 공통 실행 환경 |
-| `lib/` | obs(관측 계층), expfs.py(옛 backend), gdslib.py, scheduler.py, policies.py, value_admission.py, snapshot.py |
-| `harness/` | run_bench.py |
-| `experiments/01-feasibility/` | 개통, 프리픽스 정당성, cuFile 마이크로벤치, A~E 비교군 |
-| `experiments/02-bailian/` | Bailian coder trace 리플레이, staging과 비차단 admission |
-| `experiments/03-leval/` | LEval 실제 텍스트, I/O 스케줄러, open-loop, 혼합 admission |
-| `experiments/04-admission/` | Prefix Value Admission 시뮬레이션과 게이트 |
-| `experiments/05-upstream/` | 종료 race와 /dev/shm 누출 upstream 검증 |
-| `experiments/06-weight-offload/` | 66B 가중치 3단 스트리밍, cuFile 대 POSIX, prefetch, host 비율 |
-| `experiments/07-combined/` | 가중치 스트리밍 + KV SSD 결합, pinned 정확 등록, 워치독 |
-| `experiments/08-cufile-bounce/` | cuFile 미등록 경로의 I/O 크기 |
-| `experiments/09-kv-policy/` | 배치 구성, 구간 계측, 게이트 A/B, 저장 정책, int8 |
-| `experiments/10-model-host-baseline/` | 모델 크기 × host 비율 기준표 |
-| `experiments/11-observability/` | 관측 계층 러너, 기본값 런, LMCache 비교 시도 |
-| `tools/` | compare_results.py, baseline_table.py |
-| `results/` | 원자료 |
-| `docs/detailed-log.md` | 설계 근거, 전체 측정표, 정정 기록 |
-
-작업 규칙은 CLAUDE.md와 .claude/skills/compare-results/SKILL.md. 상세는 [docs/detailed-log.md](docs/detailed-log.md).
+| `lib/obs/` | 관측 계층 |
+| `experiments/11-observability/` | 러너, 캠페인, 입력 데이터(data/) |
+| `experiments/12-channels/` | 전송 대역폭 측정 |
+| `tools/` | 결과 대조·표 |
+| `results/qwen72b/`, `results/grid3b/`, `results/channels/` | 결과(result.json, steps, requests, events, nsys stats). nsys 원본과 티어·KV 파일은 git 제외 |
+| `docs/detailed-log.md` | 상세 기록 |
+| git 태그 `archive/opt-era-2026-09-18` | 이전 세대(OPT, expfs, 01~10 실험) 전체 |

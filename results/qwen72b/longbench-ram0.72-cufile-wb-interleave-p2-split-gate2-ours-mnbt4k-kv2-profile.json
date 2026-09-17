@@ -1,0 +1,914 @@
+{
+ "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/longbench-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2",
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "prompt_source": "longbench",
+ "kv_transport": "cufile",
+ "n_docs": 32,
+ "input_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+ "requests": [
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-0",
+   "doc": 0,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-1",
+   "doc": 1,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-2",
+   "doc": 2,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-3",
+   "doc": 3,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-4",
+   "doc": 4,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-5",
+   "doc": 5,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-6",
+   "doc": 6,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-7",
+   "doc": 7,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-8",
+   "doc": 8,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-9",
+   "doc": 9,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-10",
+   "doc": 10,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-11",
+   "doc": 11,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-12",
+   "doc": 12,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-13",
+   "doc": 13,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-14",
+   "doc": 14,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-15",
+   "doc": 15,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-16",
+   "doc": 16,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-17",
+   "doc": 17,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-18",
+   "doc": 18,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-19",
+   "doc": 19,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-20",
+   "doc": 20,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-21",
+   "doc": 21,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-22",
+   "doc": 22,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-23",
+   "doc": 23,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-24",
+   "doc": 24,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-25",
+   "doc": 25,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-26",
+   "doc": 26,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-27",
+   "doc": 27,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-28",
+   "doc": 28,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-29",
+   "doc": 29,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-30",
+   "doc": 30,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-31",
+   "doc": 31,
+   "q": 0,
+   "tokens": 8128,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-31",
+   "doc": 31,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-30",
+   "doc": 30,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-29",
+   "doc": 29,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 5568,
+   "lookups": 10
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-28",
+   "doc": 28,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 10
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-27",
+   "doc": 27,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 155
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-26",
+   "doc": 26,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 155
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-25",
+   "doc": 25,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 329
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-24",
+   "doc": 24,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 329
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-23",
+   "doc": 23,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 514
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-22",
+   "doc": 22,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 514
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-21",
+   "doc": 21,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 712
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-20",
+   "doc": 20,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 712
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-19",
+   "doc": 19,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 925
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-18",
+   "doc": 18,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 925
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-17",
+   "doc": 17,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1169
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-16",
+   "doc": 16,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1169
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-15",
+   "doc": 15,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1434
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-14",
+   "doc": 14,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1434
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-13",
+   "doc": 13,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1734
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-12",
+   "doc": 12,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 1734
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-11",
+   "doc": 11,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 2091
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-10",
+   "doc": 10,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 2091
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-9",
+   "doc": 9,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 2497
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-8",
+   "doc": 8,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 2497
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-7",
+   "doc": 7,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 3001
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-6",
+   "doc": 6,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 3001
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-5",
+   "doc": 5,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 3666
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-4",
+   "doc": 4,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 3666
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-3",
+   "doc": 3,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 4602
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-2",
+   "doc": 2,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 4602
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-1",
+   "doc": 1,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 6274
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-0",
+   "doc": 0,
+   "q": 1,
+   "tokens": 8131,
+   "matched": 8064,
+   "lookups": 6274
+  }
+ ],
+ "docs": [
+  {
+   "doc": 0,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 1,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 2,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 3,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 4,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 5,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 6,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 7,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 8,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 9,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 10,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 11,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 12,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 13,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 14,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 15,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 16,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 17,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 18,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 19,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 20,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 21,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 22,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 23,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 24,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 25,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 26,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 27,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 28,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 8064
+  },
+  {
+   "doc": 29,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 5568
+  },
+  {
+   "doc": 30,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  },
+  {
+   "doc": 31,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8128,
+   "matched_total": 0
+  }
+ ],
+ "totals": {
+  "requests": 64,
+  "prompt_tokens": 520288,
+  "matched_tokens": 239424,
+  "reused_docs": 32
+ }
+}

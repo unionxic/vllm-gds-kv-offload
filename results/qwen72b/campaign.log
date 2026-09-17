@@ -171,3 +171,26 @@
 [09-17 14:39:49] done  bailian-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2-final-nsys rc=0 (gpu_util 0.85)
 [09-17 14:39:49] == qwen72b 종료
 [09-17 14:39:49] == final-nsys 종료
+[09-17 16:25:57] == qwen72b: RAM 0.72 × (none), docs 32, decode 8, NSYS=0
+[09-17 16:25:57] start longbench-ram0.72-none-mnbt4k-kv2
+[09-17 20:04:58] done  longbench-ram0.72-none-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 20:04:58] == qwen72b: RAM 0.72 × (cufile-wb), docs 32, decode 8, NSYS=0, MODE=phases
+[09-17 20:04:58] start longbench-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2
+[09-17 22:01:13] done  longbench-ram0.72-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 22:01:13] == qwen72b 종료
+[09-17 22:01:13] == longbench 종료
+[09-17 22:09:28] == qwen72b: RAM 0.5 × (none), docs 128, decode 8, NSYS=0, MODE=stream-stream-ts450-c4
+[09-17 22:09:28] start bailian-ram0.5-none-stream-ts450-c4-vllm-default
+[09-17 22:19:57] OOM bailian-ram0.5-none-stream-ts450-c4-vllm-default (gpu_util 0.9) → 재시도
+[09-17 22:33:19] OOM bailian-ram0.5-none-stream-ts450-c4-vllm-default (gpu_util 0.85) → 재시도
+[09-17 22:33:19] FAILED bailian-ram0.5-none-stream-ts450-c4-vllm-default rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-stream-ts450-c4-vllm-default.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-stream-ts450-c4-vllm-default.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 460.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 290.12 MiB is free. Including non-PyTorch memory, this process has 15.13 GiB memory in use. Of the allocated memory 14.28 GiB is allocated by PyTorch, and 697.93 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-17 22:33:19] == qwen72b 종료
+[09-17 22:33:19] == qwen72b: RAM 0.72 × (cufile-wb), docs 128, decode 8, NSYS=0, MODE=stream-stream-ts450-c4
+[09-17 22:33:19] start bailian-ram0.72-cufile-wb-interleave-p2-split-stream-ts450-c4-ours
+[09-18 00:37:56] FAILED bailian-ram0.72-cufile-wb-interleave-p2-split-stream-ts450-c4-ours rc=134
+[09-18 00:37:56] == qwen72b 종료
+[09-18 00:37:56] == stream 종료
+[09-18 00:38:10] == qwen72b: RAM 0.5 × (none), docs 128, decode 8, NSYS=0, MODE=stream-stream-ts450-c4
+[09-18 00:38:10] start bailian-ram0.5-none-stream-ts450-c4-vllm-default

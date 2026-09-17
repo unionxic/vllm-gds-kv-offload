@@ -1,0 +1,1106 @@
+{
+ "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-cufile-mnbt4k-kv2",
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "prompt_source": "bailian",
+ "kv_transport": "cufile",
+ "n_docs": 32,
+ "input_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../02-bailian/replay600/trace/qwen_coder.jsonl",
+ "requests": [
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-0",
+   "doc": 0,
+   "q": 0,
+   "tokens": 6536,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-1",
+   "doc": 1,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-2",
+   "doc": 2,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-3",
+   "doc": 3,
+   "q": 0,
+   "tokens": 312,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-4",
+   "doc": 4,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-5",
+   "doc": 5,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 8
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-6",
+   "doc": 6,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-7",
+   "doc": 7,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 10
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-8",
+   "doc": 8,
+   "q": 0,
+   "tokens": 440,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-9",
+   "doc": 9,
+   "q": 0,
+   "tokens": 328,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-10",
+   "doc": 10,
+   "q": 0,
+   "tokens": 1416,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-11",
+   "doc": 11,
+   "q": 0,
+   "tokens": 3016,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-12",
+   "doc": 12,
+   "q": 0,
+   "tokens": 1800,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-15",
+   "doc": 15,
+   "q": 0,
+   "tokens": 1032,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-16",
+   "doc": 16,
+   "q": 0,
+   "tokens": 2504,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-17",
+   "doc": 17,
+   "q": 0,
+   "tokens": 248,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-19",
+   "doc": 19,
+   "q": 0,
+   "tokens": 5176,
+   "matched": 0,
+   "lookups": 2
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-13",
+   "doc": 13,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 912,
+   "lookups": 9
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-20",
+   "doc": 20,
+   "q": 0,
+   "tokens": 584,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-21",
+   "doc": 21,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-14",
+   "doc": 14,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 688,
+   "lookups": 3
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-18",
+   "doc": 18,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 5
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-23",
+   "doc": 23,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-26",
+   "doc": 26,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-27",
+   "doc": 27,
+   "q": 0,
+   "tokens": 2136,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-28",
+   "doc": 28,
+   "q": 0,
+   "tokens": 1880,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-22",
+   "doc": 22,
+   "q": 0,
+   "tokens": 6840,
+   "matched": 4352,
+   "lookups": 10
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-24",
+   "doc": 24,
+   "q": 0,
+   "tokens": 744,
+   "matched": 240,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-25",
+   "doc": 25,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 1248,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-29",
+   "doc": 29,
+   "q": 0,
+   "tokens": 5256,
+   "matched": 0,
+   "lookups": 11
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-31",
+   "doc": 31,
+   "q": 0,
+   "tokens": 424,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "cold_fill",
+   "rid": "cold_fill-30",
+   "doc": 30,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 944,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-31",
+   "doc": 31,
+   "q": 1,
+   "tokens": 424,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-30",
+   "doc": 30,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-29",
+   "doc": 29,
+   "q": 1,
+   "tokens": 5256,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-28",
+   "doc": 28,
+   "q": 1,
+   "tokens": 1880,
+   "matched": 1744,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-27",
+   "doc": 27,
+   "q": 1,
+   "tokens": 2136,
+   "matched": 2096,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-26",
+   "doc": 26,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 6880,
+   "lookups": 10
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-24",
+   "doc": 24,
+   "q": 1,
+   "tokens": 744,
+   "matched": 688,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-23",
+   "doc": 23,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-25",
+   "doc": 25,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 4704,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-22",
+   "doc": 22,
+   "q": 1,
+   "tokens": 6840,
+   "matched": 6784,
+   "lookups": 12
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-21",
+   "doc": 21,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 848,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-20",
+   "doc": 20,
+   "q": 1,
+   "tokens": 584,
+   "matched": 576,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-13",
+   "doc": 13,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-19",
+   "doc": 19,
+   "q": 1,
+   "tokens": 5176,
+   "matched": 5120,
+   "lookups": 10
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-18",
+   "doc": 18,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 688,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-17",
+   "doc": 17,
+   "q": 1,
+   "tokens": 248,
+   "matched": 176,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-16",
+   "doc": 16,
+   "q": 1,
+   "tokens": 2504,
+   "matched": 2384,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-15",
+   "doc": 15,
+   "q": 1,
+   "tokens": 1032,
+   "matched": 1008,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-14",
+   "doc": 14,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-12",
+   "doc": 12,
+   "q": 1,
+   "tokens": 1800,
+   "matched": 1792,
+   "lookups": 12
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-11",
+   "doc": 11,
+   "q": 1,
+   "tokens": 3016,
+   "matched": 2992,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-10",
+   "doc": 10,
+   "q": 1,
+   "tokens": 1416,
+   "matched": 1392,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-9",
+   "doc": 9,
+   "q": 1,
+   "tokens": 328,
+   "matched": 208,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-8",
+   "doc": 8,
+   "q": 1,
+   "tokens": 440,
+   "matched": 272,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-7",
+   "doc": 7,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 4704,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-6",
+   "doc": 6,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 912,
+   "lookups": 244
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-4",
+   "doc": 4,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-5",
+   "doc": 5,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 8048,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-3",
+   "doc": 3,
+   "q": 1,
+   "tokens": 312,
+   "matched": 240,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-2",
+   "doc": 2,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 688,
+   "lookups": 1
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-1",
+   "doc": 1,
+   "q": 1,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 3
+  },
+  {
+   "phase": "reverse_retrieve",
+   "rid": "reverse_retrieve-0",
+   "doc": 0,
+   "q": 1,
+   "tokens": 6536,
+   "matched": 6528,
+   "lookups": 12
+  }
+ ],
+ "docs": [
+  {
+   "doc": 0,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 6536,
+   "matched_total": 6528,
+   "meta": {
+    "chat_id": 29560,
+    "turn": 1,
+    "input_length": 6521,
+    "n_hash": 408
+   }
+  },
+  {
+   "doc": 1,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29561,
+    "turn": 1,
+    "input_length": 12627,
+    "n_hash": 790
+   }
+  },
+  {
+   "doc": 2,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 688,
+   "meta": {
+    "chat_id": 29562,
+    "turn": 1,
+    "input_length": 13443,
+    "n_hash": 841
+   }
+  },
+  {
+   "doc": 3,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 312,
+   "matched_total": 240,
+   "meta": {
+    "chat_id": 29563,
+    "turn": 1,
+    "input_length": 297,
+    "n_hash": 19
+   }
+  },
+  {
+   "doc": 4,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29564,
+    "turn": 1,
+    "input_length": 12092,
+    "n_hash": 756
+   }
+  },
+  {
+   "doc": 5,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 8048,
+   "meta": {
+    "chat_id": 29565,
+    "turn": 2,
+    "input_length": 12480,
+    "n_hash": 780
+   }
+  },
+  {
+   "doc": 6,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 912,
+   "meta": {
+    "chat_id": 29566,
+    "turn": 1,
+    "input_length": 11834,
+    "n_hash": 740
+   }
+  },
+  {
+   "doc": 7,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 4704,
+   "meta": {
+    "chat_id": 29567,
+    "turn": 1,
+    "input_length": 13040,
+    "n_hash": 815
+   }
+  },
+  {
+   "doc": 8,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 440,
+   "matched_total": 272,
+   "meta": {
+    "chat_id": 29568,
+    "turn": 1,
+    "input_length": 419,
+    "n_hash": 27
+   }
+  },
+  {
+   "doc": 9,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 328,
+   "matched_total": 208,
+   "meta": {
+    "chat_id": 29569,
+    "turn": 1,
+    "input_length": 306,
+    "n_hash": 20
+   }
+  },
+  {
+   "doc": 10,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 1416,
+   "matched_total": 1392,
+   "meta": {
+    "chat_id": 29570,
+    "turn": 1,
+    "input_length": 1395,
+    "n_hash": 88
+   }
+  },
+  {
+   "doc": 11,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 3016,
+   "matched_total": 2992,
+   "meta": {
+    "chat_id": 29571,
+    "turn": 4,
+    "input_length": 2995,
+    "n_hash": 188
+   }
+  },
+  {
+   "doc": 12,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 1800,
+   "matched_total": 1792,
+   "meta": {
+    "chat_id": 29572,
+    "turn": 1,
+    "input_length": 1789,
+    "n_hash": 112
+   }
+  },
+  {
+   "doc": 13,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 912,
+   "meta": {
+    "chat_id": 29573,
+    "turn": 1,
+    "input_length": 12527,
+    "n_hash": 783
+   }
+  },
+  {
+   "doc": 14,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 688,
+   "meta": {
+    "chat_id": 29574,
+    "turn": 1,
+    "input_length": 12897,
+    "n_hash": 807
+   }
+  },
+  {
+   "doc": 15,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 1032,
+   "matched_total": 1008,
+   "meta": {
+    "chat_id": 29575,
+    "turn": 1,
+    "input_length": 1020,
+    "n_hash": 64
+   }
+  },
+  {
+   "doc": 16,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 2504,
+   "matched_total": 2384,
+   "meta": {
+    "chat_id": 29576,
+    "turn": 2,
+    "input_length": 2491,
+    "n_hash": 156
+   }
+  },
+  {
+   "doc": 17,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 248,
+   "matched_total": 176,
+   "meta": {
+    "chat_id": 29577,
+    "turn": 1,
+    "input_length": 227,
+    "n_hash": 15
+   }
+  },
+  {
+   "doc": 18,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 688,
+   "meta": {
+    "chat_id": 29578,
+    "turn": 1,
+    "input_length": 13800,
+    "n_hash": 863
+   }
+  },
+  {
+   "doc": 19,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 5176,
+   "matched_total": 5120,
+   "meta": {
+    "chat_id": 29579,
+    "turn": 1,
+    "input_length": 5164,
+    "n_hash": 323
+   }
+  },
+  {
+   "doc": 20,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 584,
+   "matched_total": 576,
+   "meta": {
+    "chat_id": 29580,
+    "turn": 1,
+    "input_length": 569,
+    "n_hash": 36
+   }
+  },
+  {
+   "doc": 21,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 848,
+   "meta": {
+    "chat_id": 29581,
+    "turn": 1,
+    "input_length": 12250,
+    "n_hash": 766
+   }
+  },
+  {
+   "doc": 22,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 6840,
+   "matched_total": 11136,
+   "meta": {
+    "chat_id": 29582,
+    "turn": 1,
+    "input_length": 6825,
+    "n_hash": 427
+   }
+  },
+  {
+   "doc": 23,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29583,
+    "turn": 1,
+    "input_length": 12831,
+    "n_hash": 802
+   }
+  },
+  {
+   "doc": 24,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 744,
+   "matched_total": 928,
+   "meta": {
+    "chat_id": 29584,
+    "turn": 1,
+    "input_length": 733,
+    "n_hash": 46
+   }
+  },
+  {
+   "doc": 25,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 5952,
+   "meta": {
+    "chat_id": 29585,
+    "turn": 1,
+    "input_length": 12922,
+    "n_hash": 808
+   }
+  },
+  {
+   "doc": 26,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 6880,
+   "meta": {
+    "chat_id": 29586,
+    "turn": 1,
+    "input_length": 12572,
+    "n_hash": 786
+   }
+  },
+  {
+   "doc": 27,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 2136,
+   "matched_total": 2096,
+   "meta": {
+    "chat_id": 29587,
+    "turn": 7,
+    "input_length": 2118,
+    "n_hash": 133
+   }
+  },
+  {
+   "doc": 28,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 1880,
+   "matched_total": 1744,
+   "meta": {
+    "chat_id": 29588,
+    "turn": 1,
+    "input_length": 1871,
+    "n_hash": 117
+   }
+  },
+  {
+   "doc": 29,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 5256,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29589,
+    "turn": 1,
+    "input_length": 5248,
+    "n_hash": 328
+   }
+  },
+  {
+   "doc": 30,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 8120,
+   "matched_total": 944,
+   "meta": {
+    "chat_id": 29590,
+    "turn": 1,
+    "input_length": 10105,
+    "n_hash": 632
+   }
+  },
+  {
+   "doc": 31,
+   "reuse": 2,
+   "phases": [
+    "cold_fill",
+    "reverse_retrieve"
+   ],
+   "tokens": 424,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29591,
+    "turn": 1,
+    "input_length": 407,
+    "n_hash": 26
+   }
+  }
+ ],
+ "totals": {
+  "requests": 64,
+  "prompt_tokens": 308704,
+  "matched_tokens": 69856,
+  "reused_docs": 32
+ }
+}
