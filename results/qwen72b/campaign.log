@@ -124,3 +124,31 @@
 [09-16 21:26:22] done  bailian-ram0.5-hybrid-lmcache-mnbt2k-kv2-nsys8gb-lru-host_first rc=0 (gpu_util 0.85)
 [09-16 21:26:22] == qwen72b 종료
 [09-16 21:26:22] == night policy sets 종료
+[09-16 22:27:29] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 22:27:29] start bailian-ram0.5-none-interleave-p2-kv2
+[09-16 22:38:14] OOM bailian-ram0.5-none-interleave-p2-kv2 (gpu_util 0.85) → 재시도
+[09-16 22:48:14] OOM bailian-ram0.5-none-interleave-p2-kv2 (gpu_util 0.8) → 재시도
+[09-16 22:57:51] OOM bailian-ram0.5-none-interleave-p2-kv2 (gpu_util 0.75) → 재시도
+[09-16 22:57:51] FAILED bailian-ram0.5-none-interleave-p2-kv2 rc=1
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-kv2.log:[rank0]: Traceback (most recent call last):
+/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-interleave-p2-kv2.log:[rank0]: torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 924.00 MiB. GPU 0 has a total capacity of 15.55 GiB of which 880.12 MiB is free. Including non-PyTorch memory, this process has 14.56 GiB memory in use. Of the allocated memory 14.11 GiB is allocated by PyTorch, and 284.32 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+[09-16 22:57:51] == qwen72b 종료
+[09-16 22:57:51] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=0
+[09-16 22:57:51] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-kv2
+[09-16 22:59:06] == qwen72b: RAM 0.5 × (none), docs 32, decode 8, NSYS=0
+[09-16 22:59:06] start bailian-ram0.5-none-interleave-p2-mnbt4k-kv2
+[09-17 00:14:06] done  bailian-ram0.5-none-interleave-p2-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 00:14:06] == qwen72b 종료
+[09-17 00:14:06] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=0
+[09-17 00:14:06] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2
+[09-17 06:26:29] done  bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 06:26:29] == qwen72b 종료
+[09-17 06:26:29] == qwen72b: RAM 0.5 × (cufile), docs 32, decode 8, NSYS=0
+[09-17 06:26:29] start bailian-ram0.5-cufile-mnbt4k-kv2
+[09-17 07:52:49] done  bailian-ram0.5-cufile-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 07:52:49] == qwen72b 종료
+[09-17 07:52:49] == qwen72b: RAM 0.5 × (hybrid), docs 32, decode 8, NSYS=0
+[09-17 07:52:49] start bailian-ram0.5-hybrid-lmcache-mnbt4k-kv28gb-lru-host_first
+[09-17 09:19:04] done  bailian-ram0.5-hybrid-lmcache-mnbt4k-kv28gb-lru-host_first rc=0 (gpu_util 0.85)
+[09-17 09:19:04] == qwen72b 종료
+[09-17 09:19:04] == night2 종료
