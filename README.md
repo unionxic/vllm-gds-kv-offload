@@ -30,6 +30,7 @@
 - 오프로더 버퍼를 두 세트로 두면(prefetch_step 2) prefill 계산이 전송 아래 숨어 재계산 비용이 0에 가까워지고 KV 적중이 아낄 몫이 사라짐. 16 GB에서는 배치 2와 같이 못 넣음.
 - 손대지 않은 기본값(게이트 없음, 1 MiB I/O, KV 자동)은 RAM 0.5에서 두 단계 합계 +19% 손해. 같은 조건에 게이트와 4 MiB I/O만 넣으면 −1.3%.
 - Qwen2.5-72B-Instruct(GQA, 토큰당 KV 0.33 MB) RAM 0.5 기본값, LongBench-v2 8건 × 8k 토큰: SSD 적중이 두 단계 합계 3,340 → 2,896 s(−13.3%). 저장 단계 손해 0(문서 KV 2.6 GB가 SSD 쓰기 캐시 안), 적중 단계 prefill forward 67 → 29 s. 출력 토큰열 동일.
+- 72B RAM 0.5, Bailian 32건, chunk 4096·KV 18.8k에서 정책 조합(가중치 티어 교차 배치 + prefetch_step 2, 스케줄러 게이트 2, write-behind, compute/load split, 전부 저장)이 두 단계 합계 3,078 s. 기준 재계산 4,350 s 대비 −29%, 기준 SSD 전부 저장 4,032 s 대비 −24%. 가장 큰 몫은 교차 배치 + prefetch_step 2(decode forward 28.4 → 22.2 s, host 복사가 SSD 읽기 아래로 숨음), 다음이 게이트(적중 forward 67 → 50), 다음이 전부 저장. LMCache 방식 카피(host 8 GB LRU + SSD)는 같은 조건에서 SSD 전부 저장과 차이 없음.
 - 같은 72B 조건에 Bailian 트레이스 32건(프리픽스 공유 56%): 전부 저장 −7.3%. LMCache에서 옮긴 용량 정책은 상한 8 GiB(고유 KV의 37%)에서 LFU −3.5%, LRU −2.3%(역순 재방문이라 캐시보다 큰 순차 스캔, 쓰기 두 배). seen_twice admission −4.2%(첫 재사용을 잃음). 다섯 조건 모두 토큰열 동일.
 - LMCache 0.5.5 GDS L1은 이 카드에서 불성립. staging 버퍼 등록이 BAR1을 넘고 cuFileReadAsync가 적중에서 멈춤. LMCache는 저장 시점·admission·가중치 층 인식이 없어 위 문제의 설계 바깥.
 
@@ -88,6 +89,15 @@ Qwen2.5-72B RAM 0.5, 기본값, Bailian 32건 × 8k 상한(저장 + 적중, 재�
 | LFU 상한 8 GiB | 4,196 s (−3.5%) | 2.6 / 38.3 GiB |
 | LRU 상한 8 GiB | 4,249 s (−2.3%) | 2.2 / 37.6 GiB |
 | seen_twice admission | 4,169 s (−4.2%) | 5.9 / 20.6 GiB |
+
+Qwen2.5-72B RAM 0.5, Bailian 32건, chunk 4096·GPU KV 18.8k 고정(같은 조건 네 개)
+
+| 조건 | 저장 단계 | 적중 단계 | 두 단계 합계 |
+| --- | --- | --- | --- |
+| 재계산, 교차 배치 + prefetch_step 2 | 2,000 s / 69 fwd | 1,880 s / 68 fwd | 3,880 s |
+| SSD 전부 저장, 기본 배치 | 2,630 s / 69 fwd | 1,910 s / 67 fwd | 4,541 s |
+| LMCache 카피(host 8 GB LRU + SSD) | 2,630 s / 69 fwd | 1,907 s / 67 fwd | 4,537 s |
+| 정책 조합(교차 배치 + prefetch_step 2 + 게이트 2 + write-behind + split + 전부 저장) | 1,963 s / 69 fwd | 1,115 s / 50 fwd | 3,078 s |
 
 이중 버퍼(66B RAM 0.7, 배치 1, 재계산)
 
