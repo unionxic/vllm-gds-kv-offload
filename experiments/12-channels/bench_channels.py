@@ -1,4 +1,4 @@
-"""채널 대역폭 측정: host→GPU(pinned/pageable), GPU→host, SSD→GPU(cuFile bounce), GPU→SSD, GPU 계산(행렬곱),
+"""전송 대역폭 측정: host→GPU(pinned/pageable), GPU→host, SSD→GPU(cuFile bounce), GPU→SSD, GPU 계산(행렬곱),
 단독과 동시 실행 쌍의 저하율. 결과 results/channels/<tag>.json. 모델 없음.
 usage: python bench_channels.py --out results/channels/rain.json [--gib 4] [--reps 3]"""
 import argparse, ctypes, json, os, shutil, subprocess, threading, time
@@ -68,7 +68,7 @@ def mm(n=10):
     for _ in range(n): C = A @ B
     torch.cuda.synchronize()
 mm(2); t = rep(lambda: mm(10)); res["single"]["gpu_fp16_tflops"] = round(10 * 2 * 8192**3 / t / 1e12, 1)
-# ---- 동시 쌍: 각 채널을 스레드로 동시에 돌리고 각각의 소요를 잼 ----
+# ---- 동시 쌍: 각 전송 경로을 스레드로 동시에 돌리고 각각의 소요를 잼 ----
 def pair(name, fa, fb):
     out = {}
     def run(k, f):
@@ -77,7 +77,7 @@ def pair(name, fa, fb):
     t0 = time.perf_counter(); ta.start(); tb.start(); ta.join(); tb.join(); wall = time.perf_counter() - t0
     return out, wall
 def mmloop(n):
-    """행렬곱 n회(8192³ fp16, 회당 1.1 TFLOP). 단독 시간 대비 쌍 실행 시간으로 계산 채널 저하율을 본다."""
+    """행렬곱 n회(8192³ fp16, 회당 1.1 TFLOP). 단독 시간 대비 쌍 실행 시간으로 계산 전송 경로 저하율을 본다."""
     for _ in range(n): C = A @ B
     torch.cuda.synchronize()
 mm(2); MM_N = 60; res["single"]["gpu_mm60_s"] = round(rep(lambda: mmloop(MM_N)), 3)

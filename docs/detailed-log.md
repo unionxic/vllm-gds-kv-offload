@@ -829,13 +829,13 @@ Qwen2.5-3B, host 0.02, Bailian 앞 24건(4k 토큰), GPU KV 9,312 토큰(kv-batc
 - 저장 단계 wall clock이 LFU·LRU·seen_twice에서 재계산보다 20 s 짧은 것은 저장이 줄거나 늦어져 forward 수가 54로 유지된 것이고, 쓰기 자체의 비용은 어느 조건에서도 forward 길이에 나타나지 않음(decode forward 28.2~28.4 s 동일).
 - 다음 후보. 게이트를 켠 전부 저장(예상 −11%), 축출에 신규 보호(LFU 삽입 뒤 유예 또는 2-큐)와 상한을 고유량의 60~80%로 둔 조건, 같은 창을 세 번 방문하는 설계에서 seen_twice 재평가.
 
-### 채널 대역폭과 동시 실행 (KV compute/load split의 상수)
+### 전송 대역폭과 동시 실행 (KV compute/load split의 상수)
 
 #### 측정
 
 experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독과 동시 실행 쌍을 잼. cuFile은 backend·gdsio와 같은 1 MiB 호출 4스레드(64 MiB 호출은 bounce 경로에서 1.7 GB/s로 느림). 결과 results/channels/rain.json. SSD 단독 읽기는 직전 쓰기 상태에 따라 2.9~3.6 GB/s로 흔들림.
 
-| 채널 | 단독 |
+| 전송 경로 | 단독 |
 |---|---|
 | host → GPU pinned | 12.3 GB/s |
 | host → GPU pageable | 11.2 GB/s |
@@ -844,7 +844,7 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 | GPU → SSD cuFile | 1.5~2.1 GB/s (SLC 캐시 안) |
 | GPU fp16 행렬곱 8192³ | 69 TFLOPS |
 
-| 동시 쌍 | 각 채널의 단독 대비 |
+| 동시 쌍 | 각 전송 경로의 단독 대비 |
 |---|---|
 | host→GPU + SSD→GPU | host 0.65~0.67, SSD 0.8~1.0 |
 | host→GPU + GPU→host | 0.92 / 0.86 (전이중) |
@@ -853,8 +853,8 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 | SSD→GPU + GPU 계산 | 1.0 / 0.99 |
 | host→GPU + SSD→GPU + GPU 계산 | 0.67 / 1.0 / 0.99 |
 
-- GPU 계산은 어느 전송과도 서로 영향 없음. 재계산 채널은 독립.
-- SSD→GPU는 이 카드에서 host bounce를 거치므로 GPU PCIe 링크를 같이 쓰며, 동시에 돌면 host→GPU가 12.3 → 8.0 GB/s로 줄고 SSD 쪽은 유지(SSD가 링크를 먼저 가져감). 두 채널의 합은 약 11.5 GB/s로 링크 한계. 교차 배치에서 72B decode forward가 5.7 s가 아니라 2 s만 준 이유의 후보이며, nsys의 weight_h2d 구간 길이로 확인할 것.
+- GPU 계산은 어느 전송과도 서로 영향 없음. 재계산 경로은 독립.
+- SSD→GPU는 이 카드에서 host bounce를 거치므로 GPU PCIe 링크를 같이 쓰며, 동시에 돌면 host→GPU가 12.3 → 8.0 GB/s로 줄고 SSD 쪽은 유지(SSD가 링크를 먼저 가져감). 두 경로의 합은 약 11.5 GB/s로 링크 한계. 교차 배치에서 72B decode forward가 5.7 s가 아니라 2 s만 준 이유의 후보이며, nsys의 weight_h2d 구간 길이로 확인할 것.
 - 양방향(host→GPU와 GPU→host)은 거의 독립. KV 저장(GPU→host bounce)은 가중치 host 복사와 부딪히지 않음.
 - SSD 읽기와 쓰기의 공유는 66B에서 본 3.2 → 0.3 GB/s와 같은 현상.
 - pageable 메모리는 11.2 GB/s라 느린 PCIe를 흉내 내는 수단이 못 됨.
@@ -893,7 +893,7 @@ experiments/12-channels/bench_channels.py, 모델 없이 4 GiB 버퍼로 단독�
 | 교차 배치, prefetch_step 2, chunk 8192, KV 16.3k, gpu_util 0.75 | 26.4 s | 49 s | 138 | 4,712 s |
 | 교차 배치, prefetch_step 2, chunk 2048, KV 18.8k, gpu_util 0.85 | 22.7 s | 29 s (chunk당) | 164 | 4,369 s |
 
-- forward 고정비는 28.4 → 22.7 s(−20%). nsys에서 본 SSD 읽기만의 시간 23.3 s와 같으며, host 복사 5.7 s가 SSD 읽기 아래로 다 숨은 값. 채널 측정의 host 저하(동시 실행 시 0.67)는 SSD 읽기 23 s 안에 host 62 GiB / 8 GB/s = 7.7 s가 들어가므로 forward 길이에는 안 나타남.
+- forward 고정비는 28.4 → 22.7 s(−20%). nsys에서 본 SSD 읽기만의 시간 23.3 s와 같으며, host 복사 5.7 s가 SSD 읽기 아래로 다 숨은 값. 대역폭 측정의 host 저하(동시 실행 시 0.67)는 SSD 읽기 23 s 안에 host 62 GiB / 8 GB/s = 7.7 s가 들어가므로 forward 길이에는 안 나타남.
 - 두 단계 합계가 기준과 같은 것은 chunk 2048과 KV 18.8k로 forward 수가 107 → 164로 는 몫이 상쇄해서. 같은 chunk·KV로 맞춘 조건이 없어 wall clock 이득은 아직 미확정. chunk 8192 + KV 고정 2.0 조건을 추가 예정.
 - 0.75·chunk 8192 런의 26.4 s가 22.7 s와 다른 원인은 미확립(nsys 없음).
 - 출력 토큰열 64건 동일.
@@ -908,7 +908,7 @@ OOM을 피하려고 prefill chunk 2048과 GPU KV 고정(요청 2.0개분, 18.8k 
 | A1' 우리 묶음: 교차 배치 + prefetch_step 2 + 게이트 2 + write-behind + 분할 model + 전부 저장 | 2,357 s / 81 | 1,728 s / 70 | 4,086 s (A0' 대비 −6.5%) | 22.2 s |
 | B LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 3,116 s / 81 | 2,048 s / 67 | 5,164 s | 28.4 s |
 
-- A1'의 분할은 model 모드가 k=0(전부 적재)을 골라 채널 측정 예측과 같음. nsys(앞 12 forward): decode forward 23 s 안에서 SSD 가중치 읽기가 0.5 s에 시작해 끝까지, host 복사(memcpy 합집합 8.0 s, 동시 실행 저하로 5.7 → 8 s)는 전부 그 안에 겹침. forward = SSD 읽기 시간. KV 쓰기는 forward당 1.5~3.4 s, 가중치 읽기와 겹친 몫 0.9~1.8 s(SSD 구간이 forward의 95%라 write-behind가 피할 자리가 거의 없음). KV 읽기는 forward 사이, 겹침 0.
+- A1'의 분할은 model 모드가 k=0(전부 적재)을 골라 대역폭 측정 예측과 같음. nsys(앞 12 forward): decode forward 23 s 안에서 SSD 가중치 읽기가 0.5 s에 시작해 끝까지, host 복사(memcpy 합집합 8.0 s, 동시 실행 저하로 5.7 → 8 s)는 전부 그 안에 겹침. forward = SSD 읽기 시간. KV 쓰기는 forward당 1.5~3.4 s, 가중치 읽기와 겹친 몫 0.9~1.8 s(SSD 구간이 forward의 95%라 write-behind가 피할 자리가 거의 없음). KV 읽기는 forward 사이, 겹침 0.
 - B는 가중치가 기본 배치라 forward 28.4 s이고, chunk 2048로 forward가 늘어난 몫(저장 단계 81 대 기준 59)이 그대로 손해. 같은 chunk·KV의 SSD 전부 저장 기준선이 없어 host 층 자체의 손익은 미분리. host 8 GB(381 블록)는 가득 찼고 적중은 host 3,836 / SSD 5,856 회. chunk 8192·KV 2.0으로 B와 그 기준선을 다시 돌릴 예정.
 - 세 런 모두 출력 토큰열 64건 동일, 오류 0.
 
@@ -925,7 +925,7 @@ Qwen2.5-3B, host 0.02(가중치 host 17 / SSD 19 layer), Bailian 24건 4k, GPU K
 | 1 (전부 재계산) | 96.9 | 98.9 | 99.9 | 99.6 | 99.0 | 98.3 |
 
 - 겹침의 효과: 같은 k에서 split이 serial보다 8~16 s(k=0.5에서 12~16%) 빠름. serial은 적재를 기다린 뒤 계산하므로 k=0.75가 전부 재계산보다 느림.
-- 이 조건의 최적은 k=0. 4k 문서 KV 150 MB를 SSD에서 읽는 데 0.05 s, 재계산에 1.1 s라 적재가 20배 빠르고, split의 k=0.25는 앞 계산이 다른 요청의 적재·계산 아래 숨어 k=0과 같음. 채널 측정으로 세운 max 모형이 예측한 대로이며, 섞기의 최적이 가운데에 오는 영역은 3B + GDS에서는 없음(토큰당 KV가 큰 MHA 모델이나 저장 채널을 일부러 느리게 한 조건이 필요).
+- 이 조건의 최적은 k=0. 4k 문서 KV 150 MB를 SSD에서 읽는 데 0.05 s, 재계산에 1.1 s라 적재가 20배 빠르고, split의 k=0.25는 앞 계산이 다른 요청의 적재·계산 아래 숨어 k=0과 같음. 대역폭 측정으로 세운 max 모형이 예측한 대로이며, 섞기의 최적이 가운데에 오는 영역은 3B + GDS에서는 없음(토큰당 KV가 큰 MHA 모델이나 저장 전송 경로을 일부러 느리게 한 조건이 필요).
 - host 층의 유무는 차이 없음(적재 0.05 s 대 0.01 s). 출력 오류 0, 분할 요청 18~20/런.
 - nsys(k=0.5, host 0.75 GB, 적중 단계 앞 40 forward): split 68.7 s, serial 73.8 s. KV 적재 149파일 합집합 0.11 s가 split에서는 전부 forward(계산) 안에 겹침. 분할 결정에서 뒤 도착 확인까지 중앙값 5.6 s로 거의 전부 앞 계산 시간(도착은 step 경계에서 확인).
 
@@ -957,9 +957,9 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 
 수정(포크 98489b39b4). 비동기 적재 admit의 할당 실패는 break 대신 그 요청만 건너뛰고(step_skipped_waiting, 다음 step 앞자리 유지) 뒤를 계속 스케줄. 반복 할당 실패 진단 로그(free/reserved/inflight/split_pending/running/waiting) 추가(8ca3b27ae2). 확인: 3B 4조건(전체 조합, 게이트 없이, split 없이, write-behind 없이) 모두 정상 완료(게이트 없이 조건에서 진단 로그 2회, skip 경로가 풀어 줌), 72B 재실행 정상 완료(3,078 s). 3B에서 게이트 2의 적중 단계 이득 60 → 50 s.
 
-#### 티어 비율을 채널 비율에 맞춤 (RAM 0.72)
+#### 티어 비율을 전송 경로 비율에 맞춤 (RAM 0.72)
 
-교차 배치 + prefetch_step 2에서 forward = max(host 복사, SSD 읽기)가 되므로 두 채널이 같이 끝나도록 host:SSD 바이트 비율을 8.5:3.4에 맞춤. layer 1.63 GiB 단위로 RAM 0.72가 host 55 layer 89.9 GiB : SSD 25 layer 40.9 GiB(69:31). 결과 results/qwen72b/bailian-ram0.72-*.
+교차 배치 + prefetch_step 2에서 forward = max(host 복사, SSD 읽기)가 되므로 두 전송 경로가 같이 끝나도록 host:SSD 바이트 비율을 8.5:3.4에 맞춤. layer 1.63 GiB 단위로 RAM 0.72가 host 55 layer 89.9 GiB : SSD 25 layer 40.9 GiB(69:31). 결과 results/qwen72b/bailian-ram0.72-*.
 
 | 조건 (chunk 4096, KV 18.8k) | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
 |---|---|---|---|---|
