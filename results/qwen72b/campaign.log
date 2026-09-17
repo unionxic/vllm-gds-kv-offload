@@ -152,3 +152,8 @@
 [09-17 09:19:04] done  bailian-ram0.5-hybrid-lmcache-mnbt4k-kv28gb-lru-host_first rc=0 (gpu_util 0.85)
 [09-17 09:19:04] == qwen72b 종료
 [09-17 09:19:04] == night2 종료
+[09-17 09:35:53] == qwen72b: RAM 0.5 × (cufile-wb), docs 32, decode 8, NSYS=0
+[09-17 09:35:53] start bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2
+[09-17 10:38:22] done  bailian-ram0.5-cufile-wb-interleave-p2-split-gate2-ours-mnbt4k-kv2 rc=0 (gpu_util 0.85)
+[09-17 10:38:22] == qwen72b 종료
+[09-17 10:38:22] == ours-fix 종료

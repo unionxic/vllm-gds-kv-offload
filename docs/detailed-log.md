@@ -938,9 +938,12 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 | 재계산, 교차 배치 + prefetch_step 2 | 2,000 s / 69 | 1,880 s / 68 | 3,880 s | 22.2 s |
 | SSD 전부 저장, 기본 배치 | 2,630 s / 69 | 1,910 s / 67 | 4,541 s | 28.3 s |
 | LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 2,630 s / 69 | 1,907 s / 67 | 4,537 s | 28.3 s |
-| 우리 정책 조합 | 정체(아래) → 수정 뒤 재실행 | | | |
+| 우리 정책 조합: 교차 배치 + prefetch_step 2 + 게이트 2 + write-behind + split model + 전부 저장 (교착 수정 뒤) | 1,963 s / 69 | 1,115 s / 50 | 3,078 s | 22.1 s |
 
 참고: 기준(chunk 8192, KV 21.4k)은 재계산 4,350 s, SSD 전부 저장 4,032 s.
+
+- 우리 정책 조합은 같은 조건의 재계산 대비 −20.7%, 기준 재계산 대비 −29.2%, 기준 SSD 전부 저장 대비 −23.7%. 저장 단계가 재계산보다 짧고(1,963 대 2,000 s: 저장 비용 0, 교차 배치로 forward 22 s), 적중 단계는 게이트 2가 forward를 67 → 50개로 묶어 1,115 s. split model은 k=0. 반복 할당 실패 로그 0회, 출력 토큰열 동일.
+- 같은 조건에서 정책 요소별 몫: 교차 배치 + prefetch_step 2 = −661 s(4,541 → 3,880 상당), 게이트 2 = 적중 단계 forward 17개 × 22 s ≈ −380 s, 전부 저장의 prefill 건너뛰기 ≈ −400 s. write-behind와 split은 이 조건에서 0.
 
 - 교차 배치 + prefetch_step 2의 재계산이 기준 대비 −10.8%. chunk 4096으로 forward가 107 → 137개 늘어도 forward당 6 s 절약이 넘어섬.
 - 같은 조건에서 SSD 전부 저장은 재계산(기본 배치 기준 4,350 s)보다 느림. chunk 4096·KV 18.8k가 적중 계열의 forward 수를 59 → 69로 늘려서. 이 카드에서는 가중치 전송 겹치기가 KV 저장보다 큰 이득.
@@ -952,7 +955,7 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 
 원인. vLLM upstream(#44560)은 비동기 KV 적재로 admit되는 요청을 "여유 블록 − 다른 in-flight prefill의 예약"에 들어갈 때만 받고, 실패하면 waiting 루프를 break 한다. 적재가 끝나 WAITING으로 돌아온 요청들은 그 요청 뒤에 FCFS로 줄 서 있고 자기 예약(남은 prefill 블록 전부)을 쥔 채라, 머리의 요청이 예약 때문에 못 들어오면 뒤의 요청도 스케줄되지 않아 예약이 영원히 안 풀림. chunk 2048·8192에서는 타이밍상 머리 요청이 예약이 쌓이기 전에 들어가 드러나지 않음.
 
-수정(포크 98489b39b4). 비동기 적재 admit의 할당 실패는 break 대신 그 요청만 건너뛰고(step_skipped_waiting, 다음 step 앞자리 유지) 뒤를 계속 스케줄. 반복 할당 실패 진단 로그(free/reserved/inflight/split_pending/running/waiting) 추가(8ca3b27ae2). 3B 재현 4조건과 72B 재실행으로 확인 예정.
+수정(포크 98489b39b4). 비동기 적재 admit의 할당 실패는 break 대신 그 요청만 건너뛰고(step_skipped_waiting, 다음 step 앞자리 유지) 뒤를 계속 스케줄. 반복 할당 실패 진단 로그(free/reserved/inflight/split_pending/running/waiting) 추가(8ca3b27ae2). 확인: 3B 4조건(전체 조합, 게이트 없이, split 없이, write-behind 없이) 모두 정상 완료(게이트 없이 조건에서 진단 로그 2회, skip 경로가 풀어 줌), 72B 재실행 정상 완료(3,078 s). 3B에서 게이트 2의 적중 단계 이득 60 → 50 s.
 
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
