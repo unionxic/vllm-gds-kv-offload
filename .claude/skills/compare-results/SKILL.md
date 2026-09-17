@@ -51,3 +51,8 @@ python tools/compare_results.py --ref pure-ram0.5-none results/native-66b/*/resu
 - 사용자 보고: 표 요약(기준 대비 변화, 모형 대비 이탈), 분해 결과, 설정 차이, 남은 미확립 항목
 - 문서: README 측정 표에 수치 한 줄, detailed-log에 분해와 근거. 오류 수정 서사(실패 시도, 폴링 같은 것)는 문서에 남기지 않고 결과만 남긴다
 - 새 러너가 json 형식을 바꾸면 tools/compare_results.py의 extract()에 분기를 추가
+
+### nsys 런의 분석 시점
+
+- 준비 신호는 <run>-nsys/nsys.done(run_nsys.sh가 stats·sqlite 생성 뒤 씀) 또는 캠페인 로그의 done 줄. result.json은 프로파일 대상이 끝나기 전에 생기므로 신호가 아님.
+- sqlite는 run_nsys.sh가 만든 timeline*.sqlite를 읽음. 분석에서 nsys export를 다시 돌리지 않고, 다른 프로세스의 임시 폴더를 지우지 않음(2026-09-17 RAM 0.72 캡처 유실의 원인).

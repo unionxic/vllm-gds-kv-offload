@@ -9,7 +9,7 @@
 ### 실험 실행
 
 - 새 실험은 experiments/11-observability/run_obs.py + lib/obs로 돌려 같은 산출물 형식을 남김. KV 전송은 포크 안 CuFileFsSpec(C++), 외부 파이썬 전송 코드를 쓰지 않음.
-- 캠페인은 setsid nohup으로, 성공 판정은 result.json 존재로. 백그라운드 런을 멈출 때는 kill을 별도 호출로 하고 같은 명령줄에 대상 이름을 쓰지 않음.
+- 캠페인은 setsid nohup으로, 성공 판정은 result.json 존재로. nsys 런의 분석은 result.json이 아니라 캠페인 로그의 done 줄 또는 <run>-nsys/nsys.done 표식 뒤에만 시작(리포트 후처리 중 건드리면 유실). 분석 스크립트는 다른 프로세스가 쓰는 폴더(nsys-tmp 등)를 절대 지우지 않고 자기 mktemp 폴더만 쓴다. 백그라운드 런을 멈출 때는 kill을 별도 호출로 하고 같은 명령줄에 대상 이름을 쓰지 않음.
 - 66B는 VLLM_OFFLOAD_PIN_EXACT=1과 memguard 필수(안전장치).
 
 ### 문서와 용어
