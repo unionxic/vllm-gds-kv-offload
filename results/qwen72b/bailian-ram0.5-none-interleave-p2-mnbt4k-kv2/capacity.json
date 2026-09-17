@@ -1,0 +1,15 @@
+{
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "layers": 80,
+ "kv_heads": 8,
+ "head_dim": 128,
+ "kv_bytes_per_token": 327680,
+ "kv_bytes_per_request": 2684354560,
+ "requests": 32,
+ "working_set_bytes": 85899345920,
+ "gpu_kv_bytes": 6174015488,
+ "batch_fit": 2,
+ "mem_available_bytes": 127726272512,
+ "disk_free_bytes": 146803957760,
+ "warnings": []
+}

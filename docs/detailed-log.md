@@ -929,6 +929,31 @@ Qwen2.5-3B, host 0.02(가중치 host 17 / SSD 19 layer), Bailian 24건 4k, GPU K
 - host 층의 유무는 차이 없음(적재 0.05 s 대 0.01 s). 출력 오류 0, 분할 요청 18~20/런.
 - nsys(k=0.5, host 0.75 GB, 적중 단계 앞 40 forward): split 68.7 s, serial 73.8 s. KV 적재 149파일 합집합 0.11 s가 split에서는 전부 forward(계산) 안에 겹침. 분할 결정에서 뒤 도착 확인까지 중앙값 5.6 s로 거의 전부 앞 계산 시간(도착은 step 경계에서 확인).
 
+#### 정책 조합 비교: chunk 4096·KV 18.8k (72B)
+
+prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 18.8k 고정으로도 gpu_util 0.75까지 OOM(FFN 활성 462 MiB). chunk 4096으로 네 조건을 같은 KV에서 실행. 결과 results/qwen72b/*-mnbt4k-kv2*.
+
+| 조건 | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
+|---|---|---|---|---|
+| 재계산, 교차 배치 + prefetch_step 2 | 2,000 s / 69 | 1,880 s / 68 | 3,880 s | 22.2 s |
+| SSD 전부 저장, 기본 배치 | 2,630 s / 69 | 1,910 s / 67 | 4,541 s | 28.3 s |
+| LMCache 카피: 기본 배치, host 8 GB LRU + SSD write-through | 2,630 s / 69 | 1,907 s / 67 | 4,537 s | 28.3 s |
+| 우리 정책 조합 | 정체(아래) → 수정 뒤 재실행 | | | |
+
+참고: 기준(chunk 8192, KV 21.4k)은 재계산 4,350 s, SSD 전부 저장 4,032 s.
+
+- 교차 배치 + prefetch_step 2의 재계산이 기준 대비 −10.8%. chunk 4096으로 forward가 107 → 137개 늘어도 forward당 6 s 절약이 넘어섬.
+- 같은 조건에서 SSD 전부 저장은 재계산(기본 배치 기준 4,350 s)보다 느림. chunk 4096·KV 18.8k가 적중 계열의 forward 수를 59 → 69로 늘려서. 이 카드에서는 가중치 전송 겹치기가 KV 저장보다 큰 이득.
+- LMCache 카피는 SSD 전부 저장과 4 s 차이. host 8 GB 층(적중 host 3,795 / SSD 5,750)은 wall clock에 기여 없음. 72B에서 KV 적재가 forward 사이 공백 1 s 안에 끝나므로 host와 SSD의 대역폭 차이가 드러날 자리가 없음. 출력 토큰열 세 조건 모두 동일.
+
+#### 스케줄러 head-of-line 교착
+
+우리 정책 조합(게이트 2 + write-behind + split model + 교차 배치, chunk 4096)이 저장 단계 요청 14개 뒤에 멈춤. 15번째 요청(SSD 적중 11 chunk)이 매 step lookup과 분할 결정(k=0)만 반복(6시간에 2,600만 회)하고 admit되지 않았고, 두 단계 모두 3시간 상한에 걸림. KV I/O 오류 0, 적재·저장 job 모두 완료.
+
+원인. vLLM upstream(#44560)은 비동기 KV 적재로 admit되는 요청을 "여유 블록 − 다른 in-flight prefill의 예약"에 들어갈 때만 받고, 실패하면 waiting 루프를 break 한다. 적재가 끝나 WAITING으로 돌아온 요청들은 그 요청 뒤에 FCFS로 줄 서 있고 자기 예약(남은 prefill 블록 전부)을 쥔 채라, 머리의 요청이 예약 때문에 못 들어오면 뒤의 요청도 스케줄되지 않아 예약이 영원히 안 풀림. chunk 2048·8192에서는 타이밍상 머리 요청이 예약이 쌓이기 전에 들어가 드러나지 않음.
+
+수정(포크 98489b39b4). 비동기 적재 admit의 할당 실패는 break 대신 그 요청만 건너뛰고(step_skipped_waiting, 다음 step 앞자리 유지) 뒤를 계속 스케줄. 반복 할당 실패 진단 로그(free/reserved/inflight/split_pending/running/waiting) 추가(8ca3b27ae2). 3B 재현 4조건과 72B 재실행으로 확인 예정.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
