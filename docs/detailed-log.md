@@ -957,6 +957,22 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 
 수정(포크 98489b39b4). 비동기 적재 admit의 할당 실패는 break 대신 그 요청만 건너뛰고(step_skipped_waiting, 다음 step 앞자리 유지) 뒤를 계속 스케줄. 반복 할당 실패 진단 로그(free/reserved/inflight/split_pending/running/waiting) 추가(8ca3b27ae2). 확인: 3B 4조건(전체 조합, 게이트 없이, split 없이, write-behind 없이) 모두 정상 완료(게이트 없이 조건에서 진단 로그 2회, skip 경로가 풀어 줌), 72B 재실행 정상 완료(3,078 s). 3B에서 게이트 2의 적중 단계 이득 60 → 50 s.
 
+#### 티어 비율을 채널 비율에 맞춤 (RAM 0.72)
+
+교차 배치 + prefetch_step 2에서 forward = max(host 복사, SSD 읽기)가 되므로 두 채널이 같이 끝나도록 host:SSD 바이트 비율을 8.5:3.4에 맞춤. layer 1.63 GiB 단위로 RAM 0.72가 host 55 layer 89.9 GiB : SSD 25 layer 40.9 GiB(69:31). 결과 results/qwen72b/bailian-ram0.72-*.
+
+| 조건 (chunk 4096, KV 18.8k) | 저장 단계 / forward | 적중 단계 / forward | 두 단계 합계 | decode forward |
+|---|---|---|---|---|
+| 재계산, RAM 0.5 교차 배치 | 2,000 s / 69 | 1,880 s / 68 | 3,880 s | 22.2 s |
+| 재계산, RAM 0.72 교차 배치 | 1,910 s / 69 | 1,657 s / 68 | 3,567 s | 순수 decode 14.7 s (prefill chunk 동반 step 포함 중앙값 17.9) |
+| 정책 조합, RAM 0.5 | 1,963 s / 69 | 1,115 s / 50 | 3,078 s | 22.1 s |
+| 정책 조합, RAM 0.72 | 1,635 s / 69 | 812 s / 50 | 2,448 s | 14.0 s |
+
+- 정책 조합 RAM 0.72 = 기준 재계산(4,350 s) 대비 −43.7%, 기준 SSD 전부 저장(4,032 s) 대비 −39.3%, 정책 조합 RAM 0.5 대비 −20.5%. 출력 토큰열 64건 동일, 오류 0, 할당 실패 로그 0.
+- nsys(RAM 0.72 재계산 8건 캡처, cap8): decode forward 14.8 s 안에서 SSD 읽기 13.7 s가 0.0 s부터 끝까지 이어지고 빈틈은 host 3연속 구간 다섯 곳의 0.16 s(합 0.8 s). host 복사 layer당 0.22 s(인접 2개 묶음 0.44 s, 3.4 GiB), 유효 8.5 GB/s, srcKind 전부 pinned. SSD 읽기와 안 겹친 host 복사 0.9 s. 예측(SSD 12.9 + 빈틈 ≈ 13 s)과 맞고, 남는 1~2 s는 55 = 25×2 + 5의 3연속 구간이라 2슬롯에서는 피할 수 없음.
+- 32건 런의 decode 중앙값이 17.9 s인 것은 다른 요청의 4096 토큰 prefill chunk 계산이 실린 step이 섞여서. 가중치 전송의 바닥은 14.7 s.
+- RAM 0.72 재계산 런의 첫 nsys 리포트는 분석 스크립트가 nsys 임시 폴더를 지워 유실(재발 방지: run_nsys.sh 고유 임시 폴더·nsys.done 표식, 분석은 done 뒤에만). 정책 조합 RAM 0.72 런의 원본 timeline.1(저장 단계)·timeline.2(적중 단계).nsys-rep는 보존.
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
