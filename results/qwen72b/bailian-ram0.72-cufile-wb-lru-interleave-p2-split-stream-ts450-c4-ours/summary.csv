@@ -1,0 +1,4 @@
+phase,count,ttft_p50,ttft_p95,e2e_p50,e2e_p95,e2e_max,phase_wall_s
+stream,128,69.86,210.13,200.30,343.78,454.92,10291.3
+kv_r: 31 ops, 34.75 GiB, busy 421.1 s
+kv_w: 155 ops, 111.05 GiB, busy 4424.9 s

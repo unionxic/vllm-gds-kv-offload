@@ -5,3 +5,7 @@
 {"kind": "bailian_trace", "wall_ns": 1789660056155393670, "mono_ns": 815218611619756, "tid": 140261827566976, "offset": 29560, "rows": 128, "block": 16, "blocks_kept": 507, "vocab": 151643, "unique_hashes": 22739, "total_hash_refs": 47150}
 {"kind": "stream_plan", "wall_ns": 1789660056161259926, "mono_ns": 815218617485023, "tid": 140261827566976, "n_requests": 128, "time_scale": 450.0, "max_concurrency": 4, "arrival_span_s": 10093.5, "median_gap_s": 55.35, "arrival_gap_s": 0.0, "prompt_source": "bailian", "bailian_offset": 29560}
 {"kind": "phase", "wall_ns": 1789660056161305481, "mono_ns": 815218617530270, "tid": 140261827566976, "name": "stream", "requests": 128}
+{"kind": "warn", "wall_ns": 1789670883045788670, "mono_ns": 826045502013653, "tid": 140261827566976, "msg": "stream 3\uc2dc\uac04 \ucd08\uacfc"}
+{"kind": "phase", "wall_ns": 1789670883045854458, "mono_ns": 826045502079223, "tid": 140261827566976, "name": "stream_end", "wall_s": 10826.884, "matched_tokens": 0, "drain_s": 0.0}
+{"kind": "phase", "wall_ns": 1789670883046084050, "mono_ns": 826045502308826, "tid": 140261827566976, "name": "final_settle"}
+{"kind": "phase", "wall_ns": 1789670898091548863, "mono_ns": 826060547774486, "tid": 140261827566976, "name": "complete"}
