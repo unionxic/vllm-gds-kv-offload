@@ -24,6 +24,7 @@ for f in ${RATIOS:-0.5}; do for cond in ${CONDS:-none cufile cufile-wb}; do tag=
     cufile-lru) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_capacity_gb\": $CAP, \"cufile_fs_policy\": \"lru\"}");;
     cufile-lfu) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_capacity_gb\": $CAP, \"cufile_fs_policy\": \"lfu\"}");;
     cufile-seen2) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_admission\": \"seen_twice\"}");;
+    cufile-wb-lru) kvt=cufile; extra=(--kv-extra "{\"cufile_fs_store_window\": \"host\", \"cufile_fs_store_window_max_s\": 30, \"cufile_fs_capacity_gb\": $CAP, \"cufile_fs_policy\": \"lru\"}");;
     hybrid) kvt=hybrid; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"hybrid_host_policy\": \"${CPUPOL:-lru}\", \"hybrid_placement\": \"${PLACEMENT:-host_first}\"${PROFILE:+, \"hybrid_profile\": \"$PROFILE\"}}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru}-${PLACEMENT:-host_first};;
     cpu) kvt=cpu; extra=(--kv-host-gb ${KVHOSTGB:-8} --kv-extra "{\"eviction_policy\": \"${CPUPOL:-lru}\"}"); tag=$tag${KVHOSTGB:-8}gb-${CPUPOL:-lru};;
     *) log "unknown cond $cond"; continue;; esac
