@@ -978,7 +978,7 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
 - NVTX. 러너 phase:NAME, step:NAME. 오프로더 prefetch:L{i}:{cpu|ssd}(layer마다), ssd_window:on/off(SSD 구간 전환). backend kv_store_file, kv_load_file(파일 하나), kv_writes_pause/resume. libnvToolsExt가 있을 때만 링크.
 - Qwen2.5-3B, host 0.02, LongBench 8건, cold_fill 캡처로 확인. 리포트 24 MB, NVTX 34,017건. gds trace는 cuFileRead 1,368건(평균 48 ms), cuFileWrite 1,376건(32 ms), cuFileHandleNVFS 5,138건(37 ms, 합 192 s)으로 잡혀 KV 파일 store(kv_store_file 32.8 ms)와 cuFileWrite(32.3 ms)가 1:1로 맞음. cuFileHandleNVFS의 몫은 미분석.
-- 블록 I/O 한 건 추적. bcc 0.12(bpfcc-tools)의 biosnoop은 커널 5.15에서 kprobe blk_account_io_completion이 없어 실패. 대신 bpftrace 0.9.4로 tracepoint block_rq_issue/complete 기반 lib/obs/blkio.bt(ns 시각, dev, rwbs, 섹터, 바이트, 지연 us)를 두고 hostmon.sh가 BLKIO=1이면 sudo로 실행. sudoers에 /usr/bin/bpftrace NOPASSWD가 필요하며 미설정.
+- 블록 I/O 한 건 추적. bcc 0.12(bpfcc-tools)의 biosnoop은 커널 5.15에서 kprobe blk_account_io_completion이 없어 실패. 대신 bpftrace 0.9.4로 tracepoint block_rq_issue/complete 기반 lib/obs/blkio.bt(ns 시각, dev, rwbs, 섹터, 바이트, 지연 us)를 두고 hostmon.sh가 BLKIO=1이면 sudo로 실행. sudoers /usr/bin/bpftrace NOPASSWD 설정됨(2026-09-17), 128 MiB 쓰기·읽기 시험에서 824줄 기록 확인. 캠페인에서 켜려면 BLKIO=1.
 - SSD 쓰기 캐시 회복 시간(dd 4.5 GiB, 36% 사용, 72B 다운로드와 겹침): 채우기 0.85, 바로 이어서 0.70, 10 s 쉬고 1.06, 바로 이어서 0.70, 20 s 쉬고 0.40 GB/s. 쉬는 시간과 회복이 단조가 아니어서 write-behind의 묶음 크기·휴지 시간을 이 값으로 정하지 않음. 72B 런의 blkio·diskstats로 다시 봄.
 
 #### OPT-66B 종료와 모델 전환
