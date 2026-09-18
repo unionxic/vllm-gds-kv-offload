@@ -973,6 +973,20 @@ prefetch_step 2의 정적 버퍼(1.6 GiB 추가) 때문에 chunk 8192는 GPU KV 
 - 32건 런의 decode 중앙값이 17.9 s인 것은 다른 요청의 4096 토큰 prefill chunk 계산이 실린 step이 섞여서. 가중치 전송의 바닥은 14.7 s.
 - RAM 0.72 재계산 런의 첫 nsys 리포트는 분석 스크립트가 nsys 임시 폴더를 지워 유실(재발 방지: run_nsys.sh 고유 임시 폴더·nsys.done 표식, 분석은 done 뒤에만). 정책 조합 RAM 0.72 런의 원본 timeline.1(저장 단계)·timeline.2(적중 단계).nsys-rep는 보존.
 
+#### 트레이스 시간 순서 리플레이 (open-loop, 128건)
+
+두 단계 런(cold 뒤 역순 재방문)은 요청이 하나씩 닫힌 채로 들어오고 재방문이 적중을 최대로 만드는 조건. 요청 도착 방식의 차이를 보려고 Bailian 트레이스(offset 29,560) 128건을 트레이스 시각 그대로(배율 450, 도착 구간 10,094 s) 도착시키고 동시 상한 4로 open-loop 처리(run_obs --mode stream). 조건은 chunk 4096, GPU KV 18.8k, 출력 8토큰, wall clock 상한 3시간. 결과 results/qwen72b/*stream-ts450-c4*.
+
+| 조건 | 완료 | wall clock | 대기 중앙값 (p95) | TTFT 중앙값 | e2e 중앙값 | SSD KV cache hit |
+|---|---|---|---|---|---|---|
+| vLLM 기본값 (재계산, 기본 배치, gpu_util 0.8) | 93 / 128 (3시간 상한) | 10,800 s 초과 | 903 s (2,694, 계속 증가) | 169 s | 413 s | 0 |
+| 정책 조합, RAM 0.72, SSD 상한 100 GB LRU | 128 / 128 | 10,291 s | 12 s (103, 최대 131) | 70 s | 200 s | 31건, 114k / 589k 토큰 (19%) |
+
+- 기본값은 처리량 31건/h로 도착(45건/h)을 못 따라가 대기가 무한정 쌓임. 정책 조합은 45건/h로 도착을 따라감. wall clock 비교는 의미가 없고 완료 수·대기·TTFT로 비교.
+- 런당 토큰: 입력 589k(요청당 평균 4.6k, 상한 8k), 출력 1,024. KV는 토큰당 328 KB(80 layer × KV 헤드 8 × 128 × bf16 × 2)라 요청당 1.5 GB(평균) ~ 2.66 GB(8k), SSD 파일 단위 block 64토큰 21 MB. 128건 저장 총량 119 GB, LRU 축출 566파일. gpu_util 0.9·0.85는 stream 첫 prefill의 FFN 활성으로 OOM. 정책 조합 1차 런은 상한 없이 저장하다 85건에서 디스크가 차서 cuFile 로거 assertion으로 중단(KV 335 GB 예상), 그래서 100 GB LRU 상한.
+- SSD hit 19%가 트레이스 순서상 가능한 최대(121건, 224k 토큰, 38%)보다 낮은 이유. 축출·만료 아님(축출 전인 초반 요청 2, 4, 6도 hit 0). KV 저장은 요청 종료가 아니라 prefill chunk마다 나가고 chunk(1.3 GB)당 15~68 s, 미완료 저장 최대 3건이라 "앞 요청 KV가 아직 없음"은 58건 중 3건만 설명. 나머지는 GPU prefix cache hit: 커넥터의 SSD 조회는 GPU에 이미 있는 토큰 뒤부터 시작하므로 프리픽스가 GPU에 남아 있으면 SSD를 안 읽고 집계(matched_of)에 0으로 남음. 3B로 같은 트레이스 64건을 stream으로 돌려 확인: GPU prefix cache hit 41%, SSD hit 13%, 재계산 46%, 트레이스 최대 42%, 둘로 설명 안 되는 요청은 112토큰짜리 4건. 시간 순서에서는 프리픽스를 공유하는 요청이 붙어 와서 앞 요청 블록이 아직 GPU에 있고, SSD는 GPU에서 밀려난 뒤에 오는 요청만 받음. 72B 런은 GPU hit을 기록하지 않아 SSD 19% 외의 81%는 GPU hit과 재계산이 섞여 있음. 러너가 요청별 num_cached_tokens를 gpu_cached로 기록하므로 다음 런부터 세 몫이 분리됨.
+- 출력 토큰열 128건 중 1건 불일치(근소 차, Qwen chunked prefill 부류).
+
 #### nsys 캡처 구간과 NVTX, 블록 I/O 추적
 
 - 러너 --nsys-phase NAME --nsys-steps N: 그 phase 시작에 cudaProfilerStart, N개 forward(0.3 s 이상 step) 뒤 또는 phase 끝에 Stop. lib/obs/run_nsys.sh를 NSYS_CAPTURE=cudaProfilerApi로 감싸면 그 구간만 기록(capture-range-end=repeat라 여러 phase도 한 리포트). nsys 2025.3.1(~/nsight-systems-2025.3.1)의 gds trace(실험 기능)를 자동으로 켬. campaign_qwen72.sh는 NSYS=1이면 이 래퍼를 씀.
