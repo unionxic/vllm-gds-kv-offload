@@ -301,6 +301,8 @@ try:
             if v is None: continue
             if v["first_mono"] is None and o.outputs and o.outputs[0].token_ids: v["first_mono"] = s1; v["first_wall"] = time.time(); got_first = True; torch.cuda.nvtx.mark(f"req_first_token {o.request_id}")
             if o.outputs: v["ntok"] = len(o.outputs[0].token_ids); v["ids"] = list(o.outputs[0].token_ids)
+            # GPU prefix cache에서 맞은 토큰(vLLM 집계). SSD hit(matched_of)과 분리해 재계산 몫을 가르기 위해 기록
+            if getattr(o, "num_cached_tokens", None) is not None: v["gpu_cached"] = o.num_cached_tokens
             if o.finished:
                 v["finish_mono"] = s1; v["finish_wall"] = time.time(); torch.cuda.nvtx.mark(f"req_finish {o.request_id}")
                 on_finish(o.request_id, v)
