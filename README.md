@@ -1,6 +1,6 @@
 ### vLLM 가중치 스트리밍 + GDS KV 오프로드
 
-16 GB GPU 한 장에서 145 GB 모델(Qwen2.5-72B-Instruct)을 돌린다. 가중치는 host memory와 NVMe에서 매 forward 스트리밍하고, KV는 NVMe에 저장했다가 적중 시 읽는다. 구현은 vLLM 포크(~/vllm, weight-ssd-offload) 안에 있고 외부 코드는 없다.
+16 GB GPU 한 장에서 145 GB 모델(Qwen2.5-72B-Instruct)을 돌린다. 가중치는 host memory와 NVMe에서 매 forward 스트리밍하고, KV는 NVMe에 저장했다가 적중 시 읽는다. 구현은 vLLM 포크(~/gds-kv/vllm, weight-ssd-offload) 안에 있고 외부 코드는 없다.
 
 | 항목 | 값 |
 | --- | --- |

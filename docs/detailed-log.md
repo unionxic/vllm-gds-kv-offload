@@ -279,7 +279,7 @@ D1과 E1은 5회, 나머지는 3회, 실행 순서 교차. matched와 store IO�
 
 #### upstream 회귀 검증 (최신 main)
 
-우리가 특성화한 두 버그가 upstream에서 이미 처리됐는지, pinned base가 아닌 최신 main에서 재현 시험으로 확인했다. 검증 환경은 별도 worktree(~/vllm-main, commit 1f1f628859, 0.26.1rc1.dev1488)와 별도 venv(python 3.12, precompiled wheel)로, 실험용 pinned 환경(568afb3a13)은 건드리지 않았다.
+우리가 특성화한 두 버그가 upstream에서 이미 처리됐는지, pinned base가 아닌 최신 main에서 재현 시험으로 확인했다. 검증 환경은 별도 worktree(~/gds-kv/vllm-main, commit 1f1f628859, 0.26.1rc1.dev1488)와 별도 venv(python 3.12, precompiled wheel)로, 실험용 pinned 환경(568afb3a13)은 건드리지 않았다.
 
 종료 시점 _req_state race. 수정 PR #49671(Defer request finalization until final store, 2026-07-25 병합)은 우리 base(07-26 커밋)에 포함되지 않은 것으로 git 조상 검사에서 확인됐다 — 우리가 이 race를 맞은 이유가 설명된다. 최신 main에서 pinned base가 가드 없이 3/3 크래시하던 동일 조건(LEval 64문서 2라운드, tiering b16)을 가드 없이 돌린 결과 128요청 완주, KeyError 0. 대신 "cannot store chunks" WARNING이 다수 찍히는데 이것이 #49671이 도입한 우아한 거부 경로다. 판정: race는 upstream에서 해결됐고 회귀가 아니다. 우리 하네스의 prepare_store 가드는 구버전(v0.26.0) workaround로 기록을 유지하며, 새 issue는 내지 않는다.
 
@@ -384,7 +384,7 @@ Bailian 150·600, 양 러너: seen-twice 빈도 필터가 random을 이겼다. 1
 
 #### 구성과 정적 버퍼
 
-vLLM v0.26의 가중치 오프로드는 UVA와 Prefetch 두 백엔드뿐이고 SSD 티어가 없음. Prefetch 백엔드에 세 번째 티어를 넣어 층을 GPU 상주, pinned host, SSD 파일로 나누고 매 forward 정적 GPU 버퍼 풀로 층을 차례로 올린다(포크 ~/vllm 브랜치 weight-ssd-offload, offload_ssd_path와 offload_host_fraction 등 다섯 설정). host 비율은 MemTotal 대비이며 층 하나가 1.9 GiB.
+vLLM v0.26의 가중치 오프로드는 UVA와 Prefetch 두 백엔드뿐이고 SSD 티어가 없음. Prefetch 백엔드에 세 번째 티어를 넣어 층을 GPU 상주, pinned host, SSD 파일로 나누고 매 forward 정적 GPU 버퍼 풀로 층을 차례로 올린다(포크 ~/gds-kv/vllm 브랜치 weight-ssd-offload, offload_ssd_path와 offload_host_fraction 등 다섯 설정). host 비율은 MemTotal 대비이며 층 하나가 1.9 GiB.
 
 | host 비율 | 예산 | host 층 | SSD 층 | forward당 SSD 읽기 |
 |---|---|---|---|---|
@@ -603,7 +603,7 @@ wall clock 차이로는 갈리지 않아 엔진 step을 직접 돌리는 계측�
 | results/model-host-baseline | 기준표 결과 json과 로그, campaign.log, RAM 0.1 점(ram0.1), 이중 버퍼 비교(b1-step1, b1-step2) |
 | tools/baseline_table.py | 기준표 결과를 모델 × host 표로(적중 라운드, 저장 추가, 두 라운드 합계) |
 | lib/expfs.py | CuFileQ8Transport 추가 |
-| ~/vllm weight-ssd-offload | SSD 티어(2fbceeb103, 1c86373b60, fbfc637cb0), prefetch 경계 수정(3fc4433b62), 정확 등록(2f050f7fd5), 스케줄러 게이트(2998fcca0b, b576070a77), 등록 총량 상한(929df037b9) |
+| ~/gds-kv/vllm weight-ssd-offload | SSD 티어(2fbceeb103, 1c86373b60, fbfc637cb0), prefetch 경계 수정(3fc4433b62), 정확 등록(2f050f7fd5), 스케줄러 게이트(2998fcca0b, b576070a77), 등록 총량 상한(929df037b9) |
 
 재현 환경: env.sh 소싱, VLLM_USE_V2_MODEL_RUNNER=0, VLLM_ENABLE_V1_MULTIPROCESSING=0, host 0.85 이상은 VLLM_OFFLOAD_PIN_EXACT=1, cuFile I/O 크기은 CUFILE_ENV_PATH_JSON으로 4 MiB 설정, 게이트는 VLLM_KV_LOAD_WAVE_GATE=2. 런마다 SSD 티어와 KV 저장소를 지우고 다시 만들므로 디스크 여유 90 GB 이상 필요. 캠페인은 setsid nohup으로 띄우고 성공 판정은 결과 json 존재로.
 

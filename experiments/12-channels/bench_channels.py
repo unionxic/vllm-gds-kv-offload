@@ -5,7 +5,7 @@ import argparse, ctypes, json, os, shutil, subprocess, threading, time
 import torch
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", required=True); ap.add_argument("--gib", type=float, default=4.0); ap.add_argument("--reps", type=int, default=3)
-ap.add_argument("--ssd-dir", default=os.path.expanduser("~/experiments/vllm-gds-kv/results/channels/tmp"))
+ap.add_argument("--ssd-dir", default=os.path.expanduser("~/gds-kv/vllm-gds-kv/results/channels/tmp"))
 a = ap.parse_args()
 N = int(a.gib * 2**30); dev = "cuda"
 os.makedirs(a.ssd_dir, exist_ok=True)
