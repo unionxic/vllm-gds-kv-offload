@@ -1,0 +1,2343 @@
+{
+ "run_dir": "/home/unionxic/experiments/vllm-gds-kv/results/qwen72b/bailian-ram0.5-none-stream-ts450-c4-vllm-default",
+ "model": "Qwen/Qwen2.5-72B-Instruct",
+ "prompt_source": "bailian",
+ "kv_transport": "none",
+ "n_docs": 128,
+ "input_file": "/home/unionxic/experiments/vllm-gds-kv/experiments/11-observability/../02-bailian/replay600/trace/qwen_coder.jsonl",
+ "requests": [
+  {
+   "phase": "stream",
+   "rid": "stream-0",
+   "doc": 0,
+   "q": 0,
+   "tokens": 6536,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-1",
+   "doc": 1,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-2",
+   "doc": 2,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-3",
+   "doc": 3,
+   "q": 0,
+   "tokens": 312,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-4",
+   "doc": 4,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-5",
+   "doc": 5,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-6",
+   "doc": 6,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-7",
+   "doc": 7,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-8",
+   "doc": 8,
+   "q": 0,
+   "tokens": 440,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-9",
+   "doc": 9,
+   "q": 0,
+   "tokens": 328,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-10",
+   "doc": 10,
+   "q": 0,
+   "tokens": 1416,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-11",
+   "doc": 11,
+   "q": 0,
+   "tokens": 3016,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-12",
+   "doc": 12,
+   "q": 0,
+   "tokens": 1800,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-13",
+   "doc": 13,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-14",
+   "doc": 14,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-15",
+   "doc": 15,
+   "q": 0,
+   "tokens": 1032,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-16",
+   "doc": 16,
+   "q": 0,
+   "tokens": 2504,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-17",
+   "doc": 17,
+   "q": 0,
+   "tokens": 248,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-18",
+   "doc": 18,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-19",
+   "doc": 19,
+   "q": 0,
+   "tokens": 5176,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-20",
+   "doc": 20,
+   "q": 0,
+   "tokens": 584,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-21",
+   "doc": 21,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-22",
+   "doc": 22,
+   "q": 0,
+   "tokens": 6840,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-23",
+   "doc": 23,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-24",
+   "doc": 24,
+   "q": 0,
+   "tokens": 744,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-25",
+   "doc": 25,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-26",
+   "doc": 26,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-27",
+   "doc": 27,
+   "q": 0,
+   "tokens": 2136,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-28",
+   "doc": 28,
+   "q": 0,
+   "tokens": 1880,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-29",
+   "doc": 29,
+   "q": 0,
+   "tokens": 5256,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-30",
+   "doc": 30,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-31",
+   "doc": 31,
+   "q": 0,
+   "tokens": 424,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-32",
+   "doc": 32,
+   "q": 0,
+   "tokens": 984,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-33",
+   "doc": 33,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-34",
+   "doc": 34,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-35",
+   "doc": 35,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-36",
+   "doc": 36,
+   "q": 0,
+   "tokens": 1912,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-37",
+   "doc": 37,
+   "q": 0,
+   "tokens": 5672,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-38",
+   "doc": 38,
+   "q": 0,
+   "tokens": 1192,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-39",
+   "doc": 39,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-40",
+   "doc": 40,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-41",
+   "doc": 41,
+   "q": 0,
+   "tokens": 3160,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-42",
+   "doc": 42,
+   "q": 0,
+   "tokens": 584,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-43",
+   "doc": 43,
+   "q": 0,
+   "tokens": 440,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-44",
+   "doc": 44,
+   "q": 0,
+   "tokens": 7000,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-45",
+   "doc": 45,
+   "q": 0,
+   "tokens": 5240,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-46",
+   "doc": 46,
+   "q": 0,
+   "tokens": 4936,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-47",
+   "doc": 47,
+   "q": 0,
+   "tokens": 1240,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-48",
+   "doc": 48,
+   "q": 0,
+   "tokens": 7784,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-49",
+   "doc": 49,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-50",
+   "doc": 50,
+   "q": 0,
+   "tokens": 7304,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-51",
+   "doc": 51,
+   "q": 0,
+   "tokens": 2488,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-52",
+   "doc": 52,
+   "q": 0,
+   "tokens": 584,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-53",
+   "doc": 53,
+   "q": 0,
+   "tokens": 5448,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-54",
+   "doc": 54,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-55",
+   "doc": 55,
+   "q": 0,
+   "tokens": 584,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-56",
+   "doc": 56,
+   "q": 0,
+   "tokens": 1432,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-57",
+   "doc": 57,
+   "q": 0,
+   "tokens": 904,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-58",
+   "doc": 58,
+   "q": 0,
+   "tokens": 3656,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-59",
+   "doc": 59,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-60",
+   "doc": 60,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-61",
+   "doc": 61,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-62",
+   "doc": 62,
+   "q": 0,
+   "tokens": 1192,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-63",
+   "doc": 63,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-64",
+   "doc": 64,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-65",
+   "doc": 65,
+   "q": 0,
+   "tokens": 5976,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-66",
+   "doc": 66,
+   "q": 0,
+   "tokens": 1064,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-67",
+   "doc": 67,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-68",
+   "doc": 68,
+   "q": 0,
+   "tokens": 872,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-69",
+   "doc": 69,
+   "q": 0,
+   "tokens": 4008,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-70",
+   "doc": 70,
+   "q": 0,
+   "tokens": 2008,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-71",
+   "doc": 71,
+   "q": 0,
+   "tokens": 264,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-72",
+   "doc": 72,
+   "q": 0,
+   "tokens": 6456,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-73",
+   "doc": 73,
+   "q": 0,
+   "tokens": 7864,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-74",
+   "doc": 74,
+   "q": 0,
+   "tokens": 1304,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-75",
+   "doc": 75,
+   "q": 0,
+   "tokens": 1992,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-76",
+   "doc": 76,
+   "q": 0,
+   "tokens": 712,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-77",
+   "doc": 77,
+   "q": 0,
+   "tokens": 232,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-78",
+   "doc": 78,
+   "q": 0,
+   "tokens": 808,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-79",
+   "doc": 79,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-80",
+   "doc": 80,
+   "q": 0,
+   "tokens": 7480,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-81",
+   "doc": 81,
+   "q": 0,
+   "tokens": 232,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-82",
+   "doc": 82,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-83",
+   "doc": 83,
+   "q": 0,
+   "tokens": 3416,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-84",
+   "doc": 84,
+   "q": 0,
+   "tokens": 1288,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-85",
+   "doc": 85,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-86",
+   "doc": 86,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-87",
+   "doc": 87,
+   "q": 0,
+   "tokens": 3096,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-88",
+   "doc": 88,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-89",
+   "doc": 89,
+   "q": 0,
+   "tokens": 6088,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-90",
+   "doc": 90,
+   "q": 0,
+   "tokens": 1800,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-91",
+   "doc": 91,
+   "q": 0,
+   "tokens": 3800,
+   "matched": 0,
+   "lookups": 0
+  },
+  {
+   "phase": "stream",
+   "rid": "stream-92",
+   "doc": 92,
+   "q": 0,
+   "tokens": 8120,
+   "matched": 0,
+   "lookups": 0
+  }
+ ],
+ "docs": [
+  {
+   "doc": 0,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 6536,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29560,
+    "turn": 1,
+    "input_length": 6521,
+    "timestamp": 5112.174,
+    "n_hash": 408
+   }
+  },
+  {
+   "doc": 1,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29561,
+    "turn": 1,
+    "input_length": 12627,
+    "timestamp": 5112.646,
+    "n_hash": 790
+   }
+  },
+  {
+   "doc": 2,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29562,
+    "turn": 1,
+    "input_length": 13443,
+    "timestamp": 5112.671,
+    "n_hash": 841
+   }
+  },
+  {
+   "doc": 3,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 312,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29563,
+    "turn": 1,
+    "input_length": 297,
+    "timestamp": 5112.769,
+    "n_hash": 19
+   }
+  },
+  {
+   "doc": 4,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29564,
+    "turn": 1,
+    "input_length": 12092,
+    "timestamp": 5112.852,
+    "n_hash": 756
+   }
+  },
+  {
+   "doc": 5,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29565,
+    "turn": 2,
+    "input_length": 12480,
+    "timestamp": 5113.063,
+    "n_hash": 780
+   }
+  },
+  {
+   "doc": 6,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29566,
+    "turn": 1,
+    "input_length": 11834,
+    "timestamp": 5113.086,
+    "n_hash": 740
+   }
+  },
+  {
+   "doc": 7,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29567,
+    "turn": 1,
+    "input_length": 13040,
+    "timestamp": 5113.292,
+    "n_hash": 815
+   }
+  },
+  {
+   "doc": 8,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 440,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29568,
+    "turn": 1,
+    "input_length": 419,
+    "timestamp": 5113.351,
+    "n_hash": 27
+   }
+  },
+  {
+   "doc": 9,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 328,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29569,
+    "turn": 1,
+    "input_length": 306,
+    "timestamp": 5113.603,
+    "n_hash": 20
+   }
+  },
+  {
+   "doc": 10,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1416,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29570,
+    "turn": 1,
+    "input_length": 1395,
+    "timestamp": 5113.856,
+    "n_hash": 88
+   }
+  },
+  {
+   "doc": 11,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3016,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29571,
+    "turn": 4,
+    "input_length": 2995,
+    "timestamp": 5114.7,
+    "n_hash": 188
+   }
+  },
+  {
+   "doc": 12,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1800,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29572,
+    "turn": 1,
+    "input_length": 1789,
+    "timestamp": 5114.758,
+    "n_hash": 112
+   }
+  },
+  {
+   "doc": 13,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29573,
+    "turn": 1,
+    "input_length": 12527,
+    "timestamp": 5114.767,
+    "n_hash": 783
+   }
+  },
+  {
+   "doc": 14,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29574,
+    "turn": 1,
+    "input_length": 12897,
+    "timestamp": 5114.792,
+    "n_hash": 807
+   }
+  },
+  {
+   "doc": 15,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1032,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29575,
+    "turn": 1,
+    "input_length": 1020,
+    "timestamp": 5114.935,
+    "n_hash": 64
+   }
+  },
+  {
+   "doc": 16,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 2504,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29576,
+    "turn": 2,
+    "input_length": 2491,
+    "timestamp": 5115.408,
+    "n_hash": 156
+   }
+  },
+  {
+   "doc": 17,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 248,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29577,
+    "turn": 1,
+    "input_length": 227,
+    "timestamp": 5115.874,
+    "n_hash": 15
+   }
+  },
+  {
+   "doc": 18,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29578,
+    "turn": 1,
+    "input_length": 13800,
+    "timestamp": 5115.965,
+    "n_hash": 863
+   }
+  },
+  {
+   "doc": 19,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5176,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29579,
+    "turn": 1,
+    "input_length": 5164,
+    "timestamp": 5116.412,
+    "n_hash": 323
+   }
+  },
+  {
+   "doc": 20,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 584,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29580,
+    "turn": 1,
+    "input_length": 569,
+    "timestamp": 5116.467,
+    "n_hash": 36
+   }
+  },
+  {
+   "doc": 21,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29581,
+    "turn": 1,
+    "input_length": 12250,
+    "timestamp": 5116.515,
+    "n_hash": 766
+   }
+  },
+  {
+   "doc": 22,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 6840,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29582,
+    "turn": 1,
+    "input_length": 6825,
+    "timestamp": 5116.741,
+    "n_hash": 427
+   }
+  },
+  {
+   "doc": 23,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29583,
+    "turn": 1,
+    "input_length": 12831,
+    "timestamp": 5116.948,
+    "n_hash": 802
+   }
+  },
+  {
+   "doc": 24,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 744,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29584,
+    "turn": 1,
+    "input_length": 733,
+    "timestamp": 5117.254,
+    "n_hash": 46
+   }
+  },
+  {
+   "doc": 25,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29585,
+    "turn": 1,
+    "input_length": 12922,
+    "timestamp": 5117.398,
+    "n_hash": 808
+   }
+  },
+  {
+   "doc": 26,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29586,
+    "turn": 1,
+    "input_length": 12572,
+    "timestamp": 5117.456,
+    "n_hash": 786
+   }
+  },
+  {
+   "doc": 27,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 2136,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29587,
+    "turn": 7,
+    "input_length": 2118,
+    "timestamp": 5117.74,
+    "n_hash": 133
+   }
+  },
+  {
+   "doc": 28,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1880,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29588,
+    "turn": 1,
+    "input_length": 1871,
+    "timestamp": 5117.811,
+    "n_hash": 117
+   }
+  },
+  {
+   "doc": 29,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5256,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29589,
+    "turn": 1,
+    "input_length": 5248,
+    "timestamp": 5117.886,
+    "n_hash": 328
+   }
+  },
+  {
+   "doc": 30,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29590,
+    "turn": 1,
+    "input_length": 10105,
+    "timestamp": 5118.428,
+    "n_hash": 632
+   }
+  },
+  {
+   "doc": 31,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 424,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29591,
+    "turn": 1,
+    "input_length": 407,
+    "timestamp": 5118.575,
+    "n_hash": 26
+   }
+  },
+  {
+   "doc": 32,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 984,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29592,
+    "turn": 2,
+    "input_length": 971,
+    "timestamp": 5118.646,
+    "n_hash": 61
+   }
+  },
+  {
+   "doc": 33,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29593,
+    "turn": 1,
+    "input_length": 13066,
+    "timestamp": 5118.694,
+    "n_hash": 817
+   }
+  },
+  {
+   "doc": 34,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29594,
+    "turn": 2,
+    "input_length": 10252,
+    "timestamp": 5118.76,
+    "n_hash": 641
+   }
+  },
+  {
+   "doc": 35,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29595,
+    "turn": 1,
+    "input_length": 12885,
+    "timestamp": 5119.333,
+    "n_hash": 806
+   }
+  },
+  {
+   "doc": 36,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1912,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29596,
+    "turn": 3,
+    "input_length": 1893,
+    "timestamp": 5119.426,
+    "n_hash": 119
+   }
+  },
+  {
+   "doc": 37,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5672,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29597,
+    "turn": 4,
+    "input_length": 5653,
+    "timestamp": 5119.498,
+    "n_hash": 354
+   }
+  },
+  {
+   "doc": 38,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1192,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29598,
+    "turn": 1,
+    "input_length": 1181,
+    "timestamp": 5119.696,
+    "n_hash": 74
+   }
+  },
+  {
+   "doc": 39,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29599,
+    "turn": 6,
+    "input_length": 8905,
+    "timestamp": 5119.702,
+    "n_hash": 557
+   }
+  },
+  {
+   "doc": 40,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29600,
+    "turn": 2,
+    "input_length": 10000,
+    "timestamp": 5119.823,
+    "n_hash": 625
+   }
+  },
+  {
+   "doc": 41,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3160,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29601,
+    "turn": 3,
+    "input_length": 3144,
+    "timestamp": 5119.999,
+    "n_hash": 197
+   }
+  },
+  {
+   "doc": 42,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 584,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29602,
+    "turn": 2,
+    "input_length": 571,
+    "timestamp": 5120.037,
+    "n_hash": 36
+   }
+  },
+  {
+   "doc": 43,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 440,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29603,
+    "turn": 1,
+    "input_length": 420,
+    "timestamp": 5120.488,
+    "n_hash": 27
+   }
+  },
+  {
+   "doc": 44,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 7000,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29604,
+    "turn": 1,
+    "input_length": 6983,
+    "timestamp": 5120.599,
+    "n_hash": 437
+   }
+  },
+  {
+   "doc": 45,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5240,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29605,
+    "turn": 9,
+    "input_length": 5222,
+    "timestamp": 5120.824,
+    "n_hash": 327
+   }
+  },
+  {
+   "doc": 46,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 4936,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29606,
+    "turn": 1,
+    "input_length": 4915,
+    "timestamp": 5120.855,
+    "n_hash": 308
+   }
+  },
+  {
+   "doc": 47,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1240,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29607,
+    "turn": 1,
+    "input_length": 1231,
+    "timestamp": 5120.929,
+    "n_hash": 77
+   }
+  },
+  {
+   "doc": 48,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 7784,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29608,
+    "turn": 1,
+    "input_length": 7769,
+    "timestamp": 5120.951,
+    "n_hash": 486
+   }
+  },
+  {
+   "doc": 49,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29609,
+    "turn": 4,
+    "input_length": 11977,
+    "timestamp": 5121.16,
+    "n_hash": 749
+   }
+  },
+  {
+   "doc": 50,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 7304,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29610,
+    "turn": 1,
+    "input_length": 7283,
+    "timestamp": 5121.619,
+    "n_hash": 456
+   }
+  },
+  {
+   "doc": 51,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 2488,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29611,
+    "turn": 4,
+    "input_length": 2478,
+    "timestamp": 5121.619,
+    "n_hash": 155
+   }
+  },
+  {
+   "doc": 52,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 584,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29612,
+    "turn": 3,
+    "input_length": 569,
+    "timestamp": 5122.237,
+    "n_hash": 36
+   }
+  },
+  {
+   "doc": 53,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5448,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29613,
+    "turn": 3,
+    "input_length": 5425,
+    "timestamp": 5122.263,
+    "n_hash": 340
+   }
+  },
+  {
+   "doc": 54,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29614,
+    "turn": 1,
+    "input_length": 13045,
+    "timestamp": 5122.279,
+    "n_hash": 816
+   }
+  },
+  {
+   "doc": 55,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 584,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29615,
+    "turn": 1,
+    "input_length": 574,
+    "timestamp": 5122.323,
+    "n_hash": 36
+   }
+  },
+  {
+   "doc": 56,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1432,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29616,
+    "turn": 3,
+    "input_length": 1418,
+    "timestamp": 5122.369,
+    "n_hash": 89
+   }
+  },
+  {
+   "doc": 57,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 904,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29617,
+    "turn": 1,
+    "input_length": 890,
+    "timestamp": 5122.379,
+    "n_hash": 56
+   }
+  },
+  {
+   "doc": 58,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3656,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29618,
+    "turn": 2,
+    "input_length": 3637,
+    "timestamp": 5122.656,
+    "n_hash": 228
+   }
+  },
+  {
+   "doc": 59,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29619,
+    "turn": 1,
+    "input_length": 13052,
+    "timestamp": 5122.723,
+    "n_hash": 816
+   }
+  },
+  {
+   "doc": 60,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29620,
+    "turn": 2,
+    "input_length": 10641,
+    "timestamp": 5122.982,
+    "n_hash": 666
+   }
+  },
+  {
+   "doc": 61,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29621,
+    "turn": 1,
+    "input_length": 11006,
+    "timestamp": 5123.197,
+    "n_hash": 688
+   }
+  },
+  {
+   "doc": 62,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1192,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29622,
+    "turn": 1,
+    "input_length": 1172,
+    "timestamp": 5123.295,
+    "n_hash": 74
+   }
+  },
+  {
+   "doc": 63,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29623,
+    "turn": 1,
+    "input_length": 12186,
+    "timestamp": 5123.727,
+    "n_hash": 762
+   }
+  },
+  {
+   "doc": 64,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29624,
+    "turn": 1,
+    "input_length": 10858,
+    "timestamp": 5123.941,
+    "n_hash": 679
+   }
+  },
+  {
+   "doc": 65,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 5976,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29625,
+    "turn": 1,
+    "input_length": 5968,
+    "timestamp": 5124.064,
+    "n_hash": 373
+   }
+  },
+  {
+   "doc": 66,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1064,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29626,
+    "turn": 2,
+    "input_length": 1053,
+    "timestamp": 5124.279,
+    "n_hash": 66
+   }
+  },
+  {
+   "doc": 67,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29627,
+    "turn": 1,
+    "input_length": 13561,
+    "timestamp": 5124.339,
+    "n_hash": 848
+   }
+  },
+  {
+   "doc": 68,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 872,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29628,
+    "turn": 1,
+    "input_length": 863,
+    "timestamp": 5124.412,
+    "n_hash": 54
+   }
+  },
+  {
+   "doc": 69,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 4008,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29629,
+    "turn": 4,
+    "input_length": 3996,
+    "timestamp": 5124.497,
+    "n_hash": 250
+   }
+  },
+  {
+   "doc": 70,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 2008,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29630,
+    "turn": 2,
+    "input_length": 1994,
+    "timestamp": 5124.722,
+    "n_hash": 125
+   }
+  },
+  {
+   "doc": 71,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 264,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29631,
+    "turn": 1,
+    "input_length": 241,
+    "timestamp": 5124.876,
+    "n_hash": 16
+   }
+  },
+  {
+   "doc": 72,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 6456,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29632,
+    "turn": 2,
+    "input_length": 6446,
+    "timestamp": 5124.967,
+    "n_hash": 403
+   }
+  },
+  {
+   "doc": 73,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 7864,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29633,
+    "turn": 2,
+    "input_length": 7848,
+    "timestamp": 5125.557,
+    "n_hash": 491
+   }
+  },
+  {
+   "doc": 74,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1304,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29634,
+    "turn": 3,
+    "input_length": 1288,
+    "timestamp": 5125.804,
+    "n_hash": 81
+   }
+  },
+  {
+   "doc": 75,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1992,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29635,
+    "turn": 1,
+    "input_length": 1978,
+    "timestamp": 5125.901,
+    "n_hash": 124
+   }
+  },
+  {
+   "doc": 76,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 712,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29636,
+    "turn": 2,
+    "input_length": 692,
+    "timestamp": 5125.991,
+    "n_hash": 44
+   }
+  },
+  {
+   "doc": 77,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 232,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29637,
+    "turn": 1,
+    "input_length": 211,
+    "timestamp": 5126.034,
+    "n_hash": 14
+   }
+  },
+  {
+   "doc": 78,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 808,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29638,
+    "turn": 1,
+    "input_length": 793,
+    "timestamp": 5126.048,
+    "n_hash": 50
+   }
+  },
+  {
+   "doc": 79,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29639,
+    "turn": 1,
+    "input_length": 13438,
+    "timestamp": 5126.141,
+    "n_hash": 840
+   }
+  },
+  {
+   "doc": 80,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 7480,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29640,
+    "turn": 2,
+    "input_length": 7459,
+    "timestamp": 5126.637,
+    "n_hash": 467
+   }
+  },
+  {
+   "doc": 81,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 232,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29641,
+    "turn": 1,
+    "input_length": 224,
+    "timestamp": 5127.171,
+    "n_hash": 14
+   }
+  },
+  {
+   "doc": 82,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29642,
+    "turn": 1,
+    "input_length": 8657,
+    "timestamp": 5127.175,
+    "n_hash": 542
+   }
+  },
+  {
+   "doc": 83,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3416,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29643,
+    "turn": 2,
+    "input_length": 3405,
+    "timestamp": 5127.357,
+    "n_hash": 213
+   }
+  },
+  {
+   "doc": 84,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1288,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29644,
+    "turn": 2,
+    "input_length": 1278,
+    "timestamp": 5127.389,
+    "n_hash": 80
+   }
+  },
+  {
+   "doc": 85,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29645,
+    "turn": 2,
+    "input_length": 11058,
+    "timestamp": 5127.572,
+    "n_hash": 692
+   }
+  },
+  {
+   "doc": 86,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29646,
+    "turn": 5,
+    "input_length": 10717,
+    "timestamp": 5127.726,
+    "n_hash": 670
+   }
+  },
+  {
+   "doc": 87,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3096,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29647,
+    "turn": 3,
+    "input_length": 3083,
+    "timestamp": 5127.732,
+    "n_hash": 193
+   }
+  },
+  {
+   "doc": 88,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29648,
+    "turn": 14,
+    "input_length": 16175,
+    "timestamp": 5127.899,
+    "n_hash": 1011
+   }
+  },
+  {
+   "doc": 89,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 6088,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29649,
+    "turn": 2,
+    "input_length": 6076,
+    "timestamp": 5128.246,
+    "n_hash": 380
+   }
+  },
+  {
+   "doc": 90,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 1800,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29650,
+    "turn": 2,
+    "input_length": 1784,
+    "timestamp": 5128.407,
+    "n_hash": 112
+   }
+  },
+  {
+   "doc": 91,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 3800,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29651,
+    "turn": 2,
+    "input_length": 3778,
+    "timestamp": 5128.474,
+    "n_hash": 237
+   }
+  },
+  {
+   "doc": 92,
+   "reuse": 1,
+   "phases": [
+    "stream"
+   ],
+   "tokens": 8120,
+   "matched_total": 0,
+   "meta": {
+    "chat_id": 29652,
+    "turn": 1,
+    "input_length": 13326,
+    "timestamp": 5128.792,
+    "n_hash": 833
+   }
+  }
+ ],
+ "totals": {
+  "requests": 93,
+  "prompt_tokens": 433128,
+  "matched_tokens": 0,
+  "reused_docs": 0
+ }
+}

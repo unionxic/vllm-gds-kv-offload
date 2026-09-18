@@ -47,4 +47,4 @@ LongBench-v2 32건(실제 문서, RAM 0.72): 재계산 12,652 s → 정책 조�
 
 - BAR1 256 MiB라 cuFile은 bounce 두 홉이고 SSD 읽기가 GPU PCIe 링크를 같이 쓴다. 직접 DMA는 BAR1이 VRAM 전체인 카드에서만.
 - prefetch_step 2의 버퍼 1.6 GiB 때문에 chunk 8192가 안 들어가 chunk 4096·KV 18.8k로 맞췄다.
-- 역순 재방문 워크로드는 적중을 최대로 만드는 조건이라 트레이스 시간 순서 리플레이(--mode stream)로 재측정 중.
+- 역순 재방문 워크로드는 적중을 최대로 만드는 조건. 트레이스 시간 순서 open-loop 리플레이 128건(동시 상한 4)에서는 vLLM 기본값이 도착을 못 따라가 3시간에 93건 완료·대기 중앙값 903 s였고, 정책 조합은 128건 완료·대기 12 s·TTFT 169 → 70 s. SSD KV cache hit은 토큰의 19%(트레이스 최대 38%, 나머지는 GPU prefix cache hit).
