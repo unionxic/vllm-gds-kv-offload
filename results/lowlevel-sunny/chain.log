@@ -233,3 +233,4 @@ combo=h2d+local+remote :: local 2.774397 8.642;remote 3.562851 5.264;h2d 7.198 5
 combo=h2d+local+remote+rdma :: local 2.771103 6.593;remote 2.499098 9.244;h2d 7.198 4.931;rdma 2.997 5.071; :: wall 9.3 s pause_dur+3499224 nvfs+32768 MiB
 wrote ../../results/lowlevel-sunny/step5_combined.jsonl
 [00:26:41] lowlevel done
+lowlevel2 done

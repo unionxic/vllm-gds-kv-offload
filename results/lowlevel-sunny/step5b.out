@@ -9,3 +9,4 @@ combo=h2d+remote :: remote 4.919855;h2d 7.86346; :: 창 11.03 s link_rx 3.66 GiB
 combo=remote+rdma :: remote 3.952562;rdma 7.41012; :: 창 11.03 s link_rx 9.7 GiB/s gds_rx 2.09 GiB/s pause_dur+1729411
 combo=h2d+local+remote :: local 1.127451;remote 3.886099;h2d 7.94542; :: 창 11.03 s link_rx 2.57 GiB/s gds_rx 3.65 GiB/s pause_dur+8502710
 combo=h2d+local+remote+rdma :: local 2.251919;remote 1.904919;h2d 7.26367;rdma 1.0047; :: 창 11.03 s link_rx 1.69 GiB/s gds_rx 2.64 GiB/s pause_dur+9420987
+wrote ../../results/lowlevel-sunny/step5_combined.jsonl
