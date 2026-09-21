@@ -57,7 +57,10 @@ for c in conds:
     if not any(x.get("load_bytes") for x in S):
         print(f"  {c:11} load_bytes 없음(--kv-trace 없이 돈 런)")
         continue
-    H = [x for x in S if x.get("matched_of", 0) > 0]
+    H = [x for x in S if x.get("matched_of", 0) > 0 and x.get("first_mono") is not None]
+    n_nofirst = sum(1 for x in S if x.get("first_mono") is None)
+    if n_nofirst:
+        print(f"  {c:11} 첫 토큰 없는 요청 {n_nofirst}건 제외")
     bins = {"ssd 0": [], "ssd (0,0.5)": [], "ssd [0.5,1]": []}
     tot = [0, 0, 0]
     for x in H:
