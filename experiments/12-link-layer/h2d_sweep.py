@@ -5,6 +5,7 @@ import argparse, json, time, torch
 ap = argparse.ArgumentParser(); ap.add_argument("--out", required=True); ap.add_argument("--tag", default="")
 ap.add_argument("--sizes", default="64K,256K,1M,4M,16M,64M,256M"); ap.add_argument("--streams", default="1,2")
 ap.add_argument("--sec", type=float, default=3.0); ap.add_argument("--dir", default="both")
+ap.add_argument("--bytes", type=float, default=0, help="0이 아니면 --sec 대신 이만큼(바이트) 옮기고 완료 시간을 잰다")
 a = ap.parse_args()
 def sz(s): u = {"K": 1 << 10, "M": 1 << 20, "G": 1 << 30}; return int(float(s[:-1]) * u[s[-1]]) if s[-1] in u else int(s)
 sizes = [sz(s) for s in a.sizes.split(",")]; streams = [int(x) for x in a.streams.split(",")]
@@ -24,7 +25,7 @@ for d in dirs:
                     (dev[i][:n].copy_(host[i][:n], non_blocking=True) if d == "h2d" else host[i][:n].copy_(dev[i][:n], non_blocking=True))
             torch.cuda.synchronize()
             t0 = time.perf_counter(); moved = 0; k = 0
-            while time.perf_counter() - t0 < a.sec:
+            while (moved < a.bytes) if a.bytes else (time.perf_counter() - t0 < a.sec):
                 for _ in range(16):
                     off = (k % nchunk) * n; k += 1
                     for i in range(ns):
