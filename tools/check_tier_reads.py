@@ -19,7 +19,7 @@ ap.add_argument("--order", default="")
 ap.add_argument("--phase", default="stream")
 ap.add_argument("--ssd-roots", default="kv-p3-local,rain-ssd,local-ssd",
                 help="쉼표 구분. 루트 디렉터리 경로에 이 문자열이 들어가면 SSD 층으로 본다")
-a = ap.parse_args()
+a, _unknown = ap.parse_known_args()
 D = a.dir
 conds = [c for c in a.order.split() if os.path.exists(os.path.join(D, c, "result.json"))]
 conds += sorted(c for c in os.listdir(D) if c not in conds and os.path.exists(os.path.join(D, c, "result.json")))
@@ -90,3 +90,39 @@ for c in conds:
             pairs.append((x["first_mono"] - x["submit_mono"]) - (y["first_mono"] - y["submit_mono"]))
     if pairs:
         print(f"  {'':11} 적중량 맞춘 쌍 {len(pairs)}건: 엔진지연 차(ssd>0 − ssd 0) 중앙 {q(pairs, 0.5):+.3f} s, ssd 쪽이 느린 쌍 {sum(1 for p in pairs if p > 0)}/{len(pairs)}")
+
+
+# ---- 공통 적중 요청 짝 비교(--pair A B): 같은 rid가 두 조건 모두 적중일 때 적중 토큰·SSD 바이트·TTFT(도착)·엔진지연 ----
+import sys as _sys
+if "--pair" in _sys.argv:
+    i = _sys.argv.index("--pair"); A, B = _sys.argv[i + 1], _sys.argv[i + 2]
+
+    def _load(c):
+        rq = [json.loads(l) for l in open(os.path.join(D, c, "requests.jsonl"))]
+        return {x["rid"]: x for x in rq if x.get("phase") == a.phase and x.get("first_mono") is not None}
+
+    RA, RB = _load(A), _load(B)
+    both = [k for k in RA if k in RB and RA[k].get("matched_of", 0) > 0 and RB[k].get("matched_of", 0) > 0]
+    rows = []
+    for k in both:
+        xa, xb = RA[k], RB[k]
+        da, sa, _ = tiers(xa.get("load_bytes")); db, sb, _ = tiers(xb.get("load_bytes"))
+        rows.append(dict(rid=k, tok_a=xa["matched_of"], tok_b=xb["matched_of"], ssd_a=sa / 2**30, ssd_b=sb / 2**30,
+                         ttft_a=xa["first_wall"] - xa["arrival_wall"], ttft_b=xb["first_wall"] - xb["arrival_wall"],
+                         eng_a=xa["first_mono"] - xa["submit_mono"], eng_b=xb["first_mono"] - xb["submit_mono"], arr=xa["arrival_s"]))
+    print()
+    print(f"== 공통 적중 요청 {len(both)}건 ({A} vs {B}); A만 적중 {sum(1 for k in RA if RA[k].get('matched_of',0)>0 and (k not in RB or RB[k].get('matched_of',0)==0))}, B만 적중 {sum(1 for k in RB if RB[k].get('matched_of',0)>0 and (k not in RA or RA[k].get('matched_of',0)==0))}")
+    if rows:
+        def col(key): return [r[key] for r in rows]
+        print(f"  적중토큰 중앙 A {q(col('tok_a'),0.5):.0f} / B {q(col('tok_b'),0.5):.0f}; SSD GiB 합 A {sum(col('ssd_a')):.2f} / B {sum(col('ssd_b')):.2f}; SSD>0 요청 A {sum(1 for r in rows if r['ssd_a']>0)} / B {sum(1 for r in rows if r['ssd_b']>0)}")
+        print(f"  TTFT(도착) 중앙 A {q(col('ttft_a'),0.5):.2f} / B {q(col('ttft_b'),0.5):.2f} s; 엔진지연 중앙 A {q(col('eng_a'),0.5):.2f} / B {q(col('eng_b'),0.5):.2f} s")
+        d_t = [r["ttft_b"] - r["ttft_a"] for r in rows]; d_e = [r["eng_b"] - r["eng_a"] for r in rows]
+        print(f"  paired(B−A): TTFT(도착) 중앙 {q(d_t,0.5):+.2f} s (B 느린 {sum(1 for x in d_t if x>0)}/{len(rows)}), 엔진지연 중앙 {q(d_e,0.5):+.2f} s (B 느린 {sum(1 for x in d_e if x>0)}/{len(rows)})")
+        # 둘 다 SSD를 읽은 요청만
+        ss = [r for r in rows if r["ssd_a"] > 0 and r["ssd_b"] > 0]
+        if ss:
+            d_e2 = [r["eng_b"] - r["eng_a"] for r in ss]
+            print(f"  둘 다 SSD 읽은 {len(ss)}건: 적중토큰 중앙 A {q([r['tok_a'] for r in ss],0.5):.0f}/B {q([r['tok_b'] for r in ss],0.5):.0f}, SSD GiB 중앙 A {q([r['ssd_a'] for r in ss],0.5):.2f}/B {q([r['ssd_b'] for r in ss],0.5):.2f}, 엔진지연 중앙 A {q([r['eng_a'] for r in ss],0.5):.2f}/B {q([r['eng_b'] for r in ss],0.5):.2f}, paired(B−A) 중앙 {q(d_e2,0.5):+.2f} s")
+        print("  rid | 도착 s | 적중토큰 A/B | SSD GiB A/B | TTFT(도착) A/B | 엔진지연 A/B   (SSD 바이트 큰 순 12건)")
+        for r in sorted(rows, key=lambda r: -(r["ssd_a"] + r["ssd_b"]))[:12]:
+            print(f"  {r['rid']:11} | {r['arr']:6.1f} | {r['tok_a']:6d}/{r['tok_b']:6d} | {r['ssd_a']:5.2f}/{r['ssd_b']:5.2f} | {r['ttft_a']:6.2f}/{r['ttft_b']:6.2f} | {r['eng_a']:5.2f}/{r['eng_b']:5.2f}")
