@@ -1,0 +1,205 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+plan: KV 0.13 MB/token, 1.00 GiB/request, working set 96.0 GiB, GPU holds 2 requests
+ 
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0920 23:49:49.785956 2455794 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0920 23:49:49.785979 2455794 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0920 23:49:49.786407 2455794 client_service.cpp:423] client_id=12632242706427583530-12445630724470920895
+I0920 23:49:49.786420 2455794 client_service.cpp:425] client_id=12632242706427583530-12445630724470920895, host_id=30.0.0.3
+I0920 23:49:49.786422 2455794 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0920 23:49:49.787678 2455794 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0920 23:49:49.787703 2455794 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0920 23:49:49.787714 2455794 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.3 port: 13625
+I0920 23:49:49.787935 2455794 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.193
+I0920 23:49:49.787940 2455794 transfer_metadata_plugin.cpp:1298] Found active interface ens4f1np1 with IP 30.0.0.3
+I0920 23:49:49.787943 2455794 transfer_metadata_plugin.cpp:1287] Skipping interface virbr0 (not UP or not RUNNING)
+I0920 23:49:49.787945 2455794 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0920 23:49:49.787955 2455794 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.193:15165
+I0920 23:49:49.789834 2455794 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0920 23:49:49.789844 2455794 client_service.cpp:884] Using specified RDMA devices: mlx5_1
+I0920 23:49:49.814812 2455794 topology.cpp:127] Device mlx5_1 port 1 is available
+I0920 23:49:49.979804 2455794 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0920 23:49:49.979848 2455794 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0920 23:49:49.979883 2455794 rdma_context.cpp:207] Using SIEVE endpoint store
+I0920 23:49:49.982929 2455794 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_1/1 (network state: with network device)
+I0920 23:49:49.984491 2455794 rdma_context.cpp:290] RDMA device: mlx5_1, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:03
+I0920 23:49:49.985235 2455794 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0920 23:49:49.985245 2455794 real_client.cpp:851] Successfully created client on port 13625 after 1 attempt(s)
+I0920 23:49:49.986539 2455794 real_client.cpp:884] Registering local memory: 67108864 bytes
+I0920 23:49:49.999078 2455794 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+mooncake remove_all -> 2920
+INFO 09-20 23:49:51 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 8192, 'block_size': 64, 'gpu_memory_utilization': 0.9, 'kv_cache_memory_bytes': 2469606195, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='MooncakeStoreConnector', engine_id='d11b44ae-6c6f-4d67-900c-3700ddae7517', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'host_staging_gb': 8.0}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4'}
+WARNING 09-20 23:49:51 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_KV_SPLIT
+WARNING 09-20 23:49:51 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-20 23:49:52 [model.py:623] Resolved architecture: LlamaForCausalLM
+INFO 09-20 23:49:52 [model.py:1788] Using max model len 8192
+INFO 09-20 23:49:53 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+Parse safetensors files:   0%|          | 0/2 [00:00<?, ?it/s]Parse safetensors files:  50%|█████     | 1/2 [00:01<00:01,  1.35s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.09s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.13s/it]
+INFO 09-20 23:49:56 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-20 23:49:56 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-20 23:49:56 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-20 23:49:56 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-20 23:49:56 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-20 23:49:56 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-20 23:50:01 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', speculative_config=None, tokenizer='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=8192, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=auto_gptq, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-20 23:50:01 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:57827 backend=nccl
+INFO 09-20 23:50:01 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+WARNING 09-20 23:50:02 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-20 23:50:02 [gpu_model_runner.py:5250] Starting to load model hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4...
+INFO 09-20 23:50:02 [auto_gptq.py:357] Using MarlinLinearKernel for AutoGPTQLinearMethod
+ERROR 09-20 23:50:02 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-20 23:50:02 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+INFO 09-20 23:50:04 [weight_utils.py:869] Filesystem type for checkpoints: EXT4. Checkpoint size: 5.34 GiB. Available RAM: 115.23 GiB.
+INFO 09-20 23:50:04 [weight_utils.py:892] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:00<00:00,  1.10it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.92it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.73it/s]
+
+INFO 09-20 23:50:05 [default_loader.py:430] Loading weights took 1.17 seconds
+INFO 09-20 23:50:06 [gpu_model_runner.py:5347] Model loading took 5.37 GiB memory and 2.661910 seconds
+INFO 09-20 23:50:06 [utils.py:49] Connectors do not specify a kv cache layout, defaulting to NHD.
+INFO 09-20 23:50:10 [gpu_worker.py:479] Initial free memory 15.42 GiB, reserved 2.3 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-20 23:50:10 [kv_cache_utils.py:2177] GPU KV cache size: 18,816 tokens
+INFO 09-20 23:50:10 [kv_cache_utils.py:2178] Maximum concurrency for 8,192 tokens per request: 2.30x
+INFO 09-20 23:50:10 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: d11b44ae-6c6f-4d67-900c-3700ddae7517
+WARNING 09-20 23:50:10 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+I0920 23:50:10.078138 2455794 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0920 23:50:10.078158 2455794 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0920 23:50:10.078768 2455794 client_service.cpp:423] client_id=5423639604665514304-2665714247607541639
+I0920 23:50:10.078778 2455794 client_service.cpp:425] client_id=5423639604665514304-2665714247607541639, host_id=30.0.0.3
+I0920 23:50:10.078779 2455794 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0920 23:50:10.080086 2455794 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0920 23:50:10.080117 2455794 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0920 23:50:10.080127 2455794 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.3 port: 13081
+I0920 23:50:10.080339 2455794 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.193
+I0920 23:50:10.080344 2455794 transfer_metadata_plugin.cpp:1298] Found active interface ens4f1np1 with IP 30.0.0.3
+I0920 23:50:10.080346 2455794 transfer_metadata_plugin.cpp:1287] Skipping interface virbr0 (not UP or not RUNNING)
+I0920 23:50:10.080348 2455794 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0920 23:50:10.080358 2455794 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.193:15361
+I0920 23:50:10.080982 2455794 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0920 23:50:10.080996 2455794 client_service.cpp:884] Using specified RDMA devices: mlx5_1
+I0920 23:50:10.102252 2455794 topology.cpp:127] Device mlx5_1 port 1 is available
+I0920 23:50:10.102612 2455794 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0920 23:50:10.102639 2455794 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0920 23:50:10.102644 2455794 rdma_context.cpp:207] Using SIEVE endpoint store
+I0920 23:50:10.104656 2455794 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_1/1 (network state: with network device)
+I0920 23:50:10.105352 2455794 rdma_context.cpp:290] RDMA device: mlx5_1, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:03
+I0920 23:50:10.106114 2455794 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0920 23:50:10.106124 2455794 real_client.cpp:851] Successfully created client on port 13081 after 1 attempt(s)
+I0920 23:50:10.107453 2455794 real_client.cpp:884] Registering local memory: 1073741824 bytes
+I0920 23:50:10.281692 2455794 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+INFO 09-20 23:50:10 [worker.py:1062] Mooncake mode=standalone-store (global_segment_size=0, local_buffer_size=1073741824, preferred_segment=<none>, enable_offload=False)
+WARNING 09-20 23:50:10 [worker.py:1087] standalone-store mode without enable_offload: large prefills may exceed the owner DirectIO budget.
+E0920 23:50:10.292519 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bb4980000: Cannot allocate memory [12]
+E0920 23:50:10.292538 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bb4980000 len 77070336: -600
+E0920 23:50:10.293146 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bb9300000: Cannot allocate memory [12]
+E0920 23:50:10.293156 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bb9300000 len 77070336: -600
+E0920 23:50:10.293674 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bbe000000: Cannot allocate memory [12]
+E0920 23:50:10.293684 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bbe000000 len 77070336: -600
+E0920 23:50:10.294167 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bc2980000: Cannot allocate memory [12]
+E0920 23:50:10.294176 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bc2980000 len 77070336: -600
+E0920 23:50:10.294641 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bc7300000: Cannot allocate memory [12]
+E0920 23:50:10.294655 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bc7300000 len 77070336: -600
+E0920 23:50:10.295145 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bcbc80000: Cannot allocate memory [12]
+E0920 23:50:10.295153 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bcbc80000 len 77070336: -600
+E0920 23:50:10.295655 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bd0600000: Cannot allocate memory [12]
+E0920 23:50:10.295663 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bd0600000 len 77070336: -600
+E0920 23:50:10.296198 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3bd4f80000: Cannot allocate memory [12]
+E0920 23:50:10.296208 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3bd4f80000 len 77070336: -600
+E0920 23:50:10.296731 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b52000000: Cannot allocate memory [12]
+E0920 23:50:10.296741 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b52000000 len 77070336: -600
+E0920 23:50:10.297288 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b4c000000: Cannot allocate memory [12]
+E0920 23:50:10.297297 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b4c000000 len 77070336: -600
+E0920 23:50:10.297777 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b46000000: Cannot allocate memory [12]
+E0920 23:50:10.297785 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b46000000 len 77070336: -600
+E0920 23:50:10.298272 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b40000000: Cannot allocate memory [12]
+E0920 23:50:10.298280 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b40000000 len 77070336: -600
+E0920 23:50:10.298753 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b2c000000: Cannot allocate memory [12]
+E0920 23:50:10.298761 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b2c000000 len 77070336: -600
+E0920 23:50:10.299283 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b26000000: Cannot allocate memory [12]
+E0920 23:50:10.299292 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b26000000 len 77070336: -600
+E0920 23:50:10.299788 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b20000000: Cannot allocate memory [12]
+E0920 23:50:10.299798 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b20000000 len 77070336: -600
+E0920 23:50:10.300330 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b1a000000: Cannot allocate memory [12]
+E0920 23:50:10.300339 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b1a000000 len 77070336: -600
+E0920 23:50:10.300863 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b14000000: Cannot allocate memory [12]
+E0920 23:50:10.300875 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b14000000 len 77070336: -600
+E0920 23:50:10.301393 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b0e000000: Cannot allocate memory [12]
+E0920 23:50:10.301401 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b0e000000 len 77070336: -600
+E0920 23:50:10.301887 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b08000000: Cannot allocate memory [12]
+E0920 23:50:10.301894 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b08000000 len 77070336: -600
+E0920 23:50:10.302372 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3b02000000: Cannot allocate memory [12]
+E0920 23:50:10.302381 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3b02000000 len 77070336: -600
+E0920 23:50:10.302855 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3afc000000: Cannot allocate memory [12]
+E0920 23:50:10.302863 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3afc000000 len 77070336: -600
+E0920 23:50:10.303323 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3af6000000: Cannot allocate memory [12]
+E0920 23:50:10.303330 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3af6000000 len 77070336: -600
+E0920 23:50:10.303794 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3af0000000: Cannot allocate memory [12]
+E0920 23:50:10.303803 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3af0000000 len 77070336: -600
+E0920 23:50:10.304338 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3aea000000: Cannot allocate memory [12]
+E0920 23:50:10.304347 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3aea000000 len 77070336: -600
+E0920 23:50:10.304863 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3ae4000000: Cannot allocate memory [12]
+E0920 23:50:10.304872 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3ae4000000 len 77070336: -600
+E0920 23:50:10.305371 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3ade000000: Cannot allocate memory [12]
+E0920 23:50:10.305379 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3ade000000 len 77070336: -600
+E0920 23:50:10.305859 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3ad8000000: Cannot allocate memory [12]
+E0920 23:50:10.305867 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3ad8000000 len 77070336: -600
+E0920 23:50:10.306348 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3ad2000000: Cannot allocate memory [12]
+E0920 23:50:10.306355 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3ad2000000 len 77070336: -600
+E0920 23:50:10.306835 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3acc000000: Cannot allocate memory [12]
+E0920 23:50:10.306846 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3acc000000 len 77070336: -600
+E0920 23:50:10.307331 2455794 rdma_context.cpp:602] Failed to register memory 0x7f3ac6000000: Cannot allocate memory [12]
+E0920 23:50:10.307339 2455794 rdma_transport.cpp:463] Failed to register memory region (chunk 0) with context 0
+ERROR 09-20 23:50:10 [worker.py:1253] register_buffer failed for addr 0x7f3ac6000000 len 77070336: -600
+WARNING 09-20 23:50:10 [worker.py:1293] KV 텐서 RDMA 등록 실패(BAR1 부족) → host pinned 경유로 전환: 슬랩 2개 x 4.00 GiB
+INFO 09-20 23:50:10 [worker.py:1305] Registered KV caches: num_groups=1, num_segments=32, num_blocks=294
+INFO 09-20 23:50:10 [worker.py:1355] Started 1 Mooncake KV-load receive thread(s)
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-20 23:50:10 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-20 23:50:10 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-20 23:50:11 [core.py:347] init engine (profile, create kv cache, warmup model) took 4.86 s
+INFO 09-20 23:50:11 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: d11b44ae-6c6f-4d67-900c-3700ddae7517
+WARNING 09-20 23:50:11 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+stream plan: 96 req, span 476.1 s, median gap 3.480 s, time_scale 30.0, max_concurrency 4
+WARNING 09-20 23:50:11 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-20 23:50:11 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-20 23:50:11 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+INFO 09-20 23:50:29 [host_staging.py:81] Mooncake host staging slab 등록: 4.00 GiB (thread KVCacheStoreSendingThread, 슬랩 1개째)
+WARNING 09-20 23:50:47 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+INFO 09-20 23:51:43 [host_staging.py:81] Mooncake host staging slab 등록: 4.00 GiB (thread KVCacheStoreRecvingThread-0, 슬랩 2개째)
+WARNING 09-20 23:53:50 [scheduler.py:1064] allocate_slots failed 20 times for stream-44-a96403be: new=8008 ext=0 local=0 free_blocks=43 reserved=0 inflight_prefills=2 split_pending=0 running=0 waiting=1 load_async=False
+RESULT {"tiers": {"n_modules": 0, "n_ssd": 0, "host_tier_gib": 0.0, "ssd_tier_gib": 0.0, "gpu_resident": "all"}, "kv_io": {"read_n": 0, "read_gib": 0.0, "write_n": 0, "write_gib": 0.0, "read_busy_s": 0.0, "write_busy_s": 0.0, "errors": 0, "registered_tensors": 0, "write_stages_s": {"ev": 0.0, "open": 0.0, "io": 0.0, "fin": 0.0}, "read_stages_s": {"open": 0.0, "io": 0.0, "fin": 0.0}, "write_calls": 0, "read_calls": 0}, "gpu_max_gib": 8.62}
+  stream: wall 476.593 s, ttft median 6.53, matched 1552448
+I0920 23:58:17.860375 2455794 real_client.cpp:628] Cleaning up DistributedObjectStore instance
+I0920 23:58:17.861549 2455794 real_client.cpp:628] Cleaning up DistributedObjectStore instance
