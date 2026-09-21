@@ -1,0 +1,36 @@
+{"set": "local-ssd/seq", "sweep": "iosize", "threads": 8, "io": "64K", "extra": "", "gib_s": 0.934827, "sec": 19.782, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "iosize", "threads": 8, "io": "256K", "extra": "", "gib_s": 1.126549, "sec": 16.893, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "iosize", "threads": 8, "io": "1M", "extra": "", "gib_s": 3.304736, "sec": 7.493, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "iosize", "threads": 8, "io": "4M", "extra": "", "gib_s": 3.308261, "sec": 7.361, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "iosize", "threads": 8, "io": "16M", "extra": "", "gib_s": 3.217441, "sec": 7.62, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "threads", "threads": 1, "io": "1M", "extra": "", "gib_s": 1.919579, "sec": 3.646, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "threads", "threads": 2, "io": "1M", "extra": "", "gib_s": 1.797104, "sec": 4.742, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "threads", "threads": 4, "io": "1M", "extra": "", "gib_s": 3.293861, "sec": 4.984, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "threads", "threads": 8, "io": "1M", "extra": "", "gib_s": 3.303911, "sec": 7.365, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "threads", "threads": 16, "io": "1M", "extra": "", "gib_s": 0.0, "sec": 2.495, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 4", "gib_s": 0.0, "sec": 0.084, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 16", "gib_s": 0.0, "sec": 0.085, "pause_dur": 0, "nq": 36}
+{"set": "local-ssd/seq", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 64", "gib_s": 0.0, "sec": 0.079, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "iosize", "threads": 8, "io": "64K", "extra": "", "gib_s": 3.648697, "sec": 7.252, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "iosize", "threads": 8, "io": "256K", "extra": "", "gib_s": 6.256649, "sec": 5.308, "pause_dur": 28418, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "iosize", "threads": 8, "io": "1M", "extra": "", "gib_s": 7.465633, "sec": 4.802, "pause_dur": 181795, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "iosize", "threads": 8, "io": "4M", "extra": "", "gib_s": 9.49136, "sec": 4.406, "pause_dur": 260171, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "iosize", "threads": 8, "io": "16M", "extra": "", "gib_s": 8.378486, "sec": 4.546, "pause_dur": 188185, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "threads", "threads": 1, "io": "1M", "extra": "", "gib_s": 1.288339, "sec": 4.172, "pause_dur": 122830, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "threads", "threads": 2, "io": "1M", "extra": "", "gib_s": 2.218899, "sec": 4.367, "pause_dur": 234095, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "threads", "threads": 4, "io": "1M", "extra": "", "gib_s": 5.150328, "sec": 4.098, "pause_dur": 127402, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "threads", "threads": 8, "io": "1M", "extra": "", "gib_s": 7.260957, "sec": 4.739, "pause_dur": 178451, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "threads", "threads": 16, "io": "1M", "extra": "", "gib_s": 0.0, "sec": 2.612, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 4", "gib_s": 0.0, "sec": 0.079, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 16", "gib_s": 0.0, "sec": 0.078, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "batch", "threads": 4, "io": "1M", "extra": "-B 64", "gib_s": 0.0, "sec": 0.08, "pause_dur": 0, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 8, "io": "1M", "extra": "", "gib_s": 7.816991, "sec": 4.821, "pause_dur": 6162, "nq": 2}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 4, "io": "4M", "extra": "", "gib_s": 7.575759, "sec": 3.554, "pause_dur": 12573, "nq": 2}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 8, "io": "1M", "extra": "", "gib_s": 8.502612, "sec": 4.672, "pause_dur": 72282, "nq": 4}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 4, "io": "4M", "extra": "", "gib_s": 7.668073, "sec": 3.692, "pause_dur": 20937, "nq": 4}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 8, "io": "1M", "extra": "", "gib_s": 9.140068, "sec": 4.371, "pause_dur": 206764, "nq": 8}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 4, "io": "4M", "extra": "", "gib_s": 7.574535, "sec": 3.719, "pause_dur": 101177, "nq": 8}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 8, "io": "1M", "extra": "", "gib_s": 7.944603, "sec": 4.729, "pause_dur": 192344, "nq": 16}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 4, "io": "4M", "extra": "", "gib_s": 7.433157, "sec": 3.597, "pause_dur": 89178, "nq": 16}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 8, "io": "1M", "extra": "", "gib_s": 7.529841, "sec": 4.75, "pause_dur": 188602, "nq": 36}
+{"set": "rain-nvmeof/gdsio", "sweep": "nvmeof_queues", "threads": 4, "io": "4M", "extra": "", "gib_s": 7.807162, "sec": 3.595, "pause_dur": 85993, "nq": 36}

@@ -1,0 +1,40 @@
+== step1 2026-09-22T00:12:05+09:00
+/mnt/local-ssd/gdsio/gdsio.0: 936 extents
+/mnt/local-ssd/gdsio/gdsio.3: 1018 extents
+/mnt/local-ssd/gdsio/gdsio.7: 997 extents
+/mnt/local-ssd/seq/gdsio.0: 
+/mnt/local-ssd/seq/gdsio.3: 
+/mnt/local-ssd/seq/gdsio.7: 
+gdsio dd_direct rep1 4.799 GiB/s 3.33 s
+gdsio gdsio_x1 rep1 2.394812 GiB/s 3.5 s nvfs+0 MiB
+gdsio gdsio_x0 rep1 2.391404 GiB/s 5.91 s nvfs+8192 MiB
+gdsio gdsio_x2 rep1 2.389657 GiB/s 3.62 s nvfs+0 MiB
+gdsio gdsio_x6 rep1 0 GiB/s 0.07 s nvfs+0 MiB
+seq dd_direct rep1 3.303 GiB/s 4.84 s
+seq gdsio_x1 rep1 3.313608 GiB/s 4.98 s nvfs+0 MiB
+seq gdsio_x0 rep1 3.305278 GiB/s 7.5 s nvfs+16384 MiB
+seq gdsio_x2 rep1 3.313100 GiB/s 5.06 s nvfs+0 MiB
+seq gdsio_x6 rep1 0 GiB/s 0.08 s nvfs+0 MiB
+gdsio dd_direct rep2 4.797 GiB/s 3.34 s
+gdsio gdsio_x1 rep2 2.396833 GiB/s 3.49 s nvfs+0 MiB
+gdsio gdsio_x0 rep2 2.398973 GiB/s 5.88 s nvfs+8192 MiB
+gdsio gdsio_x2 rep2 0.999081 GiB/s 8.25 s nvfs+0 MiB
+gdsio gdsio_x6 rep2 0 GiB/s 0.08 s nvfs+0 MiB
+seq dd_direct rep2 3.311 GiB/s 4.83 s
+seq gdsio_x1 rep2 3.317651 GiB/s 4.98 s nvfs+0 MiB
+seq gdsio_x0 rep2 3.311714 GiB/s 7.37 s nvfs+16384 MiB
+seq gdsio_x2 rep2 3.318678 GiB/s 5.08 s nvfs+0 MiB
+seq gdsio_x6 rep2 0 GiB/s 0.07 s nvfs+0 MiB
+gdsio dd_direct rep3 4.792 GiB/s 3.34 s
+gdsio gdsio_x1 rep3 2.397417 GiB/s 3.49 s nvfs+0 MiB
+gdsio gdsio_x0 rep3 2.393159 GiB/s 5.93 s nvfs+8192 MiB
+gdsio gdsio_x2 rep3 2.389161 GiB/s 3.58 s nvfs+0 MiB
+gdsio gdsio_x6 rep3 0 GiB/s 0.08 s nvfs+0 MiB
+seq dd_direct rep3 3.308 GiB/s 4.84 s
+seq gdsio_x1 rep3 3.312952 GiB/s 4.99 s nvfs+0 MiB
+seq gdsio_x0 rep3 3.305919 GiB/s 7.4 s nvfs+16384 MiB
+seq gdsio_x2 rep3 3.317599 GiB/s 5.07 s nvfs+0 MiB
+seq gdsio_x6 rep3 0 GiB/s 0.08 s nvfs+0 MiB
+raw partition:
+17179869184 bytes (17 GB, 16 GiB) copied, 7.55097 s, 2.3 GB/s
+raw partition 8 parallel: 3.19 GiB/s

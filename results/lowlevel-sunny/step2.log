@@ -1,0 +1,25 @@
+== step2 2026-09-22T00:14:24+09:00
+local-ssd/seq x0 reg rep1 3.305415 GiB/s 7.4 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x0 noreg rep1 3.304973 GiB/s 7.51 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x5 reg rep1 3.247962 GiB/s 7.47 s nvfs+16384 MiB bar1map+16
+local-ssd/seq x5 noreg rep1 3.252679 GiB/s 7.42 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x6 reg rep1 0 GiB/s 0.08 s nvfs+0 MiB bar1map+0
+local-ssd/seq x6 noreg rep1 1.909732 GiB/s 10.89 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x0 reg rep1 7.535292 GiB/s 4.67 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x0 noreg rep1 7.361528 GiB/s 4.67 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x5 reg rep1 4.439238 GiB/s 6.15 s nvfs+16384 MiB bar1map+16
+rain-nvmeof/gdsio x5 noreg rep1 4.460779 GiB/s 6.08 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x6 reg rep1 0 GiB/s 0.08 s nvfs+0 MiB bar1map+0
+rain-nvmeof/gdsio x6 noreg rep1 5.979545 GiB/s 5.23 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x0 reg rep2 3.308062 GiB/s 7.35 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x0 noreg rep2 3.305207 GiB/s 7.37 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x5 reg rep2 3.251139 GiB/s 7.44 s nvfs+16384 MiB bar1map+16
+local-ssd/seq x5 noreg rep2 3.251893 GiB/s 7.58 s nvfs+16384 MiB bar1map+8
+local-ssd/seq x6 reg rep2 0 GiB/s 0.08 s nvfs+0 MiB bar1map+0
+local-ssd/seq x6 noreg rep2 3.087497 GiB/s 7.84 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x0 reg rep2 7.430429 GiB/s 4.75 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x0 noreg rep2 7.342688 GiB/s 4.75 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x5 reg rep2 4.506830 GiB/s 6.06 s nvfs+16384 MiB bar1map+16
+rain-nvmeof/gdsio x5 noreg rep2 4.321637 GiB/s 6.22 s nvfs+16384 MiB bar1map+8
+rain-nvmeof/gdsio x6 reg rep2 0 GiB/s 0.07 s nvfs+0 MiB bar1map+0
+rain-nvmeof/gdsio x6 noreg rep2 5.954248 GiB/s 5.26 s nvfs+16384 MiB bar1map+8

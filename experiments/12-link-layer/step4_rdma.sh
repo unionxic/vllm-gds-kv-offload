@@ -9,7 +9,7 @@ BENCH=~/.venvs/gdsllm/lib/python3.10/site-packages/mooncake/transfer_engine_benc
 META=http://30.0.0.3:8080/metadata; TGT=30.0.0.3:12355
 pause(){ ethtool -S $IF | grep -E '^ *tx_global_pause_duration:' | awk '{print $2}'; }
 echo "== step4 $(date -Is)" | tee -a $LOG
-for s in 65536 262144 1048576 4194304; do for q in 1 4; do for td in 1 4 16 64 128; do
+[ "${SKIP_PERFTEST:-0}" = 1 ] || for s in 65536 262144 1048576 4194304; do for q in 1 4; do for td in 1 4 16 64 128; do
   ssh rain "pkill -f '^ib_read_bw -d $SDEV -p $PORT' 2>/dev/null; setsid nohup ib_read_bw -d $SDEV -p $PORT -s $s -q $q -t $td -D $SEC -F --report_gbits > /tmp/perftest_srv4.log 2>&1 < /dev/null &"; sleep 1.5
   p0=$(pause); line=$(timeout $((SEC + 30)) ib_read_bw -d $CDEV -p $PORT -s $s -q $q -t $td -D $SEC -F --report_gbits --use_cuda=0 $SRV 2>&1 | grep -E "^\s*$s\s" | tail -1); g=$(echo "$line" | awk '{print $4}')
   echo "perftest s=$s q=$q txd=$td :: ${g:-0} Gb/s pause_dur+$(( $(pause) - p0 ))" | tee -a $LOG
@@ -17,10 +17,10 @@ for s in 65536 262144 1048576 4194304; do for q in 1 4; do for td in 1 4 16 64 1
 done; done; done
 ssh rain "pkill -f '^ib_read_bw -d $SDEV -p $PORT' 2>/dev/null"
 # (b) transfer engine: rain 타깃(host DRAM 4 GiB), sunny 이니시에이터(VRAM 2 GiB)
-ssh rain "pkill -f 'transfer_engine_bench --mode=target' 2>/dev/null; source ~/miniconda3/etc/profile.d/conda.sh && conda activate gdsllm && setsid nohup $RBENCH --mode=target --metadata_server=$META --local_server_name=$TGT --protocol=rdma --device_name=$SDEV --buffer_size=$((4 * 2**30)) > /tmp/te_target.log 2>&1 < /dev/null &"; sleep 4
+ssh rain "pkill -f '^$RBENCH --mode=target' 2>/dev/null; source ~/miniconda3/etc/profile.d/conda.sh && conda activate gdsllm && setsid nohup $RBENCH --mode=target --metadata_server=$META --local_server_name=$TGT --protocol=rdma --device_name=$SDEV --buffer_size=$((4 * 2**30)) > /tmp/te_target.log 2>&1 < /dev/null &"; sleep 6; ssh rain "tail -2 /tmp/te_target.log" | tee -a $LOG
 for bs in 65536 262144 1048576 4194304; do for b in 1 8 32 128; do for th in 1 4 8 16; do
   p0=$(pause); out=$(timeout 60 $BENCH --mode=initiator --metadata_server=$META --segment_id=$TGT --local_server_name=30.0.0.4:12356 --protocol=rdma --device_name=$CDEV --operation=read --use_vram=true --gpu_id=0 --buffer_size=$((2 * 2**30)) --block_size=$bs --batch_size=$b --threads=$th --duration=5 --report_unit=GB 2>&1); g=$(echo "$out" | grep -oiE '[0-9.]+ ?GB/s' | tail -1 | grep -oE '[0-9.]+')
   echo "te block=$bs batch=$b threads=$th :: ${g:-0} GB/s pause_dur+$(( $(pause) - p0 ))" | tee -a $LOG
   python3 -c "import json,sys; print(json.dumps(dict(tool='transfer_engine_bench', block=int(sys.argv[1]), batch=int(sys.argv[2]), threads=int(sys.argv[3]), gb_s=float(sys.argv[4] or 0), pause_dur=int(sys.argv[5]))))" $bs $b $th "${g:-0}" $(( $(pause) - p0 )) >> $F
 done; done; done
-ssh rain "pkill -f 'transfer_engine_bench --mode=target' 2>/dev/null"; echo "wrote $F"
+ssh rain "pkill -f '^$RBENCH --mode=target' 2>/dev/null"; echo "wrote $F"
