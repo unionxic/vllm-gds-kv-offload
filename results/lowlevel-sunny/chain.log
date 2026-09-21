@@ -234,3 +234,6 @@ combo=h2d+local+remote+rdma :: local 2.771103 6.593;remote 2.499098 9.244;h2d 7.
 wrote ../../results/lowlevel-sunny/step5_combined.jsonl
 [00:26:41] lowlevel done
 lowlevel2 done
+lowlevel3 done
+lowlevel5 done
+lowlevel6 done
