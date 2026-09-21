@@ -1,0 +1,5 @@
+[09-19 03:11:31] 원격 용량 검사: 문서 28건이면 원격 루트에 20.6 GiB 필요, 여유 20.7 GiB(마진 3 GiB 제외)
+[09-19 03:11:31] == phase3: hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, longbench 28건, max_model_len 8192, 프리픽스 상한 8000, KV 예산 2요청, host 8 GB, 가중치 13:40, host 몫 0.47, 조건(ours-ratio)
+[09-19 03:11:31] start ours-ratio (kv-transport=hybrid, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/phase3-8k-host8-rep/kv-p3-local, --kv-host-gb 8 --kv-placement ratio --kv-host-share 0.47 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/phase3-8k-host8-rep/kv-p3-local:13,/mnt/sunny-nvmeof/kv-p3:40)
+[09-19 03:20:44] done  ours-ratio rc=0
+[09-19 03:20:44] == phase3 종료
