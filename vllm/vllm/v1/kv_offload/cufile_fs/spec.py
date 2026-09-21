@@ -10,6 +10,12 @@
       cufile_fs/multi_root.py 참고
   cufile_fs_register_tensors: KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만 성공). 기본 false
   cufile_fs_read_threads / cufile_fs_write_threads: 기본 4
+  cufile_fs_root_inflight: 루트 디렉터리 → 동시 발행 상한(정수) 매핑. dict 또는 JSON dict 문자열.
+      그 루트 아래 청크에 대해 동시에 cuFile 호출 중인 수(읽기+쓰기)를 상한 이하로 묶는다.
+      청크가 어느 루트인지는 경로 접두(가장 긴 일치)로 본다. 없는 루트·상한 0은 무제한. 기본 꺼짐.
+      예 {"/mnt/rain-nvmeof/kv-p3": 8, "/mnt/rain-ssd/kv-p3": 4}
+  cufile_fs_read_priority: 정수 K(0=기본, 꺼짐). K>0이면 아직 끝나지 않은 읽기가 있는 동안
+      동시에 발행하는 쓰기 청크를 K개 이하로 묶어 읽기가 먼저 나가게 한다. 읽기가 없으면 제한 없음.
   cufile_fs_admission: all | never | profile | seen_twice
   cufile_fs_capacity_gb: SSD 파일 총량 상한(GiB, 0=무제한), cufile_fs_policy: lru | lfu
   cufile_fs_store_window: "any"(기본, 지금까지의 동작) | "host"
@@ -26,6 +32,9 @@
   cufile_fs_recompute_s_per_token: 토큰 하나 prefill 비용(초)의 초기값. 0이면 러너가
       set_recompute_cost()로 넣어 줄 때까지 기다리지 않음
   block_size: GPU 블록(16)의 배수. blocks_per_chunk = block_size / 16
+설정이 아닌 런타임 속성: CuFileFsManager.shadow_store(기본 False). 켜면 이미 티어에 있는 키도
+  저장 대상으로 잡아 같은 루트의 shadow/ 아래에 같은 양을 다시 쓴다. 쓰기 간섭만 만들고
+  캐시 상태(_entries·total_bytes·루트별 사용량·lookup)는 그대로 둔다(저장 간섭 실험).
 """
 import json
 import os
@@ -63,6 +72,28 @@ logger = init_logger(__name__)
 ALIGN = 4096
 LAST_WORKER = None  # in-process 계측용
 LAST_MANAGER = None
+
+
+def parse_root_inflight(spec: object) -> tuple[list[str], list[int]]:
+    """cufile_fs_root_inflight 설정을 (루트 목록, 상한 목록)으로 읽는다.
+
+    dict 또는 JSON dict 문자열을 받는다. 상한 0은 무제한(네이티브가 무시)이고 음수는 오류.
+    """
+    if not spec:
+        return [], []
+    if isinstance(spec, str):
+        spec = json.loads(spec)
+    if not isinstance(spec, dict):
+        raise ValueError(f"cufile_fs_root_inflight must be a dict or JSON dict string: {spec!r}")
+    roots: list[str] = []
+    limits: list[int] = []
+    for d, n in spec.items():
+        n = int(n)
+        if n < 0:
+            raise ValueError(f"cufile_fs_root_inflight limit must be >= 0: {d}={n}")
+        roots.append(str(d))
+        limits.append(n)
+    return roots, limits
 
 
 @dataclass
@@ -325,6 +356,14 @@ class CuFileFsManager(OffloadingManager):
         self.wait_s_total = 0.0  # 끝난(적중·상한) 기다림의 시간 합
         self.n_wait_declined = 0  # 쓰기 중이지만 재계산이 더 싸서 miss로 답한 lookup 수
         self.n_wait_unknown = 0  # 재계산 비용을 아직 몰라 miss로 답한 lookup 수
+        # --- shadow store(저장 간섭 실험). 런타임에 mgr.shadow_store = True/False 로 켠다 ---
+        # 켜면 이미 있는 키도 같은 루트의 shadow/ 아래로 다시 써서 쓰기 부하만 만들고,
+        # _entries·total_bytes·_root_bytes·lookup 은 건드리지 않는다.
+        self.shadow_store = False
+        self._shadow_pending: set[OffloadKey] = set()
+        self.n_shadow_stores = 0
+        self.n_shadow_done = 0
+        self.shadow_bytes = 0
         global LAST_MANAGER
         LAST_MANAGER = self
         if self.capacity_bytes:
@@ -354,6 +393,23 @@ class CuFileFsManager(OffloadingManager):
             if i is not None:
                 return self.mapper.file_name(key, i)
         return self.mapper.get_file_name(key)
+
+    def _shadow_path(self, key: OffloadKey) -> str:
+        """shadow 저장 경로. 실제 경로와 같은 루트의 shadow/ 아래에 해시 이름으로 둔다.
+
+        루트는 그 키가 놓인 루트(_root_of), 없으면 해시 루트다. 실제 경로와 디렉터리가
+        달라 lookup·prepare_load·_evict 가 이 파일을 보는 일이 없다.
+        """
+        h = get_offload_block_hash(key).hex()
+        mappers = getattr(self.mapper, "mappers", None)
+        if mappers is not None:
+            i = self._root_of.get(key)
+            if i is None:
+                i = self.mapper.hash_root(key)
+            m = mappers[i]
+        else:
+            m = self.mapper
+        return f"{m.base_path}_r{m.rank}/shadow/{h}.bin"
 
     def _root_room(self, i: int) -> bool:
         cap = self.mapper.capacities[i]
@@ -520,7 +576,30 @@ class CuFileFsManager(OffloadingManager):
                         self.policy, len(out), self.total_bytes / 2**30, self.n_evicted, self.bytes_evicted / 2**30)
         return out
 
+    def _prepare_shadow_store(self, keys: Collection[OffloadKey],
+                              req_context: ReqContext) -> PrepareStoreOutput:
+        """shadow 저장 대상 잡기. 이미 _entries 에 있거나 파일이 있는 키도 전부 대상이다.
+
+        용량 상한·admission·spill 배치·pending_wait 은 원 상태를 바꾸므로 쓰지 않고,
+        _pending 대신 _shadow_pending 에만 적는다(commit_check 가 _pending 을 본다).
+        """
+        to_store = [k for k in keys if k not in self._pending and k not in self._shadow_pending]
+        paths = []
+        for k in to_store:
+            path = self._shadow_path(k)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            paths.append(path)
+        self._shadow_pending.update(to_store)
+        self.n_shadow_stores += len(to_store)
+        if self.tracer is not None:
+            for k in to_store:
+                self.tracer.emit("shadow_enq", k, req_context)
+        return PrepareStoreOutput(keys_to_store=to_store,
+                                  store_spec=FileLoadStoreSpec(paths), evicted_keys=[])
+
     def prepare_store(self, keys: Collection[OffloadKey], req_context: ReqContext) -> PrepareStoreOutput | None:
+        if self.shadow_store:
+            return self._prepare_shadow_store(keys, req_context)
         to_store = [k for k in keys if k not in self._pending and k not in self._entries and not os.path.exists(self._path(k))]
         if self.admission is not None:
             to_store = self.admission.filter(to_store)
@@ -552,6 +631,22 @@ class CuFileFsManager(OffloadingManager):
         now = time.monotonic_ns()
         now_s = time.monotonic()
         for k in keys:
+            if k in self._shadow_pending:
+                # shadow 키는 캐시 상태를 건드리지 않고 파일만 지운다(원격 DRAM 루트 ENOSPC 방지).
+                self._shadow_pending.discard(k)
+                path = self._shadow_path(k)
+                try:
+                    self.shadow_bytes += os.path.getsize(path)
+                except OSError:
+                    pass
+                try:
+                    os.remove(path)
+                except FileNotFoundError:
+                    pass
+                self.n_shadow_done += 1
+                if self.tracer is not None:
+                    self.tracer.emit("shadow_cmt", k, req_context, ok=bool(success))
+                continue
             self._pending.discard(k)
             if self._spill:
                 ri = self._root_of.get(k)
@@ -610,6 +705,10 @@ class CuFileFsManager(OffloadingManager):
                         chunk_service_s=round(self.chunk_service_s, 5),
                         recompute_s_per_token=round(self.recompute_s_per_token, 8)),
                     admission=None if self.admission is None else dict(policy=self.admission.policy, admit=self.admission.n_admit, reject=self.admission.n_reject),
+                    shadow=dict(on=self.shadow_store, stores=self.n_shadow_stores,
+                                done=self.n_shadow_done,
+                                gib=round(self.shadow_bytes / 2**30, 3),
+                                pending=len(self._shadow_pending)),
                     # roots는 다중 루트일 때만. get_file_name 호출 수라 파일 수가 아니라 매핑 횟수다.
                     roots=self._roots_stats())
 
@@ -626,13 +725,15 @@ class CuFileFsManager(OffloadingManager):
 
     def reset_cache(self) -> None:
         self._pending.clear()
+        self._shadow_pending.clear()
         self._root_pending = [0] * self._n_roots
         self._enq_t.clear(); self._enq_q.clear(); self._wait_since.clear(); self._wait_spent.clear()
 
 
 class CuFileFsWorker(OffloadingWorker):
     def __init__(self, kv_caches: CanonicalKVCaches, blocks_per_chunk: int, n_read: int, n_write: int, register_tensors: bool,
-                 store_window: str = "any", store_window_max_s: float = 10.0, load_window: str = "any"):
+                 store_window: str = "any", store_window_max_s: float = 10.0, load_window: str = "any",
+                 root_inflight: object = None, read_priority: int = 0):
         assert len(kv_caches.group_data_refs) == 1, "CuFileFs: single KV cache group only"
         from vllm.v1.kv_offload.cufile_fs.native import load
         self.bpc = blocks_per_chunk
@@ -642,7 +743,11 @@ class CuFileFsWorker(OffloadingWorker):
             assert page % ALIGN == 0, f"CuFileFs: page_size_bytes {page} not {ALIGN}-aligned"
             t = ct.tensor
             base.append(t.data_ptr()); tbytes.append(t.numel() * t.element_size()); pages.append(page)
-        self.native = load().CuFileFs(base, tbytes, pages, self.bpc, n_read, n_write, register_tensors)
+        # 경로별 동시 발행 조절·읽기 우선(둘 다 기본 꺼짐 = 예전과 같은 동작).
+        gate_roots, gate_limits = parse_root_inflight(root_inflight)
+        read_priority = int(read_priority or 0)
+        self.native = load().CuFileFs(base, tbytes, pages, self.bpc, n_read, n_write, register_tensors,
+                                      gate_roots, gate_limits, read_priority)
         self.chunk_bytes = self.native.chunk_bytes
         self._pending: set[int] = set()
         self._events: dict[int, torch.cuda.Event] = {}
@@ -651,6 +756,9 @@ class CuFileFsWorker(OffloadingWorker):
         logger.info("CuFileFs worker: %d tensors, bpc=%d, chunk=%d bytes, registered_tensors=%d%s",
                     len(base), self.bpc, self.chunk_bytes, self.native.registered,
                     "" if register_tensors and self.native.registered else f" (register_err={self.native.register_err})" if register_tensors else "")
+        if gate_roots or read_priority:
+            logger.info("CuFileFs io policy: root_inflight=%s, read_priority=%d",
+                        dict(zip(gate_roots, gate_limits)), read_priority)
         self.window: _StoreWindow | None = None
         if store_window == "host":
             self.window = _StoreWindow(self.native, store_window_max_s, kind="write")
@@ -744,6 +852,10 @@ class CuFileFsSpec(OffloadingSpec):
         self.store_window = str(self.extra_config.get("cufile_fs_store_window", "any")).lower()
         self.load_window = str(self.extra_config.get("cufile_fs_load_window", "any")).lower()
         self.store_window_max_s = float(self.extra_config.get("cufile_fs_store_window_max_s", 10.0))
+        # 경로별 동시 발행 조절·읽기 우선(기본 꺼짐). 여기서 한 번 검증해 두고 워커에 그대로 넘긴다.
+        self.root_inflight = self.extra_config.get("cufile_fs_root_inflight")
+        parse_root_inflight(self.root_inflight)
+        self.read_priority = int(self.extra_config.get("cufile_fs_read_priority", 0))
         self.admission = str(self.extra_config.get("cufile_fs_admission", "all")).lower()
         self.admission_profile = self.extra_config.get("cufile_fs_admission_profile")
         self.capacity_gb = float(self.extra_config.get("cufile_fs_capacity_gb", 0))  # 0 = 무제한
@@ -788,5 +900,6 @@ class CuFileFsSpec(OffloadingSpec):
     def get_worker(self, kv_caches: CanonicalKVCaches) -> OffloadingWorker:
         if self._worker is None:
             self._worker = CuFileFsWorker(kv_caches, self.blocks_per_chunk, self.n_read, self.n_write, self.register_tensors,
-                                          self.store_window, self.store_window_max_s, self.load_window)
+                                          self.store_window, self.store_window_max_s, self.load_window,
+                                          self.root_inflight, self.read_priority)
         return self._worker

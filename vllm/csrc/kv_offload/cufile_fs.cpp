@@ -6,6 +6,10 @@
 //   store: <path>.tmp 에 쓰고 rename → 파일 존재 = 로드 가능(원자적). 실패 시 tmp 삭제.
 //   pause_writes/resume_writes: 가중치를 SSD에서 스트리밍하는 동안 쓰기 풀만 멈춘다.
 //   pause_reads/resume_reads: 같은 방식으로 읽기 풀만 멈춘다(split-source KV의 tail 적재를 SSD 창 밖으로 미룰 때).
+//   경로별 동시 발행 조절(기본 꺼짐): gate_roots/gate_limits는 루트 디렉터리(경로 접두)마다 동시에
+//     cuFile 호출 중인 청크 수의 상한. read_priority=K>0이면 아직 끝나지 않은 읽기가 있는 동안
+//     쓰기 동시 발행을 K개 이하로 묶는다(읽기 우선). 둘 다 꺼지면 코드 경로가 예전과 완전히 같다.
+//     pause_reads로 읽기를 멈춰 두면 그 읽기는 "안 끝난" 상태라 쓰기도 K개로 묶인 채 돈다.
 #include <torch/extension.h>
 #include <cuda_runtime_api.h>
 #include <cufile.h>
@@ -46,8 +50,10 @@ struct Job {
 class CuFileFs {
  public:
   CuFileFs(std::vector<uintptr_t> base_ptrs, std::vector<size_t> tensor_bytes,
-           std::vector<size_t> page_sizes, int bpc, int n_read, int n_write, bool register_tensors)
-      : base_(std::move(base_ptrs)), tbytes_(std::move(tensor_bytes)), page_(std::move(page_sizes)), bpc_(bpc) {
+           std::vector<size_t> page_sizes, int bpc, int n_read, int n_write, bool register_tensors,
+           std::vector<std::string> gate_roots, std::vector<int> gate_limits, int read_priority)
+      : base_(std::move(base_ptrs)), tbytes_(std::move(tensor_bytes)), page_(std::move(page_sizes)), bpc_(bpc),
+        read_priority_(read_priority > 0 ? read_priority : 0) {
     CUfileError_t e = cuFileDriverOpen();
     if (e.err != 0 && e.err != CU_FILE_DRIVER_ALREADY_OPEN) throw std::runtime_error("cuFileDriverOpen err=" + std::to_string(e.err));
     region_off_.resize(page_.size()); size_t off = 0;
@@ -60,6 +66,14 @@ class CuFileFs {
         registered_++;
       }
     }
+    // 루트별 동시 발행 상한. 경로 접두로 맞추므로 끝의 '/'는 떼어 둔다. 상한 <= 0은 무제한이라 빼 둔다.
+    if (gate_roots.size() != gate_limits.size()) throw std::runtime_error("cufile_fs: gate_roots/gate_limits size mismatch");
+    for (size_t i = 0; i < gate_roots.size(); ++i) {
+      std::string pre = gate_roots[i];
+      while (pre.size() > 1 && pre.back() == '/') pre.pop_back();
+      if (gate_limits[i] > 0) gates_.push_back(RootGate{pre, gate_limits[i], 0, 0, 0, 0, 0});
+    }
+    gate_on_ = !gates_.empty() || read_priority_ > 0;  // 스레드가 보기 전에 정해 둔다
     for (int i = 0; i < n_read; ++i) threads_.emplace_back([this] { loop(read_q_, read_cv_, false); });
     for (int i = 0; i < n_write; ++i) threads_.emplace_back([this] { loop(write_q_, write_cv_, true); });
   }
@@ -76,6 +90,8 @@ class CuFileFs {
     for (size_t c = 0; c < paths.size(); ++c) job->chunks.push_back(Chunk{paths[c], spans(bids[c], j0s[c])});
     job->remaining = (int)job->chunks.size();
     { std::lock_guard<std::mutex> g(mu_); pending_.insert(id); }
+    // 읽기 우선 판정은 "큐에 남은 읽기 + 진행 중인 읽기"를 본다. 큐에 넣기 전에 올려 둬야 새 텀이 안 생긴다.
+    if (!is_store) r_out_ += (long)job->chunks.size();
     if (job->chunks.empty()) { finish(job); return; }
     auto& q = is_store ? write_q_ : read_q_; auto& cv = is_store ? write_cv_ : read_cv_;
     { std::lock_guard<std::mutex> g(qmu_); for (size_t c = 0; c < job->chunks.size(); ++c) q.push_back({job, c});
@@ -136,11 +152,24 @@ class CuFileFs {
       if (pause_counting_) p += std::chrono::duration_cast<std::chrono::nanoseconds>(now - pause_since_).count();
       if (r_pause_counting_) rp += std::chrono::duration_cast<std::chrono::nanoseconds>(now - r_pause_since_).count();
       d["paused_ns"] = p; d["read_paused_ns"] = rp; }
+    { std::lock_guard<std::mutex> gl(gate_mu_);
+      d["gate_enabled"] = gate_on_; d["read_priority"] = read_priority_;
+      d["write_gate_wait_ns"] = w_gate_wait_ns_; d["write_gate_waits"] = w_gate_waits_;
+      d["write_inflight_peak"] = w_peak_; d["read_inflight_peak"] = r_peak_;
+      d["write_inflight_peak_during_reads"] = w_peak_reads_;
+      py::list rl;
+      for (const RootGate& rg : gates_) {
+        py::dict e; e["root"] = rg.prefix; e["limit"] = rg.limit; e["peak_inflight"] = rg.peak;
+        e["chunks"] = rg.chunks; e["gate_wait_ns"] = rg.wait_ns; e["gate_waits"] = rg.waits;
+        rl.append(e);
+      }
+      d["root_inflight"] = rl; }
     { std::lock_guard<std::mutex> g(mu_); d["last_error"] = last_err_; } return d;
   }
   void shutdown() {
     if (stopped_) return; stopped_ = true;
     { std::lock_guard<std::mutex> g(qmu_); resume_locked(); resume_reads_locked(); } read_cv_.notify_all(); write_cv_.notify_all();
+    gate_wake();  // 게이트에서 기다리던 스레드도 풀어 준다(stopped_면 조건이 참)
     for (auto& t : threads_) if (t.joinable()) t.join();
     for (int t = 0; t < registered_; ++t) cuFileBufDeregister((void*)base_[t]);
     registered_ = 0;
@@ -191,6 +220,48 @@ class CuFileFs {
       r_pause_counting_ = false;
     }
   }
+  // 경로가 속한 루트(가장 긴 접두 일치). 맞는 루트가 없으면 -1 = 무제한.
+  int gate_index(const std::string& p) const {
+    int best = -1; size_t blen = 0;
+    for (size_t i = 0; i < gates_.size(); ++i) {
+      const std::string& pre = gates_[i].prefix;
+      if (pre.size() > blen && p.size() >= pre.size() && p.compare(0, pre.size(), pre) == 0) { best = (int)i; blen = pre.size(); }
+    }
+    return best;
+  }
+  void gate_wake() { { std::lock_guard<std::mutex> gl(gate_mu_); } gate_cv_.notify_all(); }
+  // 발행 슬롯을 받을 때까지 기다린다. 기다리는 동안은 어떤 슬롯도 쥐지 않으므로(hold-and-wait 없음)
+  // 교착이 없다. 읽기는 읽기 우선 조건을 보지 않고 루트 상한만 본다.
+  void gate_acquire(int gi, bool is_write) {
+    auto t0 = std::chrono::steady_clock::now();
+    bool wroot = false, wwrite = false;  // 어느 조건에서 막혔는지(둘 다일 수 있어 대기 시간이 양쪽에 들어갈 수 있음)
+    std::unique_lock<std::mutex> lk(gate_mu_);
+    gate_cv_.wait(lk, [&] {
+      if (stopped_.load()) return true;
+      if (gi >= 0 && gates_[gi].inflight >= gates_[gi].limit) { wroot = true; return false; }
+      if (is_write && read_priority_ > 0 && w_inflight_ >= read_priority_ && r_out_.load() > 0) { wwrite = true; return false; }
+      return true;
+    });
+    long ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now() - t0).count();
+    if (gi >= 0) {
+      RootGate& rg = gates_[gi];
+      rg.inflight++; rg.chunks++; if (rg.inflight > rg.peak) rg.peak = rg.inflight;
+      if (wroot) { rg.wait_ns += ns; rg.waits++; }
+    }
+    if (is_write) {
+      w_inflight_++; if (w_inflight_ > w_peak_) w_peak_ = w_inflight_;
+      if (r_out_.load() > 0 && w_inflight_ > w_peak_reads_) w_peak_reads_ = w_inflight_;
+      if (wwrite) { w_gate_wait_ns_ += ns; w_gate_waits_++; }
+    } else {
+      r_inflight_++; if (r_inflight_ > r_peak_) r_peak_ = r_inflight_;
+    }
+  }
+  void gate_release(int gi, bool is_write) {
+    { std::lock_guard<std::mutex> lk(gate_mu_);
+      if (gi >= 0 && gates_[gi].inflight > 0) gates_[gi].inflight--;
+      if (is_write) { if (w_inflight_ > 0) w_inflight_--; } else { if (r_inflight_ > 0) r_inflight_--; } }
+    gate_cv_.notify_all();
+  }
   static std::string errstr(const char* what, long n) { return std::string(what) + " ret=" + std::to_string(n) + " errno=" + std::to_string(errno); }
   void run(const std::shared_ptr<Job>& job, size_t c) {
     const Chunk& ch = job->chunks[c]; bool ok = true; std::string tmp = ch.path + ".tmp";
@@ -206,6 +277,9 @@ class CuFileFs {
       clk::time_point tp = t0;
       if (job->is_store && job->ev) { cudaError_t ce = cudaEventSynchronize(job->ev); if (ce != cudaSuccess) ok = false; }
       w_ev_ns_ += job->is_store ? lap(tp) : 0;
+      int gi = -1;
+      // 게이트가 꺼져 있으면 여기서 아무 일도 하지 않는다(예전과 같은 경로).
+      if (gate_on_) { gi = gate_index(ch.path); gate_acquire(gi, job->is_store); tp = clk::now(); }
       int fd = -1;
       if (ok) {
         if (job->is_store) { std::string d = ch.path.substr(0, ch.path.find_last_of('/')); mkdir_p(d); fd = open(tmp.c_str(), O_WRONLY | O_CREAT | O_TRUNC | O_DIRECT, 0644); }
@@ -232,9 +306,13 @@ class CuFileFs {
       if (fd >= 0) close(fd);
       if (job->is_store) { if (ok && rename(tmp.c_str(), ch.path.c_str()) != 0) ok = false; if (!ok) unlink(tmp.c_str()); }
       (job->is_store ? w_fin_ns_ : r_fin_ns_) += lap(tp);
+      if (gate_on_) gate_release(gi, job->is_store);
     } else ok = false;
     auto ns = std::chrono::duration_cast<std::chrono::nanoseconds>(clk::now() - t0).count();
-    if (job->is_store) { writes_++; wns_ += ns; out_w_--; } else { reads_++; rns_ += ns; out_r_--; }
+    if (job->is_store) { writes_++; wns_ += ns; out_w_--; }
+    else { reads_++; rns_ += ns; out_r_--;
+           // 마지막 읽기가 끝나면 읽기 우선 조건이 풀리므로 대기 중인 쓰기 스레드를 깨운다.
+           if (r_out_.fetch_sub(1) == 1 && gate_on_) gate_wake(); }
     NVTX_POP();
     if (!ok) { errors_++; job->ok = false; }
     if (--job->remaining == 0) finish(job);
@@ -256,13 +334,25 @@ class CuFileFs {
   std::atomic<long> reads_{0}, writes_{0}, rbytes_{0}, wbytes_{0}, rns_{0}, wns_{0}, errors_{0}, out_r_{0}, out_w_{0}, paused_ns_{0}, r_paused_ns_{0};
   std::atomic<long> w_ev_ns_{0}, w_open_ns_{0}, w_io_ns_{0}, w_fin_ns_{0}, w_calls_{0}, r_open_ns_{0}, r_io_ns_{0}, r_fin_ns_{0}, r_calls_{0};  // 파일 1개 처리의 구간별 합
   std::string last_err_;
+  // 경로별 동시 발행 조절. gates_는 생성자에서만 채우고 이후 읽기 전용, 카운터는 gate_mu_ 보호.
+  struct RootGate { std::string prefix; int limit; int inflight; int peak; long chunks; long wait_ns; long waits; };
+  std::vector<RootGate> gates_; bool gate_on_ = false; int read_priority_ = 0;
+  std::mutex gate_mu_; std::condition_variable gate_cv_;
+  int w_inflight_ = 0, r_inflight_ = 0, w_peak_ = 0, r_peak_ = 0, w_peak_reads_ = 0;  // gate_mu_ 보호
+  long w_gate_wait_ns_ = 0, w_gate_waits_ = 0;  // gate_mu_ 보호
+  std::atomic<long> r_out_{0};  // 아직 끝나지 않은 읽기 청크 수(큐 + 진행 중)
 };
 
 }  // namespace
 
 PYBIND11_MODULE(TORCH_EXTENSION_NAME, m) {
   py::class_<CuFileFs>(m, "CuFileFs")
-      .def(py::init<std::vector<uintptr_t>, std::vector<size_t>, std::vector<size_t>, int, int, int, bool>())
+      .def(py::init<std::vector<uintptr_t>, std::vector<size_t>, std::vector<size_t>, int, int, int, bool,
+                    std::vector<std::string>, std::vector<int>, int>(),
+           py::arg("base_ptrs"), py::arg("tensor_bytes"), py::arg("page_sizes"), py::arg("bpc"),
+           py::arg("n_read"), py::arg("n_write"), py::arg("register_tensors"),
+           py::arg("gate_roots") = std::vector<std::string>(), py::arg("gate_limits") = std::vector<int>(),
+           py::arg("read_priority") = 0)
       .def("submit", &CuFileFs::submit, py::call_guard<py::gil_scoped_release>())
       .def("pause_writes", &CuFileFs::pause_writes, py::call_guard<py::gil_scoped_release>())
       .def("resume_writes", &CuFileFs::resume_writes, py::call_guard<py::gil_scoped_release>())
