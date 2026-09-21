@@ -6,5 +6,5 @@
  "mode": "standalone-store",
  "global_segment_size": 0,
  "local_buffer_size": 1073741824,
- "enable_offload": true
+ "enable_offload": false
 }

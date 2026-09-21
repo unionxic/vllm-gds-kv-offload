@@ -3,3 +3,10 @@
 {"kind": "phase", "wall_ns": 1790000199910393691, "mono_ns": 24303262655749, "tid": 133543180247488, "name": "model_load_end", "load_s": 20.2}
 {"kind": "tiers", "wall_ns": 1790000199910445136, "mono_ns": 24303262706706, "tid": 133543180247488, "n_modules": 0, "n_ssd": 0, "host_tier_gib": 0.0, "ssd_tier_gib": 0.0, "gpu_resident": "all"}
 {"kind": "kv_trace", "wall_ns": 1790000199910984711, "mono_ns": 24303263246924, "tid": 133543180247488, "installed": true, "transport": "mooncake"}
+{"kind": "bailian_trace", "wall_ns": 1790000200571399483, "mono_ns": 24303923661754, "tid": 133543180247488, "offset": 1240, "rows": 200, "block": 16, "blocks_kept": 1000, "vocab": 128000, "unique_hashes": 37334, "total_hash_refs": 78788}
+{"kind": "phase_gate", "wall_ns": 1790000200572294054, "mono_ns": 24303924555847, "tid": 133543180247488, "phase": "stream", "no_store": false, "shadow_store": false, "reset_gpu_cache": false}
+{"kind": "stream_plan", "wall_ns": 1790000200572447519, "mono_ns": 24303924709158, "tid": 133543180247488, "n_requests": 200, "time_scale": 6.0, "max_concurrency": 4, "arrival_span_s": 238.644, "median_gap_s": 0.864, "arrival_gap_s": 0.0, "prompt_source": "bailian", "bailian_offset": 1240}
+{"kind": "phase", "wall_ns": 1790000200572490420, "mono_ns": 24303924751954, "tid": 133543180247488, "name": "stream", "requests": 200}
+{"kind": "phase", "wall_ns": 1790000462327239203, "mono_ns": 24565679501113, "tid": 133543180247488, "name": "stream_end", "wall_s": 261.754, "matched_tokens": 2560640, "drain_s": 0.0}
+{"kind": "phase", "wall_ns": 1790000462327761270, "mono_ns": 24565680022945, "tid": 133543180247488, "name": "final_settle"}
+{"kind": "phase", "wall_ns": 1790000467357817798, "mono_ns": 24570710080715, "tid": 133543180247488, "name": "complete"}
