@@ -44,10 +44,10 @@ def keys(n, seed=0):
 
 def test_parse_root_dirs():
     assert parse_root_dirs([{"dir": "/a", "weight": 13}, {"dir": "/b", "weight": 40}]) == [
-        ("/a", 13),
-        ("/b", 40),
+        ("/a", 13, 0),
+        ("/b", 40, 0),
     ]
-    assert parse_root_dirs(["/a", "/b"]) == [("/a", 1), ("/b", 1)]
+    assert parse_root_dirs(["/a", "/b"]) == [("/a", 1, 0), ("/b", 1, 0)]
     with pytest.raises(ValueError):
         parse_root_dirs([])
     with pytest.raises(ValueError):
