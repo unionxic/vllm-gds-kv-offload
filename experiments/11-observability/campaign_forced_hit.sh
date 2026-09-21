@@ -23,16 +23,17 @@ HOSTGB=${HOSTGB:-8}; HOSTSHARE=${HOSTSHARE:-0.47}
 W_LOCAL=${W_LOCAL:-13}; W_REMOTE=${W_REMOTE:-40}
 LOCAL_ROOT=$O/kv-fh-local
 REMOTE_ROOT=${REMOTE_ROOT:-/mnt/sunny-nvmeof/kv-fh}
+REMOTE_MNT=${REMOTE_MNT:-$(dirname "$REMOTE_ROOT")}  # 원격 티어 마운트 지점(rain에서는 /mnt/sunny-nvmeof, sunny에서는 /mnt/rain-nvmeof)
 MC_MASTER=${MC_MASTER:-30.0.0.4:50051}; MC_META=${MC_META:-http://30.0.0.4:8080/metadata}
 MC_DEV=${MC_DEV:-mlx5_1}; MC_IP=${MC_IP:-30.0.0.3}; MC_STAGING_GB=${MC_STAGING_GB:-8}
 CONDS=${CONDS:-"mooncake ours-ratio"}
 COMMIT_WAIT=${COMMIT_WAIT:-900}
 
-# 파일 티어(원격 루트)를 쓰는 조건이 하나라도 있을 때만 /mnt/sunny-nvmeof 를 요구한다.
+# 파일 티어(원격 루트)를 쓰는 조건이 하나라도 있을 때만 원격 마운트(REMOTE_MNT)를 요구한다.
 # mooncake와 재계산 기준만 도는 호스트(sunny)에는 이 마운트가 없다.
 NEED_REMOTE_ANY=0
 for _c in $CONDS; do case $_c in ref-none|none|b1-tiering|mooncake) ;; *) NEED_REMOTE_ANY=1;; esac; done
-[ "$NEED_REMOTE_ANY" = 1 ] && { mountpoint -q /mnt/sunny-nvmeof || { log "ABORT: /mnt/sunny-nvmeof 이 마운트되어 있지 않음"; exit 2; }; }
+[ "$NEED_REMOTE_ANY" = 1 ] && { mountpoint -q "$REMOTE_MNT" || { log "ABORT: $REMOTE_MNT 이 마운트되어 있지 않음"; exit 2; }; }
 
 clean_root(){
   case "$1" in */kv-fh|*/kv-fh-local) ;; *) log "ABORT: KV 디렉터리 이름이 kv-fh*가 아님: $1"; exit 3;; esac
@@ -41,7 +42,7 @@ clean_root(){
 }
 
 if [ "$NEED_REMOTE_ANY" = 1 ]; then
-  FREE_GIB=$(df -B1 --output=avail /mnt/sunny-nvmeof | tail -1 | awk '{printf "%.1f", $1/1073741824}')
+  FREE_GIB=$(df -B1 --output=avail "$REMOTE_MNT" | tail -1 | awk '{printf "%.1f", $1/1073741824}')
   log "원격 램디스크 여유: $FREE_GIB GiB"
 fi
 if echo "$CONDS" | grep -qw mooncake; then

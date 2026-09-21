@@ -5,6 +5,9 @@
 #               전 구간이 host DRAM 경유. 기준선.
 #   ours-ratio  포크 HybridSpec, 배치 ratio(host 몫 HOSTSHARE) + 파일 티어 루트 2개
 #               (로컬 NVMe GDS W_LOCAL : 원격 호스트 DRAM NVMe-oF RDMA + GDS W_REMOTE).
+#               RSSD_ROOT를 주면 루트 3개: 원격 SSD(NVMe-oF RDMA + GDS) W_RSSD가 붙고, 원격 DRAM
+#               루트에 용량 REMOTE_CAP_GB(GiB)를 걸어 차면 로컬 NVMe·원격 SSD로 넘긴다(spill).
+#               총 KV가 DRAM 층(host HOSTGB + 원격 REMOTE_CAP_GB)을 넘치는 긴 문맥 조건용.
 #   mooncake    논문 기준선(Mooncake Store + Transfer Engine, FAST 2025). KV 풀은 원격 호스트
 #               DRAM 한 층이고 전송은 RDMA. 원격 서비스는 sunny의 ~/bin/mooncake_up.sh.
 #   current / pending-wait / cpu-landing
@@ -34,6 +37,10 @@ HOSTGB=${HOSTGB:-8}; HOSTSHARE=${HOSTSHARE:-0.47}
 W_LOCAL=${W_LOCAL:-13}; W_REMOTE=${W_REMOTE:-40}
 LOCAL_ROOT=$O/kv-p3-local
 REMOTE_ROOT=${REMOTE_ROOT:-/mnt/sunny-nvmeof/kv-p3}
+REMOTE_MNT=${REMOTE_MNT:-$(dirname "$REMOTE_ROOT")}  # 원격 티어 마운트 지점(rain에서는 /mnt/sunny-nvmeof, sunny에서는 /mnt/rain-nvmeof)
+# 세 번째 루트(원격 SSD). 비우면 예전과 같은 루트 2개. REMOTE_CAP_GB는 원격 DRAM 루트 용량(GiB, 0=무제한).
+RSSD_ROOT=${RSSD_ROOT:-}; W_RSSD=${W_RSSD:-32}; REMOTE_CAP_GB=${REMOTE_CAP_GB:-0}
+RSSD_MNT=${RSSD_MNT:-${RSSD_ROOT:+$(dirname "$RSSD_ROOT")}}
 BOFF=${BOFF:-29560}; TSCALE=${TSCALE:-100}; MAXCONC=${MAXCONC:-4}
 MC_MASTER=${MC_MASTER:-30.0.0.4:50051}; MC_META=${MC_META:-http://30.0.0.4:8080/metadata}
 MC_DEV=${MC_DEV:-mlx5_1}; MC_IP=${MC_IP:-30.0.0.3}; MC_STAGING_GB=${MC_STAGING_GB:-8}
@@ -50,11 +57,12 @@ fi
 # 원격 램디스크 여유에서 남겨둘 몫(GiB). 파일 티어에는 축출이 없어 저장 라운드에 쓴 만큼 그대로 쌓인다.
 REMOTE_MARGIN_GIB=${REMOTE_MARGIN_GIB:-3}
 
-# 파일 티어(원격 루트)를 쓰는 조건이 하나라도 있을 때만 /mnt/sunny-nvmeof 를 요구한다.
+# 파일 티어(원격 루트)를 쓰는 조건이 하나라도 있을 때만 원격 마운트(REMOTE_MNT)를 요구한다.
 # mooncake와 재계산 기준만 도는 호스트(sunny)에는 이 마운트가 없다.
 NEED_REMOTE_ANY=0
 for _c in $CONDS; do case $_c in ref-none|none|b1-tiering|mooncake) ;; *) NEED_REMOTE_ANY=1;; esac; done
-[ "$NEED_REMOTE_ANY" = 1 ] && { mountpoint -q /mnt/sunny-nvmeof || { log "ABORT: /mnt/sunny-nvmeof 이 마운트되어 있지 않음"; exit 2; }; }
+[ "$NEED_REMOTE_ANY" = 1 ] && { mountpoint -q "$REMOTE_MNT" || { log "ABORT: $REMOTE_MNT 이 마운트되어 있지 않음"; exit 2; }; }
+[ "$NEED_REMOTE_ANY" = 1 ] && [ -n "$RSSD_ROOT" ] && { mountpoint -q "$RSSD_MNT" || { log "ABORT: $RSSD_MNT 이 마운트되어 있지 않음"; exit 2; }; }
 
 # 이 스크립트가 만든 KV 디렉터리만 지운다(이름이 kv-p3*가 아니거나 마운트 지점이면 중단).
 clean_root(){
@@ -70,11 +78,11 @@ if [ "$NEED_REMOTE_ANY" = 0 ]; then
 elif [ "$MODE" = stream ]; then
   # stream은 프롬프트 길이가 trace마다 달라 longbench식 상한 계산이 맞지 않는다.
   # 원격 램디스크 여유만 확인하고, 실제 필요량은 런 뒤 kv_files_by_root로 본다.
-  FREE_GIB=$(df -B1 --output=avail /mnt/sunny-nvmeof | tail -1 | awk '{printf "%.1f", $1/1073741824}')
+  FREE_GIB=$(df -B1 --output=avail "$REMOTE_MNT" | tail -1 | awk '{printf "%.1f", $1/1073741824}')
   log "원격 램디스크 여유: $FREE_GIB GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)"
   awk -v f="$FREE_GIB" 'BEGIN{exit !(f < 30)}' && { log "ABORT: 원격 램디스크 여유가 30 GiB 미만"; exit 4; }
 elif echo "$CONDS" | grep -qw ours-ratio; then
-  FREE_B=$(df -B1 --output=avail /mnt/sunny-nvmeof | tail -1)
+  FREE_B=$(df -B1 --output=avail "$REMOTE_MNT" | tail -1)
   FIT=$(python - "$MODEL" "$NDOCS" "$CAP" "$W_LOCAL" "$W_REMOTE" "$FREE_B" "$REMOTE_MARGIN_GIB" <<'PY'
 import sys
 from transformers import AutoConfig
@@ -104,7 +112,8 @@ if echo "$CONDS" | grep -qw mooncake; then
   log "Mooncake 풀 용량: $(curl -s --max-time 5 "http://${MC_MASTER%%:*}:9003/metrics" | awk '/^master_total_capacity_bytes /{printf "%.1f GiB", $2/1073741824}')"
 fi
 
-log "== phase3($MODE): $MODEL, ${NDOCS}건, max_model_len $MAXLEN, 프리픽스 상한 $CAP, KV 예산 ${KVB}요청, host ${HOSTGB} GB, 가중치 ${W_LOCAL}:${W_REMOTE}, host 몫 $HOSTSHARE, 조건($CONDS)"
+ROOTS="$LOCAL_ROOT:$W_LOCAL,$REMOTE_ROOT:$W_REMOTE${REMOTE_CAP_GB:+:$REMOTE_CAP_GB}${RSSD_ROOT:+,$RSSD_ROOT:$W_RSSD}"
+log "== phase3($MODE): $MODEL, ${NDOCS}건, max_model_len $MAXLEN, 프리픽스 상한 $CAP, KV 예산 ${KVB}요청, host ${HOSTGB} GB, 루트 $ROOTS, host 몫 $HOSTSHARE, 조건($CONDS)"
 for cond in $CONDS; do
   D=$O/$cond
   if [ -f $D/result.json ]; then
@@ -113,7 +122,7 @@ for cond in $CONDS; do
   rm -rf $D
   EXTRA=""; NEED_REMOTE=0
   # 우리 조건 공통 인자. 배치 정책만 조건마다 다르다.
-  OURS="--kv-host-gb $HOSTGB --kv-roots $LOCAL_ROOT:$W_LOCAL,$REMOTE_ROOT:$W_REMOTE"
+  OURS="--kv-host-gb $HOSTGB --kv-roots $ROOTS"
   OURS_RATIO="--kv-placement ratio --kv-host-share $HOSTSHARE"
   case $cond in
     ref-none)   kvt=none;    KVDIR=$LOCAL_ROOT;;
@@ -149,9 +158,10 @@ print(json.dumps(a) if a else "")')
   # KV 루트를 비우는 것부터 런이 끝날 때까지가 한 덩어리다. 캠페인이 여러 개 떠 있어도
   # 남의 런이 쓰는 원격 루트를 지우지 않도록 이 구간 전체를 GPU 잠금 안에서 돈다.
   run_cond(){
-    clean_root "$LOCAL_ROOT"; clean_root "$REMOTE_ROOT"
+    clean_root "$LOCAL_ROOT"; clean_root "$REMOTE_ROOT"; [ -n "$RSSD_ROOT" ] && clean_root "$RSSD_ROOT"
     mkdir -p "$LOCAL_ROOT"
     [ $NEED_REMOTE = 1 ] && mkdir -p "$REMOTE_ROOT"
+    [ $NEED_REMOTE = 1 ] && [ -n "$RSSD_ROOT" ] && mkdir -p "$RSSD_ROOT"
     log "start $cond (kv-transport=$kvt, kv-root=$KVDIR$([ -n "$EXTRA" ] && echo ", $EXTRA")$([ ${#kvextra[@]} -gt 0 ] && echo ", --kv-extra ${kvextra[1]}"))"
     "${wrap[@]}" python run_obs.py --run-dir $D --model $MODEL $WORKLOAD --n-docs $NDOCS "${nsysargs[@]}" \
       --prompt-cap $CAP --decode-tokens $DECODE --max-model-len $MAXLEN --kv-batch $KVB --kv-block 64 \
@@ -160,7 +170,7 @@ print(json.dumps(a) if a else "")')
     rc=$?
     if [ -f $D/result.json ]; then log "done  $cond rc=$rc"; else
       log "FAILED $cond rc=$rc"; grep -aE 'Traceback|Error' $O/$cond.log | tail -2 | tee -a $O/campaign.log >/dev/null; fi
-    clean_root "$LOCAL_ROOT"; clean_root "$REMOTE_ROOT"
+    clean_root "$LOCAL_ROOT"; clean_root "$REMOTE_ROOT"; [ -n "$RSSD_ROOT" ] && clean_root "$RSSD_ROOT"
   }
   # GPU는 다른 작업과 나눠 쓰므로 조건 하나씩 flock으로 줄 세운다(GPULOCK=""이면 끔).
   GL="${GPULOCK-/tmp/claude-gpu.lock}"

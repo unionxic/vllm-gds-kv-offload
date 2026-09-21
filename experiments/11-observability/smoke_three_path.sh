@@ -23,9 +23,10 @@ HOSTGB=${HOSTGB:-0.5}; HOSTSHARE=${HOSTSHARE:-0.47}
 W_LOCAL=${W_LOCAL:-13}; W_REMOTE=${W_REMOTE:-40}
 LOCAL_ROOT=$O/kv-p2-local
 REMOTE_ROOT=${REMOTE_ROOT:-/mnt/sunny-nvmeof/kv-p2}
+REMOTE_MNT=${REMOTE_MNT:-$(dirname "$REMOTE_ROOT")}  # 원격 티어 마운트 지점(rain에서는 /mnt/sunny-nvmeof, sunny에서는 /mnt/rain-nvmeof)
 CONDS=${CONDS:-"none host-first ratio multi-root"}
 
-mountpoint -q /mnt/sunny-nvmeof || { log "ABORT: /mnt/sunny-nvmeof 이 마운트되어 있지 않음"; exit 2; }
+mountpoint -q "$REMOTE_MNT" || { log "ABORT: $REMOTE_MNT 이 마운트되어 있지 않음"; exit 2; }
 
 # 이 스크립트가 만든 KV 디렉터리만 지운다(이름이 kv-p2*가 아니거나 마운트 지점이면 중단).
 clean_root(){

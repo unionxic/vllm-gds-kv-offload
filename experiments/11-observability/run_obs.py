@@ -31,7 +31,8 @@ ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "
                 help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음). hybrid: 포크 HybridSpec(host 층 + GDS SSD 층, write-through). "
                      "tiering: vLLM in-tree TieringOffloadingSpec(CPU 1차 티어 + fs 2차 티어, 전송이 모두 host DRAM 경유)")
 ap.add_argument("--kv-host-gb", type=float, default=8.0, help="cpu/tiering: host KV 층 크기(GB, cpu_bytes_to_use). hybrid: hybrid_host_gb")
-ap.add_argument("--kv-roots", default=None, help="cufile/hybrid: 파일 티어 루트 여러 개. \"DIR:WEIGHT,DIR:WEIGHT\". "
+ap.add_argument("--kv-roots", default=None, help="cufile/hybrid: 파일 티어 루트 여러 개. \"DIR:WEIGHT[:CAPGB],DIR:WEIGHT\". "
+                "CAPGB(GiB)를 준 루트는 그만큼 차면 자리가 남은 루트로 넘긴다(spill). "
                 "주면 cufile_fs_root_dirs로 넘어가고 cufile_fs_root_dir은 쓰지 않음. 블록 해시로 루트 하나를 가중치 비례로 고름. "
                 "--kv-root는 그대로 필요하며(모니터·산출물 기준 경로) 여기 나열된 디렉터리 중 하나여야 함. 비어 있어야 하는 검사는 나열된 전부에 적용")
 ap.add_argument("--kv-placement", default=None, choices=["host_first", "profile", "ratio"],
@@ -113,21 +114,27 @@ def _parse_kv_roots(spec):
     for item in spec.split(","):
         item = item.strip()
         if not item: continue
-        d, _, w = item.rpartition(":")
-        if not d or not w.isdigit() or int(w) <= 0:
-            sys.exit(f"--kv-roots 항목은 DIR:WEIGHT(양의 정수) 형식이어야 함: {item}")
-        out.append((os.path.abspath(d), int(w)))
+        parts = item.split(":")
+        # DIR:WEIGHT 또는 DIR:WEIGHT:CAPGB. 디렉터리에 콜론은 없다고 본다.
+        if len(parts) == 2: d, w, cap = parts[0], parts[1], "0"
+        elif len(parts) == 3: d, w, cap = parts
+        else: sys.exit(f"--kv-roots 항목은 DIR:WEIGHT[:CAPGB] 형식이어야 함: {item}")
+        try: capf = float(cap)
+        except ValueError: capf = -1
+        if not d or not w.isdigit() or int(w) <= 0 or capf < 0:
+            sys.exit(f"--kv-roots 항목은 DIR:WEIGHT(양의 정수)[:CAPGB(0 이상)] 형식이어야 함: {item}")
+        out.append((os.path.abspath(d), int(w), capf))
     if not out: sys.exit("--kv-roots가 비어 있음")
     return out
 
-KV_ROOTS = [(os.path.abspath(args.kv_root), 1)]
+KV_ROOTS = [(os.path.abspath(args.kv_root), 1, 0.0)]
 if args.kv_roots:
     if args.kv_transport not in ("cufile", "hybrid"):
         sys.exit(f"--kv-roots는 --kv-transport cufile/hybrid에서만 씀(지금 {args.kv_transport})")
     KV_ROOTS = _parse_kv_roots(args.kv_roots)
-    if os.path.abspath(args.kv_root) not in [d for d, _ in KV_ROOTS]:
+    if os.path.abspath(args.kv_root) not in [r[0] for r in KV_ROOTS]:
         sys.exit(f"--kv-root는 --kv-roots에 나열된 디렉터리 중 하나여야 함: {args.kv_root}")
-for _d, _ in KV_ROOTS:
+for _d, *_ in KV_ROOTS:
     if os.path.isdir(_d) and os.listdir(_d):
         sys.exit(f"kv-root가 비어 있지 않음: {_d}")
 
@@ -266,7 +273,7 @@ elif args.kv_transport != "none":
     # tiering은 루트를 secondary_tiers[].root_dir로 이미 넘겼으므로 건너뛴다.
     if args.kv_transport != "tiering":
         if args.kv_roots:
-            extra["cufile_fs_root_dirs"] = [{"dir": d, "weight": w} for d, w in KV_ROOTS]
+            extra["cufile_fs_root_dirs"] = [{"dir": d, "weight": w, "capacity_gb": c} for d, w, c in KV_ROOTS]
         else:
             extra["cufile_fs_root_dir"] = args.kv_root
     if not args.pure: extra["block_size"] = args.kv_block
@@ -424,11 +431,14 @@ try:
                 if KVW is not None: KVW.get_finished()
                 st_ = KVW.stats() if KVW is not None else {}
                 # 청크 파일만 센다(루트마다 있는 설정 json과 쓰는 중인 .tmp는 제외)
-                n_disk = sum(1 for d, _ in KV_ROOTS for _dp, _dn, fs in os.walk(d) for f in fs if f.endswith(".bin"))
+                n_disk = sum(1 for d, *_ in KV_ROOTS for _dp, _dn, fs in os.walk(d) for f in fs if f.endswith(".bin"))
                 info.update(pending=len(mgr._pending), entries=len(mgr._entries), files_on_disk=n_disk,
                             outstanding_w=st_.get("outstanding_writes", 0), outstanding_r=st_.get("outstanding_reads", 0))
-                if (not mgr._pending and st_.get("outstanding_writes", 0) == 0
-                        and st_.get("outstanding_reads", 0) == 0 and n_disk == len(mgr._entries)):
+                # pending은 스케줄러 step에서 complete_store가 처리돼야 줄어드는데 phase 끝에는 step이 더 없어
+                # 남아 있을 수 있다(디스크에는 파일이 다 있음). 그래서 완료 판정은 워커 미완료 0 + 디스크 파일 수가
+                # 매니저 항목 + pending 합과 같을 때로 한다.
+                if (st_.get("outstanding_writes", 0) == 0 and st_.get("outstanding_reads", 0) == 0
+                        and n_disk == len(mgr._entries) + len(mgr._pending)):
                     info["ok"] = True; break
                 time.sleep(0.05)
         elif args.kv_transport == "mooncake":
@@ -635,7 +645,7 @@ try:
         return dict(device=best[0], mount=best[1], fstype=best[2]) if best else None
     res = dict(args=vars(args), kv_gib=kv_gib, kv_alloc_gib=kv_alloc_gib, host_fraction=host_fraction, tiers=tiers,
                kv_root=os.path.abspath(args.kv_root), kv_root_fs=mount_of(args.kv_root),
-               kv_roots=[dict(dir=d, weight=w, fs=mount_of(d)) for d, w in KV_ROOTS],
+               kv_roots=[dict(dir=d, weight=w, capacity_gb=c, fs=mount_of(d)) for d, w, c in KV_ROOTS],
                kv_extra_config=KV_EXTRA_CONFIG, phases={})
     N = len(docs)
     if args.mode == "stream":
@@ -706,11 +716,11 @@ try:
     if args.kv_transport != "none":
         # 루트마다 따로 세고(kv_files_by_root) 합계는 예전 키 이름 그대로(kv_files, kv_bytes_gib).
         by_root, n_tot, b_tot = [], 0, 0
-        for d, w in KV_ROOTS:
+        for d, w, c in KV_ROOTS:
             if not os.path.isdir(d): continue
             files = [os.path.join(dp, f) for dp, _, fs in os.walk(d) for f in fs]
             b = sum(os.path.getsize(f) for f in files)
-            by_root.append(dict(dir=d, weight=w, files=len(files), bytes_gib=round(b / 2**30, 3)))
+            by_root.append(dict(dir=d, weight=w, capacity_gb=c, files=len(files), bytes_gib=round(b / 2**30, 3)))
             n_tot += len(files); b_tot += b
         if by_root:
             res["kv_files_by_root"] = by_root
