@@ -1,0 +1,231 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/multi-root",
+  "model": "hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4",
+  "n_docs": 6,
+  "leval_workload": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json",
+  "prompt_source": "longbench",
+  "longbench_file": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl",
+  "bailian_offset": 0,
+  "bailian_block": 16,
+  "prompt_cap": 0,
+  "profile_out": null,
+  "kv_transport": "cufile",
+  "kv_host_gb": 8.0,
+  "kv_roots": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local:13,/mnt/sunny-nvmeof/kv-p2:40",
+  "kv_placement": null,
+  "kv_host_share": null,
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "register_tensors": false,
+  "kv_batch": 2.0,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": null,
+  "pure": false,
+  "prefetch_step": 1,
+  "max_num_batched_tokens": 0,
+  "io_threads": 4,
+  "gpu_util": 0.9,
+  "max_model_len": 8192,
+  "decode_tokens": 8,
+  "mode": "phases",
+  "time_scale": 1.0,
+  "max_concurrency": 0,
+  "arrival_gap_s": 0.0,
+  "settle_sec": 3.0,
+  "final_settle_sec": 3.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/ssd",
+  "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+  "no_monitors": false,
+  "kv_split": "off",
+  "kv_split_rate_toks": null,
+  "kv_extra": null,
+  "no_weight_offload": true,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": 2.3,
+ "kv_alloc_gib": 9.2,
+ "host_fraction": 0.3,
+ "tiers": {
+  "n_modules": 0,
+  "n_ssd": 0,
+  "host_tier_gib": 0.0,
+  "ssd_tier_gib": 0.0,
+  "gpu_resident": "all"
+ },
+ "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+ "kv_root_fs": {
+  "device": "/dev/nvme0n1p2",
+  "mount": "/",
+  "fstype": "ext4"
+ },
+ "kv_roots": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+   "weight": 13,
+   "fs": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4"
+   }
+  },
+  {
+   "dir": "/mnt/sunny-nvmeof/kv-p2",
+   "weight": 40,
+   "fs": {
+    "device": "/dev/nvme1n1",
+    "mount": "/mnt/sunny-nvmeof",
+    "fstype": "xfs"
+   }
+  }
+ ],
+ "kv_extra_config": {
+  "spec_name": "CuFileFsSpec",
+  "cufile_fs_register_tensors": "False",
+  "cufile_fs_read_threads": 4,
+  "cufile_fs_write_threads": 4,
+  "cufile_fs_root_dirs": [
+   {
+    "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+    "weight": 13
+   },
+   {
+    "dir": "/mnt/sunny-nvmeof/kv-p2",
+    "weight": 40
+   }
+  ],
+  "block_size": 64
+ },
+ "phases": {
+  "cold_fill": {
+   "wall_s": 108.828,
+   "matched": 0,
+   "drain_s": 0.414,
+   "matched_req_sum": 0,
+   "hit_requests": 0,
+   "ttft": [
+    18.867,
+    35.478,
+    54.262,
+    72.095,
+    90.249,
+    108.089
+   ],
+   "e2e": [
+    35.783,
+    36.471,
+    72.39,
+    72.42,
+    108.384,
+    108.414
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 2.755,
+   "matched": 4345728,
+   "drain_s": 0.0,
+   "matched_req_sum": 29760,
+   "hit_requests": 4,
+   "ttft": [
+    0.255,
+    0.253,
+    1.033,
+    1.432,
+    2.087,
+    2.485
+   ],
+   "e2e": [
+    0.59,
+    0.588,
+    1.577,
+    1.706,
+    2.63,
+    2.755
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 465,
+  "read_gib": 3.63,
+  "write_n": 768,
+  "write_gib": 6.0,
+  "read_busy_s": 2.7,
+  "write_busy_s": 366.1,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 207.2,
+   "open": 0.1,
+   "io": 158.8,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 2.7,
+   "fin": 0.0
+  },
+  "write_calls": 1664,
+  "read_calls": 995
+ },
+ "kv_manager": {
+  "files": 641,
+  "pending": 127,
+  "total_gib": 5.008,
+  "capacity_gib": 0.0,
+  "policy": "lru",
+  "refused": 0,
+  "chunk_bytes": 8388608,
+  "evicted": 0,
+  "evicted_gib": 0.0,
+  "lookup_hit": 67902,
+  "lookup_miss": 566,
+  "admission": null,
+  "roots": [
+   {
+    "root": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+    "weight": 13,
+    "mapped": 907
+   },
+   {
+    "root": "/mnt/sunny-nvmeof/kv-p2",
+    "weight": 40,
+    "mapped": 2301
+   }
+  ]
+ },
+ "kv_split": {
+  "mode": "off",
+  "decisions": 0,
+  "requests_split": 0,
+  "head_tokens_recomputed_total": 0,
+  "tail_tokens_loaded_total": 0,
+  "tail_wait_events": 0,
+  "tail_wait_s_total": 0.0
+ },
+ "gpu_max_gib": 8.61,
+ "weight_ssd_reads": 0,
+ "weight_ssd_gib": 0.0,
+ "kv_files_by_root": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/bisect-doc2/kv-p2-local",
+   "weight": 13,
+   "files": 188,
+   "bytes_gib": 1.461
+  },
+  {
+   "dir": "/mnt/sunny-nvmeof/kv-p2",
+   "weight": 40,
+   "files": 582,
+   "bytes_gib": 4.539
+  }
+ ],
+ "kv_files": 770,
+ "kv_bytes_gib": 6.0
+}
