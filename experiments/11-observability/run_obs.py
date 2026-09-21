@@ -728,6 +728,9 @@ try:
     res["kv_io"]["write_stages_s"] = {k: round(ks.get(f"w_{k}_ns", 0) / 1e9, 1) for k in ("ev", "open", "io", "fin")}
     res["kv_io"]["read_stages_s"] = {k: round(ks.get(f"r_{k}_ns", 0) / 1e9, 1) for k in ("open", "io", "fin")}
     res["kv_io"]["write_calls"] = ks.get("w_calls", 0); res["kv_io"]["read_calls"] = ks.get("r_calls", 0)
+    # IO 발행 정책(루트별 동시 발행 상한·읽기 우선)이 켜졌으면 게이트 통계도 남긴다(hybrid는 kv_worker_hybrid가 ssd를 빼므로 여기서).
+    if ks.get("gate_enabled"):
+        res["kv_io"]["gate"] = {k: v for k, v in ks.items() if "gate" in k or "inflight" in k or k == "read_priority"}
     try:
         if args.kv_transport == "hybrid":
             import vllm.v1.kv_offload.hybrid.spec as _hs
