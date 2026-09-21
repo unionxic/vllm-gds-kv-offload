@@ -1,0 +1,7 @@
+[09-21 16:34:46] Mooncake 풀 용량: 48.0 GiB
+[09-21 16:34:46] == smoke-mooncake-sunny: Qwen/Qwen2.5-3B-Instruct, longbench 8건, max_model_len 4096, KV 예산 2요청, 조건(none mooncake)
+[09-21 16:34:46] start none (kv-transport=none)
+[09-21 16:35:46] done  none rc=0
+[09-21 16:35:46] start mooncake (kv-transport=mooncake, --mooncake-master 30.0.0.3:50051 --mooncake-metadata http://30.0.0.3:8080/metadata --mooncake-device mlx5_0 --mooncake-local-ip 30.0.0.4 --mooncake-staging-gb 0)
+[09-21 16:36:35] done  mooncake rc=0
+[09-21 16:36:35] == smoke-mooncake-sunny 종료

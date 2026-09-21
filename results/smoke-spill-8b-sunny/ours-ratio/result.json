@@ -1,0 +1,370 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/ours-ratio",
+  "model": "hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4",
+  "n_docs": 24,
+  "leval_workload": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json",
+  "prompt_source": "bailian",
+  "longbench_file": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl",
+  "bailian_offset": 1240,
+  "bailian_block": 16,
+  "prompt_cap": 8000,
+  "profile_out": null,
+  "kv_transport": "hybrid",
+  "kv_host_gb": 8.0,
+  "kv_roots": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local:25,/mnt/rain-nvmeof/kv-p3:82:2,/mnt/rain-ssd/kv-p3:32",
+  "kv_placement": "ratio",
+  "kv_host_share": 0.47,
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "mooncake_master": "30.0.0.4:50051",
+  "mooncake_metadata": "http://30.0.0.4:8080/metadata",
+  "mooncake_device": "mlx5_1",
+  "mooncake_local_ip": "30.0.0.3",
+  "mooncake_local_buffer_gb": 1.0,
+  "mooncake_staging_gb": 8.0,
+  "mooncake_keep_store": false,
+  "register_tensors": false,
+  "kv_batch": 2.0,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": null,
+  "pure": false,
+  "prefetch_step": 1,
+  "max_num_batched_tokens": 0,
+  "io_threads": 4,
+  "gpu_util": 0.9,
+  "max_model_len": 8192,
+  "decode_tokens": 8,
+  "mode": "stream",
+  "no_store_phase": "",
+  "reset_gpu_cache_before": "",
+  "kv_trace": false,
+  "commit_check_sec": 0.0,
+  "time_scale": 6.0,
+  "max_concurrency": 4,
+  "arrival_gap_s": 0.0,
+  "settle_sec": 5.0,
+  "final_settle_sec": 5.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/ssd",
+  "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+  "no_monitors": false,
+  "kv_split": "off",
+  "kv_split_rate_toks": null,
+  "kv_extra": null,
+  "no_weight_offload": true,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": 2.3,
+ "kv_alloc_gib": 9.2,
+ "host_fraction": 0.3,
+ "tiers": {
+  "n_modules": 0,
+  "n_ssd": 0,
+  "host_tier_gib": 0.0,
+  "ssd_tier_gib": 0.0,
+  "gpu_resident": "all"
+ },
+ "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+ "kv_root_fs": {
+  "device": "/dev/nvme0n1p2",
+  "mount": "/",
+  "fstype": "ext4"
+ },
+ "kv_roots": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+   "weight": 25,
+   "capacity_gb": 0.0,
+   "fs": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4"
+   }
+  },
+  {
+   "dir": "/mnt/rain-nvmeof/kv-p3",
+   "weight": 82,
+   "capacity_gb": 2.0,
+   "fs": {
+    "device": "/dev/nvme1n1",
+    "mount": "/mnt/rain-nvmeof",
+    "fstype": "xfs"
+   }
+  },
+  {
+   "dir": "/mnt/rain-ssd/kv-p3",
+   "weight": 32,
+   "capacity_gb": 0.0,
+   "fs": {
+    "device": "/dev/nvme2n1",
+    "mount": "/mnt/rain-ssd",
+    "fstype": "xfs"
+   }
+  }
+ ],
+ "kv_extra_config": {
+  "spec_name": "HybridSpec",
+  "hybrid_host_gb": 8.0,
+  "cufile_fs_register_tensors": "False",
+  "cufile_fs_read_threads": 4,
+  "cufile_fs_write_threads": 4,
+  "hybrid_placement": "ratio",
+  "hybrid_host_share": 0.47,
+  "cufile_fs_root_dirs": [
+   {
+    "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+    "weight": 25,
+    "capacity_gb": 0.0
+   },
+   {
+    "dir": "/mnt/rain-nvmeof/kv-p3",
+    "weight": 82,
+    "capacity_gb": 2.0
+   },
+   {
+    "dir": "/mnt/rain-ssd/kv-p3",
+    "weight": 32,
+    "capacity_gb": 0.0
+   }
+  ],
+  "block_size": 64
+ },
+ "phases": {
+  "stream": {
+   "wall_s": 23.074,
+   "n_requests": 24,
+   "matched_tokens": 35280,
+   "matched": 35280,
+   "drain_s": 0.327,
+   "hit_requests": 4,
+   "arrival_span_s": 22.662,
+   "time_scale": 6.0,
+   "max_concurrency": 4,
+   "submitted": 24,
+   "ttft": [
+    2.715,
+    0.284,
+    0.284,
+    2.823,
+    2.625,
+    2.641,
+    5.334,
+    5.358,
+    5.232,
+    5.19,
+    0.665,
+    1.021,
+    0.945,
+    0.872,
+    1.004,
+    0.906,
+    0.958,
+    2.253,
+    0.301,
+    0.104,
+    0.137,
+    0.681,
+    0.908,
+    0.292
+   ],
+   "e2e": [
+    5.679,
+    3.173,
+    3.172,
+    5.589,
+    2.8,
+    2.813,
+    8.134,
+    5.564,
+    6.03,
+    5.988,
+    1.651,
+    1.649,
+    1.936,
+    1.03,
+    1.148,
+    1.083,
+    1.102,
+    2.476,
+    0.454,
+    0.266,
+    0.255,
+    1.702,
+    1.043,
+    0.412
+   ],
+   "queue_s": [
+    0.0,
+    2.5,
+    0.1365,
+    0.1772,
+    2.6974,
+    2.6489,
+    2.1348,
+    3.4926,
+    3.3975,
+    2.9117,
+    6.591,
+    6.3267,
+    4.4541,
+    3.9399,
+    4.5638,
+    1.3402,
+    0.2779,
+    0.0006,
+    1.756,
+    1.5239,
+    0.0005,
+    0.0006,
+    0.6219,
+    0.0004
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 205,
+  "read_gib": 1.6,
+  "write_n": 974,
+  "write_gib": 7.61,
+  "read_busy_s": 3.4,
+  "write_busy_s": 74.6,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 44.1,
+   "open": 0.3,
+   "io": 30.2,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 3.3,
+   "fin": 0.0
+  },
+  "write_calls": 2225,
+  "read_calls": 505
+ },
+ "kv_manager": {
+  "placement": "ratio",
+  "host_share": 0.47,
+  "write_through": true,
+  "host_blocks_used": 475,
+  "host_blocks_total": 953,
+  "ssd_files": 958,
+  "ssd_gib": 7.484,
+  "hits_host": 515,
+  "hits_ssd": 413,
+  "misses": 27,
+  "pending_host": 0,
+  "pending_ssd": 0,
+  "stores_host": 475,
+  "stores_ssd": 974,
+  "demotions": 0,
+  "evictions_host": 0,
+  "evictions_ssd": 0,
+  "lost_keys": 0,
+  "host_alloc_fail": 0,
+  "ssd_manager": {
+   "files": 958,
+   "pending": 16,
+   "total_gib": 7.484,
+   "capacity_gib": 0.0,
+   "policy": "lru",
+   "refused": 0,
+   "chunk_bytes": 8388608,
+   "evicted": 0,
+   "evicted_gib": 0.0,
+   "lookup_hit": 413,
+   "lookup_miss": 27,
+   "trace_path": null,
+   "trace_rows": null,
+   "pending_wait": null,
+   "admission": null,
+   "roots": [
+    {
+     "root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+     "weight": 25,
+     "capacity_gib": 0.0,
+     "mapped": 521,
+     "spilled": 124,
+     "files": 320,
+     "bytes_gib": 2.5,
+     "pending": 2
+    },
+    {
+     "root": "/mnt/rain-nvmeof/kv-p3",
+     "weight": 82,
+     "capacity_gib": 2.0,
+     "mapped": 831,
+     "spilled": 0,
+     "files": 256,
+     "bytes_gib": 2.0,
+     "pending": 0
+    },
+    {
+     "root": "/mnt/rain-ssd/kv-p3",
+     "weight": 32,
+     "capacity_gib": 0.0,
+     "mapped": 623,
+     "spilled": 174,
+     "files": 382,
+     "bytes_gib": 2.984,
+     "pending": 14
+    },
+    {
+     "spill_refused": 0
+    }
+   ]
+  }
+ },
+ "kv_worker_hybrid": {
+  "sub_jobs_host": 21,
+  "sub_jobs_ssd": 22,
+  "inflight": 1,
+  "host": null
+ },
+ "kv_split": {
+  "mode": "off",
+  "decisions": 0,
+  "requests_split": 0,
+  "head_tokens_recomputed_total": 0,
+  "tail_tokens_loaded_total": 0,
+  "tail_wait_events": 0,
+  "tail_wait_s_total": 0.0
+ },
+ "gpu_max_gib": 8.61,
+ "weight_ssd_reads": 0,
+ "weight_ssd_gib": 0.0,
+ "kv_files_by_root": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local",
+   "weight": 25,
+   "capacity_gb": 0.0,
+   "files": 323,
+   "bytes_gib": 2.516
+  },
+  {
+   "dir": "/mnt/rain-nvmeof/kv-p3",
+   "weight": 82,
+   "capacity_gb": 2.0,
+   "files": 257,
+   "bytes_gib": 2.0
+  },
+  {
+   "dir": "/mnt/rain-ssd/kv-p3",
+   "weight": 32,
+   "capacity_gb": 0.0,
+   "files": 397,
+   "bytes_gib": 3.094
+  }
+ ],
+ "kv_files": 977,
+ "kv_bytes_gib": 7.609
+}

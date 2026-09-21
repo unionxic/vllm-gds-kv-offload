@@ -1,0 +1,5 @@
+[09-21 19:31:49] 원격 램디스크 여유: 31.7 GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)
+[09-21 19:31:49] == phase3(stream): hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, 24건, max_model_len 8192, 프리픽스 상한 8000, KV 예산 2요청, host 8 GB, 루트 /home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local:25,/mnt/rain-nvmeof/kv-p3:82:2,/mnt/rain-ssd/kv-p3:32, host 몫 0.47, 조건(ours-ratio)
+[09-21 19:31:49] start ours-ratio (kv-transport=hybrid, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local, --kv-host-gb 8 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/smoke-spill-8b-sunny/kv-p3-local:25,/mnt/rain-nvmeof/kv-p3:82:2,/mnt/rain-ssd/kv-p3:32 --kv-placement ratio --kv-host-share 0.47)
+[09-21 19:33:06] done  ours-ratio rc=0
+[09-21 19:33:06] == phase3(stream) 종료

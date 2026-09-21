@@ -1,0 +1,8 @@
+[09-21 16:37:03] == smoke-three-path: Qwen/Qwen2.5-3B-Instruct, longbench 8건, max_model_len 4096, KV 예산 2요청, host 0.5 GB, 가중치 13:40, host 몫 0.47, 조건(none ratio multi-root)
+[09-21 16:37:03] start none (kv-transport=none, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local)
+[09-21 16:37:52] done  none rc=0
+[09-21 16:37:52] start ratio (kv-transport=hybrid, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local, --kv-host-gb 0.5 --kv-placement ratio --kv-host-share 0.47 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local:13,/mnt/rain-nvmeof/kv-p2:40)
+[09-21 16:39:02] done  ratio rc=0
+[09-21 16:39:02] start multi-root (kv-transport=cufile, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local, --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local:13,/mnt/rain-nvmeof/kv-p2:40)
+[09-21 16:39:51] done  multi-root rc=0
+[09-21 16:39:51] == smoke-three-path 종료

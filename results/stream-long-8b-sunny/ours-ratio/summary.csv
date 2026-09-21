@@ -1,0 +1,2 @@
+phase,count,ttft_p50,ttft_p95,e2e_p50,e2e_p95,e2e_max,phase_wall_s
+stream,200,1.71,7.27,4.67,11.40,15.55,254.4

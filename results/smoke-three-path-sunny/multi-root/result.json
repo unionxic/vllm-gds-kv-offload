@@ -1,0 +1,253 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/multi-root",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "n_docs": 8,
+  "leval_workload": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json",
+  "prompt_source": "longbench",
+  "longbench_file": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl",
+  "bailian_offset": 0,
+  "bailian_block": 16,
+  "prompt_cap": 0,
+  "profile_out": null,
+  "kv_transport": "cufile",
+  "kv_host_gb": 8.0,
+  "kv_roots": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local:13,/mnt/rain-nvmeof/kv-p2:40",
+  "kv_placement": null,
+  "kv_host_share": null,
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "mooncake_master": "30.0.0.4:50051",
+  "mooncake_metadata": "http://30.0.0.4:8080/metadata",
+  "mooncake_device": "mlx5_1",
+  "mooncake_local_ip": "30.0.0.3",
+  "mooncake_local_buffer_gb": 1.0,
+  "mooncake_staging_gb": 8.0,
+  "mooncake_keep_store": false,
+  "register_tensors": false,
+  "kv_batch": 2.0,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": null,
+  "pure": false,
+  "prefetch_step": 1,
+  "max_num_batched_tokens": 0,
+  "io_threads": 4,
+  "gpu_util": 0.9,
+  "max_model_len": 4096,
+  "decode_tokens": 8,
+  "mode": "phases",
+  "no_store_phase": "",
+  "reset_gpu_cache_before": "",
+  "kv_trace": false,
+  "commit_check_sec": 0.0,
+  "time_scale": 1.0,
+  "max_concurrency": 0,
+  "arrival_gap_s": 0.0,
+  "settle_sec": 3.0,
+  "final_settle_sec": 3.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/ssd",
+  "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+  "no_monitors": false,
+  "kv_split": "off",
+  "kv_split_rate_toks": null,
+  "kv_extra": null,
+  "no_weight_offload": true,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": 0.32,
+ "kv_alloc_gib": 2.56,
+ "host_fraction": 0.3,
+ "tiers": {
+  "n_modules": 0,
+  "n_ssd": 0,
+  "host_tier_gib": 0.0,
+  "ssd_tier_gib": 0.0,
+  "gpu_resident": "all"
+ },
+ "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+ "kv_root_fs": {
+  "device": "/dev/nvme0n1p2",
+  "mount": "/",
+  "fstype": "ext4"
+ },
+ "kv_roots": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+   "weight": 13,
+   "fs": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4"
+   }
+  },
+  {
+   "dir": "/mnt/rain-nvmeof/kv-p2",
+   "weight": 40,
+   "fs": {
+    "device": "/dev/nvme1n1",
+    "mount": "/mnt/rain-nvmeof",
+    "fstype": "xfs"
+   }
+  }
+ ],
+ "kv_extra_config": {
+  "spec_name": "CuFileFsSpec",
+  "cufile_fs_register_tensors": "False",
+  "cufile_fs_read_threads": 4,
+  "cufile_fs_write_threads": 4,
+  "cufile_fs_root_dirs": [
+   {
+    "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+    "weight": 13
+   },
+   {
+    "dir": "/mnt/rain-nvmeof/kv-p2",
+    "weight": 40
+   }
+  ],
+  "block_size": 64
+ },
+ "phases": {
+  "cold_fill": {
+   "wall_s": 4.501,
+   "matched": 0,
+   "drain_s": 0.0,
+   "matched_req_sum": 0,
+   "hit_requests": 0,
+   "ttft": [
+    1.017,
+    1.016,
+    2.117,
+    2.116,
+    3.218,
+    3.218,
+    4.33,
+    4.33
+   ],
+   "e2e": [
+    1.153,
+    1.152,
+    2.258,
+    2.257,
+    3.36,
+    3.359,
+    4.501,
+    4.501
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 1.011,
+   "matched": 1313632,
+   "drain_s": 0.0,
+   "matched_req_sum": 22640,
+   "hit_requests": 6,
+   "ttft": [
+    0.102,
+    0.098,
+    0.318,
+    0.377,
+    0.607,
+    0.667,
+    0.833,
+    0.891
+   ],
+   "e2e": [
+    0.237,
+    0.233,
+    0.481,
+    0.533,
+    0.75,
+    0.792,
+    0.974,
+    1.011
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 354,
+  "read_gib": 0.78,
+  "write_n": 512,
+  "write_gib": 1.12,
+  "read_busy_s": 0.7,
+  "write_busy_s": 16.1,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 15.0,
+   "open": 0.1,
+   "io": 1.0,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 0.7,
+   "fin": 0.0
+  },
+  "write_calls": 1229,
+  "read_calls": 748
+ },
+ "kv_manager": {
+  "files": 512,
+  "pending": 0,
+  "total_gib": 1.125,
+  "capacity_gib": 0.0,
+  "policy": "lru",
+  "refused": 0,
+  "chunk_bytes": 2359296,
+  "evicted": 0,
+  "evicted_gib": 0.0,
+  "lookup_hit": 20528,
+  "lookup_miss": 369,
+  "trace_path": null,
+  "trace_rows": null,
+  "pending_wait": null,
+  "admission": null,
+  "roots": [
+   {
+    "root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+    "weight": 13,
+    "mapped": 577
+   },
+   {
+    "root": "/mnt/rain-nvmeof/kv-p2",
+    "weight": 40,
+    "mapped": 1682
+   }
+  ]
+ },
+ "kv_split": {
+  "mode": "off",
+  "decisions": 0,
+  "requests_split": 0,
+  "head_tokens_recomputed_total": 0,
+  "tail_tokens_loaded_total": 0,
+  "tail_wait_events": 0,
+  "tail_wait_s_total": 0.0
+ },
+ "gpu_max_gib": 6.8,
+ "weight_ssd_reads": 0,
+ "weight_ssd_gib": 0.0,
+ "kv_files_by_root": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-three-path-sunny/kv-p2-local",
+   "weight": 13,
+   "files": 134,
+   "bytes_gib": 0.292
+  },
+  {
+   "dir": "/mnt/rain-nvmeof/kv-p2",
+   "weight": 40,
+   "files": 380,
+   "bytes_gib": 0.833
+  }
+ ],
+ "kv_files": 514,
+ "kv_bytes_gib": 1.125
+}
