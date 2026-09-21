@@ -1,0 +1,58 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+plan: KV 0.04 MB/token, 0.14 GiB/request, working set 1.1 GiB, GPU holds 2 requests
+ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+INFO 09-19 01:37:24 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 4096, 'gpu_memory_utilization': 0.9, 'kv_cache_memory_bytes': 343597383, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='OffloadingConnector', engine_id='f9f40345-25d5-46c8-b6ff-db76d8fd9b4c', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'spec_name': 'CuFileFsSpec', 'cufile_fs_root_dir': '/mnt/sunny-ssd/kv-smoke', 'cufile_fs_register_tensors': 'False', 'cufile_fs_read_threads': 4, 'cufile_fs_write_threads': 4, 'block_size': 64}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'Qwen/Qwen2.5-3B-Instruct'}
+WARNING 09-19 01:37:24 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_KV_SPLIT
+WARNING 09-19 01:37:24 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-19 01:37:25 [model.py:623] Resolved architecture: Qwen2ForCausalLM
+WARNING 09-19 01:37:25 [model.py:2123] Casting torch.bfloat16 to torch.float16.
+INFO 09-19 01:37:25 [model.py:1788] Using max model len 4096
+INFO 09-19 01:37:25 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+INFO 09-19 01:37:25 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-19 01:37:25 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-19 01:37:25 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-19 01:37:25 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-19 01:37:26 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-19 01:37:26 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-19 01:37:30 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='Qwen/Qwen2.5-3B-Instruct', speculative_config=None, tokenizer='Qwen/Qwen2.5-3B-Instruct', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=4096, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=None, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=Qwen/Qwen2.5-3B-Instruct, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-19 01:37:31 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.193:37433 backend=nccl
+INFO 09-19 01:37:31 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+WARNING 09-19 01:37:32 [topk_topp_sampler.py:62] FlashInfer top-p/top-k sampling unavailable: unsupported compute capability 7.5; falling back. Set VLLM_USE_FLASHINFER_SAMPLER=0 to silence.
+INFO 09-19 01:37:32 [gpu_model_runner.py:5250] Starting to load model Qwen/Qwen2.5-3B-Instruct...
+ERROR 09-19 01:37:32 [fa_utils.py:253] Cannot use FA version 2 is not supported due to FA2 is only supported on devices with compute capability >= 8
+INFO 09-19 01:37:32 [cuda.py:482] Using TRITON_ATTN attention backend out of potential backends: ['TRITON_ATTN', 'FLEX_ATTENTION'].
+INFO 09-19 01:37:33 [weight_utils.py:869] Filesystem type for checkpoints: EXT4. Checkpoint size: 5.75 GiB. Available RAM: 114.54 GiB.
+INFO 09-19 01:37:33 [weight_utils.py:892] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:01<00:01,  1.02s/it]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.27it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.22it/s]
+
+INFO 09-19 01:37:35 [default_loader.py:430] Loading weights took 1.67 seconds
+INFO 09-19 01:37:36 [gpu_model_runner.py:5347] Model loading took 5.79 GiB memory and 2.923514 seconds
+INFO 09-19 01:37:38 [gpu_worker.py:479] Initial free memory 15.42 GiB, reserved 0.32 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-19 01:37:38 [kv_cache_utils.py:2177] GPU KV cache size: 9,312 tokens
+INFO 09-19 01:37:38 [kv_cache_utils.py:2178] Maximum concurrency for 4,096 tokens per request: 2.27x
+INFO 09-19 01:37:38 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: f9f40345-25d5-46c8-b6ff-db76d8fd9b4c
+WARNING 09-19 01:37:38 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-19 01:37:38 [factory.py:47] Creating offloading spec with name: CuFileFsSpec
+WARNING 09-19 01:37:38 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-19 01:37:38 [kv_connector_model_runner_mixin.py:230] Allocating a cross layer KV cache of shape (582, 2, 36, 16, 256)
+INFO 09-19 01:37:38 [native.py:28] cufile_fs: building native extension from /home/unionxic/gds-kv/vllm/csrc/kv_offload/cufile_fs.cpp (CXX=g++-10)
+INFO 09-19 01:37:38 [spec.py:371] CuFileFs worker: 1 tensors, bpc=4, chunk=2359296 bytes, registered_tensors=0
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-19 01:37:38 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-19 01:37:39 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-19 01:37:39 [core.py:347] init engine (profile, create kv cache, warmup model) took 3.21 s
+INFO 09-19 01:37:39 [factory.py:62] Creating v1 connector with name: OffloadingConnector and engine_id: f9f40345-25d5-46c8-b6ff-db76d8fd9b4c
+WARNING 09-19 01:37:39 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+INFO 09-19 01:37:39 [factory.py:47] Creating offloading spec with name: CuFileFsSpec
+WARNING 09-19 01:37:39 [base.py:504] Initializing OffloadingSpec. This API is experimental and subject to change in the future as we iterate the design.
+WARNING 09-19 01:37:41 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-19 01:37:41 [jit_monitor.py:135] Triton kernel JIT compilation during inference: kernel_unified_attention. This causes a latency spike; consider extending warmup to cover this shape/config.
+WARNING 09-19 01:37:46 [jit_monitor.py:135] Triton kernel JIT compilation during inference: reduce_segments. This causes a latency spike; consider extending warmup to cover this shape/config.
+RESULT {"tiers": {"n_modules": 0, "n_ssd": 0, "host_tier_gib": 0.0, "ssd_tier_gib": 0.0, "gpu_resident": "all"}, "kv_io": {"read_n": 354, "read_gib": 0.78, "write_n": 512, "write_gib": 1.12, "read_busy_s": 1.4, "write_busy_s": 61.6, "errors": 0, "registered_tensors": 0, "write_stages_s": {"ev": 59.4, "open": 0.1, "io": 2.1, "fin": 0.0}, "read_stages_s": {"open": 0.0, "io": 1.4, "fin": 0.0}, "write_calls": 1231, "read_calls": 749}, "gpu_max_gib": 6.81}
+  cold_fill: wall 20.497 s, ttft median 15.23, matched 0
+  reverse_retrieve: wall 1.571 s, ttft median 0.849, matched 1531872

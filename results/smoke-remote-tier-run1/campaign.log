@@ -1,0 +1,10 @@
+[09-19 01:33:34] == smoke-remote-tier: Qwen/Qwen2.5-3B-Instruct, longbench 8건, max_model_len 4096, KV 예산 2요청, 조건(none local-ssd remote-dram remote-ssd)
+[09-19 01:33:34] start none (kv-transport=none, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-remote-tier/kv-local)
+[09-19 01:34:47] done  none rc=0
+[09-19 01:34:47] start local-ssd (kv-transport=cufile, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-remote-tier/kv-local)
+[09-19 01:36:12] done  local-ssd rc=0
+[09-19 01:36:12] start remote-dram (kv-transport=cufile, kv-root=/mnt/sunny-nvmeof/kv-smoke)
+[09-19 01:37:14] done  remote-dram rc=0
+[09-19 01:37:14] start remote-ssd (kv-transport=cufile, kv-root=/mnt/sunny-ssd/kv-smoke)
+[09-19 01:38:16] done  remote-ssd rc=0
+[09-19 01:38:16] == smoke-remote-tier 종료
