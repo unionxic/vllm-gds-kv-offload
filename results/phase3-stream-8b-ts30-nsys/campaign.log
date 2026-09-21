@@ -1,0 +1,16 @@
+[09-20 22:45:16] 원격 램디스크 여유: 63.5 GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)
+[09-20 22:45:16] Mooncake 풀 용량: 48.0 GiB
+[09-20 22:45:16] == phase3(stream): hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, 96건, max_model_len 8192, 프리픽스 상한 8000, KV 예산 2요청, host 8 GB, 가중치 13:40, host 몫 0.47, 조건(mooncake ours-ratio)
+[09-20 22:45:16] start mooncake (kv-transport=mooncake, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/kv-p3-local, --mooncake-master 30.0.0.4:50051 --mooncake-metadata http://30.0.0.4:8080/metadata --mooncake-device mlx5_1 --mooncake-local-ip 30.0.0.3 --mooncake-staging-gb 8)
+[09-20 22:45:54] FAILED mooncake rc=1
+[rank0]: Traceback (most recent call last):
+[rank0]: zmq.error.ZMQError: ipc path "/home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/mooncake-nsys/nsys-tmp.keK47b/lookup_rpc_port_0_host_rain_dp_rank0" is longer than 107 characters (sizeof(sockaddr_un.sun_path)). zmq.IPC_PATH_MAX_LEN constant can be used to check addr length (if it is defined). (addr='ipc:///home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/mooncake-nsys/nsys-tmp.keK47b/lookup_rpc_port_0_host_rain_dp_rank0')
+[09-20 22:45:54] start ours-ratio (kv-transport=hybrid, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/kv-p3-local, --kv-host-gb 8 --kv-placement ratio --kv-host-share 0.47 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/kv-p3-local:13,/mnt/sunny-nvmeof/kv-p3:40)
+[09-20 22:59:48] done  ours-ratio rc=0
+[09-20 22:59:48] == phase3(stream) 종료
+[09-20 23:00:53] 원격 램디스크 여유: 63.5 GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)
+[09-20 23:00:53] Mooncake 풀 용량: 48.0 GiB
+[09-20 23:00:53] == phase3(stream): hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, 96건, max_model_len 8192, 프리픽스 상한 8000, KV 예산 2요청, host 8 GB, 가중치 13:40, host 몫 0.47, 조건(mooncake)
+[09-20 23:00:53] start mooncake (kv-transport=mooncake, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/phase3-stream-8b-ts30-nsys/kv-p3-local, --mooncake-master 30.0.0.4:50051 --mooncake-metadata http://30.0.0.4:8080/metadata --mooncake-device mlx5_1 --mooncake-local-ip 30.0.0.3 --mooncake-staging-gb 8)
+[09-20 23:12:47] done  mooncake rc=0
+[09-20 23:12:47] == phase3(stream) 종료
