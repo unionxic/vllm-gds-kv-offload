@@ -1,0 +1,222 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING: 캐시 디렉터리 디스크 여유가 작업 집합보다 작음
+plan: KV 0.13 MB/token, 2.00 GiB/request, working set 400.0 GiB, GPU holds 2 requests
+ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0922 00:05:43.608490 145212 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0922 00:05:43.608518 145212 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0922 00:05:43.609582 145212 client_service.cpp:423] client_id=8090198991950529996-10206803876348536234
+I0922 00:05:43.609599 145212 client_service.cpp:425] client_id=8090198991950529996-10206803876348536234, host_id=30.0.0.4
+I0922 00:05:43.609602 145212 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0922 00:05:43.611218 145212 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0922 00:05:43.611263 145212 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0922 00:05:43.611276 145212 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.4 port: 12413
+I0922 00:05:43.611454 145212 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.194
+I0922 00:05:43.611461 145212 transfer_metadata_plugin.cpp:1298] Found active interface enp23s0f0np0 with IP 30.0.0.4
+I0922 00:05:43.611464 145212 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0922 00:05:43.611476 145212 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.194:16130
+I0922 00:05:43.612164 145212 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0922 00:05:43.612176 145212 client_service.cpp:884] Using specified RDMA devices: mlx5_0
+I0922 00:05:43.615545 145212 topology.cpp:127] Device mlx5_0 port 1 is available
+I0922 00:05:43.726204 145212 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0922 00:05:43.726279 145212 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0922 00:05:43.726325 145212 rdma_context.cpp:207] Using SIEVE endpoint store
+I0922 00:05:43.728691 145212 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_0/1 (network state: with network device)
+I0922 00:05:43.729605 145212 rdma_context.cpp:290] RDMA device: mlx5_0, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:04
+I0922 00:05:43.730461 145212 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0922 00:05:43.730479 145212 real_client.cpp:851] Successfully created client on port 12413 after 1 attempt(s)
+I0922 00:05:43.731954 145212 real_client.cpp:884] Registering local memory: 67108864 bytes
+I0922 00:05:43.747099 145212 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+mooncake remove_all -> 9158
+INFO 09-22 00:05:44 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 16384, 'block_size': 64, 'gpu_memory_utilization': 0.9, 'kv_cache_memory_bytes': 4939212390, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='MooncakeStoreConnector', engine_id='6c6ffe62-cf8a-4754-adc4-8dc17bb34c41', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'host_staging_gb': 0.0}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4'}
+WARNING 09-22 00:05:44 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_KV_SPLIT
+WARNING 09-22 00:05:45 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-22 00:05:46 [model.py:623] Resolved architecture: LlamaForCausalLM
+INFO 09-22 00:05:46 [model.py:1788] Using max model len 16384
+INFO 09-22 00:05:47 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+Parse safetensors files:   0%|          | 0/2 [00:00<?, ?it/s]Parse safetensors files:  50%|█████     | 1/2 [00:01<00:01,  1.30s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.03s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.07s/it]
+INFO 09-22 00:05:50 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-22 00:05:50 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-22 00:05:50 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-22 00:05:50 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-22 00:05:50 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-22 00:05:50 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-22 00:05:54 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', speculative_config=None, tokenizer='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=auto_gptq, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-22 00:05:54 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.194:43961 backend=nccl
+INFO 09-22 00:05:54 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-22 00:05:56 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+INFO 09-22 00:05:56 [gpu_model_runner.py:5250] Starting to load model hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4...
+INFO 09-22 00:05:56 [auto_gptq.py:357] Using MarlinLinearKernel for AutoGPTQLinearMethod
+INFO 09-22 00:05:56 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+INFO 09-22 00:05:56 [flash_attn.py:776] Using FlashAttention version 2
+INFO 09-22 00:05:57 [weight_utils.py:869] Filesystem type for checkpoints: EXT4. Checkpoint size: 5.34 GiB. Available RAM: 118.52 GiB.
+INFO 09-22 00:05:57 [weight_utils.py:892] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:00<00:00,  1.03it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.87it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.66it/s]
+
+INFO 09-22 00:05:59 [default_loader.py:430] Loading weights took 1.22 seconds
+INFO 09-22 00:06:00 [gpu_model_runner.py:5347] Model loading took 5.37 GiB memory and 2.844934 seconds
+INFO 09-22 00:06:00 [utils.py:49] Connectors do not specify a kv cache layout, defaulting to NHD.
+INFO 09-22 00:06:03 [gpu_worker.py:479] Initial free memory 15.44 GiB, reserved 4.6 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-22 00:06:03 [kv_cache_utils.py:2177] GPU KV cache size: 37,632 tokens
+INFO 09-22 00:06:03 [kv_cache_utils.py:2178] Maximum concurrency for 16,384 tokens per request: 2.30x
+INFO 09-22 00:06:03 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: 6c6ffe62-cf8a-4754-adc4-8dc17bb34c41
+WARNING 09-22 00:06:03 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+I0922 00:06:03.952653 145212 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0922 00:06:03.952678 145212 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0922 00:06:03.953882 145212 client_service.cpp:423] client_id=16808341997252040156-918771154729178806
+I0922 00:06:03.953900 145212 client_service.cpp:425] client_id=16808341997252040156-918771154729178806, host_id=30.0.0.4
+I0922 00:06:03.953903 145212 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0922 00:06:03.955163 145212 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0922 00:06:03.955263 145212 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0922 00:06:03.955287 145212 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.4 port: 12916
+I0922 00:06:03.955533 145212 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.194
+I0922 00:06:03.955538 145212 transfer_metadata_plugin.cpp:1298] Found active interface enp23s0f0np0 with IP 30.0.0.4
+I0922 00:06:03.955541 145212 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0922 00:06:03.955551 145212 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.194:16563
+I0922 00:06:03.956084 145212 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0922 00:06:03.956094 145212 client_service.cpp:884] Using specified RDMA devices: mlx5_0
+I0922 00:06:03.958868 145212 topology.cpp:127] Device mlx5_0 port 1 is available
+I0922 00:06:03.959210 145212 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0922 00:06:03.959259 145212 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0922 00:06:03.959265 145212 rdma_context.cpp:207] Using SIEVE endpoint store
+I0922 00:06:03.961220 145212 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_0/1 (network state: with network device)
+I0922 00:06:03.961972 145212 rdma_context.cpp:290] RDMA device: mlx5_0, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:04
+I0922 00:06:03.962862 145212 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0922 00:06:03.962877 145212 real_client.cpp:851] Successfully created client on port 12916 after 1 attempt(s)
+I0922 00:06:03.964304 145212 real_client.cpp:884] Registering local memory: 1073741824 bytes
+I0922 00:06:04.163096 145212 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+INFO 09-22 00:06:04 [worker.py:1062] Mooncake mode=standalone-store (global_segment_size=0, local_buffer_size=1073741824, preferred_segment=<none>, enable_offload=True)
+INFO 09-22 00:06:04 [worker.py:1305] Registered KV caches: num_groups=1, num_segments=32, num_blocks=588
+INFO 09-22 00:06:04 [worker.py:1355] Started 1 Mooncake KV-load receive thread(s)
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-22 00:06:04 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-22 00:06:04 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-22 00:06:05 [core.py:347] init engine (profile, create kv cache, warmup model) took 4.89 s
+INFO 09-22 00:06:05 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: 6c6ffe62-cf8a-4754-adc4-8dc17bb34c41
+WARNING 09-22 00:06:05 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+stream plan: 200 req, span 238.6 s, median gap 0.864 s, time_scale 6.0, max_concurrency 4
+WARNING 09-22 00:06:05 [input_processor.py:282] Passing raw prompts to InputProcessor is deprecated and will be removed in v0.18. You should instead pass the outputs of Renderer.render_cmpl() or Renderer.render_chat().
+WARNING 09-22 00:06:05 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _compute_slot_mapping_kernel. This causes a latency spike; consider extending warmup to cover this shape/config.
+W0922 00:06:43.270900 145849 client_service.cpp:3097] BatchPut failed for 1 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:06:43 [worker.py:695] batch_put failed: 1/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@2e581751705b230c1518a5119cfa68b707be0240ec754d23ffd4164d4456e1de
+WARNING 09-22 00:06:43 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-25-9beae299 until a later store batch succeeds
+INFO 09-22 00:06:47 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:06:48.980947 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 7ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 76, gc ttl: 5000ms.
+W0922 00:06:58.239434 145849 client_service.cpp:3097] BatchPut failed for 23 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:06:58 [worker.py:695] batch_put failed: 23/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@8d5bca4c2b664a29ffa224dd33173d2c933701d17454a235ec20179d03e2d16f
+WARNING 09-22 00:06:58 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-32-acfa6aa1 until a later store batch succeeds
+INFO 09-22 00:07:01 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:07:04.999284 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 859ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 77, gc ttl: 5000ms.
+I0922 00:07:05.228281 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 227ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 78, gc ttl: 5000ms.
+I0922 00:07:05.236177 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 6ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 79, gc ttl: 5000ms.
+W0922 00:07:13.962249 145849 client_service.cpp:3097] BatchPut failed for 16 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:07:13 [worker.py:695] batch_put failed: 16/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@5499d80a980729652537fd516ae41667c52544f772fe3bab97d3d5689d054e6f
+WARNING 09-22 00:07:13 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-44-bc307873 until a later store batch succeeds
+INFO 09-22 00:07:16 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+W0922 00:07:25.049142 145849 client_service.cpp:3097] BatchPut failed for 4 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:07:25 [worker.py:695] batch_put failed: 4/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@fd4700ca151f4c26ebf0f3e9b34fc4f6c7e9b8f4088e38e0ef80837870e7fdbd
+WARNING 09-22 00:07:25 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-52-82405efc until a later store batch succeeds
+INFO 09-22 00:07:28 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:07:35.688375 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 163ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 28, batch_id: 80, gc ttl: 5000ms.
+I0922 00:07:35.983969 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 293ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 52, batch_id: 81, gc ttl: 5000ms.
+I0922 00:07:38.574460 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 177ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 28, batch_id: 82, gc ttl: 5000ms.
+I0922 00:07:38.830549 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 254ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 40, batch_id: 83, gc ttl: 5000ms.
+I0922 00:07:38.839085 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 7ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 84, gc ttl: 5000ms.
+I0922 00:07:43.507447 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 874ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 85, gc ttl: 5000ms.
+I0922 00:07:43.752194 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 241ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 86, gc ttl: 5000ms.
+I0922 00:07:44.947557 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 17ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 2, batch_id: 87, gc ttl: 5000ms.
+I0922 00:07:45.878568 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 776ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 138, batch_id: 88, gc ttl: 5000ms.
+I0922 00:07:47.944602 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 183ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 30, batch_id: 89, gc ttl: 5000ms.
+I0922 00:07:48.115247 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 166ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 29, batch_id: 90, gc ttl: 5000ms.
+I0922 00:07:54.137531 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 14ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 91, gc ttl: 5000ms.
+I0922 00:07:56.567618 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 646ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 104, batch_id: 92, gc ttl: 5000ms.
+I0922 00:08:00.787165 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 37ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 6, batch_id: 93, gc ttl: 5000ms.
+I0922 00:08:02.008848 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 576ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 95, batch_id: 94, gc ttl: 5000ms.
+I0922 00:08:02.278317 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 259ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 43, batch_id: 95, gc ttl: 5000ms.
+I0922 00:08:02.318384 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 38ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 7, batch_id: 96, gc ttl: 5000ms.
+I0922 00:08:02.375361 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 55ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 9, batch_id: 97, gc ttl: 5000ms.
+I0922 00:08:09.073282 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 849ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 98, gc ttl: 5000ms.
+I0922 00:08:09.317454 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 242ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 43, batch_id: 99, gc ttl: 5000ms.
+I0922 00:08:10.877422 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 815ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 100, gc ttl: 5000ms.
+I0922 00:08:11.116894 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 236ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 101, gc ttl: 5000ms.
+I0922 00:08:17.172086 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 520ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 91, batch_id: 102, gc ttl: 5000ms.
+I0922 00:08:17.452535 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 267ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 47, batch_id: 103, gc ttl: 5000ms.
+I0922 00:08:18.354228 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 6ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 104, gc ttl: 5000ms.
+I0922 00:08:18.765277 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 406ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 63, batch_id: 105, gc ttl: 5000ms.
+I0922 00:08:24.741102 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 844ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 106, gc ttl: 5000ms.
+I0922 00:08:24.987315 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 244ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 107, gc ttl: 5000ms.
+I0922 00:08:26.786041 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 783ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 138, batch_id: 108, gc ttl: 5000ms.
+I0922 00:08:26.844235 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 40ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 7, batch_id: 109, gc ttl: 5000ms.
+I0922 00:08:36.212567 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 95ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 15, batch_id: 110, gc ttl: 5000ms.
+I0922 00:08:37.823465 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 813ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 111, gc ttl: 5000ms.
+I0922 00:08:38.038270 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 213ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 112, gc ttl: 5000ms.
+I0922 00:08:39.596201 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 812ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 113, gc ttl: 5000ms.
+I0922 00:08:39.659384 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 61ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 10, batch_id: 114, gc ttl: 5000ms.
+I0922 00:08:40.076048 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 366ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 67, batch_id: 115, gc ttl: 5000ms.
+I0922 00:08:50.515303 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 863ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 116, gc ttl: 5000ms.
+I0922 00:08:50.730247 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 213ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 39, batch_id: 117, gc ttl: 5000ms.
+I0922 00:08:50.935019 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 202ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 36, batch_id: 118, gc ttl: 5000ms.
+I0922 00:08:51.070761 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 89ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 15, batch_id: 119, gc ttl: 5000ms.
+W0922 00:08:53.438354 145849 client_service.cpp:3097] BatchPut failed for 12 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:08:53 [worker.py:695] batch_put failed: 12/128 keys failed (codes={-200}, batch_bytes=1073741824, num_keys=128), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@f18af6a5d3ef8177931a597d02a8307f31fab52fe2ce169de7843ad9395e9680
+WARNING 09-22 00:08:53 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-126-b32a2580 until a later store batch succeeds
+INFO 09-22 00:08:54 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+W0922 00:08:59.116573 145849 client_service.cpp:3097] BatchPut failed for 1 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:08:59 [worker.py:695] batch_put failed: 1/128 keys failed (codes={-200}, batch_bytes=1073741824, num_keys=128), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@51e67afca6058e598b66d5c689d6f02f21fc3118ec168da38d58057ef01701eb
+WARNING 09-22 00:08:59 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-125-93393629 until a later store batch succeeds
+INFO 09-22 00:09:02 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:09:16.551419 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 13ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 120, gc ttl: 5000ms.
+I0922 00:09:23.649659 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 1818ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 106, batch_id: 121, gc ttl: 5000ms.
+I0922 00:09:23.936400 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 284ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 50, batch_id: 122, gc ttl: 5000ms.
+W0922 00:09:25.562700 145849 client_service.cpp:3097] BatchPut failed for 22 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:09:25 [worker.py:695] batch_put failed: 22/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@9aff0f93f82c488cbb9be7e20d64221ecabc53943b8cc06869b3be4ee0ef6563
+WARNING 09-22 00:09:25 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-140-a2cd8074 until a later store batch succeeds
+INFO 09-22 00:09:26 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:09:26.943238 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 366ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 2, batch_id: 123, gc ttl: 5000ms.
+I0922 00:09:26.972807 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 27ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 5, batch_id: 124, gc ttl: 5000ms.
+I0922 00:09:34.388029 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 33ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 125, gc ttl: 5000ms.
+I0922 00:09:37.949625 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 172ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 126, gc ttl: 5000ms.
+W0922 00:09:37.950012 145849 client_service.cpp:3097] BatchPut failed for 10 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:09:37 [worker.py:695] batch_put failed: 10/128 keys failed (codes={-200}, batch_bytes=1073741824, num_keys=128), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@3ed399a2729006e4ed625594134579f65c4a30c39f9eb9e3bbaf3fa6ba9c24c7
+WARNING 09-22 00:09:37 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-146-bc3aa7ac until a later store batch succeeds
+INFO 09-22 00:09:41 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:09:41.621865 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 8ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 127, gc ttl: 5000ms.
+W0922 00:09:45.711933 145849 client_service.cpp:3097] BatchPut failed for 16 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:09:45 [worker.py:695] batch_put failed: 16/126 keys failed (codes={-200}, batch_bytes=1056964608, num_keys=126), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@a3121c939c2eed47372524d9c03d0c515e973531ab25767c1ccfabe9bd3e635b
+WARNING 09-22 00:09:45 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-153-8c8d9056 until a later store batch succeeds
+I0922 00:09:47.199331 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 333ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 49, batch_id: 128, gc ttl: 5000ms.
+INFO 09-22 00:09:47 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:09:48.009802 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 669ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 106, batch_id: 129, gc ttl: 5000ms.
+I0922 00:09:48.280874 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 269ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 42, batch_id: 130, gc ttl: 5000ms.
+W0922 00:09:51.282807 145849 client_service.cpp:3097] BatchPut failed for 6 keys due to insufficient space. Consider lowering eviction_high_watermark_ratio or mounting more segments.
+WARNING 09-22 00:09:51 [worker.py:695] batch_put failed: 6/127 keys failed (codes={-200}, batch_bytes=1065353216, num_keys=127), first_key=Meta-Llama-3.1-8B-Instruct-GPTQ-INT4@tp_rank:0@pcp0@dcp0@pp_rank:0@group:0@1c63bdab67bdfd572d80779551d2587dbf844c365951fa7e86ebf463dedaabd9
+WARNING 09-22 00:09:51 [worker.py:710] Detected Mooncake CPU/disk offloading pressure (NO_AVAILABLE_HANDLE); skipping future store batches for request stream-155-8d17f0b0 until a later store batch succeeds
+INFO 09-22 00:09:55 [worker.py:720] Mooncake CPU/disk offloading pressure cleared after a successful store batch
+I0922 00:09:57.475580 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 812ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 131, gc ttl: 5000ms.
+I0922 00:09:57.759326 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 281ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 49, batch_id: 132, gc ttl: 5000ms.
+I0922 00:10:01.175697 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 25ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 4, batch_id: 133, gc ttl: 5000ms.
+I0922 00:10:01.642478 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 459ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 80, batch_id: 134, gc ttl: 5000ms.
+I0922 00:10:01.674172 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 30ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 5, batch_id: 135, gc ttl: 5000ms.
+I0922 00:10:13.862282 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 384ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 66, batch_id: 136, gc ttl: 5000ms.
+I0922 00:10:16.116322 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 392ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 43, batch_id: 137, gc ttl: 5000ms.
+I0922 00:10:20.616263 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 153ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 27, batch_id: 138, gc ttl: 5000ms.
+I0922 00:10:23.984673 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 93ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 2, batch_id: 139, gc ttl: 5000ms.
+I0922 00:10:28.079596 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 9ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 1, batch_id: 140, gc ttl: 5000ms.
+I0922 00:10:29.373386 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 847ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 141, gc ttl: 5000ms.
+I0922 00:10:29.678428 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 303ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 54, batch_id: 142, gc ttl: 5000ms.
+I0922 00:10:32.286000 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 841ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 143, batch_id: 143, gc ttl: 5000ms.
+I0922 00:10:32.667743 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 380ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 65, batch_id: 144, gc ttl: 5000ms.
+I0922 00:10:33.289362 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 584ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 106, batch_id: 145, gc ttl: 5000ms.
+I0922 00:10:33.532986 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 234ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 42, batch_id: 146, gc ttl: 5000ms.
+I0922 00:10:37.527479 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 1113ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 142, batch_id: 147, gc ttl: 5000ms.
+I0922 00:10:37.626940 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 97ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 16, batch_id: 148, gc ttl: 5000ms.
+I0922 00:10:37.679994 145850 real_client.cpp:6907] Time taken for batch_get_into_offload_object_internal: 51ms, with target_rpc_service_addr: 30.0.0.3:37257, key size: 9, batch_id: 149, gc ttl: 5000ms.
+RESULT {"tiers": {"n_modules": 0, "n_ssd": 0, "host_tier_gib": 0.0, "ssd_tier_gib": 0.0, "gpu_resident": "all"}, "kv_io": {"read_n": 0, "read_gib": 0.0, "write_n": 0, "write_gib": 0.0, "read_busy_s": 0.0, "write_busy_s": 0.0, "errors": 0, "registered_tensors": 0, "write_stages_s": {"ev": 0.0, "open": 0.0, "io": 0.0, "fin": 0.0}, "read_stages_s": {"open": 0.0, "io": 0.0, "fin": 0.0}, "write_calls": 0, "read_calls": 0}, "gpu_max_gib": 10.93}
+  stream: wall 272.909 s, ttft median 2.879, matched 2981824
+I0922 00:10:49.785491 145212 real_client.cpp:628] Cleaning up DistributedObjectStore instance
+I0922 00:10:49.786674 145212 real_client.cpp:628] Cleaning up DistributedObjectStore instance

@@ -1,0 +1,8 @@
+[09-22 00:00:14] 원격 램디스크 여유: 23.7 GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)
+[09-22 00:00:14] Mooncake 풀 용량: 8.0 GiB
+[09-22 00:00:14] == phase3(stream): hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, 200건, max_model_len 16384, 프리픽스 상한 16000, KV 예산 2요청, host 4 GB, 루트 /home/unionxic/gds-kv/vllm-gds-kv/results/stream-long-8b-sunny-dram8-rep/kv-p3-local:25,/mnt/rain-nvmeof/kv-p3:82:4,/mnt/rain-ssd/kv-p3:32, host 몫 0.47, 조건(ours-ratio mooncake)
+[09-22 00:00:14] start ours-ratio (kv-transport=hybrid, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/stream-long-8b-sunny-dram8-rep/kv-p3-local, --kv-host-gb 4 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/stream-long-8b-sunny-dram8-rep/kv-p3-local:25,/mnt/rain-nvmeof/kv-p3:82:4,/mnt/rain-ssd/kv-p3:32 --kv-placement ratio --kv-host-share 0.47)
+[09-22 00:05:32] done  ours-ratio rc=0
+[09-22 00:05:32] start mooncake (kv-transport=mooncake, kv-root=/home/unionxic/gds-kv/vllm-gds-kv/results/stream-long-8b-sunny-dram8-rep/kv-p3-local, --mooncake-master 30.0.0.3:50051 --mooncake-metadata http://30.0.0.3:8080/metadata --mooncake-device mlx5_0 --mooncake-local-ip 30.0.0.4 --mooncake-staging-gb 0)
+[09-22 00:10:50] done  mooncake rc=0
+[09-22 00:10:50] == phase3(stream) 종료
