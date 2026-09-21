@@ -4,8 +4,9 @@
 워커 쪽 job 분할만 한다. kv_connector_extra_config 키:
   spec_name: "CuFileFsSpec"
   cufile_fs_root_dir: 캐시 디렉터리(단일 루트)
-  cufile_fs_root_dirs: 캐시 디렉터리 여러 개. [{"dir": str, "weight": int>0}, ...]
+  cufile_fs_root_dirs: 캐시 디렉터리 여러 개. [{"dir": str, "weight": int>0, "capacity_gb": float}, ...]
       블록 해시로 루트 하나를 결정적으로 고른다(가중치 비례). cufile_fs_root_dir 대신 씀.
+      capacity_gb(0=무제한)를 준 루트가 차면 자리가 남은 루트들 사이에서 다시 고른다(spill).
       cufile_fs/multi_root.py 참고
   cufile_fs_register_tensors: KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만 성공). 기본 false
   cufile_fs_read_threads / cufile_fs_write_threads: 기본 4
@@ -280,6 +281,15 @@ class CuFileFsManager(OffloadingManager):
         self.mapper = mapper
         self.tracer = tracer  # None이면 키 단위 계측 없음(기본)
         self._pending: set[OffloadKey] = set()
+        # 루트별 용량 spill(MultiRootFileMapper.has_capacity). 키가 놓인 루트를 기억하고
+        # 루트별 완료 바이트·대기 청크 수로 자리를 판단한다. 단일 루트/용량 없음이면 안 쓴다.
+        self._spill = bool(getattr(mapper, "has_capacity", False))
+        self._n_roots = len(getattr(mapper, "roots", [None]))
+        self._root_of: dict[OffloadKey, int] = {}
+        self._root_bytes: list[int] = [0] * self._n_roots
+        self._root_pending: list[int] = [0] * self._n_roots
+        self._root_files: list[int] = [0] * self._n_roots
+        self.n_spill_refused = 0  # 모든 루트가 차서 저장을 거른 키 수
         self.admission = admission  # None = "all"(전부 저장)
         self.capacity_bytes = int(capacity_bytes)
         self.policy = policy
@@ -339,7 +349,35 @@ class CuFileFsManager(OffloadingManager):
         return max(0.0, self.chunk_service_s * q - (now - t0))
 
     def _path(self, key: OffloadKey) -> str:
+        if self._spill:
+            i = self._root_of.get(key)
+            if i is not None:
+                return self.mapper.file_name(key, i)
         return self.mapper.get_file_name(key)
+
+    def _root_room(self, i: int) -> bool:
+        cap = self.mapper.capacities[i]
+        if cap <= 0:
+            return True
+        return self._root_bytes[i] + (self._root_pending[i] + 1) * self.chunk_bytes <= cap
+
+    def _place(self, keys: list[OffloadKey]) -> list[OffloadKey]:
+        """spill 배치. 키마다 자리가 있는 루트를 고르고 _root_of에 적는다. 전부 찬 키는 거른다."""
+        out = []
+        for k in keys:
+            allowed = [self._root_room(i) for i in range(self._n_roots)]
+            if not any(allowed):
+                self.n_spill_refused += 1
+                continue
+            i = self.mapper.root_index(k, allowed)
+            h = self.mapper.hash_root(k)
+            self.mapper.mapped[i] += 1
+            if i != h:
+                self.mapper.spilled[i] += 1
+            self._root_of[k] = i
+            self._root_pending[i] += 1
+            out.append(k)
+        return out
 
     def on_new_request(self, req_context: ReqContext) -> RequestOffloadingContext:
         return RequestOffloadingContext()
@@ -471,6 +509,10 @@ class CuFileFsManager(OffloadingManager):
                 pass
             self._entries.pop(k, None)
             self.total_bytes -= e.size
+            if self._spill:
+                i = self._root_of.pop(k, None)
+                if i is not None:
+                    self._root_bytes[i] -= e.size; self._root_files[i] -= 1
             self.n_evicted += 1; self.bytes_evicted += e.size
             out.append(k)
         if out:
@@ -491,6 +533,8 @@ class CuFileFsManager(OffloadingManager):
                 n_ok = max(0, room // self.chunk_bytes) if self.chunk_bytes else len(to_store)
                 self.n_refused += len(to_store) - n_ok
                 to_store = to_store[:n_ok]
+        if self._spill and to_store:
+            to_store = self._place(to_store)
         self._pending.update(to_store)
         if to_store and (self.pending_wait or self.tracer is not None):
             # 쓰기 큐 깊이는 "커밋을 기다리는 키 수"로 본다(워커의 청크 큐와 같은 단위).
@@ -509,6 +553,12 @@ class CuFileFsManager(OffloadingManager):
         now_s = time.monotonic()
         for k in keys:
             self._pending.discard(k)
+            if self._spill:
+                ri = self._root_of.get(k)
+                if ri is not None:
+                    self._root_pending[ri] = max(0, self._root_pending[ri] - 1)
+                    if not success:
+                        self._root_of.pop(k, None)
             if self.pending_wait:
                 t0 = self._enq_t.pop(k, None)
                 q = self._enq_q.pop(k, None)
@@ -530,6 +580,10 @@ class CuFileFsManager(OffloadingManager):
                     continue
                 self._entries[k] = _Entry(size=sz, last_ns=now, hits=0)
                 self.total_bytes += sz
+                if self._spill:
+                    ri = self._root_of.get(k)
+                    if ri is not None:
+                        self._root_bytes[ri] += sz; self._root_files[ri] += 1
                 if not self.chunk_bytes:
                     self.chunk_bytes = sz
 
@@ -557,10 +611,22 @@ class CuFileFsManager(OffloadingManager):
                         recompute_s_per_token=round(self.recompute_s_per_token, 8)),
                     admission=None if self.admission is None else dict(policy=self.admission.policy, admit=self.admission.n_admit, reject=self.admission.n_reject),
                     # roots는 다중 루트일 때만. get_file_name 호출 수라 파일 수가 아니라 매핑 횟수다.
-                    roots=self.mapper.roots_stats() if hasattr(self.mapper, "roots_stats") else None)
+                    roots=self._roots_stats())
+
+    def _roots_stats(self):
+        if not hasattr(self.mapper, "roots_stats"):
+            return None
+        st = self.mapper.roots_stats()
+        if self._spill:
+            for i, r in enumerate(st):
+                r.update(files=self._root_files[i], bytes_gib=round(self._root_bytes[i] / 2**30, 3),
+                         pending=self._root_pending[i])
+            st.append(dict(spill_refused=self.n_spill_refused))
+        return st
 
     def reset_cache(self) -> None:
         self._pending.clear()
+        self._root_pending = [0] * self._n_roots
         self._enq_t.clear(); self._enq_q.clear(); self._wait_since.clear(); self._wait_spent.clear()
 
 
