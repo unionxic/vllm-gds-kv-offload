@@ -12,6 +12,10 @@
 #               DRAM 한 층이고 전송은 RDMA. 원격 서비스는 sunny의 ~/bin/mooncake_up.sh.
 #   current / pending-wait / cpu-landing
 #               write-behind miss 대책 비교용. 티어 구성은 ours-ratio와 같고 조건 정의는 case 절 참고.
+#   store-off / store-shadow / store-on
+#               저장 간섭 실험(MODE=stream_replay 전용). 티어 구성은 ours-ratio와 같다. prefill이 재사용 프리픽스를
+#               미리 저장해 stream의 적중 상태·배치를 같게 만든 뒤, stream 동안의 저장만 끔 / 파일 티어 shadow 재쓰기 /
+#               평소대로 로 바꾼다. --kv-trace로 요청별 층·루트 적재 바이트(load_bytes)를 남긴다.
 # KV_EXTRA에 JSON을 주면 모든 조건의 --kv-extra에 합쳐진다(조건별 값이 우선).
 # GPU 런은 flock "$GPULOCK"(기본 /tmp/claude-gpu.lock)으로 하나씩 줄 세운다. GPULOCK=""이면 끈다.
 # MODE=stream이면 longbench 두 라운드 대신 bailian trace를 도착 시각대로 한 줄로 흘린다
@@ -26,7 +30,7 @@ export VLLM_USE_V2_MODEL_RUNNER=0 VLLM_ENABLE_V1_MULTIPROCESSING=0
 
 FORCE=0; [ "${1:-}" = "--force" ] && FORCE=1
 MODE=${MODE:-phases}
-if [ "$MODE" = stream ]; then OUT=${OUT:-../../results/phase3-stream-8b}; NDOCS=${NDOCS:-96}
+if [ "$MODE" = stream ] || [ "$MODE" = stream_replay ]; then OUT=${OUT:-../../results/phase3-$MODE-8b}; NDOCS=${NDOCS:-96}
 else OUT=${OUT:-../../results/phase3-8k-host8}; NDOCS=${NDOCS:-32}; fi
 O=$(mkdir -p "$OUT" && cd "$OUT" && pwd)
 log(){ echo "[$(date +%m-%d\ %H:%M:%S)] $*" | tee -a $O/campaign.log; }
@@ -44,12 +48,16 @@ RSSD_MNT=${RSSD_MNT:-${RSSD_ROOT:+$(dirname "$RSSD_ROOT")}}
 BOFF=${BOFF:-29560}; TSCALE=${TSCALE:-100}; MAXCONC=${MAXCONC:-4}
 MC_MASTER=${MC_MASTER:-30.0.0.4:50051}; MC_META=${MC_META:-http://30.0.0.4:8080/metadata}
 MC_DEV=${MC_DEV:-mlx5_1}; MC_IP=${MC_IP:-30.0.0.3}; MC_STAGING_GB=${MC_STAGING_GB:-8}
-if [ "$MODE" = stream ]; then
-  CONDS=${CONDS:-"mooncake ours-ratio"}
+if [ "$MODE" = stream ] || [ "$MODE" = stream_replay ]; then
+  if [ "$MODE" = stream_replay ]; then CONDS=${CONDS:-"store-off store-shadow"}; else CONDS=${CONDS:-"mooncake ours-ratio"}; fi
   # BTRACE=트레이스 파일(기본 bailian), BBLOCK=hash_id 하나의 토큰 수(bailian 16, Mooncake 공개 트레이스 512).
   # Mooncake 트레이스는 timestamp가 ms라 TSCALE에 1/1000을 곱해 준다(예: 배율 30 → 0.03).
   BTRACE=${BTRACE:-}; BBLOCK=${BBLOCK:-16}
-  WORKLOAD="--prompt-source bailian --bailian-offset $BOFF --bailian-block $BBLOCK ${BTRACE:+--bailian-trace $BTRACE} --mode stream --time-scale $TSCALE --max-concurrency $MAXCONC"
+  WORKLOAD="--prompt-source bailian --bailian-offset $BOFF --bailian-block $BBLOCK ${BTRACE:+--bailian-trace $BTRACE} --mode $MODE --time-scale $TSCALE --max-concurrency $MAXCONC"
+  # stream_replay: prefill 커밋 확인 상한과 stream 앞 GPU 프리픽스 캐시 비우기, 요청별 적재 바이트 계측
+  [ "$MODE" = stream_replay ] && WORKLOAD="$WORKLOAD --kv-trace --commit-check-sec ${COMMIT_SEC:-900} --reset-gpu-cache-before stream"
+  # KVTRACE=1 이면 stream 모드에서도 요청·키 단위 계측(요청별 층·루트 적재 바이트 load_bytes, mooncake는 memory/disk 층)
+  [ "$MODE" = stream ] && [ "${KVTRACE:-0}" = 1 ] && WORKLOAD="$WORKLOAD --kv-trace"
 else
   CONDS=${CONDS:-"ref-none b1-tiering ours-ratio"}
   WORKLOAD="--prompt-source longbench"
@@ -138,6 +146,9 @@ for cond in $CONDS; do
     pending-wait) kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO"
                   COND_KV_EXTRA='{"cufile_fs_pending_wait": true}';;
     cpu-landing)  kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS --kv-placement host_first";;
+    store-off)    kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store off";;
+    store-shadow) kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store shadow";;
+    store-on)     kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store on";;
     *) log "unknown cond $cond"; continue;;
   esac
   # KV_EXTRA(캠페인 전체) + 조건별 COND_KV_EXTRA를 합쳐 --kv-extra로 넘긴다.

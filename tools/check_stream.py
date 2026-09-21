@@ -47,8 +47,12 @@ def short(path):
 
 # ---- 조건별 표 ----
 print(f"== stream 조건별 ({D}, phase {a.phase})")
-hdr = ("조건", "transport", "요청", "wall s", "도착span s", "queue 중앙/p95 s", "TTFT 중앙/p95 s",
-       "e2e 중앙/p95 s", "적중요청", "적중토큰", "요청/시간")
+# TTFT 두 정의를 요청별 시각으로 따로 계산한다(중앙값끼리 더하지 않음).
+#   TTFT(도착)  = first_wall - arrival_wall  사용자가 겪는 첫 토큰까지의 시간(외부 대기 포함)
+#   엔진지연     = first_mono - submit_mono   엔진 제출 → 첫 토큰(외부 대기 제외)
+#   queue       = 도착 → 엔진 제출(max_concurrency 대기)
+hdr = ("조건", "transport", "요청", "wall s", "도착span s", "queue 중앙/p95 s", "TTFT(도착) 중앙/p95 s",
+       "엔진지연 중앙/p95 s", "e2e(제출) 중앙/p95 s", "적중요청", "적중토큰", "요청/시간")
 print(" | ".join(hdr))
 for c in conds:
     r, rq = R[c]
@@ -56,9 +60,10 @@ for c in conds:
     rqp = [x for x in rq if x.get("phase") == a.phase]
     wall = ph.get("wall_s") or 0.0
     n = ph.get("n_requests") or len(rqp)
-    qs = ph.get("queue_s") or [x.get("queue_s", 0.0) for x in rqp]
-    tt = ph.get("ttft") or []
-    e2 = ph.get("e2e") or []
+    qs = [x.get("queue_s", 0.0) for x in rqp] or ph.get("queue_s") or []
+    ta = [x["first_wall"] - x["arrival_wall"] for x in rqp if x.get("first_wall") and x.get("arrival_wall")]
+    tt = [x["first_mono"] - x["submit_mono"] for x in rqp if x.get("first_mono")] or ph.get("ttft") or []
+    e2 = [x["finish_mono"] - x["submit_mono"] for x in rqp if x.get("finish_mono")] or ph.get("e2e") or []
     hit_req = sum(1 for x in rqp if x.get("matched_of", 0) > 0)
     hit_tok = sum(x.get("matched_of", 0) for x in rqp)
     thr = (n / wall * 3600) if wall else 0.0
@@ -66,6 +71,7 @@ for c in conds:
         f"{c:11}", f"{r['args']['kv_transport']:9}", f"{n:4}", f"{wall:8.1f}",
         f"{ph.get('arrival_span_s', 0):9.1f}",
         f"{q(qs, 0.5):7.2f}/{q(qs, 0.95):7.2f}",
+        f"{q(ta, 0.5):7.2f}/{q(ta, 0.95):7.2f}",
         f"{q(tt, 0.5):7.2f}/{q(tt, 0.95):7.2f}",
         f"{q(e2, 0.5):7.2f}/{q(e2, 0.95):7.2f}",
         f"{hit_req:5}", f"{hit_tok:9}", f"{thr:8.1f}"]))

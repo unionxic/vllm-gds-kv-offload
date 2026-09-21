@@ -9,7 +9,8 @@
   lookup     조회 한 번. req, key, res(HIT|MISS|HIT_PENDING|RETRY)
   store_enq  prepare_store가 받아들인 키. req, host(키 목록), ssd(키 목록)
   store_cmt  complete_store. req, keys, ok
-  load_prep  prepare_load. req, host, ssd(각 키 수), bytes
+  load_prep  prepare_load. req, n_host, n_ssd(각 키 수), bytes, by_root(루트별 바이트: host 포함)
+  mc_load_tier mooncake 묶음 적재의 층별 바이트(VLLM_MOONCAKE_STORE_TIER_LOG=1 필요). req, memory, disk, unknown
   load_done  complete_load. req, dur_s(load_prep부터), keys
   w_submit / w_end   SSD(cuFile) 쓰기 job 하나. job, chunks, bytes, keys / dur_s, ok
   r_submit / r_end   SSD(cuFile) 읽기 job 하나. 같은 필드
@@ -18,6 +19,7 @@
   mc_put / mc_get              mooncake 묶음 전송 한 번. req, keys, bytes, dur_s
 
 한 요청의 적재 완료 시각은 load_done, 한 키의 커밋 시각은 store_cmt(파일 티어는 w_end)다.
+요청별 층·루트 읽기 바이트 합은 KvTrace.req_loads[req]에 쌓이고 run_obs가 requests.jsonl(load_bytes)에 옮긴다.
 """
 import json
 import os
@@ -48,6 +50,25 @@ class KvTrace:
         self.phase = ""
         self.n_rows = 0
         self.n_store_blocked = 0
+        self.req_loads: dict[str, dict[str, int]] = {}  # req → {층/루트: 바이트}
+
+    def add_load(self, req, by: dict) -> None:
+        if req is None:
+            return
+        with self._lock:
+            d = self.req_loads.setdefault(str(req), {})
+            for k, v in by.items():
+                d[k] = d.get(k, 0) + int(v)
+
+    def loads_of(self, rid: str) -> dict[str, int]:
+        """rid와 같거나 rid- 로 시작하는(엔진이 접미사를 붙인) 요청의 적재 바이트 합."""
+        out: dict[str, int] = {}
+        with self._lock:
+            for k, d in self.req_loads.items():
+                if k == rid or k.startswith(rid + "-"):
+                    for kk, v in d.items():
+                        out[kk] = out.get(kk, 0) + v
+        return out
 
     def emit(self, ev: str, **kw) -> None:
         row = dict(ev=ev, t=time.monotonic(), ph=self.phase)
@@ -142,8 +163,24 @@ def _patch_offloading(transport: str, tr: KvTrace) -> None:
         n_host = len(getattr(spec, "cpu_pos", ()))
         n_ssd = len(getattr(spec, "file_pos", kl))
         chunk = _chunk_bytes(self)
+        # 루트별 바이트. host 티어는 "host", 파일 티어는 그 키가 놓인 루트 디렉터리(용량 spill이면 _root_of).
+        by_root: dict[str, int] = {}
+        if n_host:
+            by_root["host"] = n_host * chunk
+        ssd = getattr(self, "ssd", self)
+        mapper = getattr(ssd, "mapper", None)
+        root_of = getattr(ssd, "_root_of", {})
+        fpos = getattr(spec, "file_pos", None)
+        ssd_keys = [kl[i] for i in fpos] if fpos is not None else kl
+        for k in ssd_keys:
+            if mapper is not None and hasattr(mapper, "hash_root"):
+                r = mapper.roots[root_of.get(k, mapper.hash_root(k))]
+            else:
+                r = getattr(mapper, "root_dir", "file")
+            by_root[r] = by_root.get(r, 0) + chunk
+        tr.add_load(rid(req_context), by_root)
         tr.emit("load_prep", req=rid(req_context), n_host=n_host, n_ssd=n_ssd,
-                bytes=(n_host + n_ssd) * chunk, keys=[_hexk(k) for k in kl])
+                bytes=(n_host + n_ssd) * chunk, by_root=by_root, keys=[_hexk(k) for k in kl])
         _load_t0.setdefault(rid(req_context), time.monotonic())
         return spec
 
@@ -275,6 +312,23 @@ def _patch_mooncake(tr: KvTrace) -> None:
         return _gf(self, finished_req_ids, meta)
 
     mw.MooncakeStoreWorker.get_finished = worker_get_finished
+
+    # 묶음 적재의 층(memory/disk)별 바이트. 워커가 VLLM_MOONCAKE_STORE_TIER_LOG=1일 때만 이 함수를 부른다
+    # (run_obs가 --kv-trace와 함께 환경변수를 켠다). 모듈 전역을 호출 시점에 찾으므로 여기서 바꿔치기 된다.
+    _tier_log = mw._log_mooncake_load_tier_summary
+
+    def _log_tier(req_id, batch_keys, load_results, tiers_by_key):
+        by = {"memory": 0, "disk": 0, "unknown": 0}
+        for i, k in enumerate(batch_keys):
+            v = load_results[i] if i < len(load_results) else -1
+            if v >= 0:
+                t = tiers_by_key.get(k, "unknown")
+                by[t if t in by else "unknown"] += int(v)
+        tr.add_load(req_id, {"mc_" + k: v for k, v in by.items()})
+        tr.emit("mc_load_tier", req=req_id, **by)
+        return _tier_log(req_id, batch_keys, load_results, tiers_by_key)
+
+    mw._log_mooncake_load_tier_summary = _log_tier
 
     def _wrap_handle(cls, ev_end):
         _h = cls._handle_request

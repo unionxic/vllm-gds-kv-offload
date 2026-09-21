@@ -61,9 +61,15 @@ ap.add_argument("--io-threads", type=int, default=4)
 ap.add_argument("--gpu-util", type=float, default=0.9)
 ap.add_argument("--max-model-len", type=int, default=2048)
 ap.add_argument("--decode-tokens", type=int, default=8)
-ap.add_argument("--mode", default="phases", choices=["phases", "forced_hit", "stream"],
+ap.add_argument("--mode", default="phases", choices=["phases", "forced_hit", "stream", "stream_replay"],
                 help="phases: cold_fill/reverse_retrieve 2단계(기본). forced_hit: cold_fill/replay 2단계(프롬프트가 같음). "
-                     "stream: trace 순서 한 줄 스트림 + open loop 도착")
+                     "stream: trace 순서 한 줄 스트림 + open loop 도착. "
+                     "stream_replay: prefill(다른 요청에도 나오는 프리픽스 블록만 미리 저장) → 커밋 확인 → stream. "
+                     "저장 간섭 실험용: 적중 상태·배치를 같게 만든 뒤 --stream-store로 저장만 바꾼다")
+ap.add_argument("--stream-store", default="on", choices=["on", "off", "shadow"],
+                help="stream phase의 저장. on: 그대로. off: 저장 차단(--kv-trace 필요). "
+                     "shadow: 파일 티어가 이미 있는 키도 같은 루트의 shadow/ 아래에 다시 써서(쓰기 양 동일, 캐시 상태 불변) "
+                     "저장 간섭만 재현(hybrid/cufile 전용, host 티어 저장은 평소대로)")
 ap.add_argument("--no-store-phase", default="", help="이 phase(쉼표 구분) 동안 오프로드 매니저가 저장을 거부한다. "
                 "hybrid/cufile은 prepare_store가 빈 결과, mooncake는 skip_save 강제. --kv-trace가 필요")
 ap.add_argument("--reset-gpu-cache-before", default="", help="이 phase(쉼표 구분) 시작에 엔진 GPU 프리픽스 캐시를 비운다"
@@ -95,6 +101,11 @@ ap.add_argument("--nsys-steps", type=int, default=0, help="캡처 phase에서 �
 args = ap.parse_args()
 NSYS_PHASES = {x.strip() for x in args.nsys_phase.split(",") if x.strip()}
 NO_STORE_PHASES = {x.strip() for x in args.no_store_phase.split(",") if x.strip()}
+if args.stream_store == "off": NO_STORE_PHASES.add("stream")
+if args.stream_store == "shadow" and args.kv_transport not in ("hybrid", "cufile"):
+    sys.exit("--stream-store shadow는 hybrid/cufile에서만")
+if args.kv_trace and args.kv_transport == "mooncake":
+    os.environ["VLLM_MOONCAKE_STORE_TIER_LOG"] = "1"  # 묶음 적재의 층(memory/disk) 판별 → kvtrace mc_load_tier
 RESET_GPU_PHASES = {x.strip() for x in args.reset_gpu_cache_before.split(",") if x.strip()}
 if NO_STORE_PHASES and not args.kv_trace:
     args.kv_trace = True  # 저장 차단 스위치가 kvtrace 안에 있다
@@ -516,6 +527,13 @@ try:
         """phase 시작 직전 훅: 저장 차단 스위치와 GPU 프리픽스 캐시 비우기."""
         if TRACE is not None:
             TRACE.phase = name; TRACE.no_store = name in NO_STORE_PHASES
+        shadow = False
+        if args.stream_store == "shadow":
+            import vllm.v1.kv_offload.hybrid.spec as _hs4
+            import vllm.v1.kv_offload.cufile_fs.spec as _cfs4
+            _mgr4 = (_hs4.LAST_MANAGER.ssd if args.kv_transport == "hybrid" and _hs4.LAST_MANAGER is not None else _cfs4.LAST_MANAGER)
+            if _mgr4 is not None:
+                _mgr4.shadow_store = shadow = (name == "stream")
         if name in RESET_GPU_PHASES:
             # 커넥터 캐시는 그대로 둔다(reset_connector 기본 False). 직전 phase의 전송이 아직
             # 보고되지 않았으면 블록이 안 풀려 실패하므로, 엔진을 돌려 가며 될 때까지 다시 부른다.
@@ -527,9 +545,10 @@ try:
             EV.emit("reset_gpu_prefix_cache", phase=name, ok=ok, wait_s=round(time.monotonic() - t0, 2))
             print(f"reset_prefix_cache before {name}: {ok} ({time.monotonic()-t0:.1f} s)", flush=True)
         EV.emit("phase_gate", phase=name, no_store=bool(TRACE is not None and TRACE.no_store),
-                reset_gpu_cache=name in RESET_GPU_PHASES)
+                shadow_store=shadow, reset_gpu_cache=name in RESET_GPU_PHASES)
 
-    def run_phase(name, order, q):
+    def run_phase(name, order, q, prompt_len=None):
+        """prompt_len: {doc: 토큰 수}를 주면 프롬프트를 그 길이로 자른다(stream_replay의 prefill)."""
         matched[0] = 0; matched_req.clear()
         phase_begin(name)
         EV.phase(name, requests=len(order))
@@ -540,10 +559,12 @@ try:
         def on_finish(rid, v):
             _m, _n = matched_of(rid)
             v["matched_of"] = _m; v["lookups"] = _n  # 요청별 KV 적중 토큰(lookup 최댓값)과 lookup 호출 수
+            if TRACE is not None: v["load_bytes"] = TRACE.loads_of(rid)  # 층·루트별 적재 바이트
             reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
             prof.append(dict(phase=name, rid=rid, doc=v["doc"], q=q, tokens=v["tokens"], matched=_m, lookups=_n))
         for i in order:
             rid = f"{name}-{i}"; toks = prompt(i, q)
+            if prompt_len is not None: toks = toks[:prompt_len[i]]
             eng.add_request(rid, {"prompt_token_ids": toks}, sp); torch.cuda.nvtx.mark(f"req_submit {rid} {len(toks)}tok")
             st[rid] = dict(doc=i, tokens=len(toks), submit_mono=time.monotonic(), submit_wall=time.time(), first_mono=None, finish_mono=None, ntok=0)
         tS = time.monotonic()
@@ -588,6 +609,7 @@ try:
             live[0] -= 1
             _m, _n = matched_of(rid)
             v["matched_of"] = _m; v["lookups"] = _n
+            if TRACE is not None: v["load_bytes"] = TRACE.loads_of(rid)
             reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
             prof.append(dict(phase=name, rid=rid, doc=v["doc"], q=0, tokens=v["tokens"], matched=_m, lookups=_n))
         pend = deque(range(n)); hold = deque()
@@ -648,7 +670,38 @@ try:
                kv_roots=[dict(dir=d, weight=w, capacity_gb=c, fs=mount_of(d)) for d, w, c in KV_ROOTS],
                kv_extra_config=KV_EXTRA_CONFIG, phases={})
     N = len(docs)
+    def reuse_prefill_plan():
+        """다른 요청에도 나오는 프리픽스 블록만 골라 {doc: 토큰 수}. 블록 사슬(앞 블록들의 누적 해시)이 두 요청
+        이상에 나타나는 앞쪽 KV 블록(--kv-block 토큰)까지가 그 요청의 재사용 프리픽스다(prefix cache와 같은 규칙)."""
+        import hashlib
+        B = args.kv_block
+        chains = []; count = {}
+        for i in range(N):
+            d = docs[i]; h = b""; ch = []
+            for b0 in range(0, len(d) - len(d) % B, B):
+                h = hashlib.blake2b(h + bytes(str(d[b0:b0 + B]), "ascii"), digest_size=16).digest()
+                ch.append(h); count[h] = count.get(h, 0) + 1
+            chains.append(ch)
+        plan = {}
+        for i in range(N):
+            L = 0
+            for h in chains[i]:
+                if count[h] >= 2: L += 1
+                else: break
+            if L: plan[i] = L * B
+        return plan
     if args.mode == "stream":
+        res["phases"]["stream"] = run_stream("stream")
+    elif args.mode == "stream_replay":
+        # 저장 간섭 실험. prefill이 재사용 프리픽스를 미리 저장하므로 stream의 티어 적중 상태·배치가
+        # --stream-store와 무관하게 같다. stream 앞에 GPU 프리픽스 캐시를 비우려면 --reset-gpu-cache-before stream.
+        plan = reuse_prefill_plan()
+        res["reuse_prefill"] = dict(n_docs=len(plan), tokens=sum(plan.values()), kv_block=args.kv_block)
+        EV.emit("reuse_prefill_plan", **res["reuse_prefill"])
+        print(f"reuse prefill plan: {len(plan)} docs, {sum(plan.values())} tokens", flush=True)
+        res["phases"]["prefill"] = run_phase("prefill", sorted(plan), 0, prompt_len=plan)
+        res["commit_check_prefill"] = commit_check("prefill")
+        EV.phase("settle"); time.sleep(args.settle_sec)
         res["phases"]["stream"] = run_stream("stream")
     elif args.mode == "forced_hit":
         # replay는 cold_fill과 같은 순서·같은 질문(q=0)이라 프롬프트 토큰열이 글자 그대로 같다.
