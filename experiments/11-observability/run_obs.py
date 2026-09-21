@@ -233,7 +233,9 @@ elif args.kv_transport == "mooncake":
     mc_cfg = dict(metadata_server=args.mooncake_metadata, master_server_address=args.mooncake_master,
                   protocol="rdma", device_name=args.mooncake_device, mode="standalone-store",
                   global_segment_size=0, local_buffer_size=int(args.mooncake_local_buffer_gb * 2**30),
-                  enable_offload=False)
+                  # enable_offload는 커넥터가 SSD 층 적재를 소유자 staging 버퍼 예산(1.25 GB x 0.9)으로 쪼개게 하는 스위치.
+                  # 없으면 171키 이상 묶음이 BUFFER_OVERFLOW(-10)로 통째로 실패해 요청이 끝나지 못한다(dram16 런에서 확인).
+                  enable_offload=True)
     mc_path = os.path.join(R, "mooncake.json")
     json.dump(mc_cfg, open(mc_path, "w"), indent=1)
     os.environ["MOONCAKE_CONFIG_PATH"] = mc_path
