@@ -1,0 +1,180 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/none",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "n_docs": 8,
+  "leval_workload": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json",
+  "prompt_source": "longbench",
+  "longbench_file": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl",
+  "bailian_offset": 0,
+  "bailian_block": 16,
+  "prompt_cap": 0,
+  "profile_out": null,
+  "kv_transport": "none",
+  "kv_host_gb": 8.0,
+  "kv_roots": null,
+  "kv_placement": null,
+  "kv_host_share": null,
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "mooncake_master": "30.0.0.4:50051",
+  "mooncake_metadata": "http://30.0.0.4:8080/metadata",
+  "mooncake_device": "mlx5_1",
+  "mooncake_local_ip": "30.0.0.3",
+  "mooncake_local_buffer_gb": 1.0,
+  "mooncake_staging_gb": 8.0,
+  "mooncake_keep_store": false,
+  "register_tensors": false,
+  "kv_batch": 2.0,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": null,
+  "pure": false,
+  "prefetch_step": 1,
+  "max_num_batched_tokens": 0,
+  "io_threads": 4,
+  "gpu_util": 0.9,
+  "max_model_len": 4096,
+  "decode_tokens": 8,
+  "mode": "phases",
+  "time_scale": 1.0,
+  "max_concurrency": 0,
+  "arrival_gap_s": 0.0,
+  "settle_sec": 3.0,
+  "final_settle_sec": 3.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/ssd",
+  "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+  "no_monitors": false,
+  "kv_split": "off",
+  "kv_split_rate_toks": null,
+  "kv_extra": null,
+  "no_weight_offload": true,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": 0.32,
+ "kv_alloc_gib": 2.56,
+ "host_fraction": 0.3,
+ "tiers": {
+  "n_modules": 0,
+  "n_ssd": 0,
+  "host_tier_gib": 0.0,
+  "ssd_tier_gib": 0.0,
+  "gpu_resident": "all"
+ },
+ "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+ "kv_root_fs": {
+  "device": "/dev/nvme0n1p2",
+  "mount": "/",
+  "fstype": "ext4"
+ },
+ "kv_roots": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+   "weight": 1,
+   "fs": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4"
+   }
+  }
+ ],
+ "kv_extra_config": null,
+ "phases": {
+  "cold_fill": {
+   "wall_s": 20.187,
+   "matched": 0,
+   "drain_s": 0.0,
+   "matched_req_sum": 0,
+   "hit_requests": 0,
+   "ttft": [
+    4.97,
+    4.969,
+    9.954,
+    9.953,
+    14.976,
+    14.975,
+    20.013,
+    20.012
+   ],
+   "e2e": [
+    5.12,
+    5.119,
+    10.131,
+    10.13,
+    15.143,
+    15.142,
+    20.188,
+    20.187
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 15.197,
+   "matched": 0,
+   "drain_s": 0.0,
+   "matched_req_sum": 0,
+   "hit_requests": 0,
+   "ttft": [
+    0.095,
+    0.094,
+    4.859,
+    4.858,
+    9.93,
+    9.929,
+    15.021,
+    15.02
+   ],
+   "e2e": [
+    0.266,
+    0.265,
+    5.024,
+    5.023,
+    10.107,
+    10.106,
+    15.197,
+    15.197
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 0,
+  "read_gib": 0.0,
+  "write_n": 0,
+  "write_gib": 0.0,
+  "read_busy_s": 0.0,
+  "write_busy_s": 0.0,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 0.0,
+   "open": 0.0,
+   "io": 0.0,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 0.0,
+   "fin": 0.0
+  },
+  "write_calls": 0,
+  "read_calls": 0
+ },
+ "kv_manager": null,
+ "kv_split": {
+  "mode": "off",
+  "decisions": 0,
+  "requests_split": 0,
+  "head_tokens_recomputed_total": 0,
+  "tail_tokens_loaded_total": 0,
+  "tail_wait_events": 0,
+  "tail_wait_s_total": 0.0
+ },
+ "gpu_max_gib": 6.81,
+ "weight_ssd_reads": 0,
+ "weight_ssd_gib": 0.0
+}

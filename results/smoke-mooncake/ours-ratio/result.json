@@ -1,0 +1,274 @@
+{
+ "args": {
+  "run_dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/ours-ratio",
+  "model": "Qwen/Qwen2.5-3B-Instruct",
+  "n_docs": 8,
+  "leval_workload": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/leval-opt-workload.json",
+  "prompt_source": "longbench",
+  "longbench_file": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/longbench-v2-10k-32.jsonl",
+  "bailian_trace": "/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl",
+  "bailian_offset": 0,
+  "bailian_block": 16,
+  "prompt_cap": 0,
+  "profile_out": null,
+  "kv_transport": "hybrid",
+  "kv_host_gb": 8.0,
+  "kv_roots": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local:13,/mnt/sunny-nvmeof/kv-mc:40",
+  "kv_placement": "ratio",
+  "kv_host_share": 0.47,
+  "lmcache_l1_gb": 40.0,
+  "lmcache_port": 5555,
+  "lmcache_chunk": 64,
+  "mooncake_master": "30.0.0.4:50051",
+  "mooncake_metadata": "http://30.0.0.4:8080/metadata",
+  "mooncake_device": "mlx5_1",
+  "mooncake_local_ip": "30.0.0.3",
+  "mooncake_local_buffer_gb": 1.0,
+  "mooncake_staging_gb": 8.0,
+  "mooncake_keep_store": false,
+  "register_tensors": false,
+  "kv_batch": 2.0,
+  "kv_threads": 4,
+  "kv_block": 64,
+  "host_weight_fraction": null,
+  "host_ram_fraction": null,
+  "pure": false,
+  "prefetch_step": 1,
+  "max_num_batched_tokens": 0,
+  "io_threads": 4,
+  "gpu_util": 0.9,
+  "max_model_len": 4096,
+  "decode_tokens": 8,
+  "mode": "phases",
+  "time_scale": 1.0,
+  "max_concurrency": 0,
+  "arrival_gap_s": 0.0,
+  "settle_sec": 3.0,
+  "final_settle_sec": 3.0,
+  "poll_sleep_ms": 0.0,
+  "ssd_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/ssd",
+  "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+  "no_monitors": false,
+  "kv_split": "off",
+  "kv_split_rate_toks": null,
+  "kv_extra": null,
+  "no_weight_offload": true,
+  "kv_load_failure_policy": "fail",
+  "nsys_phase": "",
+  "nsys_steps": 0
+ },
+ "kv_gib": 0.32,
+ "kv_alloc_gib": 2.56,
+ "host_fraction": 0.3,
+ "tiers": {
+  "n_modules": 0,
+  "n_ssd": 0,
+  "host_tier_gib": 0.0,
+  "ssd_tier_gib": 0.0,
+  "gpu_resident": "all"
+ },
+ "kv_root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+ "kv_root_fs": {
+  "device": "/dev/nvme0n1p2",
+  "mount": "/",
+  "fstype": "ext4"
+ },
+ "kv_roots": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+   "weight": 13,
+   "fs": {
+    "device": "/dev/nvme0n1p2",
+    "mount": "/",
+    "fstype": "ext4"
+   }
+  },
+  {
+   "dir": "/mnt/sunny-nvmeof/kv-mc",
+   "weight": 40,
+   "fs": {
+    "device": "/dev/nvme1n1",
+    "mount": "/mnt/sunny-nvmeof",
+    "fstype": "xfs"
+   }
+  }
+ ],
+ "kv_extra_config": {
+  "spec_name": "HybridSpec",
+  "hybrid_host_gb": 8.0,
+  "cufile_fs_register_tensors": "False",
+  "cufile_fs_read_threads": 4,
+  "cufile_fs_write_threads": 4,
+  "hybrid_placement": "ratio",
+  "hybrid_host_share": 0.47,
+  "cufile_fs_root_dirs": [
+   {
+    "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+    "weight": 13
+   },
+   {
+    "dir": "/mnt/sunny-nvmeof/kv-mc",
+    "weight": 40
+   }
+  ],
+  "block_size": 64
+ },
+ "phases": {
+  "cold_fill": {
+   "wall_s": 20.424,
+   "matched": 0,
+   "drain_s": 0.0,
+   "matched_req_sum": 0,
+   "hit_requests": 0,
+   "ttft": [
+    5.034,
+    5.033,
+    10.102,
+    10.101,
+    15.184,
+    15.183,
+    20.267,
+    20.267
+   ],
+   "e2e": [
+    5.191,
+    5.19,
+    10.265,
+    10.264,
+    15.341,
+    15.34,
+    20.424,
+    20.423
+   ]
+  },
+  "reverse_retrieve": {
+   "wall_s": 1.466,
+   "matched": 996192,
+   "drain_s": 0.0,
+   "matched_req_sum": 22640,
+   "hit_requests": 6,
+   "ttft": [
+    0.104,
+    0.103,
+    0.438,
+    0.541,
+    0.812,
+    0.929,
+    1.192,
+    1.309
+   ],
+   "e2e": [
+    0.271,
+    0.269,
+    0.681,
+    0.708,
+    1.055,
+    1.088,
+    1.433,
+    1.466
+   ]
+  }
+ },
+ "kv_io": {
+  "read_n": 177,
+  "read_gib": 0.39,
+  "write_n": 512,
+  "write_gib": 1.12,
+  "read_busy_s": 0.5,
+  "write_busy_s": 60.9,
+  "errors": 0,
+  "registered_tensors": 0,
+  "write_stages_s": {
+   "ev": 59.1,
+   "open": 0.0,
+   "io": 1.8,
+   "fin": 0.0
+  },
+  "read_stages_s": {
+   "open": 0.0,
+   "io": 0.4,
+   "fin": 0.0
+  },
+  "write_calls": 1229,
+  "read_calls": 391
+ },
+ "kv_manager": {
+  "placement": "ratio",
+  "host_share": 0.47,
+  "write_through": true,
+  "host_blocks_used": 248,
+  "host_blocks_total": 3390,
+  "ssd_files": 512,
+  "ssd_gib": 1.125,
+  "hits_host": 7704,
+  "hits_ssd": 7864,
+  "misses": 289,
+  "stores_host": 248,
+  "stores_ssd": 512,
+  "demotions": 0,
+  "evictions_host": 0,
+  "evictions_ssd": 0,
+  "lost_keys": 0,
+  "host_alloc_fail": 0,
+  "ssd_manager": {
+   "files": 512,
+   "pending": 0,
+   "total_gib": 1.125,
+   "capacity_gib": 0.0,
+   "policy": "lru",
+   "refused": 0,
+   "chunk_bytes": 2359296,
+   "evicted": 0,
+   "evicted_gib": 0.0,
+   "lookup_hit": 7864,
+   "lookup_miss": 289,
+   "admission": null,
+   "roots": [
+    {
+     "root": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+     "weight": 13,
+     "mapped": 511
+    },
+    {
+     "root": "/mnt/sunny-nvmeof/kv-mc",
+     "weight": 40,
+     "mapped": 1491
+    }
+   ]
+  }
+ },
+ "kv_worker_hybrid": {
+  "sub_jobs_host": 18,
+  "sub_jobs_ssd": 22,
+  "inflight": 0,
+  "host": null
+ },
+ "kv_split": {
+  "mode": "off",
+  "decisions": 0,
+  "requests_split": 0,
+  "head_tokens_recomputed_total": 0,
+  "tail_tokens_loaded_total": 0,
+  "tail_wait_events": 0,
+  "tail_wait_s_total": 0.0
+ },
+ "gpu_max_gib": 6.81,
+ "weight_ssd_reads": 0,
+ "weight_ssd_gib": 0.0,
+ "kv_files_by_root": [
+  {
+   "dir": "/home/unionxic/gds-kv/vllm-gds-kv/results/smoke-mooncake/kv-mc-local",
+   "weight": 13,
+   "files": 134,
+   "bytes_gib": 0.292
+  },
+  {
+   "dir": "/mnt/sunny-nvmeof/kv-mc",
+   "weight": 40,
+   "files": 380,
+   "bytes_gib": 0.833
+  }
+ ],
+ "kv_files": 514,
+ "kv_bytes_gib": 1.125
+}
