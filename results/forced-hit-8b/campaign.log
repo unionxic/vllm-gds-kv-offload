@@ -1,0 +1,8 @@
+[09-21 10:48:28] 원격 램디스크 여유: 63.5 GiB
+[09-21 10:48:28] Mooncake 풀 용량: 48.0 GiB
+[09-21 10:48:28] == forced_hit: hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, 32건, max_model_len 8192, 프리픽스 상한 8000, KV 예산 2요청, host 8 GB, 가중치 13:40, host 몫 0.47, 조건(mooncake ours-ratio)
+[09-21 10:48:28] start mooncake (kv-transport=mooncake, --mooncake-master 30.0.0.4:50051 --mooncake-metadata http://30.0.0.4:8080/metadata --mooncake-device mlx5_1 --mooncake-local-ip 30.0.0.3 --mooncake-staging-gb 8)
+[09-21 10:58:59] done  mooncake rc=0
+[09-21 10:58:59] start ours-ratio (kv-transport=hybrid, --kv-host-gb 8 --kv-placement ratio --kv-host-share 0.47 --kv-roots /home/unionxic/gds-kv/vllm-gds-kv/results/forced-hit-8b/kv-fh-local:13,/mnt/sunny-nvmeof/kv-fh:40)
+[09-21 11:09:24] done  ours-ratio rc=0
+[09-21 11:09:24] == forced_hit 종료
