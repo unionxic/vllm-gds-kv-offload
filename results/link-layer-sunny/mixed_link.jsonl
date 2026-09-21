@@ -1,0 +1,9 @@
+{"nq": 36, "combo": "nvmeof", "nvmeof_gib_s": 7.471024, "rdma_gbps": null, "total_gb_s": 8.02, "sunny_delta": {"tx_pause_ctrl_phy": 50402, "tx_global_pause_duration": 850278}, "rain_delta": {"rx_pause_ctrl_phy": 50402, "rx_global_pause_duration": 850268}}
+{"nq": 36, "combo": "rdma", "nvmeof_gib_s": null, "rdma_gbps": null, "total_gb_s": 0.0, "sunny_delta": {}, "rain_delta": {}}
+{"nq": 36, "combo": "nvmeof+rdma", "nvmeof_gib_s": 7.488459, "rdma_gbps": null, "total_gb_s": 8.04, "sunny_delta": {"tx_pause_ctrl_phy": 49754, "tx_global_pause_duration": 838705}, "rain_delta": {"rx_pause_ctrl_phy": 49754, "rx_global_pause_duration": 838700}}
+{"nq": 8, "combo": "nvmeof", "nvmeof_gib_s": 9.283169, "rdma_gbps": null, "total_gb_s": 9.97, "sunny_delta": {"tx_pause_ctrl_phy": 72766, "tx_global_pause_duration": 1222933}, "rain_delta": {"rx_pause_ctrl_phy": 72766, "rx_global_pause_duration": 1222922}}
+{"nq": 8, "combo": "rdma", "nvmeof_gib_s": null, "rdma_gbps": null, "total_gb_s": 0.0, "sunny_delta": {}, "rain_delta": {}}
+{"nq": 8, "combo": "nvmeof+rdma", "nvmeof_gib_s": 9.165039, "rdma_gbps": null, "total_gb_s": 9.84, "sunny_delta": {"tx_pause_ctrl_phy": 69842, "tx_global_pause_duration": 1173858}, "rain_delta": {"rx_pause_ctrl_phy": 69842, "rx_global_pause_duration": 1173847}}
+{"nq": 2, "combo": "nvmeof", "nvmeof_gib_s": 6.291101, "rdma_gbps": null, "total_gb_s": 6.75, "sunny_delta": {"tx_pause_ctrl_phy": 588, "tx_global_pause_duration": 12381}, "rain_delta": {"rx_pause_ctrl_phy": 588, "rx_global_pause_duration": 12381}}
+{"nq": 2, "combo": "rdma", "nvmeof_gib_s": null, "rdma_gbps": null, "total_gb_s": 0.0, "sunny_delta": {}, "rain_delta": {}}
+{"nq": 2, "combo": "nvmeof+rdma", "nvmeof_gib_s": 6.946423, "rdma_gbps": null, "total_gb_s": 7.46, "sunny_delta": {"tx_pause_ctrl_phy": 452, "tx_global_pause_duration": 9579}, "rain_delta": {"rx_pause_ctrl_phy": 452, "rx_global_pause_duration": 9579}}

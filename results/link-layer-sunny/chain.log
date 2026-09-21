@@ -1,0 +1,253 @@
+[20:43:52] start chain
+wrote ../../results/link-layer-sunny/pcie_probe_sunny.txt
+[20:43:54] mrrs_sweep
+gpu 0000:65:00.0 DevCtl=0x2930 (MaxPayload 256 bytes, MaxReadReq 512 bytes)
+== MRRS 128 (MaxReadReq 128 bytes)
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.536, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.84, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.341, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.374, 'sec': 3.12}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.688, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.945, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.348, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.375, 'sec': 3.47}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.665, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.713, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.137, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.17, 'sec': 3.26}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.734, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.838, 'sec': 3.0}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.15, 'sec': 3.02}
+{'tag': 'mrrs=128', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.171, 'sec': 3.26}
+== MRRS 256 (MaxReadReq 256 bytes)
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.616, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.84, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.341, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.374, 'sec': 3.12}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.616, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.944, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.346, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.374, 'sec': 3.47}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.671, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.717, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.141, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.17, 'sec': 3.26}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.775, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.816, 'sec': 3.0}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.15, 'sec': 3.02}
+{'tag': 'mrrs=256', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.171, 'sec': 3.26}
+== MRRS 512 (MaxReadReq 512 bytes)
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.508, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.814, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.339, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.373, 'sec': 3.12}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.593, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.941, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.348, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.374, 'sec': 3.47}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.572, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.701, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.14, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.17, 'sec': 3.26}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.558, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.831, 'sec': 3.0}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.15, 'sec': 3.02}
+{'tag': 'mrrs=512', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.171, 'sec': 3.26}
+== MRRS 1024 (MaxReadReq 1024 bytes)
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.528, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.836, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.341, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.374, 'sec': 3.12}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.673, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.944, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.348, 'sec': 3.04}
+{'tag': 'mrrs=1024', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.375, 'sec': 3.47}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.615, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.712, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.137, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.169, 'sec': 3.26}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.664, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.833, 'sec': 3.0}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.15, 'sec': 3.02}
+{'tag': 'mrrs=1024', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.171, 'sec': 3.26}
+== MRRS 2048 (MaxReadReq 2048 bytes)
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.641, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.841, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.341, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.374, 'sec': 3.12}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.691, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.946, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.347, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.374, 'sec': 3.47}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.683, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.715, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.139, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.168, 'sec': 3.26}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.785, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.83, 'sec': 3.0}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.146, 'sec': 3.02}
+{'tag': 'mrrs=2048', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.169, 'sec': 3.26}
+== MRRS 4096 (MaxReadReq 4096 bytes)
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 1, 'size': 65536, 'gbps': 2.638, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 1, 'size': 1048576, 'gbps': 11.842, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 1, 'size': 16777216, 'gbps': 12.34, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 1, 'size': 268435456, 'gbps': 12.374, 'sec': 3.12}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 2, 'size': 65536, 'gbps': 2.736, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 2, 'size': 1048576, 'gbps': 11.946, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 2, 'size': 16777216, 'gbps': 12.348, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'h2d', 'streams': 2, 'size': 268435456, 'gbps': 12.374, 'sec': 3.47}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 1, 'size': 65536, 'gbps': 2.687, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 1, 'size': 1048576, 'gbps': 12.693, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 1, 'size': 16777216, 'gbps': 13.14, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 1, 'size': 268435456, 'gbps': 13.167, 'sec': 3.26}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 2, 'size': 65536, 'gbps': 2.782, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 2, 'size': 1048576, 'gbps': 12.833, 'sec': 3.0}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 2, 'size': 16777216, 'gbps': 13.146, 'sec': 3.02}
+{'tag': 'mrrs=4096', 'dir': 'd2h', 'streams': 2, 'size': 268435456, 'gbps': 13.17, 'sec': 3.26}
+wrote ../../results/link-layer-sunny/mrrs_sweep_sunny.jsonl
+restored DevCtl=0x2930
+[20:49:06] roce_sweep
+== roce_sweep 2026-09-21T20:49:06+09:00 sizes(4096 65536 1048576 4194304) qps(1 4 16) mtus(1024 4096) sec 4
+ib_read_bw s=4096 q=1 mtu=1024 mem=host -> 
+ib_read_bw s=65536 q=1 mtu=1024 mem=host -> 
+ib_read_bw s=1048576 q=1 mtu=1024 mem=host -> 
+ib_read_bw s=4194304 q=1 mtu=1024 mem=host -> 
+ib_read_bw s=4096 q=4 mtu=1024 mem=host -> 
+ib_read_bw s=65536 q=4 mtu=1024 mem=host -> 
+ib_read_bw s=1048576 q=4 mtu=1024 mem=host -> 
+ib_read_bw s=4194304 q=4 mtu=1024 mem=host -> 
+ib_read_bw s=4096 q=16 mtu=1024 mem=host -> 
+ib_read_bw s=65536 q=16 mtu=1024 mem=host -> 
+ib_read_bw s=1048576 q=16 mtu=1024 mem=host -> 
+ib_read_bw s=4194304 q=16 mtu=1024 mem=host -> 
+ib_read_bw s=4096 q=1 mtu=4096 mem=host -> 
+ib_read_bw s=65536 q=1 mtu=4096 mem=host -> 
+ib_read_bw s=1048576 q=1 mtu=4096 mem=host -> 
+ib_read_bw s=4194304 q=1 mtu=4096 mem=host -> 
+ib_read_bw s=4096 q=4 mtu=4096 mem=host -> 
+ib_read_bw s=65536 q=4 mtu=4096 mem=host -> 
+ib_read_bw s=1048576 q=4 mtu=4096 mem=host -> 
+ib_read_bw s=4194304 q=4 mtu=4096 mem=host -> 
+ib_read_bw s=4096 q=16 mtu=4096 mem=host -> 
+ib_read_bw s=65536 q=16 mtu=4096 mem=host -> 
+ib_read_bw s=1048576 q=16 mtu=4096 mem=host -> 
+ib_read_bw s=4194304 q=16 mtu=4096 mem=host -> 
+ib_read_bw s=4096 q=1 mtu=1024 mem=cuda -> 
+ib_read_bw s=65536 q=1 mtu=1024 mem=cuda -> 
+ib_read_bw s=1048576 q=1 mtu=1024 mem=cuda -> 
+ib_read_bw s=4194304 q=1 mtu=1024 mem=cuda -> 
+ib_read_bw s=4096 q=4 mtu=1024 mem=cuda -> 
+ib_read_bw s=65536 q=4 mtu=1024 mem=cuda -> 
+ib_read_bw s=1048576 q=4 mtu=1024 mem=cuda -> 
+ib_read_bw s=4194304 q=4 mtu=1024 mem=cuda -> 
+ib_read_bw s=4096 q=16 mtu=1024 mem=cuda -> 
+ib_read_bw s=65536 q=16 mtu=1024 mem=cuda -> 
+ib_read_bw s=1048576 q=16 mtu=1024 mem=cuda -> 
+ib_read_bw s=4194304 q=16 mtu=1024 mem=cuda -> 
+ib_read_bw s=4096 q=1 mtu=4096 mem=cuda -> 
+ib_read_bw s=65536 q=1 mtu=4096 mem=cuda -> 
+ib_read_bw s=1048576 q=1 mtu=4096 mem=cuda -> 
+ib_read_bw s=4194304 q=1 mtu=4096 mem=cuda -> 
+ib_read_bw s=4096 q=4 mtu=4096 mem=cuda -> 
+ib_read_bw s=65536 q=4 mtu=4096 mem=cuda -> 
+ib_read_bw s=1048576 q=4 mtu=4096 mem=cuda -> 
+ib_read_bw s=4194304 q=4 mtu=4096 mem=cuda -> 
+ib_read_bw s=4096 q=16 mtu=4096 mem=cuda -> 
+ib_read_bw s=65536 q=16 mtu=4096 mem=cuda -> 
+ib_read_bw s=1048576 q=16 mtu=4096 mem=cuda -> 
+ib_read_bw s=4194304 q=16 mtu=4096 mem=cuda -> 
+ib_write_bw s=4096 q=1 mtu=1024 mem=host -> 
+ib_write_bw s=65536 q=1 mtu=1024 mem=host -> 
+ib_write_bw s=1048576 q=1 mtu=1024 mem=host -> 
+ib_write_bw s=4194304 q=1 mtu=1024 mem=host -> 
+ib_write_bw s=4096 q=4 mtu=1024 mem=host -> 
+ib_write_bw s=65536 q=4 mtu=1024 mem=host -> 
+ib_write_bw s=1048576 q=4 mtu=1024 mem=host -> 
+ib_write_bw s=4194304 q=4 mtu=1024 mem=host -> 
+ib_write_bw s=4096 q=16 mtu=1024 mem=host -> 
+ib_write_bw s=65536 q=16 mtu=1024 mem=host -> 
+ib_write_bw s=1048576 q=16 mtu=1024 mem=host -> 
+ib_write_bw s=4194304 q=16 mtu=1024 mem=host -> 
+ib_write_bw s=4096 q=1 mtu=4096 mem=host -> 
+ib_write_bw s=65536 q=1 mtu=4096 mem=host -> 
+ib_write_bw s=1048576 q=1 mtu=4096 mem=host -> 
+ib_write_bw s=4194304 q=1 mtu=4096 mem=host -> 
+ib_write_bw s=4096 q=4 mtu=4096 mem=host -> 
+ib_write_bw s=65536 q=4 mtu=4096 mem=host -> 
+ib_write_bw s=1048576 q=4 mtu=4096 mem=host -> 
+ib_write_bw s=4194304 q=4 mtu=4096 mem=host -> 
+ib_write_bw s=4096 q=16 mtu=4096 mem=host -> 
+ib_write_bw s=65536 q=16 mtu=4096 mem=host -> 
+ib_write_bw s=1048576 q=16 mtu=4096 mem=host -> 
+ib_write_bw s=4194304 q=16 mtu=4096 mem=host -> 
+ib_write_bw s=4096 q=1 mtu=1024 mem=cuda -> 
+ib_write_bw s=65536 q=1 mtu=1024 mem=cuda -> 
+ib_write_bw s=1048576 q=1 mtu=1024 mem=cuda -> 
+ib_write_bw s=4194304 q=1 mtu=1024 mem=cuda -> 
+ib_write_bw s=4096 q=4 mtu=1024 mem=cuda -> 
+ib_write_bw s=65536 q=4 mtu=1024 mem=cuda -> 
+ib_write_bw s=1048576 q=4 mtu=1024 mem=cuda -> 
+ib_write_bw s=4194304 q=4 mtu=1024 mem=cuda -> 
+ib_write_bw s=4096 q=16 mtu=1024 mem=cuda -> 
+ib_write_bw s=65536 q=16 mtu=1024 mem=cuda -> 
+ib_write_bw s=1048576 q=16 mtu=1024 mem=cuda -> 
+ib_write_bw s=4194304 q=16 mtu=1024 mem=cuda -> 
+ib_write_bw s=4096 q=1 mtu=4096 mem=cuda -> 
+ib_write_bw s=65536 q=1 mtu=4096 mem=cuda -> 
+ib_write_bw s=1048576 q=1 mtu=4096 mem=cuda -> 
+ib_write_bw s=4194304 q=1 mtu=4096 mem=cuda -> 
+ib_write_bw s=4096 q=4 mtu=4096 mem=cuda -> 
+ib_write_bw s=65536 q=4 mtu=4096 mem=cuda -> 
+ib_write_bw s=1048576 q=4 mtu=4096 mem=cuda -> 
+ib_write_bw s=4194304 q=4 mtu=4096 mem=cuda -> 
+ib_write_bw s=4096 q=16 mtu=4096 mem=cuda -> 
+ib_write_bw s=65536 q=16 mtu=4096 mem=cuda -> 
+ib_write_bw s=1048576 q=16 mtu=4096 mem=cuda -> 
+ib_write_bw s=4194304 q=16 mtu=4096 mem=cuda -> 
+ib_write_lat s=64 -> 
+ib_write_lat s=4096 -> 
+ib_write_lat s=65536 -> 
+ib_write_lat s=1048576 -> 
+wrote ../../results/link-layer-sunny/roce_sweep.jsonl
+[20:53:02] p2p_sweep
+== p2p_sweep 2026-09-21T20:53:39+09:00 io(64K 1M 4M) sec 10 threads 8
+io=64K combo=local :: local 0.797695  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=remote :: remote 3.332848  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=local+remote :: local 0.809314 remote 4.118080  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d :: h2d 12.344  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+local :: local 0.821495 h2d 11.493  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+remote :: remote 3.054814 h2d 9.633  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+local+remote :: local 0.820175 remote 2.590008 h2d 9.15  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=local :: local 2.366166  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=remote :: remote 7.447902  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=local+remote :: local 2.364717 remote 5.967912  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d :: h2d 12.344  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+local :: local 2.368964 h2d 9.931  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+remote :: remote 4.284556 h2d 8.774  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+local+remote :: local 2.013189 remote 2.345894 h2d 8.518  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=local :: local 1.041816  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=remote :: remote 9.391597  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=local+remote :: local 1.367549 remote 8.158405  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d :: h2d 12.332  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+local :: local 1.382074 h2d 10.924  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+remote :: remote 4.275832 h2d 8.539  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+local+remote :: local 1.025358 remote 3.318723 h2d 8.451  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+wrote ../../results/link-layer-sunny/p2p_sweep.jsonl
+[20:58:45] mixed_link
+== mixed_link 2026-09-21T20:58:45+09:00 io 1M sec 10 nqs(36 8 2)
+nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
+nq=36 combo=nvmeof :: nvmeof_gib_s 7.471024 
+nq=36 combo=rdma :: 
+nq=36 combo=nvmeof+rdma :: nvmeof_gib_s 7.488459 
+nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=8 (queue_count=9)
+nq=8 combo=nvmeof :: nvmeof_gib_s 9.283169 
+nq=8 combo=rdma :: 
+nq=8 combo=nvmeof+rdma :: nvmeof_gib_s 9.165039 
+nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=2 (queue_count=3)
+nq=2 combo=nvmeof :: nvmeof_gib_s 6.291101 
+nq=2 combo=rdma :: 
+nq=2 combo=nvmeof+rdma :: nvmeof_gib_s 6.946423 
+nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
+wrote ../../results/link-layer-sunny/mixed_link.jsonl
+wrote ../../results/link-layer-sunny/after/pcie_probe_sunny.txt
+[21:01:07] chain done

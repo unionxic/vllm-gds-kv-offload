@@ -1,0 +1,525 @@
+== roce_sweep 2026-09-21T20:49:06+09:00 sizes(4096 65536 1048576 4194304) qps(1 4 16) mtus(1024 4096) sec 4
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4096 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=65536 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=1048576 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_read_bw s=4194304 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=1 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=4 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=16 mtu=1024 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=1 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=4 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4096 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=65536 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=1048576 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+ib_write_bw s=4194304 q=16 mtu=4096 mem=host -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=1 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=4 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=16 mtu=1024 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=1 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=4 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4096 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=65536 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=1048576 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+ WARNING: BW peak won't be measured in this run.
+Perftest doesn't supports CUDA tests with inline messages: inline size set to 0
+ib_write_bw s=4194304 q=16 mtu=4096 mem=cuda -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+Disabling dynamic polling
+ib_write_lat s=64 -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+Disabling dynamic polling
+ib_write_lat s=4096 -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+Disabling dynamic polling
+ib_write_lat s=65536 -> 
+Couldn't connect to 30.0.0.3:18515
+Unable to open file descriptor for socket connection
+ Unable to init the socket connection
+Disabling dynamic polling
+ib_write_lat s=1048576 -> 

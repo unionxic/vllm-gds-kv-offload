@@ -1,0 +1,385 @@
+### sunny 2026-09-21T21:01:06+09:00 kernel 6.8.0-138-generic
+cmdline: BOOT_IMAGE=/boot/vmlinuz-6.8.0-138-generic root=UUID=8f5b9d9e-f880-4793-bee4-82020bfac766 ro quiet splash iommu=pt vt.handoff=7
+### lspci -tv
+-+-[0000:b2]-+-02.0-[b3]----00.0  Samsung Electronics Co Ltd NVMe SSD Controller SM981/PM981/PM983
+ |           +-05.0  Intel Corporation Sky Lake-E VT-d
+ |           +-05.2  Intel Corporation Sky Lake-E RAS Configuration Registers
+ |           +-05.4  Intel Corporation Sky Lake-E IOxAPIC Configuration Registers
+ |           +-12.0  Intel Corporation Sky Lake-E M3KTI Registers
+ |           +-12.1  Intel Corporation Sky Lake-E M3KTI Registers
+ |           +-12.2  Intel Corporation Sky Lake-E M3KTI Registers
+ |           +-15.0  Intel Corporation Sky Lake-E M2PCI Registers
+ |           +-15.1  Intel Corporation Sky Lake-E DDRIO Registers
+ |           +-16.0  Intel Corporation Sky Lake-E M2PCI Registers
+ |           +-16.1  Intel Corporation Sky Lake-E DDRIO Registers
+ |           +-16.4  Intel Corporation Sky Lake-E M2PCI Registers
+ |           +-16.5  Intel Corporation Sky Lake-E DDRIO Registers
+ |           +-17.0  Intel Corporation Sky Lake-E M2PCI Registers
+ |           \-17.1  Intel Corporation Sky Lake-E DDRIO Registers
+ +-[0000:64]-+-00.0-[65]--+-00.0  NVIDIA Corporation GA104GL [RTX A4000]
+ |           |            \-00.1  NVIDIA Corporation GA104 High Definition Audio Controller
+ |           +-05.0  Intel Corporation Sky Lake-E VT-d
+ |           +-05.2  Intel Corporation Sky Lake-E RAS Configuration Registers
+ |           +-05.4  Intel Corporation Sky Lake-E IOxAPIC Configuration Registers
+ |           +-08.0  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-09.0  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.0  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.1  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.2  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.3  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.4  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0a.5  Intel Corporation Sky Lake-E LM Channel 1
+ |           +-0a.6  Intel Corporation Sky Lake-E LMS Channel 1
+ |           +-0a.7  Intel Corporation Sky Lake-E LMDP Channel 1
+ |           +-0b.0  Intel Corporation Sky Lake-E DECS Channel 2
+ |           +-0b.1  Intel Corporation Sky Lake-E LM Channel 2
+ |           +-0b.2  Intel Corporation Sky Lake-E LMS Channel 2
+ |           +-0b.3  Intel Corporation Sky Lake-E LMDP Channel 2
+ |           +-0c.0  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0c.1  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0c.2  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0c.3  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0c.4  Intel Corporation Sky Lake-E Integrated Memory Controller
+ |           +-0c.5  Intel Corporation Sky Lake-E LM Channel 1
+ |           +-0c.6  Intel Corporation Sky Lake-E LMS Channel 1
+ |           +-0c.7  Intel Corporation Sky Lake-E LMDP Channel 1
+ |           +-0d.0  Intel Corporation Sky Lake-E DECS Channel 2
+ |           +-0d.1  Intel Corporation Sky Lake-E LM Channel 2
+ |           +-0d.2  Intel Corporation Sky Lake-E LMS Channel 2
+ |           \-0d.3  Intel Corporation Sky Lake-E LMDP Channel 2
+ +-[0000:16]-+-00.0-[17]--+-00.0  Mellanox Technologies MT28908 Family [ConnectX-6]
+ |           |            \-00.1  Mellanox Technologies MT28908 Family [ConnectX-6]
+ |           +-05.0  Intel Corporation Sky Lake-E VT-d
+ |           +-05.2  Intel Corporation Sky Lake-E RAS Configuration Registers
+ |           +-05.4  Intel Corporation Sky Lake-E IOxAPIC Configuration Registers
+ |           +-08.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.2  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.3  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.4  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.5  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.6  Intel Corporation Sky Lake-E CHA Registers
+ |           +-08.7  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.2  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.3  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.4  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.5  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.6  Intel Corporation Sky Lake-E CHA Registers
+ |           +-09.7  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0a.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0a.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.2  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.3  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.4  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.5  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.6  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0e.7  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.2  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.3  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.4  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.5  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.6  Intel Corporation Sky Lake-E CHA Registers
+ |           +-0f.7  Intel Corporation Sky Lake-E CHA Registers
+ |           +-10.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-10.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-1d.0  Intel Corporation Sky Lake-E CHA Registers
+ |           +-1d.1  Intel Corporation Sky Lake-E CHA Registers
+ |           +-1d.2  Intel Corporation Sky Lake-E CHA Registers
+ |           +-1d.3  Intel Corporation Sky Lake-E CHA Registers
+ |           +-1e.0  Intel Corporation Sky Lake-E PCU Registers
+ |           +-1e.1  Intel Corporation Sky Lake-E PCU Registers
+ |           +-1e.2  Intel Corporation Sky Lake-E PCU Registers
+ |           +-1e.3  Intel Corporation Sky Lake-E PCU Registers
+ |           +-1e.4  Intel Corporation Sky Lake-E PCU Registers
+ |           +-1e.5  Intel Corporation Sky Lake-E PCU Registers
+ |           \-1e.6  Intel Corporation Sky Lake-E PCU Registers
+ \-[0000:00]-+-00.0  Intel Corporation Sky Lake-E DMI3 Registers
+             +-04.0  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.1  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.2  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.3  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.4  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.5  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.6  Intel Corporation Sky Lake-E CBDMA Registers
+             +-04.7  Intel Corporation Sky Lake-E CBDMA Registers
+             +-05.0  Intel Corporation Sky Lake-E MM/Vt-d Configuration Registers
+             +-05.2  Intel Corporation Sky Lake-E RAS
+             +-05.4  Intel Corporation Sky Lake-E IOAPIC
+             +-08.0  Intel Corporation Sky Lake-E Ubox Registers
+             +-08.1  Intel Corporation Sky Lake-E Ubox Registers
+             +-08.2  Intel Corporation Sky Lake-E Ubox Registers
+             +-14.0  Intel Corporation 200 Series/Z370 Chipset Family USB 3.0 xHCI Controller
+             +-14.2  Intel Corporation 200 Series PCH Thermal Subsystem
+             +-15.0  Intel Corporation 200 Series PCH Serial IO I2C Controller #0
+             +-15.1  Intel Corporation 200 Series PCH Serial IO I2C Controller #1
+             +-16.0  Intel Corporation 200 Series PCH CSME HECI #1
+             +-17.0  Intel Corporation SATA Controller [RAID mode]
+             +-1c.0-[01]--
+             +-1c.2-[02]----00.0  ASMedia Technology Inc. ASM2142 USB 3.1 Host Controller
+             +-1c.4-[03]----00.0  ASMedia Technology Inc. ASM2142 USB 3.1 Host Controller
+             +-1f.0  Intel Corporation X299 Chipset LPC/eSPI Controller
+             +-1f.2  Intel Corporation 200 Series/Z370 Chipset Family Power Management Controller
+             +-1f.3  Intel Corporation 200 Series PCH HD Audio
+             +-1f.4  Intel Corporation 200 Series/Z370 Chipset Family SMBus Controller
+             \-1f.6  Intel Corporation Ethernet Connection (2) I219-V
+### 0000:00:1c.0 PCI bridge: Intel Corporation 200 Series PCH PCI Express Root Port #1 (rev f0)
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 128 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #1, Speed 8GT/s, Width x2, ASPM L0s L1, Exit Latency L0s unlimited, L1 <4us
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk-
+		LnkSta:	Speed 2.5GT/s (downgraded), Width x0 (downgraded)
+### 0000:00:1c.2 PCI bridge: Intel Corporation 200 Series PCH PCI Express Root Port #3 (rev f0)
+		DevCap:	MaxPayload 128 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 128 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #3, Speed 8GT/s, Width x2, ASPM not supported
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (ok), Width x2 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd- EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+### 0000:00:1c.4 PCI bridge: Intel Corporation 200 Series PCH PCI Express Root Port #5 (rev f0)
+		DevCap:	MaxPayload 128 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 128 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #5, Speed 8GT/s, Width x2, ASPM not supported
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (ok), Width x2 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd- EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+### 0000:16:00.0 PCI bridge: Intel Corporation Sky Lake-E PCI Express Root Port A (rev 07)
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #1, Speed 8GT/s, Width x16, ASPM L1, Exit Latency L1 <16us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (ok), Width x16 (ok)
+		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid+ TransBlk- ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+### 0000:17:00.0 Ethernet controller: Mellanox Technologies MT28908 Family [ConnectX-6]
+	Region 0: Memory at dffe000000 (64-bit, prefetchable) [size=32M]
+		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 512 bytes
+		LnkCap:	Port #0, Speed 16GT/s, Width x16, ASPM not supported
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (downgraded), Width x16 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+		ACSCap:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+### 0000:17:00.1 Ethernet controller: Mellanox Technologies MT28908 Family [ConnectX-6]
+	Region 0: Memory at dffc000000 (64-bit, prefetchable) [size=32M]
+		DevCap:	MaxPayload 512 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 512 bytes
+		LnkCap:	Port #0, Speed 16GT/s, Width x16, ASPM not supported
+		LnkCtl:	ASPM Disabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (downgraded), Width x16 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+		ACSCap:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid- TransBlk- ReqRedir- CmpltRedir- UpstreamFwd- EgressCtrl- DirectTrans-
+### 0000:64:00.0 PCI bridge: Intel Corporation Sky Lake-E PCI Express Root Port A (rev 07)
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #5, Speed 8GT/s, Width x16, ASPM L1, Exit Latency L1 <16us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 2.5GT/s (downgraded), Width x16 (ok)
+		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid+ TransBlk- ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+### 0000:65:00.0 VGA compatible controller: NVIDIA Corporation GA104GL [RTX A4000] (rev a1)
+	Region 0: Memory at d7000000 (32-bit, non-prefetchable) [size=16M]
+	Region 1: Memory at e000000000 (64-bit, prefetchable) [size=16G]
+	Region 3: Memory at e400000000 (64-bit, prefetchable) [size=32M]
+	Region 5: I/O ports at b000 [size=128]
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 <64us
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 512 bytes
+		LnkCap:	Port #0, Speed 8GT/s, Width x16, ASPM L0s L1, Exit Latency L0s <512ns, L1 <4us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 2.5GT/s (downgraded), Width x16 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+### 0000:65:00.1 Audio device: NVIDIA Corporation GA104 High Definition Audio Controller (rev a1)
+	Region 0: Memory at d8080000 (32-bit, non-prefetchable) [size=16K]
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 <64us
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 512 bytes
+		LnkCap:	Port #0, Speed 8GT/s, Width x16, ASPM L0s L1, Exit Latency L0s <512ns, L1 <4us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 2.5GT/s (downgraded), Width x16 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+### 0000:b2:02.0 PCI bridge: Intel Corporation Sky Lake-E PCI Express Root Port C (rev 07)
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 128 bytes
+		LnkCap:	Port #11, Speed 8GT/s, Width x4, ASPM L1, Exit Latency L1 <16us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (ok), Width x4 (ok)
+		ACSCap:	SrcValid+ TransBlk+ ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		ACSCtl:	SrcValid+ TransBlk- ReqRedir+ CmpltRedir+ UpstreamFwd+ EgressCtrl- DirectTrans-
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr-
+### 0000:b3:00.0 Non-Volatile memory controller: Samsung Electronics Co Ltd NVMe SSD Controller SM981/PM981/PM983
+	Region 0: Memory at fbe00000 (64-bit, non-prefetchable) [size=16K]
+		DevCap:	MaxPayload 256 bytes, PhantFunc 0, Latency L0s unlimited, L1 unlimited
+		DevCtl:	CorrErr- NonFatalErr- FatalErr- UnsupReq-
+			MaxPayload 256 bytes, MaxReadReq 512 bytes
+		LnkCap:	Port #0, Speed 8GT/s, Width x4, ASPM L1, Exit Latency L1 <64us
+		LnkCtl:	ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+		LnkSta:	Speed 8GT/s (ok), Width x4 (ok)
+		UESta:	DLP- SDES- TLP- FCP- CmpltTO- CmpltAbrt- UnxCmplt- RxOF- MalfTLP- ECRC- UnsupReq- ACSViol-
+		CESta:	RxErr- BadTLP- BadDLLP- Rollover- Timeout- AdvNonFatalErr+
+### nvidia-smi -q -d PCIE
+Failed to parse --display/-d flags
+### nvidia-smi topo -m
+	[4mGPU0	NIC0	NIC1	CPU Affinity	NUMA Affinity	GPU NUMA ID[0m
+GPU0	 X 	NODE	NODE	0-35	0		N/A
+NIC0	NODE	 X 	PIX				
+NIC1	NODE	PIX	 X 				
+
+Legend:
+
+  X    = Self
+  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)
+  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node
+  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)
+  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)
+  PIX  = Connection traversing at most a single PCIe bridge
+  NV#  = Connection traversing a bonded set of # NVLinks
+
+NIC Legend:
+
+  NIC0: mlx5_0
+  NIC1: mlx5_1
+
+### IOMMU groups: 81
+### RDMA
+hca_id:	mlx5_0
+	fw_ver:				20.43.4100
+	max_mr_size:			0xffffffffffffffff
+	max_qp:				131072
+	max_sge:			30
+			state:			PORT_ACTIVE (4)
+			max_mtu:		4096 (5)
+			active_mtu:		4096 (5)
+			link_layer:		Ethernet
+			active_width:		2X (16)
+			active_speed:		50.0 Gbps (64)
+			phys_state:		LINK_UP (5)
+hca_id:	mlx5_1
+	fw_ver:				20.43.4100
+	max_mr_size:			0xffffffffffffffff
+	max_qp:				131072
+	max_sge:			30
+			state:			PORT_DOWN (1)
+			max_mtu:		4096 (5)
+			active_mtu:		1024 (3)
+			link_layer:		Ethernet
+			active_width:		4X (2)
+			active_speed:		10.0 Gbps (4)
+			phys_state:		DISABLED (3)
+### NIC enp23s0f0np0
+netlink error: Operation not permitted
+	Speed: 100000Mb/s
+	Duplex: Full
+mtu 9000
+Pause parameters for enp23s0f0np0:
+Autonegotiate:	off
+RX:		on
+TX:		on
+
+Adaptive RX: on  TX: on
+rx-usecs: 8
+tx-usecs: 8
+Current hardware settings:
+RX:		1024
+RX Mini:	n/a
+RX Jumbo:	n/a
+TX:		1024
+driver: mlx5_core
+version: 25.10-1.7.1
+firmware-version: 20.43.4100 (MT_0000000224)
+expansion-rom-version: 
+### PFC/QoS
+DCBX mode: OS controlled
+Priority trust state: pcp
+Receive buffer size (bytes): 0,524160,0,0,0,0,0,0,max_buffer_size=524160
+Cable len: 7
+PFC configuration:
+	priority    0   1   2   3   4   5   6   7
+	enabled     0   0   0   0   0   0   0   0   
+	buffer      1   1   1   1   1   1   1   1   
+tc: 0 ratelimit: unlimited, tsa: vendor
+	 priority:  1
+tc: 1 ratelimit: unlimited, tsa: vendor
+	 priority:  0
+tc: 2 ratelimit: unlimited, tsa: vendor
+	 priority:  2
+tc: 3 ratelimit: unlimited, tsa: vendor
+	 priority:  3
+tc: 4 ratelimit: unlimited, tsa: vendor
+	 priority:  4
+tc: 5 ratelimit: unlimited, tsa: vendor
+	 priority:  5
+tc: 6 ratelimit: unlimited, tsa: vendor
+	 priority:  6
+tc: 7 ratelimit: unlimited, tsa: vendor
+	 priority:  7
+### ECN
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/0=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/1=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/2=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/3=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/4=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/5=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/6=1
+/sys/class/net/enp23s0f0np0/ecn/roce_np/enable/7=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/0=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/1=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/2=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/3=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/4=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/5=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/6=1
+/sys/class/net/enp23s0f0np0/ecn/roce_rp/enable/7=1
+### ethtool -S nonzero (pause/discard/err/oob)
+     rx_pause_ctrl_phy: 2013
+     tx_pause_ctrl_phy: 1841356
+     rx_err_lane_0_phy: 326453
+     rx_err_lane_1_phy: 1102537
+     rx_global_pause: 2013
+     rx_global_pause_duration: 108152
+     tx_global_pause: 1841356
+     tx_global_pause_duration: 62083302
+     rx_global_pause_transition: 806
+### mlx5 hw_counters
+-- mlx5_0
+lifespan=10
+req_cqe_error=87
+resp_cqe_error=10743
+resp_cqe_flush_error=10656
+rx_read_requests=374269
+rx_write_requests=14272199
+-- mlx5_1
+lifespan=10
+### NVMe-oF
+nvme1: nqn.2026-09.kr.ac.ajou.rain:dram0 queue_count=37 sqsize=127
+nvme2: nqn.2026-09.kr.ac.ajou.rain:ssd0 queue_count=37 sqsize=127

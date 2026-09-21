@@ -1,0 +1,22 @@
+== p2p_sweep 2026-09-21T20:53:39+09:00 io(64K 1M 4M) sec 10 threads 8
+io=64K combo=local :: local 0.797695  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=remote :: remote 3.332848  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=local+remote :: local 0.809314 remote 4.118080  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d :: h2d 12.344  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+local :: local 0.821495 h2d 11.493  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+remote :: remote 3.054814 h2d 9.633  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=64K combo=h2d+local+remote :: local 0.820175 remote 2.590008 h2d 9.15  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=local :: local 2.366166  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=remote :: remote 7.447902  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=local+remote :: local 2.364717 remote 5.967912  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d :: h2d 12.344  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+local :: local 2.368964 h2d 9.931  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+remote :: remote 4.284556 h2d 8.774  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=1M combo=h2d+local+remote :: local 2.013189 remote 2.345894 h2d 8.518  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=local :: local 1.041816  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=remote :: remote 9.391597  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=local+remote :: local 1.367549 remote 8.158405  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d :: h2d 12.332  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+local :: local 1.382074 h2d 10.924  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+remote :: remote 4.275832 h2d 8.539  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16
+io=4M combo=h2d+local+remote :: local 1.025358 remote 3.318723 h2d 8.451  :: pcie_rx_MBps=0 pcie_tx_MBps=0 gen=3 width=16

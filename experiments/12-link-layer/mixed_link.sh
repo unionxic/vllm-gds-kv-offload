@@ -16,7 +16,7 @@ reconnect(){ # $1 = nr io queues
 }
 mkdir -p $REMOTE; for i in $(seq 0 $((THREADS - 1))); do [ -f $REMOTE/gdsio.$i ] || dd if=/dev/urandom of=$REMOTE/gdsio.$i bs=1M count=2048 status=none; done
 gds(){ $GDSIO -D $REMOTE -d 0 -w $THREADS -s 2G -i $IOSIZE -x 0 -I 0 -T $SEC 2>&1 | grep -oE 'Throughput: [0-9.]+ GiB/sec' | awk '{print "nvmeof_gib_s", $2}'; }
-rdma(){ ssh rain "pkill -f 'ib_read_bw -d $SDEV -p $PORT' 2>/dev/null; setsid nohup ib_read_bw -d $SDEV -p $PORT -s 1048576 -q 4 -D $SEC -F --report_gbits > /tmp/perftest_srv2.log 2>&1 < /dev/null &"; sleep 1.5
+rdma(){ ssh rain "pkill -f '^ib_read_bw -d $SDEV -p $PORT' 2>/dev/null; setsid nohup ib_read_bw -d $SDEV -p $PORT -s 1048576 -q 4 -D $SEC -F --report_gbits > /tmp/perftest_srv2.log 2>&1 < /dev/null &"; sleep 1.5
   timeout $((SEC + 30)) ib_read_bw -d $CDEV -p $PORT -s 1048576 -q 4 -D $SEC -F --report_gbits --use_cuda=0 $SRV 2>&1 | grep -E "^\s*1048576\s" | tail -1 | awk '{print "rdma_gbps", $4}'; }
 echo "== mixed_link $(date -Is) io $IOSIZE sec $SEC nqs($NQS)" | tee -a $LOG
 for nq in $NQS; do
@@ -39,4 +39,4 @@ PY
     rm -rf $T; sleep 2
   done
 done
-reconnect 36 | tee -a $LOG; ssh rain "pkill -f 'ib_read_bw -d $SDEV -p $PORT' 2>/dev/null"; echo "wrote $F"
+reconnect 36 | tee -a $LOG; ssh rain "pkill -f '^ib_read_bw -d $SDEV -p $PORT' 2>/dev/null"; echo "wrote $F"

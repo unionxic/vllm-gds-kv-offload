@@ -14,7 +14,7 @@ cnt(){ # 호스트(local|rain) 카운터 스냅샷 한 줄
 run(){ # $1 tool, $2 size, $3 qp, $4 mtu, $5 mem(host|cuda)
   local tool=$1 s=$2 q=$3 m=$4 mem=$5 extra=""
   [ "$mem" = cuda ] && extra="--use_cuda=0"
-  ssh rain "pkill -f 'ib_(read|write)_(bw|lat) ' 2>/dev/null; setsid nohup $tool -d $SDEV -p $PORT -s $s -q $q -m $m -D $SEC -F --report_gbits > /tmp/perftest_srv.log 2>&1 < /dev/null &"
+  ssh rain "pkill -f '^ib_(read|write)_(bw|lat) ' 2>/dev/null; setsid nohup $tool -d $SDEV -p $PORT -s $s -q $q -m $m -D $SEC -F --report_gbits > /tmp/perftest_srv.log 2>&1 < /dev/null &"
   sleep 1.5
   local b0=$(cnt local) r0=$(cnt rain)
   local out; out=$(timeout $((SEC + 30)) $tool -d $CDEV -p $PORT -s $s -q $q -m $m -D $SEC -F --report_gbits $extra $SRV 2>&1)
@@ -42,9 +42,9 @@ for tool in ib_read_bw ib_write_bw; do for mem in host cuda; do for m in $MTUS; 
 done; done; done; done; done
 # 지연은 QP 1, MTU 4096, host 메모리만
 for s in 64 4096 65536 1048576; do
-  ssh rain "pkill -f 'ib_write_lat ' 2>/dev/null; setsid nohup ib_write_lat -d $SDEV -p $PORT -s $s -n 2000 -F > /tmp/perftest_srv.log 2>&1 < /dev/null &"; sleep 1.5
+  ssh rain "pkill -f '^ib_write_lat ' 2>/dev/null; setsid nohup ib_write_lat -d $SDEV -p $PORT -s $s -n 2000 -F > /tmp/perftest_srv.log 2>&1 < /dev/null &"; sleep 1.5
   out=$(timeout 60 ib_write_lat -d $CDEV -p $PORT -s $s -n 2000 -F $SRV 2>&1); echo "$out" >> $LOG
   line=$(echo "$out" | grep -E "^\s*$s\s" | tail -1); echo "ib_write_lat s=$s -> $line" | tee -a $LOG
   python3 -c "import json,re,sys; l=sys.argv[1]; n=re.findall(r'[-+]?\d+\.?\d*', l); print(json.dumps(dict(tool='ib_write_lat', size=int(sys.argv[2]), raw=l.strip(), lat_us_typical=float(n[4]) if len(n)>4 else None, lat_us_avg=float(n[5]) if len(n)>5 else None, lat_us_99=float(n[7]) if len(n)>7 else None)))" "$line" "$s" >> $F
 done
-ssh rain "pkill -f 'ib_(read|write)_(bw|lat) ' 2>/dev/null"; echo "wrote $F"
+ssh rain "pkill -f '^ib_(read|write)_(bw|lat) ' 2>/dev/null"; echo "wrote $F"
