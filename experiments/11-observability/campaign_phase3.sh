@@ -12,6 +12,10 @@
 #               DRAM 한 층이고 전송은 RDMA. 원격 서비스는 sunny의 ~/bin/mooncake_up.sh.
 #   current / pending-wait / cpu-landing
 #               write-behind miss 대책 비교용. 티어 구성은 ours-ratio와 같고 조건 정의는 case 절 참고.
+#   io-inflight / io-inflight-rp
+#               경로별 동시 IO 발행 정책 비교(티어 구성은 ours-ratio와 같음). io-inflight는 루트별 동시 발행 상한
+#               INFLIGHT_LOCAL/INFLIGHT_REMOTE/INFLIGHT_RSSD(cufile_fs_root_inflight), io-inflight-rp는 거기에
+#               읽기 우선·쓰기 발행 제한 READPRIO(cufile_fs_read_priority)를 더한 것.
 #   store-off / store-shadow / store-on
 #               저장 간섭 실험(MODE=stream_replay 전용). 티어 구성은 ours-ratio와 같다. prefill이 재사용 프리픽스를
 #               미리 저장해 stream의 적중 상태·배치를 같게 만든 뒤, stream 동안의 저장만 끔 / 파일 티어 shadow 재쓰기 /
@@ -45,6 +49,7 @@ REMOTE_MNT=${REMOTE_MNT:-$(dirname "$REMOTE_ROOT")}  # 원격 티어 마운트 �
 # 세 번째 루트(원격 SSD). 비우면 예전과 같은 루트 2개. REMOTE_CAP_GB는 원격 DRAM 루트 용량(GiB, 0=무제한).
 RSSD_ROOT=${RSSD_ROOT:-}; W_RSSD=${W_RSSD:-32}; REMOTE_CAP_GB=${REMOTE_CAP_GB:-0}
 RSSD_MNT=${RSSD_MNT:-${RSSD_ROOT:+$(dirname "$RSSD_ROOT")}}
+INFLIGHT_LOCAL=${INFLIGHT_LOCAL:-2}; INFLIGHT_REMOTE=${INFLIGHT_REMOTE:-8}; INFLIGHT_RSSD=${INFLIGHT_RSSD:-4}; READPRIO=${READPRIO:-1}
 BOFF=${BOFF:-29560}; TSCALE=${TSCALE:-100}; MAXCONC=${MAXCONC:-4}
 MC_MASTER=${MC_MASTER:-30.0.0.4:50051}; MC_META=${MC_META:-http://30.0.0.4:8080/metadata}
 MC_DEV=${MC_DEV:-mlx5_1}; MC_IP=${MC_IP:-30.0.0.3}; MC_STAGING_GB=${MC_STAGING_GB:-8}
@@ -88,7 +93,9 @@ elif [ "$MODE" = stream ]; then
   # 원격 램디스크 여유만 확인하고, 실제 필요량은 런 뒤 kv_files_by_root로 본다.
   FREE_GIB=$(df -B1 --output=avail "$REMOTE_MNT" | tail -1 | awk '{printf "%.1f", $1/1073741824}')
   log "원격 램디스크 여유: $FREE_GIB GiB (stream 모드라 longbench 용량 사전 검사는 건너뜀)"
-  awk -v f="$FREE_GIB" 'BEGIN{exit !(f < 30)}' && { log "ABORT: 원격 램디스크 여유가 30 GiB 미만"; exit 4; }
+  # 원격 DRAM 루트에 용량 상한(REMOTE_CAP_GB)이 있으면 그 상한 + 여유 2 GiB만 있으면 된다.
+  NEED_GIB=30; [ "${REMOTE_CAP_GB:-0}" != 0 ] && NEED_GIB=$(python -c "print(max(4, float('$REMOTE_CAP_GB') + 2))")
+  awk -v f="$FREE_GIB" -v n="$NEED_GIB" 'BEGIN{exit !(f < n)}' && { log "ABORT: 원격 램디스크 여유가 $NEED_GIB GiB 미만"; exit 4; }
 elif echo "$CONDS" | grep -qw ours-ratio; then
   FREE_B=$(df -B1 --output=avail "$REMOTE_MNT" | tail -1)
   FIT=$(python - "$MODEL" "$NDOCS" "$CAP" "$W_LOCAL" "$W_REMOTE" "$FREE_B" "$REMOTE_MARGIN_GIB" <<'PY'
@@ -146,6 +153,11 @@ for cond in $CONDS; do
     pending-wait) kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO"
                   COND_KV_EXTRA='{"cufile_fs_pending_wait": true}';;
     cpu-landing)  kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS --kv-placement host_first";;
+    io-inflight|io-inflight-rp)
+                  kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO"
+                  INFL="{\"$LOCAL_ROOT\": $INFLIGHT_LOCAL, \"$REMOTE_ROOT\": $INFLIGHT_REMOTE${RSSD_ROOT:+, \"$RSSD_ROOT\": $INFLIGHT_RSSD}}"
+                  if [ "$cond" = io-inflight ]; then COND_KV_EXTRA="{\"cufile_fs_root_inflight\": $INFL}"
+                  else COND_KV_EXTRA="{\"cufile_fs_root_inflight\": $INFL, \"cufile_fs_read_priority\": $READPRIO}"; fi;;
     store-off)    kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store off";;
     store-shadow) kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store shadow";;
     store-on)     kvt=hybrid; KVDIR=$LOCAL_ROOT; NEED_REMOTE=1; EXTRA="$OURS $OURS_RATIO --stream-store on";;
