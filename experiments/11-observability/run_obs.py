@@ -1,5 +1,8 @@
 """관측 체계(lib/obs)를 붙인 워크로드 러너.
    --mode phases(기본): cold_fill(문서 N개, 질문 0) → settle → reverse_retrieve(역순, 질문 1) → final_settle
+   --mode forced_hit: cold_fill(질문 0) → 저장 커밋 확인 → settle → replay(같은 순서, 같은 질문 0 = 프롬프트가 cold_fill과 글자 그대로 같음)
+     replay 구간은 --no-store-phase replay로 저장을 막고 --reset-gpu-cache-before replay로 GPU 프리픽스 캐시를 비워,
+     모든 요청이 티어에서 적재하도록 강제한다(적중률·쓰기 지연·캐시 정책을 뺀 전송 경로만의 비교).
    --mode stream: trace 순서 한 줄 스트림. 도착 시각 = (timestamp - timestamp0) x --time-scale, open loop(도착하면 제출).
      --time-scale 0은 closed loop(전부 즉시 제출, trace 순서), --max-concurrency K는 미완료 요청 K개로 제한(대기시간은 queue_s)
    가중치는 prefetch 오프로더(CPU/SSD 티어), KV는 in-tree CuFileFsSpec(native cuFile)으로 SSD. 외부 파이썬 전송 코드 없음. 엔진 step을 직접 돌려 step 단위 기록.
@@ -24,12 +27,26 @@ ap.add_argument("--bailian-offset", type=int, default=0, help="bailian: trace �
 ap.add_argument("--bailian-block", type=int, default=16, help="bailian: hash_id 하나가 나타내는 토큰 수(trace 생성 시 블록 크기)")
 ap.add_argument("--prompt-cap", type=int, default=0, help="longbench/bailian: 프리픽스 토큰 상한(0이면 max_model_len - decode - 64)")
 ap.add_argument("--profile-out", default=None, help="재사용 프로파일 json 경로. 요청별(doc, phase, 프롬프트 토큰 수, 적중 토큰 수)와 doc별 재사용 횟수")
-ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache", "cpu", "hybrid"],
-                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음). hybrid: 포크 HybridSpec(host 층 + GDS SSD 층, write-through)")
-ap.add_argument("--kv-host-gb", type=float, default=8.0, help="cpu: host KV 층 크기(GB, cpu_bytes_to_use)")
+ap.add_argument("--kv-transport", default="cufile", choices=["cufile", "none", "lmcache", "cpu", "hybrid", "tiering", "mooncake"],
+                help="cufile: in-tree CuFileFsSpec(native). none: 재계산. lmcache: LMCache MP 서버의 GDS L1(GPU↔NVMe 직접). cpu: vLLM in-tree CPUOffloadingSpec(pinned host KV 층, LRU/ARC, SSD 없음). hybrid: 포크 HybridSpec(host 층 + GDS SSD 층, write-through). "
+                     "tiering: vLLM in-tree TieringOffloadingSpec(CPU 1차 티어 + fs 2차 티어, 전송이 모두 host DRAM 경유)")
+ap.add_argument("--kv-host-gb", type=float, default=8.0, help="cpu/tiering: host KV 층 크기(GB, cpu_bytes_to_use). hybrid: hybrid_host_gb")
+ap.add_argument("--kv-roots", default=None, help="cufile/hybrid: 파일 티어 루트 여러 개. \"DIR:WEIGHT,DIR:WEIGHT\". "
+                "주면 cufile_fs_root_dirs로 넘어가고 cufile_fs_root_dir은 쓰지 않음. 블록 해시로 루트 하나를 가중치 비례로 고름. "
+                "--kv-root는 그대로 필요하며(모니터·산출물 기준 경로) 여기 나열된 디렉터리 중 하나여야 함. 비어 있어야 하는 검사는 나열된 전부에 적용")
+ap.add_argument("--kv-placement", default=None, choices=["host_first", "profile", "ratio"],
+                help="hybrid: 배치 정책(hybrid_placement). 미지정이면 스펙 기본값 host_first")
+ap.add_argument("--kv-host-share", type=float, default=None, help="hybrid --kv-placement ratio: host 티어로 보낼 블록 몫(0..1, hybrid_host_share)")
 ap.add_argument("--lmcache-l1-gb", type=float, default=40.0, help="lmcache: GDS L1 슬랩 크기(GB)")
 ap.add_argument("--lmcache-port", type=int, default=5555)
 ap.add_argument("--lmcache-chunk", type=int, default=64, help="lmcache: 토큰 chunk. GDS staging 버퍼 = chunk KV × 4가 BAR1 안이어야 함")
+ap.add_argument("--mooncake-master", default="30.0.0.4:50051", help="mooncake: master_server_address(원격 호스트의 RDMA 링크 IP:포트)")
+ap.add_argument("--mooncake-metadata", default="http://30.0.0.4:8080/metadata", help="mooncake: metadata_server. master가 --enable_http_metadata_server로 같이 띄운 것")
+ap.add_argument("--mooncake-device", default="mlx5_1", help="mooncake: 이 호스트에서 쓸 HCA 이름")
+ap.add_argument("--mooncake-local-ip", default="30.0.0.3", help="mooncake: transfer engine이 쓸 이 호스트의 RDMA 링크 IP(MOONCAKE_REQUESTER_LOCAL_HOSTNAME)")
+ap.add_argument("--mooncake-local-buffer-gb", type=float, default=1.0, help="mooncake: store가 등록하는 로컬 스테이징 버퍼(local_buffer_size, GB)")
+ap.add_argument("--mooncake-staging-gb", type=float, default=8.0, help="mooncake: KV 텐서를 RDMA에 등록하지 못하는 GPU(BAR1 부족)에서 쓸 pinned host 경유 예산(GB). 0이면 경유 없음")
+ap.add_argument("--mooncake-keep-store", action="store_true", help="mooncake: 런 시작 때 store를 비우지 않음(기본은 remove_all로 콜드 스타트)")
 ap.add_argument("--register-tensors", action="store_true", help="KV 텐서를 cuFileBufRegister(BAR1 안에 들어갈 때만)")
 ap.add_argument("--kv-batch", type=float, default=4, help="GPU KV 예산 = 요청 N개분 × 1.15 (소수 허용: 기준 런의 자동 예산을 그대로 맞출 때)")
 ap.add_argument("--kv-threads", type=int, default=4)
@@ -43,8 +60,17 @@ ap.add_argument("--io-threads", type=int, default=4)
 ap.add_argument("--gpu-util", type=float, default=0.9)
 ap.add_argument("--max-model-len", type=int, default=2048)
 ap.add_argument("--decode-tokens", type=int, default=8)
-ap.add_argument("--mode", default="phases", choices=["phases", "stream"],
-                help="phases: cold_fill/reverse_retrieve 2단계(기본). stream: trace 순서 한 줄 스트림 + open loop 도착")
+ap.add_argument("--mode", default="phases", choices=["phases", "forced_hit", "stream"],
+                help="phases: cold_fill/reverse_retrieve 2단계(기본). forced_hit: cold_fill/replay 2단계(프롬프트가 같음). "
+                     "stream: trace 순서 한 줄 스트림 + open loop 도착")
+ap.add_argument("--no-store-phase", default="", help="이 phase(쉼표 구분) 동안 오프로드 매니저가 저장을 거부한다. "
+                "hybrid/cufile은 prepare_store가 빈 결과, mooncake는 skip_save 강제. --kv-trace가 필요")
+ap.add_argument("--reset-gpu-cache-before", default="", help="이 phase(쉼표 구분) 시작에 엔진 GPU 프리픽스 캐시를 비운다"
+                "(reset_prefix_cache, 커넥터 캐시는 건드리지 않음)")
+ap.add_argument("--kv-trace", action="store_true", help="KV 커넥터 요청·키 단위 계측을 kvtrace.jsonl에 남김(lib/obs/kvtrace.py)")
+ap.add_argument("--commit-check-sec", type=float, default=0.0, help="phase 뒤 저장이 전부 커밋될 때까지 기다리는 상한(초, 0=안 함). "
+                "hybrid/cufile은 매니저 pending과 워커 outstanding이 0이고 디스크 파일 수가 매니저 항목 수와 같을 때까지, "
+                "mooncake는 저장 큐가 비고 master_key_count가 멈출 때까지")
 ap.add_argument("--time-scale", type=float, default=1.0,
                 help="stream: 도착 간격 배율. 20이면 trace를 20배 느리게. 0이면 closed loop(전부 즉시 제출)")
 ap.add_argument("--max-concurrency", type=int, default=0,
@@ -67,6 +93,10 @@ ap.add_argument("--nsys-phase", default="", help="nsys 캡처 구간으로 삼�
 ap.add_argument("--nsys-steps", type=int, default=0, help="캡처 phase에서 이 수만큼의 엔진 step(0.3 s 이상인 forward 기준) 뒤 캡처 종료. 0이면 phase 끝까지")
 args = ap.parse_args()
 NSYS_PHASES = {x.strip() for x in args.nsys_phase.split(",") if x.strip()}
+NO_STORE_PHASES = {x.strip() for x in args.no_store_phase.split(",") if x.strip()}
+RESET_GPU_PHASES = {x.strip() for x in args.reset_gpu_cache_before.split(",") if x.strip()}
+if NO_STORE_PHASES and not args.kv_trace:
+    args.kv_trace = True  # 저장 차단 스위치가 kvtrace 안에 있다
 os.environ.setdefault("VLLM_USE_V2_MODEL_RUNNER", "0"); os.environ.setdefault("VLLM_ENABLE_V1_MULTIPROCESSING", "0")
 os.environ["VLLM_KV_SPLIT"] = args.kv_split
 if args.kv_split_rate_toks is not None:
@@ -77,8 +107,29 @@ R = os.path.abspath(args.run_dir)
 if os.path.exists(os.path.join(R, "result.json")) or os.path.exists(os.path.join(R, "workload.exitcode")):
     sys.exit(f"RUN_DIR에 이미 런이 있음: {R}")
 os.makedirs(R, exist_ok=True)
-if os.path.isdir(args.kv_root) and os.listdir(args.kv_root):
-    sys.exit(f"kv-root가 비어 있지 않음: {args.kv_root}")
+# 파일 티어 루트 목록. --kv-roots가 없으면 [(kv_root, 1)] 하나로 예전과 같다.
+def _parse_kv_roots(spec):
+    out = []
+    for item in spec.split(","):
+        item = item.strip()
+        if not item: continue
+        d, _, w = item.rpartition(":")
+        if not d or not w.isdigit() or int(w) <= 0:
+            sys.exit(f"--kv-roots 항목은 DIR:WEIGHT(양의 정수) 형식이어야 함: {item}")
+        out.append((os.path.abspath(d), int(w)))
+    if not out: sys.exit("--kv-roots가 비어 있음")
+    return out
+
+KV_ROOTS = [(os.path.abspath(args.kv_root), 1)]
+if args.kv_roots:
+    if args.kv_transport not in ("cufile", "hybrid"):
+        sys.exit(f"--kv-roots는 --kv-transport cufile/hybrid에서만 씀(지금 {args.kv_transport})")
+    KV_ROOTS = _parse_kv_roots(args.kv_roots)
+    if os.path.abspath(args.kv_root) not in [d for d, _ in KV_ROOTS]:
+        sys.exit(f"--kv-root는 --kv-roots에 나열된 디렉터리 중 하나여야 함: {args.kv_root}")
+for _d, _ in KV_ROOTS:
+    if os.path.isdir(_d) and os.listdir(_d):
+        sys.exit(f"kv-root가 비어 있지 않음: {_d}")
 
 # ---- 환경, 용량 사전 검사 ----
 INPUT_FILE = {"longbench": args.longbench_file, "bailian": args.bailian_trace}.get(args.prompt_source, args.leval_workload)
@@ -125,6 +176,7 @@ kw = {} if args.no_weight_offload else dict(offload_backend="prefetch", offload_
           offload_ssd_path=args.ssd_root, offload_host_fraction=host_fraction, offload_ssd_transport="cufile",
           offload_ssd_io_threads=args.io_threads, offload_ssd_ring_mb=0)
 matched = [0]; matched_req = {}
+KV_EXTRA_CONFIG = None  # kv_connector_extra_config(커넥터를 쓰는 transport에서만)
 LMC = None
 if args.kv_transport == "lmcache":
     # LMCache MP 서버를 별도 프로세스로. --gds-l1-path 가 있으면 DRAM 층이 꺼지고 cuFile로 GPU↔NVMe 직접
@@ -155,17 +207,74 @@ if args.kv_transport == "lmcache":
                     return r
                 return _w
             _c.get_num_new_matched_tokens = _mk(_orig)
+elif args.kv_transport == "mooncake":
+    # 논문 기준선(Mooncake Store + Transfer Engine). KV 풀은 원격 호스트 DRAM이고
+    # 이 프로세스는 global_segment_size 0으로 붙는다(standalone-store). 풀 세그먼트를
+    # 내놓는 쪽은 원격의 mooncake_client 프로세스뿐이라 모든 객체가 원격에 놓인다.
+    # 접속 정보는 파일로만 받는 커넥터라 런 폴더에 쓰고 MOONCAKE_CONFIG_PATH로 가리킨다.
+    mc_cfg = dict(metadata_server=args.mooncake_metadata, master_server_address=args.mooncake_master,
+                  protocol="rdma", device_name=args.mooncake_device, mode="standalone-store",
+                  global_segment_size=0, local_buffer_size=int(args.mooncake_local_buffer_gb * 2**30),
+                  enable_offload=False)
+    mc_path = os.path.join(R, "mooncake.json")
+    json.dump(mc_cfg, open(mc_path, "w"), indent=1)
+    os.environ["MOONCAKE_CONFIG_PATH"] = mc_path
+    # vLLM의 get_ip()는 관리망 주소를 집으므로 RDMA 링크 주소를 명시한다.
+    os.environ["MOONCAKE_REQUESTER_LOCAL_HOSTNAME"] = args.mooncake_local_ip
+    if not args.mooncake_keep_store:
+        from mooncake.store import MooncakeDistributedStore as _MDS
+        _mc = _MDS()
+        if _mc.setup(args.mooncake_local_ip, mc_cfg["metadata_server"], 0, 1 << 26, "rdma",
+                     args.mooncake_device, mc_cfg["master_server_address"]) != 0:
+            sys.exit("mooncake store에 붙지 못함(master/metadata 확인)")
+        print("mooncake remove_all ->", _mc.remove_all(), flush=True); _mc.close(); del _mc
+    extra = {"host_staging_gb": args.mooncake_staging_gb}
+    if args.kv_extra: extra.update(json.loads(args.kv_extra))
+    KV_EXTRA_CONFIG = dict(extra, _mooncake=dict(mc_cfg))  # result.json에 접속 구성까지 남김
+    kw["kv_transfer_config"] = KVTransferConfig(kv_connector="MooncakeStoreConnector", kv_role="kv_both",
+        kv_load_failure_policy=args.kv_load_failure_policy, kv_connector_extra_config=extra)
+    # store의 객체 단위 = vLLM 블록 크기라 --kv-block을 엔진 블록 크기로 넘겨
+    # 파일 티어 조건의 오프로드 블록 크기와 적중 단위를 맞춘다.
+    if not args.pure: kw["block_size"] = args.kv_block
+    import vllm.distributed.kv_transfer.kv_connector.v1.mooncake.store.scheduler as mcsched
+    _mg = mcsched.MooncakeStoreScheduler.get_num_new_matched_tokens
+    def _mgw(self, request, n):
+        r = _mg(self, request, n); m = (r[0] or 0)
+        matched[0] += m; matched_req.setdefault(getattr(request, "request_id", None), []).append(m)
+        return r
+    mcsched.MooncakeStoreScheduler.get_num_new_matched_tokens = _mgw
 elif args.kv_transport != "none":
     if args.kv_transport == "cpu":
         extra = {"spec_name": "CPUOffloadingSpec", "cpu_bytes_to_use": int(args.kv_host_gb * 1e9)}
+    elif args.kv_transport == "tiering":
+        # in-tree 다층 오프로드. 1차 티어는 pinned host DRAM(cpu_bytes_to_use), 2차 티어는
+        # tiering/fs/manager.py의 FileSystemTierManager(type "fs", 파이썬 os.write/os.readv).
+        # 2차 티어는 GPU에 직접 닿지 못하고 1차 티어를 거치므로 전 구간이 host DRAM 경유다.
+        # 스레드 수는 cufile 경로(--kv-threads)와 같은 값을 줘 티어 병렬도를 맞춘다.
+        extra = {"spec_name": "TieringOffloadingSpec", "cpu_bytes_to_use": int(args.kv_host_gb * 1e9),
+                 "secondary_tiers": [{"type": "fs", "root_dir": os.path.abspath(args.kv_root),
+                                      "n_read_threads": args.kv_threads, "n_write_threads": args.kv_threads}]}
     elif args.kv_transport == "hybrid":
-        extra = {"spec_name": "HybridSpec", "hybrid_host_gb": args.kv_host_gb, "cufile_fs_root_dir": args.kv_root,
+        extra = {"spec_name": "HybridSpec", "hybrid_host_gb": args.kv_host_gb,
                  "cufile_fs_register_tensors": str(args.register_tensors), "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
+        if args.kv_placement: extra["hybrid_placement"] = args.kv_placement
+        if args.kv_host_share is not None: extra["hybrid_host_share"] = args.kv_host_share
     else:
-        extra = {"spec_name": "CuFileFsSpec", "cufile_fs_root_dir": args.kv_root, "cufile_fs_register_tensors": str(args.register_tensors),
+        extra = {"spec_name": "CuFileFsSpec", "cufile_fs_register_tensors": str(args.register_tensors),
                  "cufile_fs_read_threads": args.kv_threads, "cufile_fs_write_threads": args.kv_threads}
+    # 루트가 여럿이면 cufile_fs_root_dirs만, 하나면 예전대로 cufile_fs_root_dir만 넘긴다.
+    # tiering은 루트를 secondary_tiers[].root_dir로 이미 넘겼으므로 건너뛴다.
+    if args.kv_transport != "tiering":
+        if args.kv_roots:
+            extra["cufile_fs_root_dirs"] = [{"dir": d, "weight": w} for d, w in KV_ROOTS]
+        else:
+            extra["cufile_fs_root_dir"] = args.kv_root
     if not args.pure: extra["block_size"] = args.kv_block
     if args.kv_extra: extra.update(json.loads(args.kv_extra))
+    # 키 단위 계측을 켰는데 경로가 없으면 런 폴더에 둔다(KV 루트는 캠페인이 런 뒤 지움).
+    if str(extra.get("cufile_fs_trace_keys", "false")).lower() in ("1", "true", "yes") and not extra.get("cufile_fs_trace_path"):
+        extra["cufile_fs_trace_path"] = os.path.join(R, "keytrace.jsonl")
+    KV_EXTRA_CONFIG = dict(extra)  # result.json에 그대로 남길 티어 구성
     kw["kv_transfer_config"] = KVTransferConfig(kv_connector="OffloadingConnector", kv_role="kv_both", kv_connector_extra_config=extra)
     import vllm.distributed.kv_transfer.kv_connector.v1.offloading.scheduler as osched
     _gm = osched.OffloadingConnectorScheduler.get_num_new_matched_tokens
@@ -190,6 +299,12 @@ try:
         tiers = dict(n_modules=len(off.module_offloaders), n_ssd=sum(1 for m in off.module_offloaders if m.mode == "ssd"),
                      host_tier_gib=round(off.host_tier_bytes / 2**30, 2), ssd_tier_gib=round(off.ssd_tier_bytes / 2**30, 2))
     EV.emit("tiers", **tiers)
+    # KV 커넥터 계측(조건 공통). 저장 차단 스위치도 여기 있다. cufile 인스턴스 래핑보다 먼저 붙인다.
+    TRACE = None
+    if args.kv_trace:
+        from obs import kvtrace
+        TRACE = kvtrace.install(args.kv_transport, os.path.join(R, "kvtrace.jsonl"))
+        EV.emit("kv_trace", installed=TRACE is not None, transport=args.kv_transport)
     KVW = None
     if args.kv_transport == "hybrid":
         import vllm.v1.kv_offload.hybrid.spec as hspec
@@ -215,6 +330,23 @@ try:
         KVW.submit_store, KVW.submit_load, KVW.get_finished = submit_store, submit_load, get_finished
     def kvstat():
         return KVW.stats() if KVW is not None else {}
+    # cufile_fs_pending_wait 정책이 쓰는 "토큰 하나 재계산(prefill) 비용".
+    # 엔진 step의 (걸린 시간 / 그 step에 예약된 토큰 수)를 EMA로 갱신해 파일 티어 매니저에 넣는다.
+    # 예약 토큰이 PW_MIN_TOK 미만인 step은 decode라 보고 건너뛴다.
+    PWMGR = None; PW_SCHED_TOK = [0]; PW_COST = [0.0]; PW_MIN_TOK = 256
+    if KV_EXTRA_CONFIG and str(KV_EXTRA_CONFIG.get("cufile_fs_pending_wait", "false")).lower() in ("1", "true", "yes"):
+        import vllm.v1.core.sched.scheduler as _vsched
+        import vllm.v1.kv_offload.cufile_fs.spec as _cfs3
+        import vllm.v1.kv_offload.hybrid.spec as _hs3
+        PWMGR = (_hs3.LAST_MANAGER.ssd if args.kv_transport == "hybrid" and _hs3.LAST_MANAGER is not None
+                 else _cfs3.LAST_MANAGER)
+        _osched = _vsched.Scheduler.schedule
+        def _sched_wrap(self):
+            out = _osched(self)
+            PW_SCHED_TOK[0] = getattr(out, "total_num_scheduled_tokens", 0)
+            return out
+        _vsched.Scheduler.schedule = _sched_wrap
+        EV.emit("pending_wait", manager=type(PWMGR).__name__ if PWMGR is not None else None, min_tokens=PW_MIN_TOK)
     doc_meta = []  # bailian일 때만 채움(chat_id/turn/input_length/timestamp)
     if args.prompt_source == "longbench":
         # 실제 문서 텍스트를 모델 토크나이저로. 프리픽스 = 문서 토큰(상한까지), 단계별 꼬리 = 다른 질문 문장 → 프리픽스 적중
@@ -277,6 +409,56 @@ try:
             if not KVW._pending and st_["outstanding_writes"] == 0 and st_["outstanding_reads"] == 0: break
             time.sleep(0.005)
         return round(time.monotonic() - t, 3)
+    def commit_check(tag):
+        """저장이 전부 커밋됐는지 확인한다(강제 적중 조건의 전제).
+           hybrid/cufile: 매니저 pending 0, 워커 outstanding 0, 루트의 실제 파일 수 == 매니저 항목 수.
+           mooncake: 저장 큐 비움, 진행 중 저장 요청 0, master_key_count가 2초 동안 그대로.
+           반환은 events.jsonl에 남길 요약 dict."""
+        if args.commit_check_sec <= 0: return None
+        t0 = time.monotonic(); info = dict(tag=tag, ok=False)
+        if args.kv_transport in ("hybrid", "cufile"):
+            import vllm.v1.kv_offload.hybrid.spec as _hs2
+            import vllm.v1.kv_offload.cufile_fs.spec as _cfs2
+            mgr = (_hs2.LAST_MANAGER.ssd if args.kv_transport == "hybrid" else _cfs2.LAST_MANAGER)
+            while time.monotonic() - t0 < args.commit_check_sec:
+                if KVW is not None: KVW.get_finished()
+                st_ = KVW.stats() if KVW is not None else {}
+                # 청크 파일만 센다(루트마다 있는 설정 json과 쓰는 중인 .tmp는 제외)
+                n_disk = sum(1 for d, _ in KV_ROOTS for _dp, _dn, fs in os.walk(d) for f in fs if f.endswith(".bin"))
+                info.update(pending=len(mgr._pending), entries=len(mgr._entries), files_on_disk=n_disk,
+                            outstanding_w=st_.get("outstanding_writes", 0), outstanding_r=st_.get("outstanding_reads", 0))
+                if (not mgr._pending and st_.get("outstanding_writes", 0) == 0
+                        and st_.get("outstanding_reads", 0) == 0 and n_disk == len(mgr._entries)):
+                    info["ok"] = True; break
+                time.sleep(0.05)
+        elif args.kv_transport == "mooncake":
+            import urllib.request
+            from obs import kvtrace as _kt
+            w = _kt.LAST_MC_WORKER
+            host = args.mooncake_master.split(":")[0]
+            def key_count():
+                try:
+                    for ln in urllib.request.urlopen(f"http://{host}:9003/metrics", timeout=5).read().decode().splitlines():
+                        if ln.startswith("master_key_count "): return int(float(ln.split()[1]))
+                except Exception: pass
+                return -1
+            last, stable_since = None, None
+            while time.monotonic() - t0 < args.commit_check_sec:
+                q = w.kv_send_thread.request_queue if w is not None else None
+                n_q = q.unfinished_tasks if q is not None else 0
+                n_live = len(w.kv_send_thread.stored_requests) if w is not None else 0
+                kc = key_count()
+                info.update(queue=n_q, live_store_reqs=n_live, master_key_count=kc)
+                if n_q == 0 and n_live == 0:
+                    if kc == last and stable_since is not None and time.monotonic() - stable_since > 2.0:
+                        info["ok"] = True; break
+                    if kc != last: last, stable_since = kc, time.monotonic()
+                time.sleep(0.2)
+        info["wait_s"] = round(time.monotonic() - t0, 2)
+        EV.emit("commit_check", **info)
+        print("commit_check", json.dumps(info), flush=True)
+        return info
+
     prof = []
     def matched_of(rid):
         # 엔진이 내부 request_id에 접미사를 붙이므로(예: cold_fill-3-9feca30f) 접두 일치까지 본다.
@@ -291,6 +473,10 @@ try:
         torch.cuda.nvtx.range_push(f"step:{name} #{cap['n_step']} running={sum(1 for v in st.values() if v['first_mono'] is None or v['finish_mono'] is None)}")
         outs = eng.step(); torch.cuda.nvtx.range_pop(); cap["n_step"] += 1
         s1 = time.monotonic(); post_w = wstat(); post_k = kvstat()
+        if PWMGR is not None and PW_SCHED_TOK[0] >= PW_MIN_TOK:
+            c = (s1 - s0) / PW_SCHED_TOK[0]
+            PW_COST[0] = c if PW_COST[0] <= 0 else 0.2 * c + 0.8 * PW_COST[0]
+            PWMGR.set_recompute_cost(PW_COST[0])
         if cap["on"] and s1 - s0 > 0.3:
             cap["n_fwd"] += 1
             if args.nsys_steps and cap["n_fwd"] >= args.nsys_steps:
@@ -316,16 +502,35 @@ try:
         elif args.poll_sleep_ms and not outs:
             time.sleep(args.poll_sleep_ms / 1000.0)
         return n_out, got_first
+    def phase_begin(name):
+        """phase 시작 직전 훅: 저장 차단 스위치와 GPU 프리픽스 캐시 비우기."""
+        if TRACE is not None:
+            TRACE.phase = name; TRACE.no_store = name in NO_STORE_PHASES
+        if name in RESET_GPU_PHASES:
+            # 커넥터 캐시는 그대로 둔다(reset_connector 기본 False). 직전 phase의 전송이 아직
+            # 보고되지 않았으면 블록이 안 풀려 실패하므로, 엔진을 돌려 가며 될 때까지 다시 부른다.
+            t0 = time.monotonic(); ok = False
+            while time.monotonic() - t0 < 180.0:
+                ok = bool(llm.llm_engine.reset_prefix_cache())
+                if ok: break
+                eng.step(); time.sleep(0.02)
+            EV.emit("reset_gpu_prefix_cache", phase=name, ok=ok, wait_s=round(time.monotonic() - t0, 2))
+            print(f"reset_prefix_cache before {name}: {ok} ({time.monotonic()-t0:.1f} s)", flush=True)
+        EV.emit("phase_gate", phase=name, no_store=bool(TRACE is not None and TRACE.no_store),
+                reset_gpu_cache=name in RESET_GPU_PHASES)
+
     def run_phase(name, order, q):
         matched[0] = 0; matched_req.clear()
+        phase_begin(name)
         EV.phase(name, requests=len(order))
         cap = dict(on=name in NSYS_PHASES, n_fwd=0, n_step=0)
         if cap["on"]: torch.cuda.profiler.start(); EV.emit("nsys", msg=f"capture start {name}")
         torch.cuda.nvtx.range_push(f"phase:{name}")
         st = {}
         def on_finish(rid, v):
-            reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
             _m, _n = matched_of(rid)
+            v["matched_of"] = _m; v["lookups"] = _n  # 요청별 KV 적중 토큰(lookup 최댓값)과 lookup 호출 수
+            reqs_f.write(json.dumps(dict(phase=name, rid=rid, **v)) + "\n")
             prof.append(dict(phase=name, rid=rid, doc=v["doc"], q=q, tokens=v["tokens"], matched=_m, lookups=_n))
         for i in order:
             rid = f"{name}-{i}"; toks = prompt(i, q)
@@ -339,7 +544,10 @@ try:
         torch.cuda.nvtx.range_pop()
         if cap["on"]: torch.cuda.profiler.stop(); EV.emit("nsys", msg=f"capture stop {name} at phase end")
         EV.phase(name + "_end", wall_s=round(time.monotonic() - tS, 3), matched_tokens=matched[0], drain_s=d)
+        # matched는 lookup 호출마다 누적된 합(호출 수에 따라 부풀음). 요청 단위는 matched_req_sum·hit_requests를 쓸 것.
         return dict(wall_s=round(time.monotonic() - tS, 3), matched=matched[0], drain_s=d,
+                    matched_req_sum=sum(v.get("matched_of", 0) for v in st.values()),
+                    hit_requests=sum(1 for v in st.values() if v.get("matched_of", 0) > 0),
                     ttft=[round(v["first_mono"] - v["submit_mono"], 3) for v in st.values() if v["first_mono"]],
                     e2e=[round(v["finish_mono"] - v["submit_mono"], 3) for v in st.values() if v["finish_mono"]])
     def arrival_times(n):
@@ -352,6 +560,7 @@ try:
         """trace 순서 한 줄 스트림. 도착하면 제출(open loop), --max-concurrency로 동시 미완료 수 제한."""
         from collections import deque
         matched[0] = 0; matched_req.clear()
+        phase_begin(name)
         n = len(docs); arr = arrival_times(n)
         gaps = sorted(arr[i + 1] - arr[i] for i in range(n - 1))
         med_gap = gaps[len(gaps) // 2] if gaps else 0.0
@@ -410,15 +619,42 @@ try:
         cc = llm.llm_engine.vllm_config.cache_config
         kv_alloc_gib = round(cc.num_gpu_blocks * cc.block_size * (2 * n_layer * d_model * 2) / 2**30, 2)
     except Exception: kv_alloc_gib = kv_gib
-    res = dict(args=vars(args), kv_gib=kv_gib, kv_alloc_gib=kv_alloc_gib, host_fraction=host_fraction, tiers=tiers, phases={})
+    def mount_of(path):
+        """path가 놓인 마운트 지점·장치·파일시스템. KV 디렉터리(--kv-root)가 어느 저장 계층인지
+           result.json만 보고 알 수 있게 기록한다(로컬 SSD / 원격 NVMe-oF 마운트 구분)."""
+        p = os.path.abspath(path); best = None
+        try:
+            for line in open("/proc/mounts"):
+                f = line.split()
+                if len(f) < 3: continue
+                mp = f[1].replace("\\040", " ")
+                if p == mp or p.startswith(mp.rstrip("/") + "/"):
+                    if best is None or len(mp) > len(best[1]): best = (f[0], mp, f[2])
+        except OSError:
+            return None
+        return dict(device=best[0], mount=best[1], fstype=best[2]) if best else None
+    res = dict(args=vars(args), kv_gib=kv_gib, kv_alloc_gib=kv_alloc_gib, host_fraction=host_fraction, tiers=tiers,
+               kv_root=os.path.abspath(args.kv_root), kv_root_fs=mount_of(args.kv_root),
+               kv_roots=[dict(dir=d, weight=w, fs=mount_of(d)) for d, w in KV_ROOTS],
+               kv_extra_config=KV_EXTRA_CONFIG, phases={})
     N = len(docs)
     if args.mode == "stream":
         res["phases"]["stream"] = run_stream("stream")
+    elif args.mode == "forced_hit":
+        # replay는 cold_fill과 같은 순서·같은 질문(q=0)이라 프롬프트 토큰열이 글자 그대로 같다.
+        res["phases"]["cold_fill"] = run_phase("cold_fill", list(range(N)), 0)
+        res["commit_check_cold_fill"] = commit_check("cold_fill")
+        EV.phase("settle"); time.sleep(args.settle_sec)
+        res["phases"]["replay"] = run_phase("replay", list(range(N)), 0)
     else:
         res["phases"]["cold_fill"] = run_phase("cold_fill", list(range(N)), 0)
         EV.phase("settle"); time.sleep(args.settle_sec)
         res["phases"]["reverse_retrieve"] = run_phase("reverse_retrieve", list(reversed(range(N))), 1)
     EV.phase("final_settle"); time.sleep(args.final_settle_sec)
+    if TRACE is not None:
+        TRACE.flush()
+        res["kv_trace"] = dict(rows=TRACE.n_rows, store_blocked_calls=TRACE.n_store_blocked,
+                               path=os.path.abspath(TRACE.path))
     ks = kvstat()
     res["kv_io"] = dict(read_n=ks.get("reads", 0), read_gib=round(ks.get("read_bytes", 0) / 2**30, 2), write_n=ks.get("writes", 0),
                         write_gib=round(ks.get("write_bytes", 0) / 2**30, 2), read_busy_s=round(ks.get("read_busy_ns", 0) / 1e9, 1),
@@ -432,9 +668,29 @@ try:
             import vllm.v1.kv_offload.hybrid.spec as _hs
             res["kv_manager"] = _hs.LAST_MANAGER.stats() if _hs.LAST_MANAGER is not None else None
             res["kv_worker_hybrid"] = {k: v for k, v in _hs.LAST_WORKER.stats().items() if k != "ssd"} if _hs.LAST_WORKER is not None else None
-        else:
+        elif args.kv_transport == "cufile":
             import vllm.v1.kv_offload.cufile_fs.spec as _cfs
             res["kv_manager"] = _cfs.LAST_MANAGER.stats() if _cfs.LAST_MANAGER is not None else None
+        elif args.kv_transport == "mooncake":
+            # 포크 계측 전역이 없다. 풀 점유량은 master의 prometheus 엔드포인트에서 긁는다.
+            res["kv_manager"] = None
+            import urllib.request
+            _host = args.mooncake_master.split(":")[0]
+            _m = {}
+            try:
+                _txt = urllib.request.urlopen(f"http://{_host}:9003/metrics", timeout=5).read().decode()
+                for ln in _txt.splitlines():
+                    if ln.startswith("#") or " " not in ln: continue
+                    k, _, v = ln.rpartition(" ")
+                    if k.startswith(("master_", "segment_")):
+                        try: _m[k] = float(v)
+                        except ValueError: pass
+            except Exception as _e:
+                _m = {"error": repr(_e)}
+            res["kv_mooncake"] = _m
+        else:
+            # cpu/tiering/lmcache/none은 포크 계측 전역이 없다. 전송량은 kv_files_by_root로 본다.
+            res["kv_manager"] = None
     except Exception as e:
         res["kv_manager"] = {"error": repr(e)}
     try:
@@ -443,11 +699,22 @@ try:
         res["kv_split"]["tail_wait_s_total"] = round(res["kv_split"]["tail_wait_s_total"], 3)
     except Exception as e:
         res["kv_split"] = {"error": repr(e)}
+    if PWMGR is not None:
+        res["kv_pending_wait_cost_s_per_token"] = round(PW_COST[0], 8)
     res["gpu_max_gib"] = round(torch.cuda.max_memory_allocated() / 2**30, 2)
     res["weight_ssd_reads"], res["weight_ssd_gib"] = wstat()[0], round(wstat()[1] / 2**30, 2)
-    if args.kv_transport != "none" and os.path.isdir(args.kv_root):
-        files = [os.path.join(dp, f) for dp, _, fs in os.walk(args.kv_root) for f in fs]
-        res["kv_files"], res["kv_bytes_gib"] = len(files), round(sum(os.path.getsize(f) for f in files) / 2**30, 3)
+    if args.kv_transport != "none":
+        # 루트마다 따로 세고(kv_files_by_root) 합계는 예전 키 이름 그대로(kv_files, kv_bytes_gib).
+        by_root, n_tot, b_tot = [], 0, 0
+        for d, w in KV_ROOTS:
+            if not os.path.isdir(d): continue
+            files = [os.path.join(dp, f) for dp, _, fs in os.walk(d) for f in fs]
+            b = sum(os.path.getsize(f) for f in files)
+            by_root.append(dict(dir=d, weight=w, files=len(files), bytes_gib=round(b / 2**30, 3)))
+            n_tot += len(files); b_tot += b
+        if by_root:
+            res["kv_files_by_root"] = by_root
+            res["kv_files"], res["kv_bytes_gib"] = n_tot, round(b_tot / 2**30, 3)
     if args.profile_out:
         by_doc = {}
         for e in prof:
@@ -474,6 +741,10 @@ try:
 except BaseException as e:
     EV.emit("error", err=repr(e)); open(os.path.join(R, "workload.exitcode"), "w").write("1\n"); raise
 finally:
+    _tr = globals().get("TRACE")
+    try:
+        if _tr is not None: _tr.close()
+    except Exception as e: print("kvtrace close:", e)
     stop_monitors()
     if LMC is not None:
         try: LMC.terminate(); LMC.wait(timeout=30)

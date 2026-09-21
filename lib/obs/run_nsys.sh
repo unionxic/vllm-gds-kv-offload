@@ -11,7 +11,9 @@ TRACE=${NSYS_TRACE:-cuda,nvtx,osrt}; "$NSYS" profile --help 2>&1 | grep -q "'gds
 CAP=""; [ "${NSYS_CAPTURE:-}" = "cudaProfilerApi" ] && CAP="--capture-range=cudaProfilerApi --capture-range-end=repeat"
 # nsys 임시 파일이 디스크를 채우면 런이 멈추므로(72B에서 24 GB) 시작 전 여유 40 GB 확인
 avail_gb=$(df -BG --output=avail "$R" | tail -1 | tr -dc 0-9); [ "${avail_gb:-0}" -lt 40 ] && { echo "run_nsys: 디스크 여유 ${avail_gb} GB < 40 GB, nsys 없이 실행" >&2; exec "$@"; }
-"$NSYS" profile --output "$R/timeline" --trace=$TRACE --sample=none --cpuctxsw=none --cuda-memory-usage=true --storage-metrics=true --force-overwrite=true $CAP "$@"; rc=$?
+"$NSYS" profile --output "$R/timeline" --trace=$TRACE --sample=none --cpuctxsw=none --cuda-memory-usage=true --storage-metrics=true --force-overwrite=true $CAP env TMPDIR="${APP_TMPDIR:-/tmp}" "$@"; rc=$?
+# 위 env TMPDIR: nsys 임시 폴더(TMPDIR, 결과 폴더 안)는 그대로 두고 프로파일 대상 프로그램에는 짧은 TMPDIR을 준다.
+# Mooncake 커넥터가 TMPDIR 아래에 ZMQ ipc 소켓을 만드는데 경로가 107자를 넘으면 실패한다.
 # 후처리가 끝난 뒤에만 stats·sqlite를 만들고 nsys.done 표식을 남긴다. 분석은 nsys.done이 있는 리포트만 읽는다
 # (result.json은 프로파일 대상 프로세스가 끝나기 전에 생기므로 준비 신호로 쓰지 않는다).
 for rep in "$R"/timeline*.nsys-rep; do
