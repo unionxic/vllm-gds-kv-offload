@@ -251,3 +251,4 @@ nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_cou
 wrote ../../results/link-layer-sunny/mixed_link.jsonl
 wrote ../../results/link-layer-sunny/after/pcie_probe_sunny.txt
 [21:01:07] chain done
+chain2 done

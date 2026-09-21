@@ -1,17 +1,3 @@
-== mixed_link 2026-09-21T20:58:45+09:00 io 1M sec 10 nqs(36 8 2)
-nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
-nq=36 combo=nvmeof :: nvmeof_gib_s 7.471024 
-nq=36 combo=rdma :: 
-nq=36 combo=nvmeof+rdma :: nvmeof_gib_s 7.488459 
-nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=8 (queue_count=9)
-nq=8 combo=nvmeof :: nvmeof_gib_s 9.283169 
-nq=8 combo=rdma :: 
-nq=8 combo=nvmeof+rdma :: nvmeof_gib_s 9.165039 
-nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=2 (queue_count=3)
-nq=2 combo=nvmeof :: nvmeof_gib_s 6.291101 
-nq=2 combo=rdma :: 
-nq=2 combo=nvmeof+rdma :: nvmeof_gib_s 6.946423 
-nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
 == mixed_link 2026-09-21T21:14:29+09:00 io 1M sec 10 nqs(36 8 2)
 nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
 nq=36 combo=nvmeof :: nvmeof_gib_s 7.549214 
@@ -26,3 +12,4 @@ nq=2 combo=nvmeof :: nvmeof_gib_s 6.250229
 nq=2 combo=rdma :: rdma_gbps 82.10 
 nq=2 combo=nvmeof+rdma :: nvmeof_gib_s 2.432053 rdma_gbps 66.78 
 nvme-of nqn.2026-09.kr.ac.ajou.rain:dram0 reconnected nr-io-queues=36 (queue_count=37)
+wrote ../../results/link-layer-sunny/mixed_link.jsonl
