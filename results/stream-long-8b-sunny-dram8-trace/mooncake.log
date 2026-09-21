@@ -1,0 +1,101 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+WARNING: 캐시 디렉터리 디스크 여유가 작업 집합보다 작음
+plan: KV 0.13 MB/token, 2.00 GiB/request, working set 400.0 GiB, GPU holds 2 requests
+ Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0921 23:16:18.543887 116707 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0921 23:16:18.543926 116707 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0921 23:16:18.544704 116707 client_service.cpp:423] client_id=884179999779596406-13305463790768280224
+I0921 23:16:18.544720 116707 client_service.cpp:425] client_id=884179999779596406-13305463790768280224, host_id=30.0.0.4
+I0921 23:16:18.544724 116707 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0921 23:16:18.546327 116707 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0921 23:16:18.546376 116707 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0921 23:16:18.546389 116707 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.4 port: 14239
+I0921 23:16:18.546568 116707 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.194
+I0921 23:16:18.546577 116707 transfer_metadata_plugin.cpp:1298] Found active interface enp23s0f0np0 with IP 30.0.0.4
+I0921 23:16:18.546581 116707 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0921 23:16:18.546593 116707 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.194:15765
+I0921 23:16:18.547423 116707 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0921 23:16:18.547452 116707 client_service.cpp:884] Using specified RDMA devices: mlx5_0
+I0921 23:16:18.550052 116707 topology.cpp:127] Device mlx5_0 port 1 is available
+I0921 23:16:18.663985 116707 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0921 23:16:18.664040 116707 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0921 23:16:18.664085 116707 rdma_context.cpp:207] Using SIEVE endpoint store
+I0921 23:16:18.666375 116707 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_0/1 (network state: with network device)
+I0921 23:16:18.667173 116707 rdma_context.cpp:290] RDMA device: mlx5_0, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:04
+I0921 23:16:18.667976 116707 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0921 23:16:18.667991 116707 real_client.cpp:851] Successfully created client on port 14239 after 1 attempt(s)
+I0921 23:16:18.669430 116707 real_client.cpp:884] Registering local memory: 67108864 bytes
+I0921 23:16:18.684165 116707 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+mooncake remove_all -> 9085
+INFO 09-21 23:16:19 [api_utils.py:273] non-default args: {'dtype': 'float16', 'max_model_len': 16384, 'block_size': 64, 'gpu_memory_utilization': 0.9, 'kv_cache_memory_bytes': 4939212390, 'disable_log_stats': True, 'enforce_eager': True, 'kv_transfer_config': KVTransferConfig(kv_connector='MooncakeStoreConnector', engine_id='2fd83805-9a8a-43aa-8d09-be2faf4c6499', kv_buffer_device='cuda', kv_buffer_size=1000000000.0, kv_role='kv_both', kv_rank=None, kv_parallel_size=1, kv_ip='127.0.0.1', kv_port=14579, kv_connector_extra_config={'host_staging_gb': 0.0}, kv_connector_module_path=None, enable_permute_local_kv=False, kv_load_failure_policy='fail'), 'model': 'hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4'}
+WARNING 09-21 23:16:19 [envs.py:2113] Unknown vLLM environment variable detected: VLLM_KV_SPLIT
+WARNING 09-21 23:16:19 [arg_utils.py:1651] The global random seed is set to 0. Since VLLM_ENABLE_V1_MULTIPROCESSING is set to False, this may affect the random state of the Python process that launched vLLM.
+INFO 09-21 23:16:21 [model.py:623] Resolved architecture: LlamaForCausalLM
+INFO 09-21 23:16:21 [model.py:1788] Using max model len 16384
+INFO 09-21 23:16:22 [scheduler.py:252] Chunked prefill is enabled with max_num_batched_tokens=8192.
+Parse safetensors files:   0%|          | 0/2 [00:00<?, ?it/s]Parse safetensors files:  50%|█████     | 1/2 [00:01<00:01,  1.39s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.04s/it]Parse safetensors files: 100%|██████████| 2/2 [00:02<00:00,  1.09s/it]
+INFO 09-21 23:16:25 [vllm.py:1109] Asynchronous scheduling is enabled.
+WARNING 09-21 23:16:25 [vllm.py:1163] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+WARNING 09-21 23:16:25 [vllm.py:1213] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+INFO 09-21 23:16:25 [kernel.py:295] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+INFO 09-21 23:16:25 [vllm.py:1392] Cudagraph is disabled under eager mode
+INFO 09-21 23:16:25 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+INFO 09-21 23:16:29 [core.py:116] Initializing a V1 LLM engine (v0.26.1.dev0+g568afb3a1.d20260821) with config: model='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', speculative_config=None, tokenizer='hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.float16, max_seq_len=16384, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=auto_gptq, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [8192], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'size_asserts': False, 'alignment_asserts': False, 'scalar_asserts': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+INFO 09-21 23:16:29 [parallel_state.py:1615] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://210.107.198.194:46333 backend=nccl
+INFO 09-21 23:16:30 [parallel_state.py:1946] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+INFO 09-21 23:16:31 [topk_topp_sampler.py:55] Using FlashInfer for top-p & top-k sampling.
+INFO 09-21 23:16:31 [gpu_model_runner.py:5250] Starting to load model hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4...
+INFO 09-21 23:16:31 [auto_gptq.py:357] Using MarlinLinearKernel for AutoGPTQLinearMethod
+INFO 09-21 23:16:31 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+INFO 09-21 23:16:31 [flash_attn.py:776] Using FlashAttention version 2
+INFO 09-21 23:16:32 [weight_utils.py:869] Filesystem type for checkpoints: EXT4. Checkpoint size: 5.34 GiB. Available RAM: 118.56 GiB.
+INFO 09-21 23:16:32 [weight_utils.py:892] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:00<00:00,  1.02it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.86it/s]
+Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:01<00:00,  1.66it/s]
+
+INFO 09-21 23:16:34 [default_loader.py:430] Loading weights took 1.22 seconds
+INFO 09-21 23:16:35 [gpu_model_runner.py:5347] Model loading took 5.37 GiB memory and 2.693901 seconds
+INFO 09-21 23:16:35 [utils.py:49] Connectors do not specify a kv cache layout, defaulting to NHD.
+INFO 09-21 23:16:38 [gpu_worker.py:479] Initial free memory 15.44 GiB, reserved 4.6 GiB memory for KV Cache as specified by kv_cache_memory_bytes config and skipped memory profiling. This does not respect the gpu_memory_utilization config. Only use kv_cache_memory_bytes config when you want manual control of KV cache memory size. If OOM'ed, check the difference of initial free memory between the current run and the previous run where kv_cache_memory_bytes is suggested and update it correspondingly.
+INFO 09-21 23:16:38 [kv_cache_utils.py:2177] GPU KV cache size: 37,632 tokens
+INFO 09-21 23:16:38 [kv_cache_utils.py:2178] Maximum concurrency for 16,384 tokens per request: 2.30x
+INFO 09-21 23:16:38 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: 2fd83805-9a8a-43aa-8d09-be2faf4c6499
+WARNING 09-21 23:16:38 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.
+I0921 23:16:38.790622 116707 client_metric.cpp:102] Client metrics enabled (default enabled)
+I0921 23:16:38.790653 116707 client_metric.cpp:103] Client bandwidth summary enabled via MC_STORE_CLIENT_METRIC_BANDWIDTH
+I0921 23:16:38.791411 116707 client_service.cpp:423] client_id=452814553875443209-437811671024483241
+I0921 23:16:38.791427 116707 client_service.cpp:425] client_id=452814553875443209-437811671024483241, host_id=30.0.0.4
+I0921 23:16:38.791430 116707 client_service.cpp:437] Client metrics enabled but reporting disabled (interval=0)
+I0921 23:16:38.792876 116707 client_service.cpp:1077] Storage root directory is not set. persisting data is disabled.
+I0921 23:16:38.793004 116707 transfer_engine_impl.cpp:1046] Metrics reporting is disabled (set MC_TE_METRIC=1 to enable)
+I0921 23:16:38.793031 116707 transfer_engine_impl.cpp:116] Transfer Engine parseHostNameWithPort. server_name: 30.0.0.4 port: 12785
+I0921 23:16:38.793345 116707 transfer_metadata_plugin.cpp:1298] Found active interface eno1 with IP 210.107.198.194
+I0921 23:16:38.793366 116707 transfer_metadata_plugin.cpp:1298] Found active interface enp23s0f0np0 with IP 30.0.0.4
+I0921 23:16:38.793375 116707 transfer_metadata_plugin.cpp:1287] Skipping interface docker0 (not UP or not RUNNING)
+I0921 23:16:38.793403 116707 transfer_engine_impl.cpp:183] Transfer Engine RPC using new RPC mapping, listening on 210.107.198.194:15573
+I0921 23:16:38.794199 116707 client_service.cpp:872] Transfer engine auto discovery is disabled for protocol: rdma
+I0921 23:16:38.794224 116707 client_service.cpp:884] Using specified RDMA devices: mlx5_0
+I0921 23:16:38.798031 116707 topology.cpp:127] Device mlx5_0 port 1 is available
+I0921 23:16:38.798607 116707 client_service.cpp:894] Topology discovery complete with specified devices. Found 1 HCAs
+I0921 23:16:38.798658 116707 rdma_transport.cpp:159] [RDMA] Relaxed ordering is supported on this host; IBV_ACCESS_RELAXED_ORDERING will be requested for registered memory regions.
+I0921 23:16:38.798679 116707 rdma_context.cpp:207] Using SIEVE endpoint store
+I0921 23:16:38.802378 116707 rdma_context.cpp:1363] Find best gid index: 3 on mlx5_0/1 (network state: with network device)
+I0921 23:16:38.804040 116707 rdma_context.cpp:290] RDMA device: mlx5_0, LID: 0, GID: (GID_Index 3) 00:00:00:00:00:00:00:00:00:00:ff:ff:1e:00:00:04
+I0921 23:16:38.805547 116707 transfer_task.cpp:965] MC_STORE_MEMCPY not set, auto-detected: non-TCP transport available, memcpy disabled
+I0921 23:16:38.805584 116707 real_client.cpp:851] Successfully created client on port 12785 after 1 attempt(s)
+I0921 23:16:38.809710 116707 real_client.cpp:884] Registering local memory: 1073741824 bytes
+I0921 23:16:39.017305 116707 real_client.cpp:1088] Global segment size is 0, skip mounting segment
+INFO 09-21 23:16:39 [worker.py:1062] Mooncake mode=standalone-store (global_segment_size=0, local_buffer_size=1073741824, preferred_segment=<none>, enable_offload=True)
+INFO 09-21 23:16:39 [worker.py:1305] Registered KV caches: num_groups=1, num_segments=32, num_blocks=588
+INFO 09-21 23:16:39 [worker.py:1355] Started 1 Mooncake KV-load receive thread(s)
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.cudart module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.runtime module instead.
+<frozen importlib._bootstrap_external>:1184: FutureWarning: The cuda.nvrtc module is deprecated and will be removed in a future release, please switch to use the cuda.bindings.nvrtc module instead.
+INFO 09-21 23:16:39 [cutedsl_warmup.py:101] Skipping CuTeDSL warmup because no compile units were requested.
+INFO 09-21 23:16:39 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+INFO 09-21 23:16:39 [core.py:347] init engine (profile, create kv cache, warmup model) took 4.83 s
+INFO 09-21 23:16:39 [factory.py:62] Creating v1 connector with name: MooncakeStoreConnector and engine_id: 2fd83805-9a8a-43aa-8d09-be2faf4c6499
+WARNING 09-21 23:16:39 [base.py:190] Initializing KVConnectorBase_V1. This API is experimental and subject to change in the future as we iterate the design.

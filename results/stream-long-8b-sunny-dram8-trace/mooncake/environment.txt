@@ -1,0 +1,12 @@
+2026-09-21T23:16:07+09:00
+host=sunny kernel=6.8.0-138-generic
+repo= dirty=0
+vllm_fork= branch=
+NVIDIA RTX A4000, 580.178.04, 16376 MiB, 00000000:65:00.0
+cuda=release 12.8 nsys=NVIDIA Nsight Systems version 2024.6.2.225-246235244400v0
+nvidia_fs=2.30.2 srcversion=54C4E4822B1963D7BB87D21
+cufile_json=default
+VLLM_ENABLE_V1_MULTIPROCESSING=0 VLLM_KV_SPLIT=off VLLM_MOONCAKE_STORE_TIER_LOG=1 VLLM_USE_V2_MODEL_RUNNER=0 
+input=/home/unionxic/gds-kv/vllm-gds-kv/experiments/11-observability/data/bailian-qwen_coder.jsonl sha256=3d74974cebb7bccb bytes=132054902
+/      /dev/nvme0n1p2 ext4   rw,relatime,errors=remount-ro
+/dev/nvme0n1p2  147G   76G   64G  55% /

@@ -1,0 +1,5 @@
+{"combo": "nvmeof", "nvmeof_gib_s": 8.944361, "link_rx_gb_s": 9.74, "pause_frames": 52152}
+{"combo": "rdma_cuda", "rdma_cuda_gbps": 82.1, "link_rx_gb_s": 10.42, "pause_frames": 67316}
+{"combo": "nvmeof+rdma_cuda", "nvmeof_gib_s": 3.889896, "rdma_cuda_gbps": 47.45, "link_rx_gb_s": 10.41, "pause_frames": 65854}
+{"combo": "rdma_host", "rdma_host_gbps": 97.96, "link_rx_gb_s": 12.43, "pause_frames": 0}
+{"combo": "nvmeof+rdma_host", "nvmeof_gib_s": 4.291664, "rdma_host_gbps": 61.56, "link_rx_gb_s": 12.33, "pause_frames": 0}

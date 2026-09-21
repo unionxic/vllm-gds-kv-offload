@@ -1,0 +1,1424 @@
+{"ev": "mc_lookup", "t": 23609.145689984, "ph": "stream", "req": "stream-0-86b4863b", "hit_tokens": 0, "dur_s": 0.002992}
+{"ev": "mc_store_enq", "t": 23609.178453987, "ph": "stream", "req": "stream-0-86b4863b", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23611.90173944, "ph": "stream", "req": "stream-1-b489dba3", "hit_tokens": 0, "dur_s": 0.001265}
+{"ev": "mc_lookup", "t": 23611.902491765, "ph": "stream", "req": "stream-2-97e016cd", "hit_tokens": 0, "dur_s": 0.000644}
+{"ev": "mc_lookup", "t": 23611.904570579, "ph": "stream", "req": "stream-3-a2e23e55", "hit_tokens": 0, "dur_s": 0.00195}
+{"ev": "mc_store_enq", "t": 23611.928060674, "ph": "stream", "req": "stream-1-b489dba3", "tokens": 128}
+{"ev": "mc_store_enq", "t": 23611.928072408, "ph": "stream", "req": "stream-2-97e016cd", "tokens": 832}
+{"ev": "mc_store_enq", "t": 23611.928075967, "ph": "stream", "req": "stream-3-a2e23e55", "tokens": 5952}
+{"ev": "mc_store_enq", "t": 23611.928078885, "ph": "stream", "req": "stream-0-86b4863b", "tokens": 9408}
+{"ev": "mc_put", "t": 23612.110709236, "ph": "stream", "req": "stream-0-86b4863b", "keys": 128, "bytes": 1073741824, "dur_s": 0.213771, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23612.110795976, "ph": "stream", "req": "stream-0-86b4863b", "bytes": 1073741824, "io_s": 0.214357, "dur_s": 2.932201}
+{"ev": "mc_store_enq", "t": 23614.344213123, "ph": "stream", "req": "stream-3-a2e23e55", "tokens": 12160}
+{"ev": "mc_put", "t": 23614.689079603, "ph": "stream", "req": "stream-1-b489dba3", "keys": 2, "bytes": 16777216, "dur_s": 0.02014, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23614.689118295, "ph": "stream", "req": "stream-1-b489dba3", "bytes": 16777216, "io_s": 0.020518, "dur_s": 2.557259}
+{"ev": "mc_put", "t": 23614.711199188, "ph": "stream", "req": "stream-2-97e016cd", "keys": 12, "bytes": 100663296, "dur_s": 0.019174, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23614.711233837, "ph": "stream", "req": "stream-2-97e016cd", "bytes": 100663296, "io_s": 0.021426, "dur_s": 0.0221}
+{"ev": "mc_put", "t": 23614.855460447, "ph": "stream", "req": "stream-3-a2e23e55", "keys": 93, "bytes": 780140544, "dur_s": 0.142507, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23614.855572939, "ph": "stream", "req": "stream-3-a2e23e55", "bytes": 780140544, "io_s": 0.142685, "dur_s": 0.144327}
+{"ev": "mc_put", "t": 23614.886108973, "ph": "stream", "req": "stream-0-86b4863b", "keys": 19, "bytes": 159383552, "dur_s": 0.029499, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23614.886141821, "ph": "stream", "req": "stream-0-86b4863b", "bytes": 159383552, "io_s": 0.030138, "dur_s": 0.030553}
+{"ev": "mc_put", "t": 23617.415794614, "ph": "stream", "req": "stream-3-a2e23e55", "keys": 97, "bytes": 813694976, "dur_s": 0.178352, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23617.415904997, "ph": "stream", "req": "stream-3-a2e23e55", "bytes": 813694976, "io_s": 0.179142, "dur_s": 0.184313}
+{"ev": "mc_lookup", "t": 23617.417101754, "ph": "stream", "req": "stream-4-a3fd1815", "hit_tokens": 0, "dur_s": 0.002853}
+{"ev": "mc_store_enq", "t": 23617.437816852, "ph": "stream", "req": "stream-4-a3fd1815", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23617.447917378, "ph": "stream", "req": "stream-5-9e16281d", "hit_tokens": 0, "dur_s": 0.003727}
+{"ev": "mc_lookup", "t": 23617.450109287, "ph": "stream", "req": "stream-6-997f5e9f", "hit_tokens": 0, "dur_s": 0.001999}
+{"ev": "mc_store_enq", "t": 23619.566162372, "ph": "stream", "req": "stream-5-9e16281d", "tokens": 11712}
+{"ev": "mc_store_enq", "t": 23619.566178948, "ph": "stream", "req": "stream-4-a3fd1815", "tokens": 11776}
+{"ev": "mc_lookup", "t": 23620.294498799, "ph": "stream", "req": "stream-6-997f5e9f", "hit_tokens": 0, "dur_s": 0.002384}
+{"ev": "mc_put", "t": 23620.485690047, "ph": "stream", "req": "stream-4-a3fd1815", "keys": 128, "bytes": 1073741824, "dur_s": 0.197464, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23620.485806068, "ph": "stream", "req": "stream-4-a3fd1815", "bytes": 1073741824, "io_s": 0.198071, "dur_s": 3.047899}
+{"ev": "mc_store_enq", "t": 23621.752754757, "ph": "stream", "req": "stream-6-997f5e9f", "tokens": 8192}
+{"ev": "mc_put", "t": 23621.999560789, "ph": "stream", "req": "stream-5-9e16281d", "keys": 2, "bytes": 16777216, "dur_s": 0.022749, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23621.999606663, "ph": "stream", "req": "stream-5-9e16281d", "bytes": 16777216, "io_s": 0.023583, "dur_s": 1.513731}
+{"ev": "mc_lookup", "t": 23622.016179407, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002787}
+{"ev": "mc_put", "t": 23622.098737618, "ph": "stream", "req": "stream-4-a3fd1815", "keys": 56, "bytes": 469762048, "dur_s": 0.085931, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23622.09882031, "ph": "stream", "req": "stream-4-a3fd1815", "bytes": 469762048, "io_s": 0.097654, "dur_s": 0.099195}
+{"ev": "mc_store_enq", "t": 23623.747392177, "ph": "stream", "req": "stream-6-997f5e9f", "tokens": 9600}
+{"ev": "mc_lookup", "t": 23624.955179707, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.00282}
+{"ev": "mc_put", "t": 23625.144161206, "ph": "stream", "req": "stream-6-997f5e9f", "keys": 127, "bytes": 1065353216, "dur_s": 0.19561, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23625.14426923, "ph": "stream", "req": "stream-6-997f5e9f", "bytes": 1065353216, "io_s": 0.196107, "dur_s": 3.045087}
+{"ev": "mc_lookup", "t": 23625.608680438, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002906}
+{"ev": "mc_put", "t": 23625.621974125, "ph": "stream", "req": "stream-6-997f5e9f", "keys": 22, "bytes": 184549376, "dur_s": 0.041702, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23625.622016059, "ph": "stream", "req": "stream-6-997f5e9f", "bytes": 184549376, "io_s": 0.042032, "dur_s": 0.47773}
+{"ev": "mc_lookup", "t": 23625.639296645, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002923}
+{"ev": "mc_lookup", "t": 23625.663069252, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002645}
+{"ev": "mc_lookup", "t": 23625.686377855, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002849}
+{"ev": "mc_lookup", "t": 23625.70915859, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.00235}
+{"ev": "mc_lookup", "t": 23625.732472006, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002282}
+{"ev": "mc_lookup", "t": 23625.755075773, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002853}
+{"ev": "mc_lookup", "t": 23625.759199069, "ph": "stream", "req": "stream-7-8b5235fb", "hit_tokens": 0, "dur_s": 0.002768}
+{"ev": "mc_store_enq", "t": 23625.78159237, "ph": "stream", "req": "stream-7-8b5235fb", "tokens": 8256}
+{"ev": "mc_lookup", "t": 23625.78729748, "ph": "stream", "req": "stream-8-826b870e", "hit_tokens": 0, "dur_s": 0.004595}
+{"ev": "mc_lookup", "t": 23625.788221793, "ph": "stream", "req": "stream-9-9cf96f84", "hit_tokens": 0, "dur_s": 0.000822}
+{"ev": "mc_lookup", "t": 23625.789161129, "ph": "stream", "req": "stream-10-a8438f91", "hit_tokens": 0, "dur_s": 0.000872}
+{"ev": "mc_store_enq", "t": 23628.37529656, "ph": "stream", "req": "stream-8-826b870e", "tokens": 256}
+{"ev": "mc_store_enq", "t": 23628.375308647, "ph": "stream", "req": "stream-9-9cf96f84", "tokens": 64}
+{"ev": "mc_store_enq", "t": 23628.375312123, "ph": "stream", "req": "stream-10-a8438f91", "tokens": 2176}
+{"ev": "mc_store_enq", "t": 23628.375314938, "ph": "stream", "req": "stream-7-8b5235fb", "tokens": 13824}
+{"ev": "mc_put", "t": 23628.937146066, "ph": "stream", "req": "stream-7-8b5235fb", "keys": 128, "bytes": 1073741824, "dur_s": 0.197178, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23628.937265079, "ph": "stream", "req": "stream-7-8b5235fb", "bytes": 1073741824, "io_s": 0.197992, "dur_s": 3.15558}
+{"ev": "mc_store_enq", "t": 23630.117282294, "ph": "stream", "req": "stream-10-a8438f91", "tokens": 2240}
+{"ev": "mc_put", "t": 23632.334835751, "ph": "stream", "req": "stream-8-826b870e", "keys": 4, "bytes": 33554432, "dur_s": 0.024508, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23632.33487636, "ph": "stream", "req": "stream-8-826b870e", "bytes": 33554432, "io_s": 0.024837, "dur_s": 3.397445}
+{"ev": "mc_put", "t": 23632.338060095, "ph": "stream", "req": "stream-9-9cf96f84", "keys": 1, "bytes": 8388608, "dur_s": 0.002359, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23632.338081525, "ph": "stream", "req": "stream-9-9cf96f84", "bytes": 8388608, "io_s": 0.003053, "dur_s": 0.003189}
+{"ev": "mc_put", "t": 23632.401621742, "ph": "stream", "req": "stream-10-a8438f91", "keys": 34, "bytes": 285212672, "dur_s": 0.062282, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23632.401669991, "ph": "stream", "req": "stream-10-a8438f91", "bytes": 285212672, "io_s": 0.062463, "dur_s": 0.063578}
+{"ev": "mc_lookup", "t": 23632.494055426, "ph": "stream", "req": "stream-11-81af22c1", "hit_tokens": 0, "dur_s": 0.001431}
+{"ev": "mc_lookup", "t": 23632.497281815, "ph": "stream", "req": "stream-12-8474c94c", "hit_tokens": 1600, "dur_s": 0.002913}
+{"ev": "mc_lookup", "t": 23632.498388549, "ph": "stream", "req": "stream-13-b0ece556", "hit_tokens": 0, "dur_s": 0.000891}
+{"ev": "mc_load_enq", "t": 23632.520291313, "ph": "stream", "req": "stream-12-8474c94c", "tokens": 11648}
+{"ev": "mc_store_enq", "t": 23632.520342795, "ph": "stream", "req": "stream-11-81af22c1", "tokens": 1344}
+{"ev": "mc_store_enq", "t": 23632.520348537, "ph": "stream", "req": "stream-13-b0ece556", "tokens": 1728}
+{"ev": "mc_lookup", "t": 23632.527733373, "ph": "stream", "req": "stream-14-98351154", "hit_tokens": 12096, "dur_s": 0.003054}
+{"ev": "mc_put", "t": 23632.552292754, "ph": "stream", "req": "stream-7-8b5235fb", "keys": 87, "bytes": 729808896, "dur_s": 0.148887, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23632.55236687, "ph": "stream", "req": "stream-7-8b5235fb", "bytes": 729808896, "io_s": 0.149316, "dur_s": 0.150688}
+{"ev": "mc_load_tier", "t": 23632.571552883, "ph": "stream", "req": "stream-12-8474c94c", "memory": 209715200, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23632.571747726, "ph": "stream", "req": "stream-12-8474c94c", "keys": 25, "bytes": 209715200, "dur_s": 0.048835, "status": "ok"}
+{"ev": "mc_load_done", "t": 23632.571776775, "ph": "stream", "req": "stream-12-8474c94c", "bytes": 209715200, "io_s": 0.048835, "dur_s": 0.05133}
+{"ev": "mc_put", "t": 23632.572846468, "ph": "stream", "req": "stream-10-a8438f91", "keys": 1, "bytes": 8388608, "dur_s": 0.01931, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23632.572865111, "ph": "stream", "req": "stream-10-a8438f91", "bytes": 8388608, "io_s": 0.019563, "dur_s": 0.019654}
+{"ev": "mc_lookup", "t": 23633.529906841, "ph": "stream", "req": "stream-14-98351154", "hit_tokens": 12096, "dur_s": 0.004}
+{"ev": "mc_put", "t": 23633.551827462, "ph": "stream", "req": "stream-11-81af22c1", "keys": 20, "bytes": 167772160, "dur_s": 0.035404, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23633.551859217, "ph": "stream", "req": "stream-11-81af22c1", "bytes": 167772160, "io_s": 0.035641, "dur_s": 0.97483}
+{"ev": "mc_lookup", "t": 23633.573789999, "ph": "stream", "req": "stream-14-98351154", "hit_tokens": 12096, "dur_s": 0.003632}
+{"ev": "mc_put", "t": 23633.593414807, "ph": "stream", "req": "stream-13-b0ece556", "keys": 26, "bytes": 218103808, "dur_s": 0.040987, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23633.593448594, "ph": "stream", "req": "stream-13-b0ece556", "bytes": 218103808, "io_s": 0.041131, "dur_s": 0.04158}
+{"ev": "mc_load_enq", "t": 23633.59378499, "ph": "stream", "req": "stream-14-98351154", "tokens": 12096}
+{"ev": "mc_store_enq", "t": 23633.593839649, "ph": "stream", "req": "stream-12-8474c94c", "tokens": 11776}
+{"ev": "mc_load_tier", "t": 23633.76785443, "ph": "stream", "req": "stream-14-98351154", "memory": 1585446912, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23633.768101698, "ph": "stream", "req": "stream-14-98351154", "keys": 189, "bytes": 1585446912, "dur_s": 0.161452, "status": "ok"}
+{"ev": "mc_load_done", "t": 23633.768278548, "ph": "stream", "req": "stream-14-98351154", "bytes": 1585446912, "io_s": 0.161452, "dur_s": 0.174371}
+{"ev": "mc_put", "t": 23633.768632343, "ph": "stream", "req": "stream-12-8474c94c", "keys": 2, "bytes": 16777216, "dur_s": 0.096687, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23633.768659054, "ph": "stream", "req": "stream-12-8474c94c", "bytes": 16777216, "io_s": 0.101239, "dur_s": 0.169607}
+{"ev": "mc_lookup", "t": 23633.805380854, "ph": "stream", "req": "stream-15-87016bb9", "hit_tokens": 0, "dur_s": 0.001191}
+{"ev": "mc_lookup", "t": 23633.807970691, "ph": "stream", "req": "stream-16-b12b44b6", "hit_tokens": 0, "dur_s": 0.001818}
+{"ev": "mc_store_enq", "t": 23633.837053364, "ph": "stream", "req": "stream-14-98351154", "tokens": 12288}
+{"ev": "mc_store_enq", "t": 23633.837068608, "ph": "stream", "req": "stream-15-87016bb9", "tokens": 2752}
+{"ev": "mc_store_enq", "t": 23633.837073983, "ph": "stream", "req": "stream-16-b12b44b6", "tokens": 12608}
+{"ev": "mc_put", "t": 23635.432465791, "ph": "stream", "req": "stream-14-98351154", "keys": 3, "bytes": 25165824, "dur_s": 0.022194, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23635.432499318, "ph": "stream", "req": "stream-14-98351154", "bytes": 25165824, "io_s": 0.022983, "dur_s": 1.595373}
+{"ev": "mc_lookup", "t": 23635.490992387, "ph": "stream", "req": "stream-17-99c14c4a", "hit_tokens": 0, "dur_s": 0.002035}
+{"ev": "mc_store_enq", "t": 23635.512213602, "ph": "stream", "req": "stream-17-99c14c4a", "tokens": 6976}
+{"ev": "mc_put", "t": 23635.513756102, "ph": "stream", "req": "stream-15-87016bb9", "keys": 43, "bytes": 360710144, "dur_s": 0.067946, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23635.513811221, "ph": "stream", "req": "stream-15-87016bb9", "bytes": 360710144, "io_s": 0.080046, "dur_s": 0.081299}
+{"ev": "mc_put", "t": 23635.539027718, "ph": "stream", "req": "stream-16-b12b44b6", "keys": 16, "bytes": 134217728, "dur_s": 0.02417, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23635.539051522, "ph": "stream", "req": "stream-16-b12b44b6", "bytes": 134217728, "io_s": 0.024678, "dur_s": 0.02523}
+{"ev": "mc_lookup", "t": 23638.209324573, "ph": "stream", "req": "stream-18-a6f0373c", "hit_tokens": 0, "dur_s": 0.002842}
+{"ev": "mc_lookup", "t": 23638.210236542, "ph": "stream", "req": "stream-19-8199604a", "hit_tokens": 0, "dur_s": 0.0007}
+{"ev": "mc_lookup", "t": 23638.212842514, "ph": "stream", "req": "stream-20-bca2da03", "hit_tokens": 0, "dur_s": 0.002351}
+{"ev": "mc_store_enq", "t": 23638.235955001, "ph": "stream", "req": "stream-18-a6f0373c", "tokens": 11776}
+{"ev": "mc_store_enq", "t": 23638.235964934, "ph": "stream", "req": "stream-19-8199604a", "tokens": 128}
+{"ev": "mc_store_enq", "t": 23638.235968682, "ph": "stream", "req": "stream-20-bca2da03", "tokens": 12352}
+{"ev": "mc_put", "t": 23638.280865907, "ph": "stream", "req": "stream-17-99c14c4a", "keys": 108, "bytes": 905969664, "dur_s": 0.186341, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23638.280987642, "ph": "stream", "req": "stream-17-99c14c4a", "bytes": 905969664, "io_s": 0.186822, "dur_s": 2.74051}
+{"ev": "mc_put", "t": 23638.482082864, "ph": "stream", "req": "stream-18-a6f0373c", "keys": 2, "bytes": 16777216, "dur_s": 0.022682, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23638.482114725, "ph": "stream", "req": "stream-18-a6f0373c", "bytes": 16777216, "io_s": 0.023516, "dur_s": 0.201105}
+{"ev": "mc_put", "t": 23638.498989102, "ph": "stream", "req": "stream-19-8199604a", "keys": 2, "bytes": 16777216, "dur_s": 0.003965, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23638.499029043, "ph": "stream", "req": "stream-19-8199604a", "bytes": 16777216, "io_s": 0.016598, "dur_s": 0.0169}
+{"ev": "mc_put", "t": 23638.504616248, "ph": "stream", "req": "stream-20-bca2da03", "keys": 2, "bytes": 16777216, "dur_s": 0.004311, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23638.504658601, "ph": "stream", "req": "stream-20-bca2da03", "bytes": 16777216, "io_s": 0.005079, "dur_s": 0.005613}
+{"ev": "mc_lookup", "t": 23638.520201131, "ph": "stream", "req": "stream-21-a183416c", "hit_tokens": 0, "dur_s": 0.001286}
+{"ev": "mc_store_enq", "t": 23638.553086564, "ph": "stream", "req": "stream-21-a183416c", "tokens": 2368}
+{"ev": "mc_put", "t": 23639.42517789, "ph": "stream", "req": "stream-21-a183416c", "keys": 36, "bytes": 301989888, "dur_s": 0.069316, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23639.425230971, "ph": "stream", "req": "stream-21-a183416c", "bytes": 301989888, "io_s": 0.069666, "dur_s": 0.872034}
+{"ev": "mc_lookup", "t": 23639.462463498, "ph": "stream", "req": "stream-22-90251822", "hit_tokens": 0, "dur_s": 0.001648}
+{"ev": "mc_lookup", "t": 23639.463428235, "ph": "stream", "req": "stream-23-b31fa958", "hit_tokens": 0, "dur_s": 0.000745}
+{"ev": "mc_lookup", "t": 23639.464091721, "ph": "stream", "req": "stream-24-9f5ffaeb", "hit_tokens": 0, "dur_s": 0.000535}
+{"ev": "mc_store_enq", "t": 23639.48408524, "ph": "stream", "req": "stream-22-90251822", "tokens": 2944}
+{"ev": "mc_store_enq", "t": 23639.484097618, "ph": "stream", "req": "stream-23-b31fa958", "tokens": 1088}
+{"ev": "mc_store_enq", "t": 23639.484101505, "ph": "stream", "req": "stream-24-9f5ffaeb", "tokens": 320}
+{"ev": "mc_lookup", "t": 23641.014542842, "ph": "stream", "req": "stream-25-b19b9a1e", "hit_tokens": 0, "dur_s": 0.002472}
+{"ev": "mc_store_enq", "t": 23641.035403519, "ph": "stream", "req": "stream-25-b19b9a1e", "tokens": 8192}
+{"ev": "mc_put", "t": 23641.040232734, "ph": "stream", "req": "stream-22-90251822", "keys": 46, "bytes": 385875968, "dur_s": 0.076574, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23641.040283866, "ph": "stream", "req": "stream-22-90251822", "bytes": 385875968, "io_s": 0.076991, "dur_s": 1.556128}
+{"ev": "mc_put", "t": 23641.06585547, "ph": "stream", "req": "stream-23-b31fa958", "keys": 16, "bytes": 134217728, "dur_s": 0.0249, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23641.065879153, "ph": "stream", "req": "stream-23-b31fa958", "bytes": 134217728, "io_s": 0.025296, "dur_s": 0.025586}
+{"ev": "mc_put", "t": 23641.07267158, "ph": "stream", "req": "stream-24-9f5ffaeb", "keys": 4, "bytes": 33554432, "dur_s": 0.006506, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23641.072686463, "ph": "stream", "req": "stream-24-9f5ffaeb", "bytes": 33554432, "io_s": 0.00669, "dur_s": 0.006799}
+{"ev": "mc_store_enq", "t": 23642.66593139, "ph": "stream", "req": "stream-25-b19b9a1e", "tokens": 8960}
+{"ev": "mc_put", "t": 23644.375273267, "ph": "stream", "req": "stream-25-b19b9a1e", "keys": 127, "bytes": 1065353216, "dur_s": 0.193217, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23644.37556955, "ph": "stream", "req": "stream-25-b19b9a1e", "bytes": 1065353216, "io_s": 0.193607, "dur_s": 3.293075}
+{"ev": "mc_store_cmt", "t": 23644.375599412, "ph": "stream", "req": "stream-25-b19b9a1e", "bytes": 0, "io_s": 0.0, "dur_s": 1e-05}
+{"ev": "mc_lookup", "t": 23644.621035118, "ph": "stream", "req": "stream-26-b124b014", "hit_tokens": 0, "dur_s": 0.002556}
+{"ev": "mc_store_enq", "t": 23644.641305834, "ph": "stream", "req": "stream-26-b124b014", "tokens": 11456}
+{"ev": "mc_lookup", "t": 23644.650210343, "ph": "stream", "req": "stream-27-bd1152af", "hit_tokens": 0, "dur_s": 0.002177}
+{"ev": "mc_lookup", "t": 23644.651470138, "ph": "stream", "req": "stream-28-9a7667ab", "hit_tokens": 64, "dur_s": 0.000939}
+{"ev": "mc_store_enq", "t": 23647.571216492, "ph": "stream", "req": "stream-27-bd1152af", "tokens": 11712}
+{"ev": "mc_store_enq", "t": 23647.571232295, "ph": "stream", "req": "stream-26-b124b014", "tokens": 12160}
+{"ev": "mc_lookup", "t": 23648.259703361, "ph": "stream", "req": "stream-28-9a7667ab", "hit_tokens": 64, "dur_s": 0.002097}
+{"ev": "mc_put", "t": 23648.448170123, "ph": "stream", "req": "stream-26-b124b014", "keys": 127, "bytes": 1065353216, "dur_s": 0.194924, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23648.448423307, "ph": "stream", "req": "stream-26-b124b014", "bytes": 1065353216, "io_s": 0.195605, "dur_s": 3.806994}
+{"ev": "mc_load_enq", "t": 23649.417489777, "ph": "stream", "req": "stream-28-9a7667ab", "tokens": 128}
+{"ev": "mc_load_tier", "t": 23649.431809372, "ph": "stream", "req": "stream-28-9a7667ab", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23649.432081493, "ph": "stream", "req": "stream-28-9a7667ab", "keys": 1, "bytes": 8388608, "dur_s": 0.01376, "status": "ok"}
+{"ev": "mc_load_done", "t": 23649.432128511, "ph": "stream", "req": "stream-28-9a7667ab", "bytes": 8388608, "io_s": 0.01376, "dur_s": 0.0145}
+{"ev": "mc_lookup", "t": 23650.886386425, "ph": "stream", "req": "stream-29-a074ae7e", "hit_tokens": 3840, "dur_s": 0.003738}
+{"ev": "mc_lookup", "t": 23650.910712839, "ph": "stream", "req": "stream-29-a074ae7e", "hit_tokens": 4992, "dur_s": 0.003056}
+{"ev": "mc_store_enq", "t": 23650.930919445, "ph": "stream", "req": "stream-28-9a7667ab", "tokens": 5376}
+{"ev": "mc_put", "t": 23650.933978221, "ph": "stream", "req": "stream-27-bd1152af", "keys": 68, "bytes": 570425344, "dur_s": 0.118458, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23650.934073765, "ph": "stream", "req": "stream-27-bd1152af", "bytes": 570425344, "io_s": 0.119215, "dur_s": 2.480134}
+{"ev": "mc_lookup", "t": 23650.935608648, "ph": "stream", "req": "stream-29-a074ae7e", "hit_tokens": 4992, "dur_s": 0.003712}
+{"ev": "mc_put", "t": 23650.953945755, "ph": "stream", "req": "stream-26-b124b014", "keys": 11, "bytes": 92274688, "dur_s": 0.01847, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23650.953991472, "ph": "stream", "req": "stream-26-b124b014", "bytes": 92274688, "io_s": 0.019184, "dur_s": 0.019907}
+{"ev": "mc_load_enq", "t": 23651.904898391, "ph": "stream", "req": "stream-29-a074ae7e", "tokens": 12352}
+{"ev": "mc_load_tier", "t": 23651.977279819, "ph": "stream", "req": "stream-29-a074ae7e", "memory": 654311424, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23651.977446487, "ph": "stream", "req": "stream-29-a074ae7e", "keys": 78, "bytes": 654311424, "dur_s": 0.066997, "status": "ok"}
+{"ev": "mc_load_done", "t": 23651.977516498, "ph": "stream", "req": "stream-29-a074ae7e", "bytes": 654311424, "io_s": 0.066997, "dur_s": 0.072484}
+{"ev": "mc_store_enq", "t": 23653.030038373, "ph": "stream", "req": "stream-29-a074ae7e", "tokens": 12416}
+{"ev": "mc_lookup", "t": 23653.034186419, "ph": "stream", "req": "stream-30-a2a32938", "hit_tokens": 0, "dur_s": 0.001473}
+{"ev": "mc_lookup", "t": 23653.037878922, "ph": "stream", "req": "stream-31-ba92fecc", "hit_tokens": 0, "dur_s": 0.003417}
+{"ev": "mc_store_enq", "t": 23653.05856481, "ph": "stream", "req": "stream-30-a2a32938", "tokens": 384}
+{"ev": "mc_store_enq", "t": 23653.058576149, "ph": "stream", "req": "stream-31-ba92fecc", "tokens": 13504}
+{"ev": "mc_put", "t": 23653.076798665, "ph": "stream", "req": "stream-28-9a7667ab", "keys": 82, "bytes": 687865856, "dur_s": 0.142359, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23653.076998582, "ph": "stream", "req": "stream-28-9a7667ab", "bytes": 687865856, "io_s": 0.142812, "dur_s": 2.10773}
+{"ev": "mc_put", "t": 23653.094878117, "ph": "stream", "req": "stream-29-a074ae7e", "keys": 1, "bytes": 8388608, "dur_s": 0.002881, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23653.094911043, "ph": "stream", "req": "stream-29-a074ae7e", "bytes": 8388608, "io_s": 0.003872, "dur_s": 0.017857}
+{"ev": "mc_put", "t": 23654.315839068, "ph": "stream", "req": "stream-30-a2a32938", "keys": 6, "bytes": 50331648, "dur_s": 0.017894, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23654.315872705, "ph": "stream", "req": "stream-30-a2a32938", "bytes": 50331648, "io_s": 0.036157, "dur_s": 1.220947}
+{"ev": "mc_put", "t": 23654.373218846, "ph": "stream", "req": "stream-31-ba92fecc", "keys": 30, "bytes": 251658240, "dur_s": 0.05582, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23654.373270344, "ph": "stream", "req": "stream-31-ba92fecc", "bytes": 251658240, "io_s": 0.056695, "dur_s": 0.057386}
+{"ev": "mc_lookup", "t": 23654.379831834, "ph": "stream", "req": "stream-32-9206ec50", "hit_tokens": 0, "dur_s": 0.002426}
+{"ev": "mc_store_enq", "t": 23654.401150453, "ph": "stream", "req": "stream-32-9206ec50", "tokens": 8384}
+{"ev": "mc_store_enq", "t": 23656.599346339, "ph": "stream", "req": "stream-32-9206ec50", "tokens": 11456}
+{"ev": "mc_put", "t": 23657.874326842, "ph": "stream", "req": "stream-32-9206ec50", "keys": 127, "bytes": 1065353216, "dur_s": 0.158666, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23657.874644518, "ph": "stream", "req": "stream-32-9206ec50", "bytes": 1065353216, "io_s": 0.159221, "dur_s": 3.473417}
+{"ev": "mc_store_cmt", "t": 23657.883199292, "ph": "stream", "req": "stream-32-9206ec50", "bytes": 0, "io_s": 0.0, "dur_s": 1.9e-05}
+{"ev": "mc_lookup", "t": 23659.3216652, "ph": "stream", "req": "stream-33-9e43f4ef", "hit_tokens": 0, "dur_s": 0.002229}
+{"ev": "mc_store_enq", "t": 23659.345101841, "ph": "stream", "req": "stream-33-9e43f4ef", "tokens": 4544}
+{"ev": "mc_lookup", "t": 23659.356271938, "ph": "stream", "req": "stream-34-a0df11e2", "hit_tokens": 2752, "dur_s": 0.004165}
+{"ev": "mc_lookup", "t": 23659.358217432, "ph": "stream", "req": "stream-35-a1310ddd", "hit_tokens": 0, "dur_s": 0.001707}
+{"ev": "mc_load_enq", "t": 23660.079166298, "ph": "stream", "req": "stream-34-a0df11e2", "tokens": 11584}
+{"ev": "mc_load_tier", "t": 23660.119618428, "ph": "stream", "req": "stream-34-a0df11e2", "memory": 360710144, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23660.119774834, "ph": "stream", "req": "stream-34-a0df11e2", "keys": 43, "bytes": 360710144, "dur_s": 0.036998, "status": "ok"}
+{"ev": "mc_load_done", "t": 23660.119826928, "ph": "stream", "req": "stream-34-a0df11e2", "bytes": 360710144, "io_s": 0.036998, "dur_s": 0.040532}
+{"ev": "mc_lookup", "t": 23661.032203908, "ph": "stream", "req": "stream-35-a1310ddd", "hit_tokens": 0, "dur_s": 0.001856}
+{"ev": "mc_store_enq", "t": 23661.065479344, "ph": "stream", "req": "stream-35-a1310ddd", "tokens": 3008}
+{"ev": "mc_put", "t": 23661.13044068, "ph": "stream", "req": "stream-33-9e43f4ef", "keys": 70, "bytes": 587202560, "dur_s": 0.112301, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23661.130812055, "ph": "stream", "req": "stream-33-9e43f4ef", "bytes": 587202560, "io_s": 0.113142, "dur_s": 1.785595}
+{"ev": "mc_store_enq", "t": 23662.203658583, "ph": "stream", "req": "stream-34-a0df11e2", "tokens": 13376}
+{"ev": "mc_put", "t": 23662.23865639, "ph": "stream", "req": "stream-35-a1310ddd", "keys": 46, "bytes": 385875968, "dur_s": 0.076488, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23662.238713527, "ph": "stream", "req": "stream-35-a1310ddd", "bytes": 385875968, "io_s": 0.077055, "dur_s": 1.10554}
+{"ev": "mc_lookup", "t": 23663.246213846, "ph": "stream", "req": "stream-36-a431a839", "hit_tokens": 11648, "dur_s": 0.003502}
+{"ev": "mc_put", "t": 23663.268795987, "ph": "stream", "req": "stream-34-a0df11e2", "keys": 28, "bytes": 234881024, "dur_s": 0.051603, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23663.268835991, "ph": "stream", "req": "stream-34-a0df11e2", "bytes": 234881024, "io_s": 0.052353, "dur_s": 1.029671}
+{"ev": "mc_lookup", "t": 23663.274900992, "ph": "stream", "req": "stream-36-a431a839", "hit_tokens": 11648, "dur_s": 0.00319}
+{"ev": "mc_lookup", "t": 23663.298373693, "ph": "stream", "req": "stream-36-a431a839", "hit_tokens": 11648, "dur_s": 0.0031}
+{"ev": "mc_load_enq", "t": 23663.318130381, "ph": "stream", "req": "stream-36-a431a839", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23663.326601606, "ph": "stream", "req": "stream-36-a431a839", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23663.326806198, "ph": "stream", "req": "stream-36-a431a839", "keys": 182, "bytes": 1526726656, "dur_s": 0.003347, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23663.326969044, "ph": "stream", "req": "stream-36-a431a839", "bytes": 1526726656, "io_s": 0.003347, "dur_s": 0.008683}
+{"ev": "mc_lookup", "t": 23663.327280861, "ph": "stream", "req": "stream-37-8a23c441", "hit_tokens": 64, "dur_s": 0.001219}
+{"ev": "mc_load_enq", "t": 23663.364732629, "ph": "stream", "req": "stream-37-8a23c441", "tokens": 128}
+{"ev": "mc_load_tier", "t": 23663.380849897, "ph": "stream", "req": "stream-37-8a23c441", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23663.381055797, "ph": "stream", "req": "stream-37-8a23c441", "keys": 1, "bytes": 8388608, "dur_s": 0.015593, "status": "ok"}
+{"ev": "mc_load_done", "t": 23663.381085927, "ph": "stream", "req": "stream-37-8a23c441", "bytes": 8388608, "io_s": 0.015593, "dur_s": 0.01626}
+{"ev": "mc_lookup", "t": 23663.390882407, "ph": "stream", "req": "stream-38-8658a452", "hit_tokens": 0, "dur_s": 0.002022}
+{"ev": "mc_lookup", "t": 23663.394458003, "ph": "stream", "req": "stream-39-bda8a10b", "hit_tokens": 5056, "dur_s": 0.003175}
+{"ev": "mc_load_enq", "t": 23663.415563504, "ph": "stream", "req": "stream-39-bda8a10b", "tokens": 12416}
+{"ev": "mc_store_enq", "t": 23663.415609229, "ph": "stream", "req": "stream-38-8658a452", "tokens": 6336}
+{"ev": "mc_load_tier", "t": 23663.488236512, "ph": "stream", "req": "stream-39-bda8a10b", "memory": 662700032, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23663.488357967, "ph": "stream", "req": "stream-39-bda8a10b", "keys": 79, "bytes": 662700032, "dur_s": 0.067505, "status": "ok"}
+{"ev": "mc_load_done", "t": 23663.488413599, "ph": "stream", "req": "stream-39-bda8a10b", "bytes": 662700032, "io_s": 0.067505, "dur_s": 0.072738}
+{"ev": "mc_store_enq", "t": 23664.783456355, "ph": "stream", "req": "stream-37-8a23c441", "tokens": 192}
+{"ev": "mc_lookup", "t": 23665.874096779, "ph": "stream", "req": "stream-40-a4a7fcce", "hit_tokens": 0, "dur_s": 0.001577}
+{"ev": "mc_store_enq", "t": 23665.904410965, "ph": "stream", "req": "stream-40-a4a7fcce", "tokens": 4160}
+{"ev": "mc_put", "t": 23666.008530429, "ph": "stream", "req": "stream-38-8658a452", "keys": 98, "bytes": 822083584, "dur_s": 0.153739, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23666.008761523, "ph": "stream", "req": "stream-38-8658a452", "bytes": 822083584, "io_s": 0.15567, "dur_s": 2.589026}
+{"ev": "mc_put", "t": 23666.015399699, "ph": "stream", "req": "stream-37-8a23c441", "keys": 1, "bytes": 8388608, "dur_s": 0.002934, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23666.015447156, "ph": "stream", "req": "stream-37-8a23c441", "bytes": 8388608, "io_s": 0.003445, "dur_s": 0.003709}
+{"ev": "mc_store_enq", "t": 23666.679749088, "ph": "stream", "req": "stream-39-bda8a10b", "tokens": 12544}
+{"ev": "mc_put", "t": 23667.577560299, "ph": "stream", "req": "stream-40-a4a7fcce", "keys": 65, "bytes": 545259520, "dur_s": 0.102915, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23667.577644933, "ph": "stream", "req": "stream-40-a4a7fcce", "bytes": 545259520, "io_s": 0.103459, "dur_s": 1.56185}
+{"ev": "mc_put", "t": 23667.599639772, "ph": "stream", "req": "stream-39-bda8a10b", "keys": 2, "bytes": 16777216, "dur_s": 0.013339, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23667.599704964, "ph": "stream", "req": "stream-39-bda8a10b", "bytes": 16777216, "io_s": 0.014335, "dur_s": 0.022039}
+{"ev": "mc_lookup", "t": 23667.688448414, "ph": "stream", "req": "stream-41-94852273", "hit_tokens": 0, "dur_s": 0.001417}
+{"ev": "mc_store_enq", "t": 23667.707571577, "ph": "stream", "req": "stream-41-94852273", "tokens": 1472}
+{"ev": "mc_lookup", "t": 23667.714547786, "ph": "stream", "req": "stream-42-b41f9478", "hit_tokens": 128, "dur_s": 0.003363}
+{"ev": "mc_load_enq", "t": 23667.857017524, "ph": "stream", "req": "stream-42-b41f9478", "tokens": 11712}
+{"ev": "mc_load_tier", "t": 23667.860100994, "ph": "stream", "req": "stream-42-b41f9478", "memory": 16777216, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23667.860336091, "ph": "stream", "req": "stream-42-b41f9478", "keys": 2, "bytes": 16777216, "dur_s": 0.002303, "status": "ok"}
+{"ev": "mc_load_done", "t": 23667.860377236, "ph": "stream", "req": "stream-42-b41f9478", "bytes": 16777216, "io_s": 0.002303, "dur_s": 0.003258}
+{"ev": "mc_lookup", "t": 23668.253434961, "ph": "stream", "req": "stream-43-81e01239", "hit_tokens": 11648, "dur_s": 0.003406}
+{"ev": "mc_put", "t": 23668.278892243, "ph": "stream", "req": "stream-41-94852273", "keys": 22, "bytes": 184549376, "dur_s": 0.03974, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23668.278988314, "ph": "stream", "req": "stream-41-94852273", "bytes": 184549376, "io_s": 0.040304, "dur_s": 0.571293}
+{"ev": "mc_load_enq", "t": 23668.290976522, "ph": "stream", "req": "stream-43-81e01239", "tokens": 11648}
+{"ev": "mc_lookup", "t": 23668.308485894, "ph": "stream", "req": "stream-44-bd90fe5d", "hit_tokens": 0, "dur_s": 0.00594}
+{"ev": "mc_load_tier", "t": 23668.310730509, "ph": "stream", "req": "stream-43-81e01239", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23668.311173599, "ph": "stream", "req": "stream-43-81e01239", "keys": 182, "bytes": 1526726656, "dur_s": 0.005398, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23668.311581398, "ph": "stream", "req": "stream-43-81e01239", "bytes": 1526726656, "io_s": 0.005398, "dur_s": 0.020487}
+{"ev": "mc_lookup", "t": 23668.34861887, "ph": "stream", "req": "stream-44-bd90fe5d", "hit_tokens": 0, "dur_s": 0.002316}
+{"ev": "mc_store_enq", "t": 23668.36791147, "ph": "stream", "req": "stream-42-b41f9478", "tokens": 12224}
+{"ev": "mc_lookup", "t": 23668.374719177, "ph": "stream", "req": "stream-44-bd90fe5d", "hit_tokens": 0, "dur_s": 0.002505}
+{"ev": "mc_store_enq", "t": 23668.590619179, "ph": "stream", "req": "stream-44-bd90fe5d", "tokens": 8128}
+{"ev": "mc_put", "t": 23668.66204543, "ph": "stream", "req": "stream-42-b41f9478", "keys": 8, "bytes": 67108864, "dur_s": 0.019265, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23668.665594725, "ph": "stream", "req": "stream-42-b41f9478", "bytes": 67108864, "io_s": 0.020108, "dur_s": 0.297543}
+{"ev": "mc_lookup", "t": 23668.67224529, "ph": "stream", "req": "stream-45-b89a6faf", "hit_tokens": 0, "dur_s": 0.010347}
+{"ev": "mc_store_enq", "t": 23671.320701676, "ph": "stream", "req": "stream-45-b89a6faf", "tokens": 576}
+{"ev": "mc_store_enq", "t": 23671.320716437, "ph": "stream", "req": "stream-44-bd90fe5d", "tokens": 12160}
+{"ev": "mc_put", "t": 23672.128939226, "ph": "stream", "req": "stream-44-bd90fe5d", "keys": 127, "bytes": 1065353216, "dur_s": 0.193323, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23672.129099323, "ph": "stream", "req": "stream-44-bd90fe5d", "bytes": 1065353216, "io_s": 0.193917, "dur_s": 3.46346}
+{"ev": "mc_put", "t": 23674.179377194, "ph": "stream", "req": "stream-45-b89a6faf", "keys": 8, "bytes": 67108864, "dur_s": 0.022342, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23674.179431073, "ph": "stream", "req": "stream-45-b89a6faf", "bytes": 67108864, "io_s": 0.022856, "dur_s": 2.046102}
+{"ev": "mc_lookup", "t": 23674.235333045, "ph": "stream", "req": "stream-46-ba8428d7", "hit_tokens": 0, "dur_s": 0.00157}
+{"ev": "mc_store_enq", "t": 23674.261220466, "ph": "stream", "req": "stream-46-ba8428d7", "tokens": 4736}
+{"ev": "mc_put", "t": 23674.280700153, "ph": "stream", "req": "stream-44-bd90fe5d", "keys": 63, "bytes": 528482304, "dur_s": 0.098133, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23674.280778749, "ph": "stream", "req": "stream-44-bd90fe5d", "bytes": 528482304, "io_s": 0.099098, "dur_s": 0.101328}
+{"ev": "mc_lookup", "t": 23676.103688098, "ph": "stream", "req": "stream-47-8aed9705", "hit_tokens": 11648, "dur_s": 0.002624}
+{"ev": "mc_lookup", "t": 23676.148699622, "ph": "stream", "req": "stream-47-8aed9705", "hit_tokens": 11648, "dur_s": 0.001617}
+{"ev": "mc_put", "t": 23676.16328801, "ph": "stream", "req": "stream-46-ba8428d7", "keys": 73, "bytes": 612368384, "dur_s": 0.131061, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23676.1633804, "ph": "stream", "req": "stream-46-ba8428d7", "bytes": 612368384, "io_s": 0.131597, "dur_s": 1.871873}
+{"ev": "mc_lookup", "t": 23676.172554846, "ph": "stream", "req": "stream-47-8aed9705", "hit_tokens": 11648, "dur_s": 0.001643}
+{"ev": "mc_lookup", "t": 23676.174236308, "ph": "stream", "req": "stream-48-93202b63", "hit_tokens": 0, "dur_s": 0.000654}
+{"ev": "mc_lookup", "t": 23676.175209732, "ph": "stream", "req": "stream-49-94f492f3", "hit_tokens": 0, "dur_s": 0.000666}
+{"ev": "mc_load_enq", "t": 23676.202327803, "ph": "stream", "req": "stream-47-8aed9705", "tokens": 11648}
+{"ev": "mc_store_enq", "t": 23676.202378293, "ph": "stream", "req": "stream-48-93202b63", "tokens": 512}
+{"ev": "mc_store_enq", "t": 23676.202387781, "ph": "stream", "req": "stream-49-94f492f3", "tokens": 5632}
+{"ev": "mc_load_tier", "t": 23676.216522778, "ph": "stream", "req": "stream-47-8aed9705", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23676.216841406, "ph": "stream", "req": "stream-47-8aed9705", "keys": 182, "bytes": 1526726656, "dur_s": 0.004308, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23676.217188398, "ph": "stream", "req": "stream-47-8aed9705", "bytes": 1526726656, "io_s": 0.004308, "dur_s": 0.014571}
+{"ev": "mc_put", "t": 23678.490062437, "ph": "stream", "req": "stream-48-93202b63", "keys": 7, "bytes": 58720256, "dur_s": 0.018285, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23678.490112382, "ph": "stream", "req": "stream-48-93202b63", "bytes": 58720256, "io_s": 0.024196, "dur_s": 2.287645}
+{"ev": "mc_lookup", "t": 23678.530434522, "ph": "stream", "req": "stream-50-90803ab8", "hit_tokens": 0, "dur_s": 0.001227}
+{"ev": "mc_lookup", "t": 23678.531350251, "ph": "stream", "req": "stream-51-9ff2fdd8", "hit_tokens": 0, "dur_s": 0.000816}
+{"ev": "mc_store_enq", "t": 23678.551251569, "ph": "stream", "req": "stream-50-90803ab8", "tokens": 128}
+{"ev": "mc_store_enq", "t": 23678.551264236, "ph": "stream", "req": "stream-51-9ff2fdd8", "tokens": 896}
+{"ev": "mc_put", "t": 23678.628472178, "ph": "stream", "req": "stream-49-94f492f3", "keys": 87, "bytes": 729808896, "dur_s": 0.134813, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23678.628590755, "ph": "stream", "req": "stream-49-94f492f3", "bytes": 729808896, "io_s": 0.135619, "dur_s": 0.138459}
+{"ev": "mc_put", "t": 23678.938414545, "ph": "stream", "req": "stream-50-90803ab8", "keys": 2, "bytes": 16777216, "dur_s": 0.005917, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23678.938472627, "ph": "stream", "req": "stream-50-90803ab8", "bytes": 16777216, "io_s": 0.006312, "dur_s": 0.309839}
+{"ev": "mc_put", "t": 23678.965949679, "ph": "stream", "req": "stream-51-9ff2fdd8", "keys": 14, "bytes": 117440512, "dur_s": 0.025827, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23678.965996315, "ph": "stream", "req": "stream-51-9ff2fdd8", "bytes": 117440512, "io_s": 0.026437, "dur_s": 0.027498}
+{"ev": "mc_lookup", "t": 23679.044103932, "ph": "stream", "req": "stream-52-80a90df1", "hit_tokens": 0, "dur_s": 0.002414}
+{"ev": "mc_store_enq", "t": 23679.064601121, "ph": "stream", "req": "stream-52-80a90df1", "tokens": 8128}
+{"ev": "mc_lookup", "t": 23679.070347533, "ph": "stream", "req": "stream-53-9c6562f3", "hit_tokens": 0, "dur_s": 0.002446}
+{"ev": "mc_store_enq", "t": 23681.904063942, "ph": "stream", "req": "stream-53-9c6562f3", "tokens": 3968}
+{"ev": "mc_store_enq", "t": 23681.904092145, "ph": "stream", "req": "stream-52-80a90df1", "tokens": 12352}
+{"ev": "mc_put", "t": 23682.489141017, "ph": "stream", "req": "stream-52-80a90df1", "keys": 127, "bytes": 1065353216, "dur_s": 0.187604, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23682.48947209, "ph": "stream", "req": "stream-52-80a90df1", "bytes": 1065353216, "io_s": 0.188128, "dur_s": 3.424766}
+{"ev": "mc_store_enq", "t": 23685.488747736, "ph": "stream", "req": "stream-53-9c6562f3", "tokens": 12160}
+{"ev": "mc_lookup", "t": 23685.934708952, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003829}
+{"ev": "mc_lookup", "t": 23685.93597545, "ph": "stream", "req": "stream-55-8129e0b3", "hit_tokens": 0, "dur_s": 0.001166}
+{"ev": "mc_put", "t": 23685.998086851, "ph": "stream", "req": "stream-53-9c6562f3", "keys": 62, "bytes": 520093696, "dur_s": 0.095639, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23685.998468971, "ph": "stream", "req": "stream-53-9c6562f3", "bytes": 520093696, "io_s": 0.096065, "dur_s": 3.505393}
+{"ev": "mc_put", "t": 23686.107204684, "ph": "stream", "req": "stream-52-80a90df1", "keys": 70, "bytes": 587202560, "dur_s": 0.106826, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23686.107277297, "ph": "stream", "req": "stream-52-80a90df1", "bytes": 587202560, "io_s": 0.107638, "dur_s": 0.108795}
+{"ev": "mc_store_enq", "t": 23689.044106103, "ph": "stream", "req": "stream-55-8129e0b3", "tokens": 1600}
+{"ev": "mc_store_enq", "t": 23689.04412113, "ph": "stream", "req": "stream-53-9c6562f3", "tokens": 15104}
+{"ev": "mc_lookup", "t": 23689.767697136, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003937}
+{"ev": "mc_put", "t": 23689.955170099, "ph": "stream", "req": "stream-53-9c6562f3", "keys": 128, "bytes": 1073741824, "dur_s": 0.195254, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23689.955319201, "ph": "stream", "req": "stream-53-9c6562f3", "bytes": 1073741824, "io_s": 0.195901, "dur_s": 3.830673}
+{"ev": "mc_lookup", "t": 23691.998201109, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003791}
+{"ev": "mc_put", "t": 23692.009713512, "ph": "stream", "req": "stream-55-8129e0b3", "keys": 24, "bytes": 201326592, "dur_s": 0.044371, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23692.009765111, "ph": "stream", "req": "stream-55-8129e0b3", "bytes": 201326592, "io_s": 0.04486, "dur_s": 2.053902}
+{"ev": "mc_lookup", "t": 23692.030090056, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.004024}
+{"ev": "mc_lookup", "t": 23692.054771441, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003576}
+{"ev": "mc_lookup", "t": 23692.078863862, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003451}
+{"ev": "mc_put", "t": 23692.09683953, "ph": "stream", "req": "stream-53-9c6562f3", "keys": 46, "bytes": 385875968, "dur_s": 0.085932, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23692.096891363, "ph": "stream", "req": "stream-53-9c6562f3", "bytes": 385875968, "io_s": 0.086394, "dur_s": 0.087115}
+{"ev": "mc_lookup", "t": 23692.102947445, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003486}
+{"ev": "mc_lookup", "t": 23692.12858073, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003682}
+{"ev": "mc_lookup", "t": 23692.131695427, "ph": "stream", "req": "stream-56-94071079", "hit_tokens": 11712, "dur_s": 0.003061}
+{"ev": "mc_lookup", "t": 23692.155545793, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003414}
+{"ev": "mc_lookup", "t": 23692.158739295, "ph": "stream", "req": "stream-56-94071079", "hit_tokens": 11712, "dur_s": 0.003146}
+{"ev": "mc_lookup", "t": 23692.165785597, "ph": "stream", "req": "stream-54-ab552e61", "hit_tokens": 12544, "dur_s": 0.003502}
+{"ev": "mc_lookup", "t": 23692.169312845, "ph": "stream", "req": "stream-56-94071079", "hit_tokens": 11712, "dur_s": 0.00307}
+{"ev": "mc_lookup", "t": 23692.170996921, "ph": "stream", "req": "stream-57-965eaa92", "hit_tokens": 0, "dur_s": 0.001622}
+{"ev": "mc_lookup", "t": 23692.174772155, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.00317}
+{"ev": "mc_load_enq", "t": 23692.204660716, "ph": "stream", "req": "stream-54-ab552e61", "tokens": 12544}
+{"ev": "mc_store_enq", "t": 23692.204725506, "ph": "stream", "req": "stream-57-965eaa92", "tokens": 6656}
+{"ev": "mc_lookup", "t": 23692.225257078, "ph": "stream", "req": "stream-56-94071079", "hit_tokens": 11712, "dur_s": 0.005967}
+{"ev": "mc_lookup", "t": 23692.228760137, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.003423}
+{"ev": "mc_load_tier", "t": 23692.614156209, "ph": "stream", "req": "stream-54-ab552e61", "memory": 1258291200, "disk": 385875968, "unknown": 0}
+{"ev": "mc_get", "t": 23692.614376005, "ph": "stream", "req": "stream-54-ab552e61", "keys": 196, "bytes": 1644167168, "dur_s": 0.39253, "status": "ok"}
+{"ev": "mc_load_done", "t": 23692.614568886, "ph": "stream", "req": "stream-54-ab552e61", "bytes": 1644167168, "io_s": 0.39253, "dur_s": 0.409764}
+{"ev": "mc_lookup", "t": 23694.755821634, "ph": "stream", "req": "stream-56-94071079", "hit_tokens": 11712, "dur_s": 0.003673}
+{"ev": "mc_lookup", "t": 23694.760138626, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.003464}
+{"ev": "mc_load_enq", "t": 23694.797912997, "ph": "stream", "req": "stream-56-94071079", "tokens": 11712}
+{"ev": "mc_lookup", "t": 23694.81514894, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.006674}
+{"ev": "mc_store_enq", "t": 23694.8410573, "ph": "stream", "req": "stream-54-ab552e61", "tokens": 12608}
+{"ev": "mc_lookup", "t": 23694.845478657, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.003547}
+{"ev": "mc_put", "t": 23694.904565737, "ph": "stream", "req": "stream-57-965eaa92", "keys": 103, "bytes": 864026624, "dur_s": 0.169676, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23694.904778538, "ph": "stream", "req": "stream-57-965eaa92", "bytes": 864026624, "io_s": 0.174992, "dur_s": 2.694844}
+{"ev": "mc_lookup", "t": 23694.907961507, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001729}
+{"ev": "mc_lookup", "t": 23694.931227449, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001874}
+{"ev": "mc_lookup", "t": 23694.953410052, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001449}
+{"ev": "mc_lookup", "t": 23694.975784582, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001889}
+{"ev": "mc_lookup", "t": 23694.998475324, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001774}
+{"ev": "mc_lookup", "t": 23694.999301609, "ph": "stream", "req": "stream-59-9e1645ea", "hit_tokens": 64, "dur_s": 0.000772}
+{"ev": "mc_put", "t": 23695.01745668, "ph": "stream", "req": "stream-54-ab552e61", "keys": 1, "bytes": 8388608, "dur_s": 0.11034, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23695.017479973, "ph": "stream", "req": "stream-54-ab552e61", "bytes": 8388608, "io_s": 0.111297, "dur_s": 0.112544}
+{"ev": "mc_load_enq", "t": 23695.018804776, "ph": "stream", "req": "stream-59-9e1645ea", "tokens": 128}
+{"ev": "mc_lookup", "t": 23695.020989554, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001467}
+{"ev": "mc_lookup", "t": 23695.042924505, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.00182}
+{"ev": "mc_lookup", "t": 23695.046887749, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.001971}
+{"ev": "mc_lookup", "t": 23695.048081081, "ph": "stream", "req": "stream-60-817a648f", "hit_tokens": 0, "dur_s": 0.001133}
+{"ev": "mc_store_enq", "t": 23695.070633137, "ph": "stream", "req": "stream-60-817a648f", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23695.075541456, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.003966}
+{"ev": "mc_load_tier", "t": 23695.254895097, "ph": "stream", "req": "stream-56-94071079", "memory": 1233125376, "disk": 301989888, "unknown": 0}
+{"ev": "mc_get", "t": 23695.255099183, "ph": "stream", "req": "stream-56-94071079", "keys": 183, "bytes": 1535115264, "dur_s": 0.445323, "status": "ok"}
+{"ev": "mc_load_done", "t": 23695.2552888, "ph": "stream", "req": "stream-56-94071079", "bytes": 1535115264, "io_s": 0.445323, "dur_s": 0.457237}
+{"ev": "mc_load_tier", "t": 23695.267519513, "ph": "stream", "req": "stream-59-9e1645ea", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23695.267754961, "ph": "stream", "req": "stream-59-9e1645ea", "keys": 1, "bytes": 8388608, "dur_s": 0.012138, "status": "ok"}
+{"ev": "mc_load_done", "t": 23695.267800756, "ph": "stream", "req": "stream-59-9e1645ea", "bytes": 8388608, "io_s": 0.012138, "dur_s": 0.012498}
+{"ev": "mc_store_enq", "t": 23697.440604527, "ph": "stream", "req": "stream-60-817a648f", "tokens": 11648}
+{"ev": "mc_lookup", "t": 23698.296585484, "ph": "stream", "req": "stream-58-892f92d2", "hit_tokens": 11648, "dur_s": 0.0041}
+{"ev": "mc_put", "t": 23698.485079566, "ph": "stream", "req": "stream-60-817a648f", "keys": 128, "bytes": 1073741824, "dur_s": 0.196624, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23698.485213446, "ph": "stream", "req": "stream-60-817a648f", "bytes": 1073741824, "io_s": 0.197339, "dur_s": 3.414492}
+{"ev": "mc_load_enq", "t": 23698.936667827, "ph": "stream", "req": "stream-58-892f92d2", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23698.953702248, "ph": "stream", "req": "stream-58-892f92d2", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23698.954169992, "ph": "stream", "req": "stream-58-892f92d2", "keys": 182, "bytes": 1526726656, "dur_s": 0.005808, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23698.954629968, "ph": "stream", "req": "stream-58-892f92d2", "bytes": 1526726656, "io_s": 0.005808, "dur_s": 0.017802}
+{"ev": "mc_store_enq", "t": 23700.080967436, "ph": "stream", "req": "stream-56-94071079", "tokens": 11840}
+{"ev": "mc_store_enq", "t": 23700.08098268, "ph": "stream", "req": "stream-59-9e1645ea", "tokens": 2112}
+{"ev": "mc_put", "t": 23700.116724543, "ph": "stream", "req": "stream-60-817a648f", "keys": 54, "bytes": 452984832, "dur_s": 0.087752, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23700.116873186, "ph": "stream", "req": "stream-60-817a648f", "bytes": 452984832, "io_s": 0.088246, "dur_s": 1.631629}
+{"ev": "mc_put", "t": 23700.916071559, "ph": "stream", "req": "stream-56-94071079", "keys": 2, "bytes": 16777216, "dur_s": 0.02302, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23700.916141449, "ph": "stream", "req": "stream-56-94071079", "bytes": 16777216, "io_s": 0.024069, "dur_s": 0.790683}
+{"ev": "mc_lookup", "t": 23700.923987387, "ph": "stream", "req": "stream-61-be7a0400", "hit_tokens": 128, "dur_s": 0.003283}
+{"ev": "mc_load_enq", "t": 23700.950856396, "ph": "stream", "req": "stream-61-be7a0400", "tokens": 128}
+{"ev": "mc_put", "t": 23700.979516385, "ph": "stream", "req": "stream-59-9e1645ea", "keys": 31, "bytes": 260046848, "dur_s": 0.05727, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23700.979588241, "ph": "stream", "req": "stream-59-9e1645ea", "bytes": 260046848, "io_s": 0.061734, "dur_s": 0.06342}
+{"ev": "mc_load_tier", "t": 23700.98076023, "ph": "stream", "req": "stream-61-be7a0400", "memory": 0, "disk": 16777216, "unknown": 0}
+{"ev": "mc_get", "t": 23700.981069295, "ph": "stream", "req": "stream-61-be7a0400", "keys": 2, "bytes": 16777216, "dur_s": 0.029341, "status": "ok"}
+{"ev": "mc_load_done", "t": 23700.981123028, "ph": "stream", "req": "stream-61-be7a0400", "bytes": 16777216, "io_s": 0.029341, "dur_s": 0.030136}
+{"ev": "mc_store_enq", "t": 23701.03427122, "ph": "stream", "req": "stream-61-be7a0400", "tokens": 3648}
+{"ev": "mc_lookup", "t": 23701.039034507, "ph": "stream", "req": "stream-62-bb6b83ba", "hit_tokens": 0, "dur_s": 0.000846}
+{"ev": "mc_store_enq", "t": 23701.606361117, "ph": "stream", "req": "stream-62-bb6b83ba", "tokens": 64}
+{"ev": "mc_lookup", "t": 23702.429103984, "ph": "stream", "req": "stream-63-947abdf1", "hit_tokens": 8832, "dur_s": 0.003227}
+{"ev": "mc_lookup", "t": 23702.430592412, "ph": "stream", "req": "stream-64-b0fe451f", "hit_tokens": 0, "dur_s": 0.001053}
+{"ev": "mc_put", "t": 23702.441457674, "ph": "stream", "req": "stream-61-be7a0400", "keys": 55, "bytes": 461373440, "dur_s": 0.091219, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23702.441529365, "ph": "stream", "req": "stream-61-be7a0400", "bytes": 461373440, "io_s": 0.091934, "dur_s": 1.40712}
+{"ev": "mc_put", "t": 23702.444293712, "ph": "stream", "req": "stream-62-bb6b83ba", "keys": 1, "bytes": 8388608, "dur_s": 0.002281, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23702.444353429, "ph": "stream", "req": "stream-62-bb6b83ba", "bytes": 8388608, "io_s": 0.002663, "dur_s": 0.002803}
+{"ev": "mc_load_enq", "t": 23702.463244602, "ph": "stream", "req": "stream-63-947abdf1", "tokens": 12160}
+{"ev": "mc_store_enq", "t": 23702.463301339, "ph": "stream", "req": "stream-64-b0fe451f", "tokens": 1728}
+{"ev": "mc_put", "t": 23703.122483292, "ph": "stream", "req": "stream-64-b0fe451f", "keys": 27, "bytes": 226492416, "dur_s": 0.05002, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23703.122531454, "ph": "stream", "req": "stream-64-b0fe451f", "bytes": 226492416, "io_s": 0.050445, "dur_s": 0.65214}
+{"ev": "mc_lookup", "t": 23703.181223214, "ph": "stream", "req": "stream-65-8018dacc", "hit_tokens": 1024, "dur_s": 0.002434}
+{"ev": "mc_load_enq", "t": 23703.201052115, "ph": "stream", "req": "stream-65-8018dacc", "tokens": 12608}
+{"ev": "mc_lookup", "t": 23703.2039347, "ph": "stream", "req": "stream-66-84697195", "hit_tokens": 0, "dur_s": 0.001266}
+{"ev": "mc_store_enq", "t": 23703.224619147, "ph": "stream", "req": "stream-66-84697195", "tokens": 6144}
+{"ev": "mc_load_tier", "t": 23703.292008723, "ph": "stream", "req": "stream-63-947abdf1", "memory": 0, "disk": 1157627904, "unknown": 0}
+{"ev": "mc_get", "t": 23703.292191867, "ph": "stream", "req": "stream-63-947abdf1", "keys": 138, "bytes": 1157627904, "dur_s": 0.81895, "status": "ok"}
+{"ev": "mc_load_done", "t": 23703.292280392, "ph": "stream", "req": "stream-63-947abdf1", "bytes": 1157627904, "io_s": 0.81895, "dur_s": 0.82889}
+{"ev": "mc_load_tier", "t": 23703.373037337, "ph": "stream", "req": "stream-65-8018dacc", "memory": 33554432, "disk": 100663296, "unknown": 0}
+{"ev": "mc_get", "t": 23703.373163442, "ph": "stream", "req": "stream-65-8018dacc", "keys": 16, "bytes": 134217728, "dur_s": 0.080097, "status": "ok"}
+{"ev": "mc_load_done", "t": 23703.373191053, "ph": "stream", "req": "stream-65-8018dacc", "bytes": 134217728, "io_s": 0.080097, "dur_s": 0.0809}
+{"ev": "mc_lookup", "t": 23705.560535758, "ph": "stream", "req": "stream-67-9a61544f", "hit_tokens": 0, "dur_s": 0.001441}
+{"ev": "mc_store_enq", "t": 23705.59027797, "ph": "stream", "req": "stream-67-9a61544f", "tokens": 2368}
+{"ev": "mc_put", "t": 23705.690767378, "ph": "stream", "req": "stream-66-84697195", "keys": 95, "bytes": 796917760, "dur_s": 0.148966, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23705.690886005, "ph": "stream", "req": "stream-66-84697195", "bytes": 796917760, "io_s": 0.149536, "dur_s": 2.466161}
+{"ev": "mc_store_enq", "t": 23705.974752921, "ph": "stream", "req": "stream-63-947abdf1", "tokens": 12800}
+{"ev": "mc_store_enq", "t": 23705.974765109, "ph": "stream", "req": "stream-65-8018dacc", "tokens": 13184}
+{"ev": "mc_put", "t": 23706.46716642, "ph": "stream", "req": "stream-67-9a61544f", "keys": 36, "bytes": 301989888, "dur_s": 0.056279, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23706.46722004, "ph": "stream", "req": "stream-67-9a61544f", "bytes": 301989888, "io_s": 0.057376, "dur_s": 0.775772}
+{"ev": "mc_put", "t": 23707.176850568, "ph": "stream", "req": "stream-63-947abdf1", "keys": 10, "bytes": 83886080, "dur_s": 0.034393, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23707.17692524, "ph": "stream", "req": "stream-63-947abdf1", "bytes": 83886080, "io_s": 0.035181, "dur_s": 0.705798}
+{"ev": "mc_put", "t": 23707.197389243, "ph": "stream", "req": "stream-65-8018dacc", "keys": 9, "bytes": 75497472, "dur_s": 0.018268, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23707.19744155, "ph": "stream", "req": "stream-65-8018dacc", "bytes": 75497472, "io_s": 0.019276, "dur_s": 0.020486}
+{"ev": "mc_lookup", "t": 23707.266443402, "ph": "stream", "req": "stream-68-ba2a1ddd", "hit_tokens": 11648, "dur_s": 0.003512}
+{"ev": "mc_lookup", "t": 23707.288492283, "ph": "stream", "req": "stream-68-ba2a1ddd", "hit_tokens": 11648, "dur_s": 0.001919}
+{"ev": "mc_lookup", "t": 23707.315537882, "ph": "stream", "req": "stream-68-ba2a1ddd", "hit_tokens": 11648, "dur_s": 0.002169}
+{"ev": "mc_lookup", "t": 23707.317037216, "ph": "stream", "req": "stream-69-bc845e6b", "hit_tokens": 0, "dur_s": 0.001184}
+{"ev": "mc_load_enq", "t": 23707.317264405, "ph": "stream", "req": "stream-68-ba2a1ddd", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23707.328599747, "ph": "stream", "req": "stream-68-ba2a1ddd", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23707.328807945, "ph": "stream", "req": "stream-68-ba2a1ddd", "keys": 182, "bytes": 1526726656, "dur_s": 0.003695, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23707.328999823, "ph": "stream", "req": "stream-68-ba2a1ddd", "bytes": 1526726656, "io_s": 0.003695, "dur_s": 0.011593}
+{"ev": "mc_lookup", "t": 23707.340372588, "ph": "stream", "req": "stream-69-bc845e6b", "hit_tokens": 0, "dur_s": 0.002008}
+{"ev": "mc_lookup", "t": 23707.342732218, "ph": "stream", "req": "stream-69-bc845e6b", "hit_tokens": 0, "dur_s": 0.001654}
+{"ev": "mc_lookup", "t": 23707.346711621, "ph": "stream", "req": "stream-69-bc845e6b", "hit_tokens": 0, "dur_s": 0.001867}
+{"ev": "mc_store_enq", "t": 23707.375039135, "ph": "stream", "req": "stream-69-bc845e6b", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23707.381788932, "ph": "stream", "req": "stream-70-a3277a1f", "hit_tokens": 6656, "dur_s": 0.005493}
+{"ev": "mc_lookup", "t": 23707.383633941, "ph": "stream", "req": "stream-71-bac6a626", "hit_tokens": 128, "dur_s": 0.001177}
+{"ev": "mc_lookup", "t": 23707.384784783, "ph": "stream", "req": "stream-72-bf69d7e3", "hit_tokens": 64, "dur_s": 0.000943}
+{"ev": "mc_load_enq", "t": 23709.288229915, "ph": "stream", "req": "stream-70-a3277a1f", "tokens": 6912}
+{"ev": "mc_load_enq", "t": 23709.288236486, "ph": "stream", "req": "stream-71-bac6a626", "tokens": 128}
+{"ev": "mc_load_enq", "t": 23709.288237934, "ph": "stream", "req": "stream-72-bf69d7e3", "tokens": 64}
+{"ev": "mc_store_enq", "t": 23709.291083724, "ph": "stream", "req": "stream-69-bc845e6b", "tokens": 9856}
+{"ev": "mc_load_tier", "t": 23709.910167963, "ph": "stream", "req": "stream-70-a3277a1f", "memory": 0, "disk": 872415232, "unknown": 0}
+{"ev": "mc_get", "t": 23709.910364842, "ph": "stream", "req": "stream-70-a3277a1f", "keys": 104, "bytes": 872415232, "dur_s": 0.616173, "status": "ok"}
+{"ev": "mc_load_done", "t": 23709.910456877, "ph": "stream", "req": "stream-70-a3277a1f", "bytes": 872415232, "io_s": 0.616173, "dur_s": 0.62213}
+{"ev": "mc_load_tier", "t": 23709.923215721, "ph": "stream", "req": "stream-71-bac6a626", "memory": 8388608, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23709.923378424, "ph": "stream", "req": "stream-71-bac6a626", "keys": 2, "bytes": 16777216, "dur_s": 0.012381, "status": "ok"}
+{"ev": "mc_load_done", "t": 23709.923404848, "ph": "stream", "req": "stream-71-bac6a626", "bytes": 16777216, "io_s": 0.012381, "dur_s": 0.012935}
+{"ev": "mc_load_tier", "t": 23709.925015293, "ph": "stream", "req": "stream-72-bf69d7e3", "memory": 8388608, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23709.92512745, "ph": "stream", "req": "stream-72-bf69d7e3", "keys": 1, "bytes": 8388608, "dur_s": 0.001249, "status": "ok"}
+{"ev": "mc_load_done", "t": 23709.925147716, "ph": "stream", "req": "stream-72-bf69d7e3", "bytes": 8388608, "io_s": 0.001249, "dur_s": 0.001729}
+{"ev": "mc_put", "t": 23710.796317957, "ph": "stream", "req": "stream-69-bc845e6b", "keys": 128, "bytes": 1073741824, "dur_s": 0.195102, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23710.796466687, "ph": "stream", "req": "stream-69-bc845e6b", "bytes": 1073741824, "io_s": 0.195858, "dur_s": 3.421303}
+{"ev": "mc_put", "t": 23711.436474294, "ph": "stream", "req": "stream-69-bc845e6b", "keys": 26, "bytes": 218103808, "dur_s": 0.046265, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23711.436529708, "ph": "stream", "req": "stream-69-bc845e6b", "bytes": 218103808, "io_s": 0.046715, "dur_s": 0.637942}
+{"ev": "mc_store_enq", "t": 23711.481655889, "ph": "stream", "req": "stream-70-a3277a1f", "tokens": 11392}
+{"ev": "mc_store_enq", "t": 23711.481675363, "ph": "stream", "req": "stream-71-bac6a626", "tokens": 1408}
+{"ev": "mc_store_enq", "t": 23711.481681626, "ph": "stream", "req": "stream-72-bf69d7e3", "tokens": 1664}
+{"ev": "mc_lookup", "t": 23714.803032272, "ph": "stream", "req": "stream-73-808e5371", "hit_tokens": 0, "dur_s": 0.001166}
+{"ev": "mc_store_enq", "t": 23714.821914875, "ph": "stream", "req": "stream-73-808e5371", "tokens": 1792}
+{"ev": "mc_put", "t": 23714.822512927, "ph": "stream", "req": "stream-70-a3277a1f", "keys": 70, "bytes": 587202560, "dur_s": 0.131612, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23714.82262177, "ph": "stream", "req": "stream-70-a3277a1f", "bytes": 587202560, "io_s": 0.132592, "dur_s": 3.340854}
+{"ev": "mc_put", "t": 23714.853965876, "ph": "stream", "req": "stream-71-bac6a626", "keys": 20, "bytes": 167772160, "dur_s": 0.030541, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23714.853998147, "ph": "stream", "req": "stream-71-bac6a626", "bytes": 167772160, "io_s": 0.030978, "dur_s": 0.031365}
+{"ev": "mc_put", "t": 23714.893639834, "ph": "stream", "req": "stream-72-bf69d7e3", "keys": 25, "bytes": 209715200, "dur_s": 0.038991, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23714.893699265, "ph": "stream", "req": "stream-72-bf69d7e3", "bytes": 209715200, "io_s": 0.039244, "dur_s": 0.039687}
+{"ev": "mc_put", "t": 23715.497721477, "ph": "stream", "req": "stream-73-808e5371", "keys": 27, "bytes": 226492416, "dur_s": 0.047471, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23715.497763251, "ph": "stream", "req": "stream-73-808e5371", "bytes": 226492416, "io_s": 0.047817, "dur_s": 0.600515}
+{"ev": "mc_lookup", "t": 23715.513961003, "ph": "stream", "req": "stream-74-b1911d66", "hit_tokens": 11648, "dur_s": 0.002367}
+{"ev": "mc_lookup", "t": 23715.51616356, "ph": "stream", "req": "stream-75-a5309c55", "hit_tokens": 12544, "dur_s": 0.001825}
+{"ev": "mc_lookup", "t": 23715.516803045, "ph": "stream", "req": "stream-76-b0be3d56", "hit_tokens": 0, "dur_s": 0.000592}
+{"ev": "mc_load_enq", "t": 23715.543468617, "ph": "stream", "req": "stream-74-b1911d66", "tokens": 11648}
+{"ev": "mc_store_enq", "t": 23715.543538925, "ph": "stream", "req": "stream-76-b0be3d56", "tokens": 1472}
+{"ev": "mc_load_tier", "t": 23715.557354089, "ph": "stream", "req": "stream-74-b1911d66", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23715.557649201, "ph": "stream", "req": "stream-74-b1911d66", "keys": 182, "bytes": 1526726656, "dur_s": 0.003995, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23715.557932342, "ph": "stream", "req": "stream-74-b1911d66", "bytes": 1526726656, "io_s": 0.003995, "dur_s": 0.014216}
+{"ev": "mc_lookup", "t": 23715.558063455, "ph": "stream", "req": "stream-75-a5309c55", "hit_tokens": 12544, "dur_s": 0.006019}
+{"ev": "mc_lookup", "t": 23716.044841402, "ph": "stream", "req": "stream-75-a5309c55", "hit_tokens": 12544, "dur_s": 0.003565}
+{"ev": "mc_put", "t": 23716.074527701, "ph": "stream", "req": "stream-76-b0be3d56", "keys": 23, "bytes": 192937984, "dur_s": 0.040231, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23716.074570653, "ph": "stream", "req": "stream-76-b0be3d56", "bytes": 192937984, "io_s": 0.045715, "dur_s": 0.530967}
+{"ev": "mc_load_enq", "t": 23716.084892694, "ph": "stream", "req": "stream-75-a5309c55", "tokens": 12800}
+{"ev": "mc_lookup", "t": 23716.103198932, "ph": "stream", "req": "stream-77-9e354a4f", "hit_tokens": 448, "dur_s": 0.005697}
+{"ev": "mc_load_enq", "t": 23716.140816602, "ph": "stream", "req": "stream-77-9e354a4f", "tokens": 448}
+{"ev": "mc_lookup", "t": 23716.191293005, "ph": "stream", "req": "stream-78-920ba1cf", "hit_tokens": 11648, "dur_s": 0.003679}
+{"ev": "mc_lookup", "t": 23716.214853657, "ph": "stream", "req": "stream-78-920ba1cf", "hit_tokens": 11648, "dur_s": 0.003589}
+{"ev": "mc_lookup", "t": 23716.238330586, "ph": "stream", "req": "stream-78-920ba1cf", "hit_tokens": 11648, "dur_s": 0.003656}
+{"ev": "mc_load_enq", "t": 23716.238717647, "ph": "stream", "req": "stream-78-920ba1cf", "tokens": 11648}
+{"ev": "mc_lookup", "t": 23716.244183699, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003746}
+{"ev": "mc_lookup", "t": 23716.247799393, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003272}
+{"ev": "mc_lookup", "t": 23716.251468801, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003238}
+{"ev": "mc_lookup", "t": 23716.253646879, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001789}
+{"ev": "mc_lookup", "t": 23716.255623897, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001579}
+{"ev": "mc_lookup", "t": 23716.258318074, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002202}
+{"ev": "mc_lookup", "t": 23716.261677318, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00287}
+{"ev": "mc_lookup", "t": 23716.264670404, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002438}
+{"ev": "mc_lookup", "t": 23716.267836011, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002668}
+{"ev": "mc_lookup", "t": 23716.270961347, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002494}
+{"ev": "mc_lookup", "t": 23716.273862069, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002393}
+{"ev": "mc_lookup", "t": 23716.276304687, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002036}
+{"ev": "mc_lookup", "t": 23716.279214924, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002446}
+{"ev": "mc_lookup", "t": 23716.282606687, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002845}
+{"ev": "mc_lookup", "t": 23716.285962496, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002801}
+{"ev": "mc_lookup", "t": 23716.289878019, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003331}
+{"ev": "mc_lookup", "t": 23716.29386192, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003228}
+{"ev": "mc_lookup", "t": 23716.29814389, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003519}
+{"ev": "mc_lookup", "t": 23716.302720694, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003632}
+{"ev": "mc_lookup", "t": 23716.307271266, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003619}
+{"ev": "mc_lookup", "t": 23716.311900055, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003709}
+{"ev": "mc_lookup", "t": 23716.316606501, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003767}
+{"ev": "mc_lookup", "t": 23716.321311923, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003768}
+{"ev": "mc_lookup", "t": 23716.326147321, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003897}
+{"ev": "mc_lookup", "t": 23716.330639757, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003552}
+{"ev": "mc_lookup", "t": 23716.335310941, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003725}
+{"ev": "mc_lookup", "t": 23716.339940777, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003684}
+{"ev": "mc_lookup", "t": 23716.348069215, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00379}
+{"ev": "mc_lookup", "t": 23716.352764963, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003759}
+{"ev": "mc_lookup", "t": 23716.35750103, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003772}
+{"ev": "mc_lookup", "t": 23716.362547856, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004087}
+{"ev": "mc_lookup", "t": 23716.367514853, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004001}
+{"ev": "mc_lookup", "t": 23716.372251547, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00378}
+{"ev": "mc_lookup", "t": 23716.37691604, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003692}
+{"ev": "mc_lookup", "t": 23716.381617601, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003734}
+{"ev": "mc_lookup", "t": 23716.386556852, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003966}
+{"ev": "mc_lookup", "t": 23716.391288328, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003754}
+{"ev": "mc_lookup", "t": 23716.395981128, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003719}
+{"ev": "mc_lookup", "t": 23716.40065386, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003689}
+{"ev": "mc_lookup", "t": 23716.405380482, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003753}
+{"ev": "mc_lookup", "t": 23716.410461816, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004102}
+{"ev": "mc_lookup", "t": 23716.415357406, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.0039}
+{"ev": "mc_lookup", "t": 23716.420384562, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00402}
+{"ev": "mc_lookup", "t": 23716.425288465, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003886}
+{"ev": "mc_lookup", "t": 23716.430081781, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003767}
+{"ev": "mc_lookup", "t": 23716.43499998, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003898}
+{"ev": "mc_lookup", "t": 23716.439871033, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003803}
+{"ev": "mc_lookup", "t": 23716.444838823, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003911}
+{"ev": "mc_lookup", "t": 23716.449897096, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003963}
+{"ev": "mc_lookup", "t": 23716.454946101, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003961}
+{"ev": "mc_lookup", "t": 23716.460504532, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004409}
+{"ev": "mc_lookup", "t": 23716.465974926, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004343}
+{"ev": "mc_lookup", "t": 23716.47108233, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003969}
+{"ev": "mc_lookup", "t": 23716.47628144, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00407}
+{"ev": "mc_lookup", "t": 23716.48148783, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004071}
+{"ev": "mc_lookup", "t": 23716.487022211, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004399}
+{"ev": "mc_lookup", "t": 23716.492561029, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004416}
+{"ev": "mc_lookup", "t": 23716.49791597, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00424}
+{"ev": "mc_lookup", "t": 23716.502898808, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003842}
+{"ev": "mc_lookup", "t": 23716.50798169, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003937}
+{"ev": "mc_lookup", "t": 23716.513229443, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004105}
+{"ev": "mc_lookup", "t": 23716.518354773, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004007}
+{"ev": "mc_lookup", "t": 23716.523539771, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004066}
+{"ev": "mc_lookup", "t": 23716.528729314, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00406}
+{"ev": "mc_lookup", "t": 23716.534114063, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00426}
+{"ev": "mc_lookup", "t": 23716.539328416, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004099}
+{"ev": "mc_lookup", "t": 23716.544518581, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004072}
+{"ev": "mc_lookup", "t": 23716.549692217, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004047}
+{"ev": "mc_lookup", "t": 23716.555093053, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004275}
+{"ev": "mc_lookup", "t": 23716.560247455, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004036}
+{"ev": "mc_lookup", "t": 23716.565432639, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004052}
+{"ev": "mc_lookup", "t": 23716.570645108, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004097}
+{"ev": "mc_lookup", "t": 23716.575722087, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003948}
+{"ev": "mc_lookup", "t": 23716.580806904, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003963}
+{"ev": "mc_lookup", "t": 23716.585861477, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003906}
+{"ev": "mc_lookup", "t": 23716.591133153, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00414}
+{"ev": "mc_lookup", "t": 23716.596111748, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003858}
+{"ev": "mc_lookup", "t": 23716.601257398, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004015}
+{"ev": "mc_lookup", "t": 23716.606342718, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00396}
+{"ev": "mc_lookup", "t": 23716.61135522, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003942}
+{"ev": "mc_lookup", "t": 23716.616113169, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003834}
+{"ev": "mc_lookup", "t": 23716.621126951, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003937}
+{"ev": "mc_lookup", "t": 23716.626454412, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00425}
+{"ev": "mc_lookup", "t": 23716.63167606, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004108}
+{"ev": "mc_lookup", "t": 23716.636772754, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003983}
+{"ev": "mc_lookup", "t": 23716.642221241, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00434}
+{"ev": "mc_lookup", "t": 23716.647815921, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004476}
+{"ev": "mc_lookup", "t": 23716.652954354, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004022}
+{"ev": "mc_lookup", "t": 23716.65839381, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004125}
+{"ev": "mc_lookup", "t": 23716.663571525, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004073}
+{"ev": "mc_lookup", "t": 23716.668761117, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004091}
+{"ev": "mc_lookup", "t": 23716.674255338, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004392}
+{"ev": "mc_lookup", "t": 23716.679421327, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004052}
+{"ev": "mc_lookup", "t": 23716.684647491, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004126}
+{"ev": "mc_lookup", "t": 23716.6898289, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004084}
+{"ev": "mc_lookup", "t": 23716.69484569, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00393}
+{"ev": "mc_lookup", "t": 23716.699663402, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003772}
+{"ev": "mc_lookup", "t": 23716.7044252, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003711}
+{"ev": "mc_lookup", "t": 23716.709209153, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003735}
+{"ev": "mc_lookup", "t": 23716.71365274, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003505}
+{"ev": "mc_lookup", "t": 23716.718114126, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003477}
+{"ev": "mc_lookup", "t": 23716.722407592, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003314}
+{"ev": "mc_lookup", "t": 23716.726381188, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003126}
+{"ev": "mc_lookup", "t": 23716.731601184, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004354}
+{"ev": "mc_lookup", "t": 23716.736569217, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004045}
+{"ev": "mc_lookup", "t": 23716.74144032, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004068}
+{"ev": "mc_lookup", "t": 23716.746580704, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004165}
+{"ev": "mc_lookup", "t": 23716.751401908, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00384}
+{"ev": "mc_lookup", "t": 23716.756677416, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004162}
+{"ev": "mc_lookup", "t": 23716.762142741, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.004373}
+{"ev": "mc_lookup", "t": 23716.766994102, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003751}
+{"ev": "mc_lookup", "t": 23716.771852664, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00376}
+{"ev": "mc_lookup", "t": 23716.776614494, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003758}
+{"ev": "mc_lookup", "t": 23716.781016244, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003374}
+{"ev": "mc_lookup", "t": 23716.785457103, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003539}
+{"ev": "mc_lookup", "t": 23716.789902634, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003519}
+{"ev": "mc_lookup", "t": 23716.794551437, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003691}
+{"ev": "mc_lookup", "t": 23716.799028736, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00351}
+{"ev": "mc_lookup", "t": 23716.803664756, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003752}
+{"ev": "mc_lookup", "t": 23716.807812721, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003194}
+{"ev": "mc_lookup", "t": 23716.811734911, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003041}
+{"ev": "mc_lookup", "t": 23716.815822579, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003263}
+{"ev": "mc_lookup", "t": 23716.819926384, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003287}
+{"ev": "mc_lookup", "t": 23716.823800412, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003082}
+{"ev": "mc_lookup", "t": 23716.827756269, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003164}
+{"ev": "mc_lookup", "t": 23716.831383076, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002827}
+{"ev": "mc_lookup", "t": 23716.835681949, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003531}
+{"ev": "mc_lookup", "t": 23716.839383955, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002909}
+{"ev": "mc_lookup", "t": 23716.84291208, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002749}
+{"ev": "mc_lookup", "t": 23716.846567746, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.00291}
+{"ev": "mc_lookup", "t": 23716.850107473, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002787}
+{"ev": "mc_lookup", "t": 23716.853445902, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002607}
+{"ev": "mc_lookup", "t": 23716.85695367, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002808}
+{"ev": "mc_lookup", "t": 23716.860361398, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002723}
+{"ev": "mc_lookup", "t": 23716.863775619, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002716}
+{"ev": "mc_lookup", "t": 23716.868416434, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003947}
+{"ev": "mc_lookup", "t": 23716.873280584, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003833}
+{"ev": "mc_lookup", "t": 23716.877914121, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003623}
+{"ev": "mc_lookup", "t": 23716.882398145, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003513}
+{"ev": "mc_lookup", "t": 23716.886575488, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003246}
+{"ev": "mc_lookup", "t": 23716.890682872, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003176}
+{"ev": "mc_lookup", "t": 23716.894448915, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002844}
+{"ev": "mc_lookup", "t": 23716.898314666, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003089}
+{"ev": "mc_lookup", "t": 23716.902360529, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003283}
+{"ev": "mc_lookup", "t": 23716.906536075, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003356}
+{"ev": "mc_lookup", "t": 23716.910683058, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003344}
+{"ev": "mc_lookup", "t": 23716.914975029, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003501}
+{"ev": "mc_lookup", "t": 23716.919291398, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003325}
+{"ev": "mc_lookup", "t": 23716.923563015, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003366}
+{"ev": "mc_lookup", "t": 23716.928090435, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003635}
+{"ev": "mc_lookup", "t": 23716.932591839, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003607}
+{"ev": "mc_lookup", "t": 23716.936957759, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003361}
+{"ev": "mc_lookup", "t": 23716.941308298, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003421}
+{"ev": "mc_lookup", "t": 23716.945506814, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003289}
+{"ev": "mc_lookup", "t": 23716.949493641, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003144}
+{"ev": "mc_lookup", "t": 23716.953463024, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003134}
+{"ev": "mc_lookup", "t": 23716.957145915, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002945}
+{"ev": "mc_lookup", "t": 23716.960748847, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002878}
+{"ev": "mc_lookup", "t": 23716.964310193, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002833}
+{"ev": "mc_lookup", "t": 23716.967166083, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002247}
+{"ev": "mc_lookup", "t": 23716.970083068, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002306}
+{"ev": "mc_lookup", "t": 23716.973096348, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002402}
+{"ev": "mc_lookup", "t": 23716.975776059, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002085}
+{"ev": "mc_lookup", "t": 23716.978277761, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001963}
+{"ev": "mc_lookup", "t": 23716.980886473, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002062}
+{"ev": "mc_lookup", "t": 23716.983579426, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002159}
+{"ev": "mc_lookup", "t": 23716.98583843, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001776}
+{"ev": "mc_lookup", "t": 23716.988289143, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001972}
+{"ev": "mc_load_tier", "t": 23716.990790917, "ph": "stream", "req": "stream-75-a5309c55", "memory": 486539264, "disk": 1157627904, "unknown": 0}
+{"ev": "mc_get", "t": 23716.991160371, "ph": "stream", "req": "stream-75-a5309c55", "keys": 196, "bytes": 1644167168, "dur_s": 0.892237, "status": "ok"}
+{"ev": "mc_load_done", "t": 23716.991543487, "ph": "stream", "req": "stream-75-a5309c55", "bytes": 1644167168, "io_s": 0.892237, "dur_s": 0.906494}
+{"ev": "mc_lookup", "t": 23716.992096877, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.003318}
+{"ev": "mc_lookup", "t": 23716.994703652, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002124}
+{"ev": "mc_lookup", "t": 23716.997996431, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002183}
+{"ev": "mc_store_enq", "t": 23717.022961094, "ph": "stream", "req": "stream-75-a5309c55", "tokens": 13056}
+{"ev": "mc_lookup", "t": 23717.02566706, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.001739}
+{"ev": "mc_load_tier", "t": 23717.041165306, "ph": "stream", "req": "stream-77-9e354a4f", "memory": 0, "disk": 58720256, "unknown": 0}
+{"ev": "mc_get", "t": 23717.041436263, "ph": "stream", "req": "stream-77-9e354a4f", "keys": 7, "bytes": 58720256, "dur_s": 0.048719, "status": "ok"}
+{"ev": "mc_load_done", "t": 23717.041498617, "ph": "stream", "req": "stream-77-9e354a4f", "bytes": 58720256, "io_s": 0.048719, "dur_s": 0.049925}
+{"ev": "mc_load_tier", "t": 23717.056110121, "ph": "stream", "req": "stream-78-920ba1cf", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23717.056372098, "ph": "stream", "req": "stream-78-920ba1cf", "keys": 182, "bytes": 1526726656, "dur_s": 0.00474, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23717.056651538, "ph": "stream", "req": "stream-78-920ba1cf", "bytes": 1526726656, "io_s": 0.00474, "dur_s": 0.015125}
+{"ev": "mc_put", "t": 23717.174359294, "ph": "stream", "req": "stream-75-a5309c55", "keys": 4, "bytes": 33554432, "dur_s": 0.021866, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23717.174394424, "ph": "stream", "req": "stream-75-a5309c55", "bytes": 33554432, "io_s": 0.023084, "dur_s": 0.151363}
+{"ev": "mc_lookup", "t": 23717.177699782, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 12352, "dur_s": 0.002941}
+{"ev": "mc_store_enq", "t": 23717.22379725, "ph": "stream", "req": "stream-77-9e354a4f", "tokens": 8576}
+{"ev": "mc_lookup", "t": 23717.233066061, "ph": "stream", "req": "stream-79-8fe55d60", "hit_tokens": 11904, "dur_s": 0.007896}
+{"ev": "mc_lookup", "t": 23717.234282041, "ph": "stream", "req": "stream-80-ae776af1", "hit_tokens": 576, "dur_s": 0.000918}
+{"ev": "mc_load_enq", "t": 23719.191587099, "ph": "stream", "req": "stream-79-8fe55d60", "tokens": 12352}
+{"ev": "mc_store_enq", "t": 23719.191673276, "ph": "stream", "req": "stream-77-9e354a4f", "tokens": 10304}
+{"ev": "mc_load_tier", "t": 23719.20168167, "ph": "stream", "req": "stream-79-8fe55d60", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23719.20186462, "ph": "stream", "req": "stream-79-8fe55d60", "keys": 186, "bytes": 1560281088, "dur_s": 0.00379, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23719.202029806, "ph": "stream", "req": "stream-79-8fe55d60", "bytes": 1560281088, "io_s": 0.00379, "dur_s": 0.010255}
+{"ev": "mc_lookup", "t": 23720.539968039, "ph": "stream", "req": "stream-80-ae776af1", "hit_tokens": 576, "dur_s": 0.002008}
+{"ev": "mc_put", "t": 23720.729961034, "ph": "stream", "req": "stream-77-9e354a4f", "keys": 127, "bytes": 1065353216, "dur_s": 0.195847, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23720.730232757, "ph": "stream", "req": "stream-77-9e354a4f", "bytes": 1065353216, "io_s": 0.196695, "dur_s": 3.506359}
+{"ev": "mc_lookup", "t": 23721.402162592, "ph": "stream", "req": "stream-80-ae776af1", "hit_tokens": 576, "dur_s": 0.002135}
+{"ev": "mc_put", "t": 23721.430082965, "ph": "stream", "req": "stream-77-9e354a4f", "keys": 27, "bytes": 226492416, "dur_s": 0.051118, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23721.430131259, "ph": "stream", "req": "stream-77-9e354a4f", "bytes": 226492416, "io_s": 0.051644, "dur_s": 0.699615}
+{"ev": "mc_lookup", "t": 23721.434733412, "ph": "stream", "req": "stream-80-ae776af1", "hit_tokens": 576, "dur_s": 0.002031}
+{"ev": "mc_lookup", "t": 23721.435669408, "ph": "stream", "req": "stream-81-bfbbdd73", "hit_tokens": 0, "dur_s": 0.000807}
+{"ev": "mc_load_enq", "t": 23721.459954778, "ph": "stream", "req": "stream-80-ae776af1", "tokens": 576}
+{"ev": "mc_store_enq", "t": 23721.460372879, "ph": "stream", "req": "stream-81-bfbbdd73", "tokens": 512}
+{"ev": "mc_load_tier", "t": 23721.520327443, "ph": "stream", "req": "stream-80-ae776af1", "memory": 0, "disk": 75497472, "unknown": 0}
+{"ev": "mc_get", "t": 23721.520469741, "ph": "stream", "req": "stream-80-ae776af1", "keys": 9, "bytes": 75497472, "dur_s": 0.059534, "status": "ok"}
+{"ev": "mc_load_done", "t": 23721.52049933, "ph": "stream", "req": "stream-80-ae776af1", "bytes": 75497472, "io_s": 0.059534, "dur_s": 0.060455}
+{"ev": "mc_lookup", "t": 23721.657754173, "ph": "stream", "req": "stream-82-8f063528", "hit_tokens": 0, "dur_s": 0.0014}
+{"ev": "mc_put", "t": 23721.666513958, "ph": "stream", "req": "stream-81-bfbbdd73", "keys": 8, "bytes": 67108864, "dur_s": 0.016006, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23721.666585774, "ph": "stream", "req": "stream-81-bfbbdd73", "bytes": 67108864, "io_s": 0.01646, "dur_s": 0.206099}
+{"ev": "mc_store_enq", "t": 23721.693107168, "ph": "stream", "req": "stream-82-8f063528", "tokens": 128}
+{"ev": "mc_put", "t": 23721.745291413, "ph": "stream", "req": "stream-82-8f063528", "keys": 2, "bytes": 16777216, "dur_s": 0.004911, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23721.745350343, "ph": "stream", "req": "stream-82-8f063528", "bytes": 16777216, "io_s": 0.005323, "dur_s": 0.052123}
+{"ev": "mc_store_enq", "t": 23721.792775391, "ph": "stream", "req": "stream-80-ae776af1", "tokens": 3200}
+{"ev": "mc_lookup", "t": 23722.767993795, "ph": "stream", "req": "stream-83-b0fe5d6a", "hit_tokens": 0, "dur_s": 0.00212}
+{"ev": "mc_store_enq", "t": 23722.803961099, "ph": "stream", "req": "stream-83-b0fe5d6a", "tokens": 4672}
+{"ev": "mc_put", "t": 23722.82110986, "ph": "stream", "req": "stream-80-ae776af1", "keys": 41, "bytes": 343932928, "dur_s": 0.067228, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23722.821168879, "ph": "stream", "req": "stream-80-ae776af1", "bytes": 343932928, "io_s": 0.067864, "dur_s": 1.028283}
+{"ev": "mc_lookup", "t": 23724.392354234, "ph": "stream", "req": "stream-84-be69c3e0", "hit_tokens": 11648, "dur_s": 0.003875}
+{"ev": "mc_load_enq", "t": 23724.413815147, "ph": "stream", "req": "stream-84-be69c3e0", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23724.431434162, "ph": "stream", "req": "stream-84-be69c3e0", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23724.431882705, "ph": "stream", "req": "stream-84-be69c3e0", "keys": 182, "bytes": 1526726656, "dur_s": 0.005599, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23724.432299392, "ph": "stream", "req": "stream-84-be69c3e0", "bytes": 1526726656, "io_s": 0.005599, "dur_s": 0.018353}
+{"ev": "mc_put", "t": 23724.449329258, "ph": "stream", "req": "stream-83-b0fe5d6a", "keys": 64, "bytes": 536870912, "dur_s": 0.107769, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23724.44938898, "ph": "stream", "req": "stream-83-b0fe5d6a", "bytes": 536870912, "io_s": 0.108417, "dur_s": 1.624214}
+{"ev": "mc_lookup", "t": 23724.455195659, "ph": "stream", "req": "stream-85-a57a0df8", "hit_tokens": 0, "dur_s": 0.001314}
+{"ev": "mc_store_enq", "t": 23724.474479392, "ph": "stream", "req": "stream-85-a57a0df8", "tokens": 1792}
+{"ev": "mc_lookup", "t": 23724.479045855, "ph": "stream", "req": "stream-86-847e367e", "hit_tokens": 64, "dur_s": 0.001498}
+{"ev": "mc_load_enq", "t": 23724.638985303, "ph": "stream", "req": "stream-86-847e367e", "tokens": 64}
+{"ev": "mc_load_tier", "t": 23724.64122814, "ph": "stream", "req": "stream-86-847e367e", "memory": 8388608, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23724.641466301, "ph": "stream", "req": "stream-86-847e367e", "keys": 1, "bytes": 8388608, "dur_s": 0.001645, "status": "ok"}
+{"ev": "mc_load_done", "t": 23724.641508997, "ph": "stream", "req": "stream-86-847e367e", "bytes": 8388608, "io_s": 0.001645, "dur_s": 0.002428}
+{"ev": "mc_lookup", "t": 23725.112141977, "ph": "stream", "req": "stream-87-81652729", "hit_tokens": 64, "dur_s": 0.002098}
+{"ev": "mc_load_enq", "t": 23725.148421714, "ph": "stream", "req": "stream-87-81652729", "tokens": 64}
+{"ev": "mc_put", "t": 23725.150522826, "ph": "stream", "req": "stream-85-a57a0df8", "keys": 28, "bytes": 234881024, "dur_s": 0.049994, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23725.150578063, "ph": "stream", "req": "stream-85-a57a0df8", "bytes": 234881024, "io_s": 0.050821, "dur_s": 0.675975}
+{"ev": "mc_load_tier", "t": 23725.150817682, "ph": "stream", "req": "stream-87-81652729", "memory": 8388608, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23725.151174069, "ph": "stream", "req": "stream-87-81652729", "keys": 1, "bytes": 8388608, "dur_s": 0.00194, "status": "ok"}
+{"ev": "mc_load_done", "t": 23725.151219988, "ph": "stream", "req": "stream-87-81652729", "bytes": 8388608, "io_s": 0.00194, "dur_s": 0.002677}
+{"ev": "mc_lookup", "t": 23725.172505964, "ph": "stream", "req": "stream-88-b910a529", "hit_tokens": 0, "dur_s": 0.001386}
+{"ev": "mc_store_enq", "t": 23725.192025948, "ph": "stream", "req": "stream-86-847e367e", "tokens": 2496}
+{"ev": "mc_store_enq", "t": 23725.192038561, "ph": "stream", "req": "stream-88-b910a529", "tokens": 1536}
+{"ev": "mc_store_enq", "t": 23726.164643519, "ph": "stream", "req": "stream-87-81652729", "tokens": 3712}
+{"ev": "mc_put", "t": 23726.66757746, "ph": "stream", "req": "stream-86-847e367e", "keys": 38, "bytes": 318767104, "dur_s": 0.059202, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23726.667636562, "ph": "stream", "req": "stream-86-847e367e", "bytes": 318767104, "io_s": 0.059627, "dur_s": 1.47552}
+{"ev": "mc_put", "t": 23726.705281253, "ph": "stream", "req": "stream-88-b910a529", "keys": 23, "bytes": 192937984, "dur_s": 0.035863, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23726.705314433, "ph": "stream", "req": "stream-88-b910a529", "bytes": 192937984, "io_s": 0.036477, "dur_s": 0.037665}
+{"ev": "mc_lookup", "t": 23728.03397526, "ph": "stream", "req": "stream-89-a4558c90", "hit_tokens": 11904, "dur_s": 0.004169}
+{"ev": "mc_load_enq", "t": 23728.05458661, "ph": "stream", "req": "stream-89-a4558c90", "tokens": 12352}
+{"ev": "mc_put", "t": 23728.064155307, "ph": "stream", "req": "stream-87-81652729", "keys": 57, "bytes": 478150656, "dur_s": 0.100824, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23728.064268166, "ph": "stream", "req": "stream-87-81652729", "bytes": 478150656, "io_s": 0.101268, "dur_s": 1.356049}
+{"ev": "mc_load_tier", "t": 23728.071668761, "ph": "stream", "req": "stream-89-a4558c90", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23728.072191678, "ph": "stream", "req": "stream-89-a4558c90", "keys": 186, "bytes": 1560281088, "dur_s": 0.0063, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23728.072732262, "ph": "stream", "req": "stream-89-a4558c90", "bytes": 1560281088, "io_s": 0.0063, "dur_s": 0.017983}
+{"ev": "mc_lookup", "t": 23728.12027916, "ph": "stream", "req": "stream-90-89029b42", "hit_tokens": 11648, "dur_s": 0.004067}
+{"ev": "mc_load_enq", "t": 23728.139891168, "ph": "stream", "req": "stream-90-89029b42", "tokens": 11648}
+{"ev": "mc_lookup", "t": 23728.15811093, "ph": "stream", "req": "stream-91-81808b8f", "hit_tokens": 2240, "dur_s": 0.005602}
+{"ev": "mc_load_tier", "t": 23728.158544827, "ph": "stream", "req": "stream-90-89029b42", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23728.158941104, "ph": "stream", "req": "stream-90-89029b42", "keys": 182, "bytes": 1526726656, "dur_s": 0.00531, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23728.15932299, "ph": "stream", "req": "stream-90-89029b42", "bytes": 1526726656, "io_s": 0.00531, "dur_s": 0.019279}
+{"ev": "mc_lookup", "t": 23728.162500548, "ph": "stream", "req": "stream-92-8e8c12f5", "hit_tokens": 11648, "dur_s": 0.004124}
+{"ev": "mc_load_enq", "t": 23728.162856567, "ph": "stream", "req": "stream-91-81808b8f", "tokens": 10240}
+{"ev": "mc_lookup", "t": 23728.169955194, "ph": "stream", "req": "stream-92-8e8c12f5", "hit_tokens": 11648, "dur_s": 0.003831}
+{"ev": "mc_lookup", "t": 23728.171929221, "ph": "stream", "req": "stream-93-81670340", "hit_tokens": 0, "dur_s": 0.001848}
+{"ev": "mc_load_tier", "t": 23728.19618665, "ph": "stream", "req": "stream-91-81808b8f", "memory": 293601280, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23728.196352062, "ph": "stream", "req": "stream-91-81808b8f", "keys": 35, "bytes": 293601280, "dur_s": 0.030088, "status": "ok"}
+{"ev": "mc_load_done", "t": 23728.196383928, "ph": "stream", "req": "stream-91-81808b8f", "bytes": 293601280, "io_s": 0.030088, "dur_s": 0.033173}
+{"ev": "mc_store_enq", "t": 23728.201069378, "ph": "stream", "req": "stream-93-81670340", "tokens": 6336}
+{"ev": "mc_lookup", "t": 23728.212058153, "ph": "stream", "req": "stream-92-8e8c12f5", "hit_tokens": 11648, "dur_s": 0.003518}
+{"ev": "mc_lookup", "t": 23728.215767679, "ph": "stream", "req": "stream-94-8f19187e", "hit_tokens": 13056, "dur_s": 0.003477}
+{"ev": "mc_load_enq", "t": 23729.364147749, "ph": "stream", "req": "stream-92-8e8c12f5", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23729.383735274, "ph": "stream", "req": "stream-92-8e8c12f5", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23729.384324824, "ph": "stream", "req": "stream-92-8e8c12f5", "keys": 182, "bytes": 1526726656, "dur_s": 0.006329, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23729.384720905, "ph": "stream", "req": "stream-92-8e8c12f5", "bytes": 1526726656, "io_s": 0.006329, "dur_s": 0.020402}
+{"ev": "mc_lookup", "t": 23730.603055797, "ph": "stream", "req": "stream-94-8f19187e", "hit_tokens": 13056, "dur_s": 0.004571}
+{"ev": "mc_store_enq", "t": 23730.638895523, "ph": "stream", "req": "stream-91-81808b8f", "tokens": 10560}
+{"ev": "mc_lookup", "t": 23730.643721573, "ph": "stream", "req": "stream-94-8f19187e", "hit_tokens": 13056, "dur_s": 0.003886}
+{"ev": "mc_put", "t": 23730.738500369, "ph": "stream", "req": "stream-93-81670340", "keys": 98, "bytes": 822083584, "dur_s": 0.156097, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23730.73871203, "ph": "stream", "req": "stream-93-81670340", "bytes": 822083584, "io_s": 0.156944, "dur_s": 2.537491}
+{"ev": "mc_put", "t": 23730.796985371, "ph": "stream", "req": "stream-91-81808b8f", "keys": 5, "bytes": 41943040, "dur_s": 0.014143, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23730.797018517, "ph": "stream", "req": "stream-91-81808b8f", "bytes": 41943040, "io_s": 0.015104, "dur_s": 0.058265}
+{"ev": "mc_lookup", "t": 23730.801072874, "ph": "stream", "req": "stream-94-8f19187e", "hit_tokens": 13056, "dur_s": 0.004139}
+{"ev": "mc_lookup", "t": 23730.802188263, "ph": "stream", "req": "stream-95-8e736905", "hit_tokens": 0, "dur_s": 0.00089}
+{"ev": "mc_load_enq", "t": 23730.822659549, "ph": "stream", "req": "stream-94-8f19187e", "tokens": 13056}
+{"ev": "mc_store_enq", "t": 23730.823726363, "ph": "stream", "req": "stream-95-8e736905", "tokens": 640}
+{"ev": "mc_put", "t": 23731.089948197, "ph": "stream", "req": "stream-95-8e736905", "keys": 10, "bytes": 83886080, "dur_s": 0.0195, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23731.089979359, "ph": "stream", "req": "stream-95-8e736905", "bytes": 83886080, "io_s": 0.020287, "dur_s": 0.261006}
+{"ev": "mc_lookup", "t": 23731.142085327, "ph": "stream", "req": "stream-96-861468c7", "hit_tokens": 0, "dur_s": 0.001326}
+{"ev": "mc_store_enq", "t": 23731.16101338, "ph": "stream", "req": "stream-96-861468c7", "tokens": 384}
+{"ev": "mc_lookup", "t": 23731.309526153, "ph": "stream", "req": "stream-97-98b61fc8", "hit_tokens": 64, "dur_s": 0.001911}
+{"ev": "mc_put", "t": 23731.310828818, "ph": "stream", "req": "stream-96-861468c7", "keys": 5, "bytes": 41943040, "dur_s": 0.010181, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23731.310853999, "ph": "stream", "req": "stream-96-861468c7", "bytes": 41943040, "io_s": 0.010619, "dur_s": 0.149779}
+{"ev": "mc_load_enq", "t": 23731.347128721, "ph": "stream", "req": "stream-97-98b61fc8", "tokens": 128}
+{"ev": "mc_lookup", "t": 23731.371347611, "ph": "stream", "req": "stream-98-a6cf4899", "hit_tokens": 4288, "dur_s": 0.002577}
+{"ev": "mc_load_enq", "t": 23731.39066288, "ph": "stream", "req": "stream-98-a6cf4899", "tokens": 4288}
+{"ev": "mc_lookup", "t": 23731.454290709, "ph": "stream", "req": "stream-99-aa0394c7", "hit_tokens": 0, "dur_s": 0.001577}
+{"ev": "mc_store_enq", "t": 23731.473288655, "ph": "stream", "req": "stream-99-aa0394c7", "tokens": 2624}
+{"ev": "mc_load_tier", "t": 23731.661907456, "ph": "stream", "req": "stream-94-8f19187e", "memory": 553648128, "disk": 1157627904, "unknown": 0}
+{"ev": "mc_get", "t": 23731.662118388, "ph": "stream", "req": "stream-94-8f19187e", "keys": 204, "bytes": 1711276032, "dur_s": 0.830058, "status": "ok"}
+{"ev": "mc_load_done", "t": 23731.66233495, "ph": "stream", "req": "stream-94-8f19187e", "bytes": 1711276032, "io_s": 0.830058, "dur_s": 0.838545}
+{"ev": "mc_load_tier", "t": 23731.674435341, "ph": "stream", "req": "stream-97-98b61fc8", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23731.674663139, "ph": "stream", "req": "stream-97-98b61fc8", "keys": 1, "bytes": 8388608, "dur_s": 0.011935, "status": "ok"}
+{"ev": "mc_load_done", "t": 23731.674702013, "ph": "stream", "req": "stream-97-98b61fc8", "bytes": 8388608, "io_s": 0.011935, "dur_s": 0.012353}
+{"ev": "mc_load_tier", "t": 23732.07090746, "ph": "stream", "req": "stream-98-a6cf4899", "memory": 33554432, "disk": 528482304, "unknown": 0}
+{"ev": "mc_get", "t": 23732.071038429, "ph": "stream", "req": "stream-98-a6cf4899", "keys": 67, "bytes": 562036736, "dur_s": 0.391781, "status": "ok"}
+{"ev": "mc_load_done", "t": 23732.071096057, "ph": "stream", "req": "stream-98-a6cf4899", "bytes": 562036736, "io_s": 0.391781, "dur_s": 0.396372}
+{"ev": "mc_put", "t": 23732.472137888, "ph": "stream", "req": "stream-99-aa0394c7", "keys": 40, "bytes": 335544320, "dur_s": 0.067107, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23732.472194652, "ph": "stream", "req": "stream-99-aa0394c7", "bytes": 335544320, "io_s": 0.06745, "dur_s": 0.99882}
+{"ev": "mc_store_enq", "t": 23732.49887893, "ph": "stream", "req": "stream-94-8f19187e", "tokens": 13120}
+{"ev": "mc_store_enq", "t": 23732.498896898, "ph": "stream", "req": "stream-97-98b61fc8", "tokens": 3584}
+{"ev": "mc_store_enq", "t": 23733.162031586, "ph": "stream", "req": "stream-98-a6cf4899", "tokens": 5760}
+{"ev": "mc_put", "t": 23733.808439538, "ph": "stream", "req": "stream-94-8f19187e", "keys": 1, "bytes": 8388608, "dur_s": 0.003415, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23733.808466379, "ph": "stream", "req": "stream-94-8f19187e", "bytes": 8388608, "io_s": 0.004371, "dur_s": 1.309431}
+{"ev": "mc_put", "t": 23733.905400581, "ph": "stream", "req": "stream-97-98b61fc8", "keys": 54, "bytes": 452984832, "dur_s": 0.083997, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23733.905464245, "ph": "stream", "req": "stream-97-98b61fc8", "bytes": 452984832, "io_s": 0.094373, "dur_s": 0.096988}
+{"ev": "mc_put", "t": 23734.510294701, "ph": "stream", "req": "stream-98-a6cf4899", "keys": 23, "bytes": 192937984, "dur_s": 0.045568, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23734.510341613, "ph": "stream", "req": "stream-98-a6cf4899", "bytes": 192937984, "io_s": 0.046453, "dur_s": 0.601625}
+{"ev": "mc_lookup", "t": 23734.552681592, "ph": "stream", "req": "stream-100-afd98b0c", "hit_tokens": 0, "dur_s": 0.001093}
+{"ev": "mc_store_enq", "t": 23734.57128428, "ph": "stream", "req": "stream-100-afd98b0c", "tokens": 512}
+{"ev": "mc_put", "t": 23734.766915856, "ph": "stream", "req": "stream-100-afd98b0c", "keys": 7, "bytes": 58720256, "dur_s": 0.014464, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23734.766941077, "ph": "stream", "req": "stream-100-afd98b0c", "bytes": 58720256, "io_s": 0.014814, "dur_s": 0.195563}
+{"ev": "mc_lookup", "t": 23734.787487632, "ph": "stream", "req": "stream-101-b4357549", "hit_tokens": 0, "dur_s": 0.001585}
+{"ev": "mc_lookup", "t": 23734.788677887, "ph": "stream", "req": "stream-102-99151239", "hit_tokens": 0, "dur_s": 0.000795}
+{"ev": "mc_store_enq", "t": 23734.808879054, "ph": "stream", "req": "stream-101-b4357549", "tokens": 7360}
+{"ev": "mc_store_enq", "t": 23734.808892029, "ph": "stream", "req": "stream-102-99151239", "tokens": 768}
+{"ev": "mc_lookup", "t": 23734.821305975, "ph": "stream", "req": "stream-103-b8ab5e2f", "hit_tokens": 11648, "dur_s": 0.003893}
+{"ev": "mc_store_enq", "t": 23736.677441261, "ph": "stream", "req": "stream-102-99151239", "tokens": 2816}
+{"ev": "mc_lookup", "t": 23737.970639348, "ph": "stream", "req": "stream-103-b8ab5e2f", "hit_tokens": 11648, "dur_s": 0.003326}
+{"ev": "mc_put", "t": 23738.126792026, "ph": "stream", "req": "stream-101-b4357549", "keys": 115, "bytes": 964689920, "dur_s": 0.176007, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23738.126926203, "ph": "stream", "req": "stream-101-b4357549", "bytes": 964689920, "io_s": 0.176489, "dur_s": 3.317926}
+{"ev": "mc_put", "t": 23738.146808346, "ph": "stream", "req": "stream-102-99151239", "keys": 12, "bytes": 100663296, "dur_s": 0.018973, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23738.146832948, "ph": "stream", "req": "stream-102-99151239", "bytes": 100663296, "io_s": 0.019638, "dur_s": 0.019894}
+{"ev": "mc_load_enq", "t": 23738.176015292, "ph": "stream", "req": "stream-103-b8ab5e2f", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23738.194078189, "ph": "stream", "req": "stream-103-b8ab5e2f", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23738.194438607, "ph": "stream", "req": "stream-103-b8ab5e2f", "keys": 182, "bytes": 1526726656, "dur_s": 0.005677, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23738.194790605, "ph": "stream", "req": "stream-103-b8ab5e2f", "bytes": 1526726656, "io_s": 0.005677, "dur_s": 0.018639}
+{"ev": "mc_put", "t": 23738.794130411, "ph": "stream", "req": "stream-102-99151239", "keys": 32, "bytes": 268435456, "dur_s": 0.058079, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23738.794247331, "ph": "stream", "req": "stream-102-99151239", "bytes": 268435456, "io_s": 0.058485, "dur_s": 0.647007}
+{"ev": "mc_lookup", "t": 23738.814346354, "ph": "stream", "req": "stream-104-b327405f", "hit_tokens": 3904, "dur_s": 0.002458}
+{"ev": "mc_load_enq", "t": 23738.834313102, "ph": "stream", "req": "stream-104-b327405f", "tokens": 13120}
+{"ev": "mc_lookup", "t": 23738.841875612, "ph": "stream", "req": "stream-105-82636884", "hit_tokens": 704, "dur_s": 0.001889}
+{"ev": "mc_load_enq", "t": 23738.879792434, "ph": "stream", "req": "stream-105-82636884", "tokens": 704}
+{"ev": "mc_lookup", "t": 23738.945467907, "ph": "stream", "req": "stream-106-924ad42d", "hit_tokens": 0, "dur_s": 0.002169}
+{"ev": "mc_store_enq", "t": 23738.965062054, "ph": "stream", "req": "stream-106-924ad42d", "tokens": 8256}
+{"ev": "mc_lookup", "t": 23738.971087209, "ph": "stream", "req": "stream-107-8ee72760", "hit_tokens": 0, "dur_s": 0.001542}
+{"ev": "mc_load_tier", "t": 23739.119039243, "ph": "stream", "req": "stream-104-b327405f", "memory": 125829120, "disk": 385875968, "unknown": 0}
+{"ev": "mc_get", "t": 23739.13265066, "ph": "stream", "req": "stream-104-b327405f", "keys": 61, "bytes": 511705088, "dur_s": 0.295678, "status": "ok"}
+{"ev": "mc_load_done", "t": 23739.132789914, "ph": "stream", "req": "stream-104-b327405f", "bytes": 511705088, "io_s": 0.295678, "dur_s": 0.29833}
+{"ev": "mc_load_tier", "t": 23739.189277895, "ph": "stream", "req": "stream-105-82636884", "memory": 33554432, "disk": 58720256, "unknown": 0}
+{"ev": "mc_get", "t": 23739.18952327, "ph": "stream", "req": "stream-105-82636884", "keys": 11, "bytes": 92274688, "dur_s": 0.055359, "status": "ok"}
+{"ev": "mc_load_done", "t": 23739.189582932, "ph": "stream", "req": "stream-105-82636884", "bytes": 92274688, "io_s": 0.055359, "dur_s": 0.056764}
+{"ev": "mc_store_enq", "t": 23741.114151172, "ph": "stream", "req": "stream-106-924ad42d", "tokens": 10624}
+{"ev": "mc_lookup", "t": 23742.203731498, "ph": "stream", "req": "stream-107-8ee72760", "hit_tokens": 0, "dur_s": 0.002816}
+{"ev": "mc_put", "t": 23742.392346866, "ph": "stream", "req": "stream-106-924ad42d", "keys": 128, "bytes": 1073741824, "dur_s": 0.195379, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23742.392507511, "ph": "stream", "req": "stream-106-924ad42d", "bytes": 1073741824, "io_s": 0.196041, "dur_s": 3.427351}
+{"ev": "mc_store_enq", "t": 23743.20395204, "ph": "stream", "req": "stream-107-8ee72760", "tokens": 8128}
+{"ev": "mc_put", "t": 23743.429366093, "ph": "stream", "req": "stream-106-924ad42d", "keys": 37, "bytes": 310378496, "dur_s": 0.057596, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23743.42943858, "ph": "stream", "req": "stream-106-924ad42d", "bytes": 310378496, "io_s": 0.058103, "dur_s": 1.029369}
+{"ev": "mc_store_enq", "t": 23745.792195302, "ph": "stream", "req": "stream-104-b327405f", "tokens": 13248}
+{"ev": "mc_store_enq", "t": 23745.792210572, "ph": "stream", "req": "stream-105-82636884", "tokens": 2496}
+{"ev": "mc_store_enq", "t": 23745.792214371, "ph": "stream", "req": "stream-107-8ee72760", "tokens": 9536}
+{"ev": "mc_put", "t": 23746.838641776, "ph": "stream", "req": "stream-107-8ee72760", "keys": 127, "bytes": 1065353216, "dur_s": 0.193848, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23746.838804524, "ph": "stream", "req": "stream-107-8ee72760", "bytes": 1065353216, "io_s": 0.194549, "dur_s": 3.385956}
+{"ev": "mc_put", "t": 23748.121069536, "ph": "stream", "req": "stream-104-b327405f", "keys": 2, "bytes": 16777216, "dur_s": 0.011782, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23748.121138594, "ph": "stream", "req": "stream-104-b327405f", "bytes": 16777216, "io_s": 0.012666, "dur_s": 1.276283}
+{"ev": "mc_put", "t": 23748.187264733, "ph": "stream", "req": "stream-105-82636884", "keys": 28, "bytes": 234881024, "dur_s": 0.05525, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23748.187363943, "ph": "stream", "req": "stream-105-82636884", "bytes": 234881024, "io_s": 0.064589, "dur_s": 0.066195}
+{"ev": "mc_put", "t": 23748.23132544, "ph": "stream", "req": "stream-107-8ee72760", "keys": 22, "bytes": 184549376, "dur_s": 0.043017, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23748.231360438, "ph": "stream", "req": "stream-107-8ee72760", "bytes": 184549376, "io_s": 0.04334, "dur_s": 0.043969}
+{"ev": "mc_lookup", "t": 23748.25425256, "ph": "stream", "req": "stream-108-9f659a5c", "hit_tokens": 0, "dur_s": 0.001676}
+{"ev": "mc_lookup", "t": 23748.278265835, "ph": "stream", "req": "stream-108-9f659a5c", "hit_tokens": 0, "dur_s": 0.001444}
+{"ev": "mc_lookup", "t": 23748.304816552, "ph": "stream", "req": "stream-108-9f659a5c", "hit_tokens": 0, "dur_s": 0.001843}
+{"ev": "mc_lookup", "t": 23748.308551655, "ph": "stream", "req": "stream-109-acf05e78", "hit_tokens": 11648, "dur_s": 0.003422}
+{"ev": "mc_lookup", "t": 23748.31008639, "ph": "stream", "req": "stream-110-9a126bbd", "hit_tokens": 960, "dur_s": 0.001453}
+{"ev": "mc_lookup", "t": 23748.311144767, "ph": "stream", "req": "stream-111-92543555", "hit_tokens": 0, "dur_s": 0.000889}
+{"ev": "mc_load_enq", "t": 23748.355321065, "ph": "stream", "req": "stream-110-9a126bbd", "tokens": 960}
+{"ev": "mc_store_enq", "t": 23748.355411813, "ph": "stream", "req": "stream-108-9f659a5c", "tokens": 2176}
+{"ev": "mc_store_enq", "t": 23748.355430875, "ph": "stream", "req": "stream-111-92543555", "tokens": 896}
+{"ev": "mc_lookup", "t": 23748.362480016, "ph": "stream", "req": "stream-109-acf05e78", "hit_tokens": 11648, "dur_s": 0.003763}
+{"ev": "mc_load_tier", "t": 23748.495374434, "ph": "stream", "req": "stream-110-9a126bbd", "memory": 0, "disk": 125829120, "unknown": 0}
+{"ev": "mc_get", "t": 23748.495667968, "ph": "stream", "req": "stream-110-9a126bbd", "keys": 15, "bytes": 125829120, "dur_s": 0.138813, "status": "ok"}
+{"ev": "mc_load_done", "t": 23748.495736369, "ph": "stream", "req": "stream-110-9a126bbd", "bytes": 125829120, "io_s": 0.138813, "dur_s": 0.140189}
+{"ev": "mc_lookup", "t": 23749.412326991, "ph": "stream", "req": "stream-109-acf05e78", "hit_tokens": 11648, "dur_s": 0.004555}
+{"ev": "mc_load_enq", "t": 23749.451877251, "ph": "stream", "req": "stream-109-acf05e78", "tokens": 11648}
+{"ev": "mc_put", "t": 23749.456988577, "ph": "stream", "req": "stream-108-9f659a5c", "keys": 34, "bytes": 285212672, "dur_s": 0.059814, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23749.457056892, "ph": "stream", "req": "stream-108-9f659a5c", "bytes": 285212672, "io_s": 0.060415, "dur_s": 1.100654}
+{"ev": "mc_load_tier", "t": 23749.462685989, "ph": "stream", "req": "stream-109-acf05e78", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23749.462933802, "ph": "stream", "req": "stream-109-acf05e78", "keys": 182, "bytes": 1526726656, "dur_s": 0.004219, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23749.463223762, "ph": "stream", "req": "stream-109-acf05e78", "bytes": 1526726656, "io_s": 0.004219, "dur_s": 0.011159}
+{"ev": "mc_put", "t": 23749.476964867, "ph": "stream", "req": "stream-111-92543555", "keys": 13, "bytes": 109051904, "dur_s": 0.019298, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23749.476997533, "ph": "stream", "req": "stream-111-92543555", "bytes": 109051904, "io_s": 0.019656, "dur_s": 0.019929}
+{"ev": "mc_store_enq", "t": 23749.482717266, "ph": "stream", "req": "stream-110-9a126bbd", "tokens": 3968}
+{"ev": "mc_lookup", "t": 23750.618558859, "ph": "stream", "req": "stream-112-b923e29b", "hit_tokens": 11648, "dur_s": 0.003948}
+{"ev": "mc_load_enq", "t": 23750.654927022, "ph": "stream", "req": "stream-112-b923e29b", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23750.662456542, "ph": "stream", "req": "stream-112-b923e29b", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23750.662622956, "ph": "stream", "req": "stream-112-b923e29b", "keys": 182, "bytes": 1526726656, "dur_s": 0.002975, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23750.662781207, "ph": "stream", "req": "stream-112-b923e29b", "bytes": 1526726656, "io_s": 0.002975, "dur_s": 0.007781}
+{"ev": "mc_put", "t": 23750.674089904, "ph": "stream", "req": "stream-110-9a126bbd", "keys": 47, "bytes": 394264576, "dur_s": 0.077169, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23750.674173137, "ph": "stream", "req": "stream-110-9a126bbd", "bytes": 394264576, "io_s": 0.07782, "dur_s": 1.191369}
+{"ev": "mc_lookup", "t": 23750.714866538, "ph": "stream", "req": "stream-113-8b0621a9", "hit_tokens": 9792, "dur_s": 0.002836}
+{"ev": "mc_load_enq", "t": 23750.734004499, "ph": "stream", "req": "stream-113-8b0621a9", "tokens": 10496}
+{"ev": "mc_lookup", "t": 23750.750950096, "ph": "stream", "req": "stream-114-8cfa5b80", "hit_tokens": 0, "dur_s": 0.005277}
+{"ev": "mc_lookup", "t": 23750.754739492, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.003336}
+{"ev": "mc_store_enq", "t": 23750.779568662, "ph": "stream", "req": "stream-114-8cfa5b80", "tokens": 12416}
+{"ev": "mc_lookup", "t": 23750.788556981, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.007406}
+{"ev": "mc_load_tier", "t": 23751.612506974, "ph": "stream", "req": "stream-113-8b0621a9", "memory": 16777216, "disk": 1266679808, "unknown": 0}
+{"ev": "mc_get", "t": 23751.612990661, "ph": "stream", "req": "stream-113-8b0621a9", "keys": 153, "bytes": 1283457024, "dur_s": 0.866223, "status": "ok"}
+{"ev": "mc_load_done", "t": 23751.613304171, "ph": "stream", "req": "stream-113-8b0621a9", "bytes": 1283457024, "io_s": 0.866223, "dur_s": 0.87916}
+{"ev": "mc_lookup", "t": 23753.215764471, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.004081}
+{"ev": "mc_lookup", "t": 23753.252899078, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.003956}
+{"ev": "mc_lookup", "t": 23753.254178737, "ph": "stream", "req": "stream-116-b658c9cc", "hit_tokens": 0, "dur_s": 0.001102}
+{"ev": "mc_store_enq", "t": 23753.291281048, "ph": "stream", "req": "stream-113-8b0621a9", "tokens": 10880}
+{"ev": "mc_store_enq", "t": 23753.29129382, "ph": "stream", "req": "stream-116-b658c9cc", "tokens": 832}
+{"ev": "mc_lookup", "t": 23753.295887266, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.003705}
+{"ev": "mc_put", "t": 23753.302413135, "ph": "stream", "req": "stream-114-8cfa5b80", "keys": 75, "bytes": 629145600, "dur_s": 0.121546, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23753.302609486, "ph": "stream", "req": "stream-114-8cfa5b80", "bytes": 629145600, "io_s": 0.122462, "dur_s": 2.522892}
+{"ev": "mc_put", "t": 23753.792467663, "ph": "stream", "req": "stream-113-8b0621a9", "keys": 6, "bytes": 50331648, "dur_s": 0.017548, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23753.79253747, "ph": "stream", "req": "stream-113-8b0621a9", "bytes": 50331648, "io_s": 0.018523, "dur_s": 0.489878}
+{"ev": "mc_lookup", "t": 23753.797234403, "ph": "stream", "req": "stream-115-b9250134", "hit_tokens": 11648, "dur_s": 0.004303}
+{"ev": "mc_put", "t": 23753.817275182, "ph": "stream", "req": "stream-116-b658c9cc", "keys": 12, "bytes": 100663296, "dur_s": 0.023442, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23753.817356118, "ph": "stream", "req": "stream-116-b658c9cc", "bytes": 100663296, "io_s": 0.023945, "dur_s": 0.02479}
+{"ev": "mc_load_enq", "t": 23753.818420768, "ph": "stream", "req": "stream-115-b9250134", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23753.829656946, "ph": "stream", "req": "stream-115-b9250134", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23753.829848048, "ph": "stream", "req": "stream-115-b9250134", "keys": 182, "bytes": 1526726656, "dur_s": 0.00301, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23753.830041189, "ph": "stream", "req": "stream-115-b9250134", "bytes": 1526726656, "io_s": 0.00301, "dur_s": 0.011463}
+{"ev": "mc_lookup", "t": 23753.911781735, "ph": "stream", "req": "stream-117-9a749e46", "hit_tokens": 11648, "dur_s": 0.002382}
+{"ev": "mc_load_enq", "t": 23753.931052208, "ph": "stream", "req": "stream-117-9a749e46", "tokens": 11648}
+{"ev": "mc_lookup", "t": 23753.940288852, "ph": "stream", "req": "stream-118-996ee105", "hit_tokens": 0, "dur_s": 0.003392}
+{"ev": "mc_load_tier", "t": 23753.941326479, "ph": "stream", "req": "stream-117-9a749e46", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23753.941610646, "ph": "stream", "req": "stream-117-9a749e46", "keys": 182, "bytes": 1526726656, "dur_s": 0.004004, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23753.941865934, "ph": "stream", "req": "stream-117-9a749e46", "bytes": 1526726656, "io_s": 0.004004, "dur_s": 0.010649}
+{"ev": "mc_lookup", "t": 23753.96235503, "ph": "stream", "req": "stream-118-996ee105", "hit_tokens": 0, "dur_s": 0.001681}
+{"ev": "mc_lookup", "t": 23753.984625084, "ph": "stream", "req": "stream-118-996ee105", "hit_tokens": 0, "dur_s": 0.001779}
+{"ev": "mc_store_enq", "t": 23754.003946068, "ph": "stream", "req": "stream-118-996ee105", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23754.01417892, "ph": "stream", "req": "stream-119-9286bc6d", "hit_tokens": 0, "dur_s": 0.001606}
+{"ev": "mc_lookup", "t": 23754.018863885, "ph": "stream", "req": "stream-120-9e5ebbb9", "hit_tokens": 0, "dur_s": 0.003664}
+{"ev": "mc_lookup", "t": 23754.02041202, "ph": "stream", "req": "stream-121-b995ca43", "hit_tokens": 0, "dur_s": 0.000934}
+{"ev": "mc_store_enq", "t": 23757.233265737, "ph": "stream", "req": "stream-119-9286bc6d", "tokens": 3456}
+{"ev": "mc_store_enq", "t": 23757.233301519, "ph": "stream", "req": "stream-120-9e5ebbb9", "tokens": 12352}
+{"ev": "mc_store_enq", "t": 23757.233316345, "ph": "stream", "req": "stream-121-b995ca43", "tokens": 1664}
+{"ev": "mc_store_enq", "t": 23757.233327783, "ph": "stream", "req": "stream-118-996ee105", "tokens": 9024}
+{"ev": "mc_put", "t": 23757.41709848, "ph": "stream", "req": "stream-118-996ee105", "keys": 128, "bytes": 1073741824, "dur_s": 0.18911, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23757.417399189, "ph": "stream", "req": "stream-118-996ee105", "bytes": 1073741824, "io_s": 0.189783, "dur_s": 3.413285}
+{"ev": "mc_put", "t": 23760.31331643, "ph": "stream", "req": "stream-119-9286bc6d", "keys": 53, "bytes": 444596224, "dur_s": 0.097804, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23760.313534399, "ph": "stream", "req": "stream-119-9286bc6d", "bytes": 444596224, "io_s": 0.098354, "dur_s": 2.893641}
+{"ev": "mc_put", "t": 23760.358653372, "ph": "stream", "req": "stream-120-9e5ebbb9", "keys": 23, "bytes": 192937984, "dur_s": 0.043614, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23760.35868685, "ph": "stream", "req": "stream-120-9e5ebbb9", "bytes": 192937984, "io_s": 0.044592, "dur_s": 0.04514}
+{"ev": "mc_put", "t": 23760.405810553, "ph": "stream", "req": "stream-121-b995ca43", "keys": 25, "bytes": 209715200, "dur_s": 0.046488, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23760.405898231, "ph": "stream", "req": "stream-121-b995ca43", "bytes": 209715200, "io_s": 0.046713, "dur_s": 0.047199}
+{"ev": "mc_lookup", "t": 23760.410167027, "ph": "stream", "req": "stream-122-9a31511c", "hit_tokens": 11648, "dur_s": 0.004615}
+{"ev": "mc_lookup", "t": 23760.41098409, "ph": "stream", "req": "stream-123-b59f72ed", "hit_tokens": 0, "dur_s": 0.00073}
+{"ev": "mc_lookup", "t": 23760.412211242, "ph": "stream", "req": "stream-124-83444518", "hit_tokens": 2304, "dur_s": 0.00112}
+{"ev": "mc_lookup", "t": 23760.415325288, "ph": "stream", "req": "stream-125-b7d7a559", "hit_tokens": 960, "dur_s": 0.002945}
+{"ev": "mc_put", "t": 23760.437134405, "ph": "stream", "req": "stream-118-996ee105", "keys": 17, "bytes": 142606336, "dur_s": 0.027265, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23760.437217323, "ph": "stream", "req": "stream-118-996ee105", "bytes": 142606336, "io_s": 0.028472, "dur_s": 0.031293}
+{"ev": "mc_load_enq", "t": 23760.437726048, "ph": "stream", "req": "stream-124-83444518", "tokens": 2368}
+{"ev": "mc_store_enq", "t": 23760.437779574, "ph": "stream", "req": "stream-123-b59f72ed", "tokens": 320}
+{"ev": "mc_lookup", "t": 23760.44422188, "ph": "stream", "req": "stream-122-9a31511c", "hit_tokens": 11648, "dur_s": 0.003564}
+{"ev": "mc_lookup", "t": 23760.447125566, "ph": "stream", "req": "stream-125-b7d7a559", "hit_tokens": 960, "dur_s": 0.002787}
+{"ev": "mc_put", "t": 23760.525238095, "ph": "stream", "req": "stream-123-b59f72ed", "keys": 4, "bytes": 33554432, "dur_s": 0.008523, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23760.525264283, "ph": "stream", "req": "stream-123-b59f72ed", "bytes": 33554432, "io_s": 0.010072, "dur_s": 0.087416}
+{"ev": "mc_lookup", "t": 23760.525585808, "ph": "stream", "req": "stream-122-9a31511c", "hit_tokens": 11648, "dur_s": 0.003679}
+{"ev": "mc_lookup", "t": 23760.529837346, "ph": "stream", "req": "stream-125-b7d7a559", "hit_tokens": 4288, "dur_s": 0.003206}
+{"ev": "mc_load_enq", "t": 23760.57007706, "ph": "stream", "req": "stream-122-9a31511c", "tokens": 11648}
+{"ev": "mc_load_enq", "t": 23760.570081181, "ph": "stream", "req": "stream-125-b7d7a559", "tokens": 4288}
+{"ev": "mc_load_tier", "t": 23760.655863993, "ph": "stream", "req": "stream-124-83444518", "memory": 0, "disk": 301989888, "unknown": 0}
+{"ev": "mc_get", "t": 23760.656006215, "ph": "stream", "req": "stream-124-83444518", "keys": 36, "bytes": 301989888, "dur_s": 0.215799, "status": "ok"}
+{"ev": "mc_load_done", "t": 23760.656054082, "ph": "stream", "req": "stream-124-83444518", "bytes": 301989888, "io_s": 0.215799, "dur_s": 0.218091}
+{"ev": "mc_load_tier", "t": 23760.664146931, "ph": "stream", "req": "stream-122-9a31511c", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23760.664411769, "ph": "stream", "req": "stream-122-9a31511c", "keys": 182, "bytes": 1526726656, "dur_s": 0.003504, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23760.664663005, "ph": "stream", "req": "stream-122-9a31511c", "bytes": 1526726656, "io_s": 0.003504, "dur_s": 0.008598}
+{"ev": "mc_lookup", "t": 23760.688866204, "ph": "stream", "req": "stream-126-aa4f8a10", "hit_tokens": 0, "dur_s": 0.002735}
+{"ev": "mc_store_enq", "t": 23760.711273313, "ph": "stream", "req": "stream-124-83444518", "tokens": 2816}
+{"ev": "mc_store_enq", "t": 23760.711288311, "ph": "stream", "req": "stream-126-aa4f8a10", "tokens": 7744}
+{"ev": "mc_lookup", "t": 23760.714516399, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.00225}
+{"ev": "mc_load_tier", "t": 23760.933636762, "ph": "stream", "req": "stream-125-b7d7a559", "memory": 436207616, "disk": 125829120, "unknown": 0}
+{"ev": "mc_get", "t": 23760.933937926, "ph": "stream", "req": "stream-125-b7d7a559", "keys": 67, "bytes": 562036736, "dur_s": 0.26552, "status": "ok"}
+{"ev": "mc_load_done", "t": 23760.934090223, "ph": "stream", "req": "stream-125-b7d7a559", "bytes": 562036736, "io_s": 0.26552, "dur_s": 0.269411}
+{"ev": "mc_store_enq", "t": 23762.839753119, "ph": "stream", "req": "stream-126-aa4f8a10", "tokens": 10496}
+{"ev": "mc_put", "t": 23763.928803477, "ph": "stream", "req": "stream-124-83444518", "keys": 7, "bytes": 58720256, "dur_s": 0.012725, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23763.928839898, "ph": "stream", "req": "stream-124-83444518", "bytes": 58720256, "io_s": 0.013596, "dur_s": 3.217445}
+{"ev": "mc_lookup", "t": 23763.92928216, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.004028}
+{"ev": "mc_put", "t": 23764.10690967, "ph": "stream", "req": "stream-126-aa4f8a10", "keys": 120, "bytes": 1006632960, "dur_s": 0.175596, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23764.107480433, "ph": "stream", "req": "stream-126-aa4f8a10", "bytes": 1006632960, "io_s": 0.176289, "dur_s": 0.178629}
+{"ev": "mc_store_cmt", "t": 23764.107520713, "ph": "stream", "req": "stream-126-aa4f8a10", "bytes": 0, "io_s": 0.0, "dur_s": 1.2e-05}
+{"ev": "mc_store_enq", "t": 23765.294165888, "ph": "stream", "req": "stream-125-b7d7a559", "tokens": 12416}
+{"ev": "mc_lookup", "t": 23765.301970882, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.004175}
+{"ev": "mc_store_enq", "t": 23767.300604932, "ph": "stream", "req": "stream-125-b7d7a559", "tokens": 12928}
+{"ev": "mc_lookup", "t": 23769.15113533, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.004648}
+{"ev": "mc_put", "t": 23769.33847413, "ph": "stream", "req": "stream-125-b7d7a559", "keys": 127, "bytes": 1065353216, "dur_s": 0.195941, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23769.338754619, "ph": "stream", "req": "stream-125-b7d7a559", "bytes": 1065353216, "io_s": 0.196938, "dur_s": 4.044489}
+{"ev": "mc_put", "t": 23769.449533358, "ph": "stream", "req": "stream-125-b7d7a559", "keys": 8, "bytes": 67108864, "dur_s": 0.020544, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23769.449610073, "ph": "stream", "req": "stream-125-b7d7a559", "bytes": 67108864, "io_s": 0.02111, "dur_s": 0.11083}
+{"ev": "mc_lookup", "t": 23769.453673129, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.004225}
+{"ev": "mc_lookup", "t": 23769.478490885, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.003643}
+{"ev": "mc_lookup", "t": 23769.501742726, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.002601}
+{"ev": "mc_lookup", "t": 23769.52520734, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.002279}
+{"ev": "mc_lookup", "t": 23769.526277389, "ph": "stream", "req": "stream-128-a4669b2a", "hit_tokens": 0, "dur_s": 0.001028}
+{"ev": "mc_store_enq", "t": 23769.547137035, "ph": "stream", "req": "stream-128-a4669b2a", "tokens": 7488}
+{"ev": "mc_lookup", "t": 23769.556801124, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.007479}
+{"ev": "mc_lookup", "t": 23769.558043218, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.001175}
+{"ev": "mc_lookup", "t": 23772.519111878, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.003112}
+{"ev": "mc_lookup", "t": 23772.520713091, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.001492}
+{"ev": "mc_lookup", "t": 23772.553683418, "ph": "stream", "req": "stream-127-8818b1a7", "hit_tokens": 11648, "dur_s": 0.00365}
+{"ev": "mc_lookup", "t": 23772.557231569, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.002503}
+{"ev": "mc_load_enq", "t": 23772.594153888, "ph": "stream", "req": "stream-127-8818b1a7", "tokens": 11648}
+{"ev": "mc_load_tier", "t": 23772.608334883, "ph": "stream", "req": "stream-127-8818b1a7", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23772.608656216, "ph": "stream", "req": "stream-127-8818b1a7", "keys": 182, "bytes": 1526726656, "dur_s": 0.006431, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23772.608864783, "ph": "stream", "req": "stream-127-8818b1a7", "bytes": 1526726656, "io_s": 0.006431, "dur_s": 0.014614}
+{"ev": "mc_lookup", "t": 23772.611219029, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.003099}
+{"ev": "mc_lookup", "t": 23772.66348103, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.002485}
+{"ev": "mc_put", "t": 23772.68431739, "ph": "stream", "req": "stream-128-a4669b2a", "keys": 117, "bytes": 981467136, "dur_s": 0.18591, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23772.684438468, "ph": "stream", "req": "stream-128-a4669b2a", "bytes": 981467136, "io_s": 0.187609, "dur_s": 3.137157}
+{"ev": "mc_lookup", "t": 23772.690702672, "ph": "stream", "req": "stream-129-8b2bf59b", "hit_tokens": 0, "dur_s": 0.002315}
+{"ev": "mc_lookup", "t": 23772.693415407, "ph": "stream", "req": "stream-130-ac2da6a5", "hit_tokens": 0, "dur_s": 0.002405}
+{"ev": "mc_store_enq", "t": 23772.714332068, "ph": "stream", "req": "stream-129-8b2bf59b", "tokens": 6528}
+{"ev": "mc_store_enq", "t": 23772.714345339, "ph": "stream", "req": "stream-130-ac2da6a5", "tokens": 1728}
+{"ev": "mc_store_enq", "t": 23775.430070071, "ph": "stream", "req": "stream-130-ac2da6a5", "tokens": 9920}
+{"ev": "mc_lookup", "t": 23775.830728863, "ph": "stream", "req": "stream-131-ae5a5574", "hit_tokens": 0, "dur_s": 0.001854}
+{"ev": "mc_put", "t": 23775.967386015, "ph": "stream", "req": "stream-129-8b2bf59b", "keys": 101, "bytes": 847249408, "dur_s": 0.154185, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23775.967516222, "ph": "stream", "req": "stream-129-8b2bf59b", "bytes": 847249408, "io_s": 0.15502, "dur_s": 3.253096}
+{"ev": "mc_put", "t": 23776.008644239, "ph": "stream", "req": "stream-130-ac2da6a5", "keys": 26, "bytes": 218103808, "dur_s": 0.040165, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23776.00870528, "ph": "stream", "req": "stream-130-ac2da6a5", "bytes": 218103808, "io_s": 0.040693, "dur_s": 0.041174}
+{"ev": "mc_store_enq", "t": 23777.680129589, "ph": "stream", "req": "stream-131-ae5a5574", "tokens": 128}
+{"ev": "mc_store_enq", "t": 23777.680141235, "ph": "stream", "req": "stream-130-ac2da6a5", "tokens": 10624}
+{"ev": "mc_lookup", "t": 23779.334396213, "ph": "stream", "req": "stream-132-b183d90a", "hit_tokens": 0, "dur_s": 0.003404}
+{"ev": "mc_put", "t": 23779.494091231, "ph": "stream", "req": "stream-130-ac2da6a5", "keys": 128, "bytes": 1073741824, "dur_s": 0.172165, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23779.494425426, "ph": "stream", "req": "stream-130-ac2da6a5", "bytes": 1073741824, "io_s": 0.172825, "dur_s": 3.484559}
+{"ev": "mc_put", "t": 23779.753702034, "ph": "stream", "req": "stream-131-ae5a5574", "keys": 2, "bytes": 16777216, "dur_s": 0.02136, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23779.754306753, "ph": "stream", "req": "stream-131-ae5a5574", "bytes": 16777216, "io_s": 0.021756, "dur_s": 0.259858}
+{"ev": "mc_lookup", "t": 23779.758051377, "ph": "stream", "req": "stream-132-b183d90a", "hit_tokens": 0, "dur_s": 0.003212}
+{"ev": "mc_lookup", "t": 23779.792102524, "ph": "stream", "req": "stream-132-b183d90a", "hit_tokens": 0, "dur_s": 0.003287}
+{"ev": "mc_put", "t": 23779.800774498, "ph": "stream", "req": "stream-130-ac2da6a5", "keys": 27, "bytes": 226492416, "dur_s": 0.045149, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23779.800820653, "ph": "stream", "req": "stream-130-ac2da6a5", "bytes": 226492416, "io_s": 0.045766, "dur_s": 0.046499}
+{"ev": "mc_store_enq", "t": 23779.818989425, "ph": "stream", "req": "stream-132-b183d90a", "tokens": 8128}
+{"ev": "mc_store_enq", "t": 23782.680795093, "ph": "stream", "req": "stream-132-b183d90a", "tokens": 13376}
+{"ev": "mc_put", "t": 23783.249074433, "ph": "stream", "req": "stream-132-b183d90a", "keys": 127, "bytes": 1065353216, "dur_s": 0.166922, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23783.249442967, "ph": "stream", "req": "stream-132-b183d90a", "bytes": 1065353216, "io_s": 0.16755, "dur_s": 3.430357}
+{"ev": "mc_store_cmt", "t": 23783.255550722, "ph": "stream", "req": "stream-132-b183d90a", "bytes": 0, "io_s": 0.0, "dur_s": 2.2e-05}
+{"ev": "mc_lookup", "t": 23785.870324697, "ph": "stream", "req": "stream-133-a04f13f9", "hit_tokens": 0, "dur_s": 0.00227}
+{"ev": "mc_store_enq", "t": 23785.893385772, "ph": "stream", "req": "stream-133-a04f13f9", "tokens": 448}
+{"ev": "mc_lookup", "t": 23786.043598468, "ph": "stream", "req": "stream-134-b1b078f8", "hit_tokens": 64, "dur_s": 0.001691}
+{"ev": "mc_lookup", "t": 23786.044874588, "ph": "stream", "req": "stream-135-854b054b", "hit_tokens": 0, "dur_s": 0.001022}
+{"ev": "mc_put", "t": 23786.047858158, "ph": "stream", "req": "stream-133-a04f13f9", "keys": 6, "bytes": 50331648, "dur_s": 0.012782, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23786.048042483, "ph": "stream", "req": "stream-133-a04f13f9", "bytes": 50331648, "io_s": 0.01327, "dur_s": 0.154521}
+{"ev": "mc_load_enq", "t": 23786.082133323, "ph": "stream", "req": "stream-134-b1b078f8", "tokens": 128}
+{"ev": "mc_store_enq", "t": 23786.082182581, "ph": "stream", "req": "stream-135-854b054b", "tokens": 448}
+{"ev": "mc_load_tier", "t": 23786.102515685, "ph": "stream", "req": "stream-134-b1b078f8", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23786.102789877, "ph": "stream", "req": "stream-134-b1b078f8", "keys": 1, "bytes": 8388608, "dur_s": 0.019816, "status": "ok"}
+{"ev": "mc_load_done", "t": 23786.102837929, "ph": "stream", "req": "stream-134-b1b078f8", "bytes": 8388608, "io_s": 0.019816, "dur_s": 0.020577}
+{"ev": "mc_put", "t": 23786.222681002, "ph": "stream", "req": "stream-135-854b054b", "keys": 6, "bytes": 50331648, "dur_s": 0.012317, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23786.222705815, "ph": "stream", "req": "stream-135-854b054b", "bytes": 50331648, "io_s": 0.01275, "dur_s": 0.140213}
+{"ev": "mc_store_enq", "t": 23786.259407437, "ph": "stream", "req": "stream-134-b1b078f8", "tokens": 192}
+{"ev": "mc_lookup", "t": 23786.262801276, "ph": "stream", "req": "stream-136-8df8a6dc", "hit_tokens": 0, "dur_s": 0.001776}
+{"ev": "mc_put", "t": 23786.292185207, "ph": "stream", "req": "stream-134-b1b078f8", "keys": 1, "bytes": 8388608, "dur_s": 0.002915, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23786.292204807, "ph": "stream", "req": "stream-134-b1b078f8", "bytes": 8388608, "io_s": 0.003399, "dur_s": 0.032662}
+{"ev": "mc_store_enq", "t": 23786.300883792, "ph": "stream", "req": "stream-136-8df8a6dc", "tokens": 2304}
+{"ev": "mc_lookup", "t": 23787.153753949, "ph": "stream", "req": "stream-137-ade05ba4", "hit_tokens": 0, "dur_s": 0.003006}
+{"ev": "mc_store_enq", "t": 23787.174179838, "ph": "stream", "req": "stream-137-ade05ba4", "tokens": 8192}
+{"ev": "mc_put", "t": 23787.17790407, "ph": "stream", "req": "stream-136-8df8a6dc", "keys": 35, "bytes": 293601280, "dur_s": 0.060683, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23787.177955033, "ph": "stream", "req": "stream-136-8df8a6dc", "bytes": 293601280, "io_s": 0.061426, "dur_s": 0.876828}
+{"ev": "mc_store_enq", "t": 23789.096012228, "ph": "stream", "req": "stream-137-ade05ba4", "tokens": 9664}
+{"ev": "mc_lookup", "t": 23790.426552235, "ph": "stream", "req": "stream-138-9aba9478", "hit_tokens": 12352, "dur_s": 0.003976}
+{"ev": "mc_put", "t": 23790.608060354, "ph": "stream", "req": "stream-137-ade05ba4", "keys": 127, "bytes": 1065353216, "dur_s": 0.194373, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23790.608229115, "ph": "stream", "req": "stream-137-ade05ba4", "bytes": 1065353216, "io_s": 0.194671, "dur_s": 3.430238}
+{"ev": "mc_load_enq", "t": 23790.614582016, "ph": "stream", "req": "stream-138-9aba9478", "tokens": 12352}
+{"ev": "mc_put", "t": 23791.138850352, "ph": "stream", "req": "stream-137-ade05ba4", "keys": 23, "bytes": 192937984, "dur_s": 0.041567, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23791.138897379, "ph": "stream", "req": "stream-137-ade05ba4", "bytes": 192937984, "io_s": 0.041855, "dur_s": 0.530612}
+{"ev": "mc_lookup", "t": 23791.16969646, "ph": "stream", "req": "stream-139-a048de34", "hit_tokens": 0, "dur_s": 0.001655}
+{"ev": "mc_store_enq", "t": 23791.188854188, "ph": "stream", "req": "stream-139-a048de34", "tokens": 512}
+{"ev": "mc_lookup", "t": 23791.194616483, "ph": "stream", "req": "stream-140-89d0f048", "hit_tokens": 0, "dur_s": 0.002672}
+{"ev": "mc_store_enq", "t": 23791.310855567, "ph": "stream", "req": "stream-140-89d0f048", "tokens": 8192}
+{"ev": "mc_put", "t": 23791.354915022, "ph": "stream", "req": "stream-139-a048de34", "keys": 7, "bytes": 58720256, "dur_s": 0.012504, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23791.35494039, "ph": "stream", "req": "stream-139-a048de34", "bytes": 58720256, "io_s": 0.012912, "dur_s": 0.166025}
+{"ev": "mc_load_tier", "t": 23792.688210699, "ph": "stream", "req": "stream-138-9aba9478", "memory": 436207616, "disk": 1182793728, "unknown": 0}
+{"ev": "mc_get", "t": 23792.68845836, "ph": "stream", "req": "stream-138-9aba9478", "keys": 193, "bytes": 1619001344, "dur_s": 2.067513, "status": "ok"}
+{"ev": "mc_load_done", "t": 23792.688723099, "ph": "stream", "req": "stream-138-9aba9478", "bytes": 1619001344, "io_s": 2.067513, "dur_s": 2.074015}
+{"ev": "mc_store_enq", "t": 23793.301817057, "ph": "stream", "req": "stream-140-89d0f048", "tokens": 9856}
+{"ev": "mc_put", "t": 23794.782203254, "ph": "stream", "req": "stream-140-89d0f048", "keys": 127, "bytes": 1065353216, "dur_s": 0.160829, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23794.782577372, "ph": "stream", "req": "stream-140-89d0f048", "bytes": 1065353216, "io_s": 0.161426, "dur_s": 3.427619}
+{"ev": "mc_store_cmt", "t": 23794.785182748, "ph": "stream", "req": "stream-140-89d0f048", "bytes": 0, "io_s": 0.0, "dur_s": 1.6e-05}
+{"ev": "mc_store_enq", "t": 23795.445077075, "ph": "stream", "req": "stream-138-9aba9478", "tokens": 12736}
+{"ev": "mc_lookup", "t": 23795.452102288, "ph": "stream", "req": "stream-141-b3acb553", "hit_tokens": 128, "dur_s": 0.002958}
+{"ev": "mc_put", "t": 23795.673435541, "ph": "stream", "req": "stream-138-9aba9478", "keys": 6, "bytes": 50331648, "dur_s": 0.022081, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23795.673794625, "ph": "stream", "req": "stream-138-9aba9478", "bytes": 50331648, "io_s": 0.023394, "dur_s": 0.228572}
+{"ev": "mc_lookup", "t": 23795.676950346, "ph": "stream", "req": "stream-141-b3acb553", "hit_tokens": 128, "dur_s": 0.002877}
+{"ev": "mc_lookup", "t": 23795.706203246, "ph": "stream", "req": "stream-141-b3acb553", "hit_tokens": 128, "dur_s": 0.001712}
+{"ev": "mc_load_enq", "t": 23795.725735559, "ph": "stream", "req": "stream-141-b3acb553", "tokens": 128}
+{"ev": "mc_lookup", "t": 23795.748475914, "ph": "stream", "req": "stream-142-b0583707", "hit_tokens": 0, "dur_s": 0.001053}
+{"ev": "mc_load_tier", "t": 23795.753040956, "ph": "stream", "req": "stream-141-b3acb553", "memory": 0, "disk": 16777216, "unknown": 0}
+{"ev": "mc_get", "t": 23795.753328269, "ph": "stream", "req": "stream-141-b3acb553", "keys": 2, "bytes": 16777216, "dur_s": 0.026564, "status": "ok"}
+{"ev": "mc_load_done", "t": 23795.753376722, "ph": "stream", "req": "stream-141-b3acb553", "bytes": 16777216, "io_s": 0.026564, "dur_s": 0.027515}
+{"ev": "mc_store_enq", "t": 23795.767206602, "ph": "stream", "req": "stream-142-b0583707", "tokens": 192}
+{"ev": "mc_put", "t": 23795.855295056, "ph": "stream", "req": "stream-142-b0583707", "keys": 3, "bytes": 25165824, "dur_s": 0.007171, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23795.8553177, "ph": "stream", "req": "stream-142-b0583707", "bytes": 25165824, "io_s": 0.007542, "dur_s": 0.088056}
+{"ev": "mc_store_enq", "t": 23795.892497052, "ph": "stream", "req": "stream-141-b3acb553", "tokens": 8256}
+{"ev": "mc_lookup", "t": 23795.899153526, "ph": "stream", "req": "stream-143-bfe67a1a", "hit_tokens": 320, "dur_s": 0.005522}
+{"ev": "mc_load_enq", "t": 23797.839434077, "ph": "stream", "req": "stream-143-bfe67a1a", "tokens": 320}
+{"ev": "mc_store_enq", "t": 23797.839506631, "ph": "stream", "req": "stream-141-b3acb553", "tokens": 9792}
+{"ev": "mc_load_tier", "t": 23797.911136697, "ph": "stream", "req": "stream-143-bfe67a1a", "memory": 0, "disk": 41943040, "unknown": 0}
+{"ev": "mc_get", "t": 23797.911414955, "ph": "stream", "req": "stream-143-bfe67a1a", "keys": 5, "bytes": 41943040, "dur_s": 0.070722, "status": "ok"}
+{"ev": "mc_load_done", "t": 23797.911466643, "ph": "stream", "req": "stream-143-bfe67a1a", "bytes": 41943040, "io_s": 0.070722, "dur_s": 0.071863}
+{"ev": "mc_lookup", "t": 23799.186450454, "ph": "stream", "req": "stream-144-9ad65ed2", "hit_tokens": 0, "dur_s": 0.002377}
+{"ev": "mc_put", "t": 23799.371234948, "ph": "stream", "req": "stream-141-b3acb553", "keys": 127, "bytes": 1065353216, "dur_s": 0.193905, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23799.371401157, "ph": "stream", "req": "stream-141-b3acb553", "bytes": 1065353216, "io_s": 0.194801, "dur_s": 3.47884}
+{"ev": "mc_store_enq", "t": 23799.627415823, "ph": "stream", "req": "stream-144-9ad65ed2", "tokens": 3840}
+{"ev": "mc_put", "t": 23799.918042009, "ph": "stream", "req": "stream-141-b3acb553", "keys": 24, "bytes": 201326592, "dur_s": 0.038428, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23799.918083522, "ph": "stream", "req": "stream-141-b3acb553", "bytes": 201326592, "io_s": 0.038945, "dur_s": 0.544577}
+{"ev": "mc_store_enq", "t": 23801.351445711, "ph": "stream", "req": "stream-143-bfe67a1a", "tokens": 832}
+{"ev": "mc_put", "t": 23801.400252825, "ph": "stream", "req": "stream-144-9ad65ed2", "keys": 59, "bytes": 494927872, "dur_s": 0.097591, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23801.400328124, "ph": "stream", "req": "stream-144-9ad65ed2", "bytes": 494927872, "io_s": 0.098142, "dur_s": 1.475697}
+{"ev": "mc_put", "t": 23801.546687998, "ph": "stream", "req": "stream-143-bfe67a1a", "keys": 8, "bytes": 67108864, "dur_s": 0.016103, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23801.546714634, "ph": "stream", "req": "stream-143-bfe67a1a", "bytes": 67108864, "io_s": 0.016438, "dur_s": 0.146369}
+{"ev": "mc_lookup", "t": 23801.577471877, "ph": "stream", "req": "stream-145-a1a115ea", "hit_tokens": 0, "dur_s": 0.001378}
+{"ev": "mc_store_enq", "t": 23801.597756117, "ph": "stream", "req": "stream-145-a1a115ea", "tokens": 4352}
+{"ev": "mc_lookup", "t": 23803.271534679, "ph": "stream", "req": "stream-146-b528bc02", "hit_tokens": 64, "dur_s": 0.00308}
+{"ev": "mc_load_enq", "t": 23803.291479643, "ph": "stream", "req": "stream-146-b528bc02", "tokens": 128}
+{"ev": "mc_lookup", "t": 23803.294026388, "ph": "stream", "req": "stream-147-b801f51a", "hit_tokens": 0, "dur_s": 0.001085}
+{"ev": "mc_store_enq", "t": 23803.33090074, "ph": "stream", "req": "stream-147-b801f51a", "tokens": 64}
+{"ev": "mc_load_tier", "t": 23803.338107151, "ph": "stream", "req": "stream-146-b528bc02", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23803.338356982, "ph": "stream", "req": "stream-146-b528bc02", "keys": 1, "bytes": 8388608, "dur_s": 0.045846, "status": "ok"}
+{"ev": "mc_load_done", "t": 23803.338388979, "ph": "stream", "req": "stream-146-b528bc02", "bytes": 8388608, "io_s": 0.045846, "dur_s": 0.04675}
+{"ev": "mc_put", "t": 23803.338530644, "ph": "stream", "req": "stream-145-a1a115ea", "keys": 68, "bytes": 570425344, "dur_s": 0.116299, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23803.33861851, "ph": "stream", "req": "stream-145-a1a115ea", "bytes": 570425344, "io_s": 0.116856, "dur_s": 1.74075}
+{"ev": "mc_put", "t": 23803.347994365, "ph": "stream", "req": "stream-147-b801f51a", "keys": 1, "bytes": 8388608, "dur_s": 0.002966, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23803.348020907, "ph": "stream", "req": "stream-147-b801f51a", "bytes": 8388608, "io_s": 0.003256, "dur_s": 0.009381}
+{"ev": "mc_lookup", "t": 23803.354991084, "ph": "stream", "req": "stream-148-b4ee2f77", "hit_tokens": 64, "dur_s": 0.001033}
+{"ev": "mc_load_enq", "t": 23803.375021522, "ph": "stream", "req": "stream-148-b4ee2f77", "tokens": 128}
+{"ev": "mc_load_tier", "t": 23803.3892613, "ph": "stream", "req": "stream-148-b4ee2f77", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23803.389561114, "ph": "stream", "req": "stream-148-b4ee2f77", "keys": 1, "bytes": 8388608, "dur_s": 0.013707, "status": "ok"}
+{"ev": "mc_load_done", "t": 23803.389605696, "ph": "stream", "req": "stream-148-b4ee2f77", "bytes": 8388608, "io_s": 0.013707, "dur_s": 0.014459}
+{"ev": "mc_store_enq", "t": 23803.405140784, "ph": "stream", "req": "stream-146-b528bc02", "tokens": 8256}
+{"ev": "mc_store_enq", "t": 23805.550338466, "ph": "stream", "req": "stream-146-b528bc02", "tokens": 10880}
+{"ev": "mc_lookup", "t": 23806.649046369, "ph": "stream", "req": "stream-149-acd6440a", "hit_tokens": 0, "dur_s": 0.002606}
+{"ev": "mc_put", "t": 23806.833397358, "ph": "stream", "req": "stream-146-b528bc02", "keys": 127, "bytes": 1065353216, "dur_s": 0.193984, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23806.833561667, "ph": "stream", "req": "stream-146-b528bc02", "bytes": 1065353216, "io_s": 0.194949, "dur_s": 3.428363}
+{"ev": "mc_store_enq", "t": 23807.723110208, "ph": "stream", "req": "stream-148-b4ee2f77", "tokens": 576}
+{"ev": "mc_store_enq", "t": 23807.723124167, "ph": "stream", "req": "stream-149-acd6440a", "tokens": 5440}
+{"ev": "mc_put", "t": 23807.968653743, "ph": "stream", "req": "stream-146-b528bc02", "keys": 41, "bytes": 343932928, "dur_s": 0.063901, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23807.968711758, "ph": "stream", "req": "stream-146-b528bc02", "bytes": 343932928, "io_s": 0.064467, "dur_s": 1.135103}
+{"ev": "mc_put", "t": 23810.152059374, "ph": "stream", "req": "stream-148-b4ee2f77", "keys": 7, "bytes": 58720256, "dur_s": 0.01459, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23810.152091415, "ph": "stream", "req": "stream-148-b4ee2f77", "bytes": 58720256, "io_s": 0.014964, "dur_s": 2.173424}
+{"ev": "mc_lookup", "t": 23810.209497433, "ph": "stream", "req": "stream-150-b994da18", "hit_tokens": 0, "dur_s": 0.001959}
+{"ev": "mc_store_enq", "t": 23810.228464226, "ph": "stream", "req": "stream-150-b994da18", "tokens": 1280}
+{"ev": "mc_put", "t": 23810.291765187, "ph": "stream", "req": "stream-149-acd6440a", "keys": 84, "bytes": 704643072, "dur_s": 0.137731, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23810.291871939, "ph": "stream", "req": "stream-149-acd6440a", "bytes": 704643072, "io_s": 0.138425, "dur_s": 0.139769}
+{"ev": "mc_put", "t": 23810.714107893, "ph": "stream", "req": "stream-150-b994da18", "keys": 19, "bytes": 159383552, "dur_s": 0.037183, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23810.714141456, "ph": "stream", "req": "stream-150-b994da18", "bytes": 159383552, "io_s": 0.037885, "dur_s": 0.42225}
+{"ev": "mc_lookup", "t": 23810.740199757, "ph": "stream", "req": "stream-151-90301704", "hit_tokens": 64, "dur_s": 0.001316}
+{"ev": "mc_load_enq", "t": 23810.759352433, "ph": "stream", "req": "stream-151-90301704", "tokens": 64}
+{"ev": "mc_lookup", "t": 23810.763376775, "ph": "stream", "req": "stream-152-a2c0d9fc", "hit_tokens": 0, "dur_s": 0.001475}
+{"ev": "mc_lookup", "t": 23810.765913342, "ph": "stream", "req": "stream-153-ba602221", "hit_tokens": 0, "dur_s": 0.002417}
+{"ev": "mc_load_tier", "t": 23810.770010629, "ph": "stream", "req": "stream-151-90301704", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23810.770346937, "ph": "stream", "req": "stream-151-90301704", "keys": 1, "bytes": 8388608, "dur_s": 0.01013, "status": "ok"}
+{"ev": "mc_load_done", "t": 23810.77039233, "ph": "stream", "req": "stream-151-90301704", "bytes": 8388608, "io_s": 0.01013, "dur_s": 0.010898}
+{"ev": "mc_store_enq", "t": 23810.786766116, "ph": "stream", "req": "stream-152-a2c0d9fc", "tokens": 192}
+{"ev": "mc_store_enq", "t": 23810.786778517, "ph": "stream", "req": "stream-153-ba602221", "tokens": 8000}
+{"ev": "mc_store_enq", "t": 23812.917158829, "ph": "stream", "req": "stream-153-ba602221", "tokens": 10496}
+{"ev": "mc_put", "t": 23813.999847712, "ph": "stream", "req": "stream-152-a2c0d9fc", "keys": 3, "bytes": 25165824, "dur_s": 0.006434, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23813.999876754, "ph": "stream", "req": "stream-152-a2c0d9fc", "bytes": 25165824, "io_s": 0.007044, "dur_s": 3.213044}
+{"ev": "mc_put", "t": 23814.181882435, "ph": "stream", "req": "stream-153-ba602221", "keys": 124, "bytes": 1040187392, "dur_s": 0.179583, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23814.182471553, "ph": "stream", "req": "stream-153-ba602221", "bytes": 1040187392, "io_s": 0.180156, "dur_s": 0.182583}
+{"ev": "mc_store_cmt", "t": 23814.182529012, "ph": "stream", "req": "stream-153-ba602221", "bytes": 0, "io_s": 0.0, "dur_s": 1.4e-05}
+{"ev": "mc_store_enq", "t": 23814.479095252, "ph": "stream", "req": "stream-151-90301704", "tokens": 128}
+{"ev": "mc_put", "t": 23815.248255761, "ph": "stream", "req": "stream-151-90301704", "keys": 1, "bytes": 8388608, "dur_s": 0.003209, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23815.249066451, "ph": "stream", "req": "stream-151-90301704", "bytes": 8388608, "io_s": 0.003836, "dur_s": 0.769843}
+{"ev": "mc_lookup", "t": 23815.251824114, "ph": "stream", "req": "stream-154-acc3fa18", "hit_tokens": 0, "dur_s": 0.001635}
+{"ev": "mc_store_enq", "t": 23815.274107974, "ph": "stream", "req": "stream-154-acc3fa18", "tokens": 1088}
+{"ev": "mc_put", "t": 23815.688327825, "ph": "stream", "req": "stream-154-acc3fa18", "keys": 16, "bytes": 134217728, "dur_s": 0.029843, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23815.688365246, "ph": "stream", "req": "stream-154-acc3fa18", "bytes": 134217728, "io_s": 0.030799, "dur_s": 0.414173}
+{"ev": "mc_lookup", "t": 23815.744092649, "ph": "stream", "req": "stream-155-95bbec4a", "hit_tokens": 3328, "dur_s": 0.00333}
+{"ev": "mc_load_enq", "t": 23815.763608284, "ph": "stream", "req": "stream-155-95bbec4a", "tokens": 3328}
+{"ev": "mc_lookup", "t": 23815.77346613, "ph": "stream", "req": "stream-156-86c3bd98", "hit_tokens": 11840, "dur_s": 0.004921}
+{"ev": "mc_load_enq", "t": 23815.79424054, "ph": "stream", "req": "stream-156-86c3bd98", "tokens": 11840}
+{"ev": "mc_lookup", "t": 23815.798405935, "ph": "stream", "req": "stream-157-b7c83291", "hit_tokens": 0, "dur_s": 0.002241}
+{"ev": "mc_store_enq", "t": 23815.818516039, "ph": "stream", "req": "stream-157-b7c83291", "tokens": 8192}
+{"ev": "mc_store_enq", "t": 23817.732837997, "ph": "stream", "req": "stream-157-b7c83291", "tokens": 10176}
+{"ev": "mc_load_tier", "t": 23818.653270945, "ph": "stream", "req": "stream-155-95bbec4a", "memory": 33554432, "disk": 402653184, "unknown": 0}
+{"ev": "mc_get", "t": 23818.653439723, "ph": "stream", "req": "stream-155-95bbec4a", "keys": 52, "bytes": 436207616, "dur_s": 2.88445, "status": "ok"}
+{"ev": "mc_load_done", "t": 23818.653515113, "ph": "stream", "req": "stream-155-95bbec4a", "bytes": 436207616, "io_s": 2.88445, "dur_s": 2.889823}
+{"ev": "mc_lookup", "t": 23819.06160913, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003969}
+{"ev": "mc_put", "t": 23819.229771817, "ph": "stream", "req": "stream-157-b7c83291", "keys": 127, "bytes": 1065353216, "dur_s": 0.181366, "status": "partial_failure"}
+{"ev": "mc_store_cmt", "t": 23819.23005263, "ph": "stream", "req": "stream-157-b7c83291", "bytes": 1065353216, "io_s": 0.182056, "dur_s": 3.411472}
+{"ev": "mc_store_cmt", "t": 23819.233507712, "ph": "stream", "req": "stream-157-b7c83291", "bytes": 0, "io_s": 0.0, "dur_s": 4.2e-05}
+{"ev": "mc_lookup", "t": 23820.003657216, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.005034}
+{"ev": "mc_store_enq", "t": 23820.063413432, "ph": "stream", "req": "stream-155-95bbec4a", "tokens": 11456}
+{"ev": "mc_lookup", "t": 23820.072364583, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003833}
+{"ev": "mc_load_tier", "t": 23821.737601454, "ph": "stream", "req": "stream-156-86c3bd98", "memory": 436207616, "disk": 1115684864, "unknown": 0}
+{"ev": "mc_get", "t": 23821.737822857, "ph": "stream", "req": "stream-156-86c3bd98", "keys": 185, "bytes": 1551892480, "dur_s": 3.079026, "status": "ok"}
+{"ev": "mc_load_done", "t": 23821.73804187, "ph": "stream", "req": "stream-156-86c3bd98", "bytes": 1551892480, "io_s": 3.079026, "dur_s": 3.084514}
+{"ev": "mc_store_enq", "t": 23822.251945084, "ph": "stream", "req": "stream-155-95bbec4a", "tokens": 12864}
+{"ev": "mc_lookup", "t": 23823.761324728, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.004017}
+{"ev": "mc_put", "t": 23823.947469896, "ph": "stream", "req": "stream-155-95bbec4a", "keys": 127, "bytes": 1065353216, "dur_s": 0.194303, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23823.947868081, "ph": "stream", "req": "stream-155-95bbec4a", "bytes": 1065353216, "io_s": 0.195238, "dur_s": 3.884314}
+{"ev": "mc_lookup", "t": 23824.496657664, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.004038}
+{"ev": "mc_put", "t": 23824.50577971, "ph": "stream", "req": "stream-155-95bbec4a", "keys": 22, "bytes": 184549376, "dur_s": 0.03953, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23824.505873227, "ph": "stream", "req": "stream-155-95bbec4a", "bytes": 184549376, "io_s": 0.040088, "dur_s": 0.557968}
+{"ev": "mc_store_enq", "t": 23824.532251683, "ph": "stream", "req": "stream-156-86c3bd98", "tokens": 12160}
+{"ev": "mc_lookup", "t": 23824.537036241, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.002696}
+{"ev": "mc_put", "t": 23824.723366179, "ph": "stream", "req": "stream-156-86c3bd98", "keys": 5, "bytes": 41943040, "dur_s": 0.016703, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23824.723441784, "ph": "stream", "req": "stream-156-86c3bd98", "bytes": 41943040, "io_s": 0.018123, "dur_s": 0.191054}
+{"ev": "mc_lookup", "t": 23824.740454184, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003846}
+{"ev": "mc_lookup", "t": 23824.771724211, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003908}
+{"ev": "mc_lookup", "t": 23824.7734707, "ph": "stream", "req": "stream-159-87fdf927", "hit_tokens": 0, "dur_s": 0.001583}
+{"ev": "mc_lookup", "t": 23824.823234874, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.00396}
+{"ev": "mc_lookup", "t": 23824.825196444, "ph": "stream", "req": "stream-159-87fdf927", "hit_tokens": 0, "dur_s": 0.001796}
+{"ev": "mc_lookup", "t": 23824.851983219, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003354}
+{"ev": "mc_lookup", "t": 23824.853265507, "ph": "stream", "req": "stream-159-87fdf927", "hit_tokens": 0, "dur_s": 0.001225}
+{"ev": "mc_store_enq", "t": 23824.87290827, "ph": "stream", "req": "stream-159-87fdf927", "tokens": 5568}
+{"ev": "mc_lookup", "t": 23824.87958343, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.001964}
+{"ev": "mc_lookup", "t": 23826.997554769, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.003813}
+{"ev": "mc_lookup", "t": 23826.998823002, "ph": "stream", "req": "stream-160-9b4784cb", "hit_tokens": 0, "dur_s": 0.001163}
+{"ev": "mc_store_enq", "t": 23827.030154516, "ph": "stream", "req": "stream-160-9b4784cb", "tokens": 3200}
+{"ev": "mc_lookup", "t": 23827.033181791, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.002179}
+{"ev": "mc_put", "t": 23827.114542766, "ph": "stream", "req": "stream-159-87fdf927", "keys": 86, "bytes": 721420288, "dur_s": 0.136874, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23827.114656914, "ph": "stream", "req": "stream-159-87fdf927", "bytes": 721420288, "io_s": 0.137446, "dur_s": 2.241606}
+{"ev": "mc_lookup", "t": 23828.225894941, "ph": "stream", "req": "stream-158-b8ad8f58", "hit_tokens": 12288, "dur_s": 0.004042}
+{"ev": "mc_lookup", "t": 23828.228356942, "ph": "stream", "req": "stream-161-8f6f12f5", "hit_tokens": 0, "dur_s": 0.001391}
+{"ev": "mc_load_enq", "t": 23828.264207322, "ph": "stream", "req": "stream-158-b8ad8f58", "tokens": 12288}
+{"ev": "mc_store_enq", "t": 23828.2642652, "ph": "stream", "req": "stream-161-8f6f12f5", "tokens": 1984}
+{"ev": "mc_load_tier", "t": 23828.283041424, "ph": "stream", "req": "stream-158-b8ad8f58", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23828.283287606, "ph": "stream", "req": "stream-158-b8ad8f58", "keys": 192, "bytes": 1610612736, "dur_s": 0.005409, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23828.283509004, "ph": "stream", "req": "stream-158-b8ad8f58", "bytes": 1610612736, "io_s": 0.005409, "dur_s": 0.019151}
+{"ev": "mc_put", "t": 23828.292292451, "ph": "stream", "req": "stream-160-9b4784cb", "keys": 50, "bytes": 419430400, "dur_s": 0.082398, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23828.292367458, "ph": "stream", "req": "stream-160-9b4784cb", "bytes": 419430400, "io_s": 0.083114, "dur_s": 1.176943}
+{"ev": "mc_lookup", "t": 23829.008898274, "ph": "stream", "req": "stream-162-813ddecd", "hit_tokens": 256, "dur_s": 0.001487}
+{"ev": "mc_put", "t": 23829.022867339, "ph": "stream", "req": "stream-161-8f6f12f5", "keys": 31, "bytes": 260046848, "dur_s": 0.057931, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23829.02292577, "ph": "stream", "req": "stream-161-8f6f12f5", "bytes": 260046848, "io_s": 0.058536, "dur_s": 0.730496}
+{"ev": "mc_load_enq", "t": 23829.028789137, "ph": "stream", "req": "stream-162-813ddecd", "tokens": 256}
+{"ev": "mc_lookup", "t": 23829.053964279, "ph": "stream", "req": "stream-163-8e36e129", "hit_tokens": 5120, "dur_s": 0.002523}
+{"ev": "mc_load_tier", "t": 23829.060646999, "ph": "stream", "req": "stream-162-813ddecd", "memory": 0, "disk": 33554432, "unknown": 0}
+{"ev": "mc_get", "t": 23829.060887109, "ph": "stream", "req": "stream-162-813ddecd", "keys": 4, "bytes": 33554432, "dur_s": 0.030985, "status": "ok"}
+{"ev": "mc_load_done", "t": 23829.060934594, "ph": "stream", "req": "stream-162-813ddecd", "bytes": 33554432, "io_s": 0.030985, "dur_s": 0.031981}
+{"ev": "mc_load_enq", "t": 23829.073590771, "ph": "stream", "req": "stream-163-8e36e129", "tokens": 12736}
+{"ev": "mc_lookup", "t": 23829.103118857, "ph": "stream", "req": "stream-164-84dbbd2b", "hit_tokens": 320, "dur_s": 0.000941}
+{"ev": "mc_load_enq", "t": 23829.121238866, "ph": "stream", "req": "stream-164-84dbbd2b", "tokens": 384}
+{"ev": "mc_store_enq", "t": 23829.121279277, "ph": "stream", "req": "stream-162-813ddecd", "tokens": 576}
+{"ev": "mc_lookup", "t": 23829.236955304, "ph": "stream", "req": "stream-165-8135d28f", "hit_tokens": 0, "dur_s": 0.001865}
+{"ev": "mc_put", "t": 23829.238987087, "ph": "stream", "req": "stream-162-813ddecd", "keys": 5, "bytes": 41943040, "dur_s": 0.010474, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23829.239013247, "ph": "stream", "req": "stream-162-813ddecd", "bytes": 41943040, "io_s": 0.010965, "dur_s": 0.1176}
+{"ev": "mc_store_enq", "t": 23829.258046587, "ph": "stream", "req": "stream-165-8135d28f", "tokens": 2368}
+{"ev": "mc_load_tier", "t": 23829.555835163, "ph": "stream", "req": "stream-163-8e36e129", "memory": 0, "disk": 671088640, "unknown": 0}
+{"ev": "mc_get", "t": 23829.556011103, "ph": "stream", "req": "stream-163-8e36e129", "keys": 80, "bytes": 671088640, "dur_s": 0.476631, "status": "ok"}
+{"ev": "mc_load_done", "t": 23829.556107026, "ph": "stream", "req": "stream-163-8e36e129", "bytes": 671088640, "io_s": 0.476631, "dur_s": 0.482379}
+{"ev": "mc_load_tier", "t": 23829.590250316, "ph": "stream", "req": "stream-164-84dbbd2b", "memory": 0, "disk": 41943040, "unknown": 0}
+{"ev": "mc_get", "t": 23829.590362206, "ph": "stream", "req": "stream-164-84dbbd2b", "keys": 5, "bytes": 41943040, "dur_s": 0.033703, "status": "ok"}
+{"ev": "mc_load_done", "t": 23829.590385651, "ph": "stream", "req": "stream-164-84dbbd2b", "bytes": 41943040, "io_s": 0.033703, "dur_s": 0.034268}
+{"ev": "mc_put", "t": 23830.176360122, "ph": "stream", "req": "stream-165-8135d28f", "keys": 37, "bytes": 310378496, "dur_s": 0.065786, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23830.176425445, "ph": "stream", "req": "stream-165-8135d28f", "bytes": 310378496, "io_s": 0.066357, "dur_s": 0.918261}
+{"ev": "mc_store_enq", "t": 23830.21078501, "ph": "stream", "req": "stream-163-8e36e129", "tokens": 13120}
+{"ev": "mc_store_enq", "t": 23830.210807452, "ph": "stream", "req": "stream-164-84dbbd2b", "tokens": 384}
+{"ev": "mc_put", "t": 23830.430197902, "ph": "stream", "req": "stream-163-8e36e129", "keys": 6, "bytes": 50331648, "dur_s": 0.017443, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23830.430237284, "ph": "stream", "req": "stream-163-8e36e129", "bytes": 50331648, "io_s": 0.018013, "dur_s": 0.219359}
+{"ev": "mc_store_cmt", "t": 23830.430741671, "ph": "stream", "req": "stream-164-84dbbd2b", "bytes": 0, "io_s": 0.000417, "dur_s": 0.00049}
+{"ev": "mc_lookup", "t": 23830.454557092, "ph": "stream", "req": "stream-166-bb3c81c1", "hit_tokens": 0, "dur_s": 0.00211}
+{"ev": "mc_store_enq", "t": 23830.475055721, "ph": "stream", "req": "stream-166-bb3c81c1", "tokens": 7552}
+{"ev": "mc_lookup", "t": 23833.487900016, "ph": "stream", "req": "stream-167-899eaf6b", "hit_tokens": 0, "dur_s": 0.001396}
+{"ev": "mc_store_enq", "t": 23833.517388635, "ph": "stream", "req": "stream-167-899eaf6b", "tokens": 256}
+{"ev": "mc_put", "t": 23833.662821065, "ph": "stream", "req": "stream-166-bb3c81c1", "keys": 118, "bytes": 989855744, "dur_s": 0.199266, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23833.6630986, "ph": "stream", "req": "stream-166-bb3c81c1", "bytes": 989855744, "io_s": 0.199855, "dur_s": 3.187897}
+{"ev": "mc_put", "t": 23833.673797712, "ph": "stream", "req": "stream-167-899eaf6b", "keys": 4, "bytes": 33554432, "dur_s": 0.009804, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23833.673847416, "ph": "stream", "req": "stream-167-899eaf6b", "bytes": 33554432, "io_s": 0.010223, "dur_s": 0.010664}
+{"ev": "mc_lookup", "t": 23833.67635549, "ph": "stream", "req": "stream-168-b06089aa", "hit_tokens": 0, "dur_s": 0.002606}
+{"ev": "mc_store_enq", "t": 23833.696592028, "ph": "stream", "req": "stream-168-b06089aa", "tokens": 8192}
+{"ev": "mc_lookup", "t": 23833.702692432, "ph": "stream", "req": "stream-169-a16c9305", "hit_tokens": 0, "dur_s": 0.001519}
+{"ev": "mc_store_enq", "t": 23836.34058567, "ph": "stream", "req": "stream-169-a16c9305", "tokens": 2240}
+{"ev": "mc_store_enq", "t": 23836.340604886, "ph": "stream", "req": "stream-168-b06089aa", "tokens": 10816}
+{"ev": "mc_put", "t": 23837.143069447, "ph": "stream", "req": "stream-168-b06089aa", "keys": 127, "bytes": 1065353216, "dur_s": 0.19391, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23837.143231947, "ph": "stream", "req": "stream-168-b06089aa", "bytes": 1065353216, "io_s": 0.194739, "dur_s": 3.446483}
+{"ev": "mc_lookup", "t": 23839.03977136, "ph": "stream", "req": "stream-170-83189612", "hit_tokens": 0, "dur_s": 0.001393}
+{"ev": "mc_store_enq", "t": 23839.063977236, "ph": "stream", "req": "stream-170-83189612", "tokens": 448}
+{"ev": "mc_put", "t": 23839.072597267, "ph": "stream", "req": "stream-169-a16c9305", "keys": 35, "bytes": 293601280, "dur_s": 0.059013, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23839.072726048, "ph": "stream", "req": "stream-169-a16c9305", "bytes": 293601280, "io_s": 0.059561, "dur_s": 1.926102}
+{"ev": "mc_put", "t": 23839.139543905, "ph": "stream", "req": "stream-168-b06089aa", "keys": 41, "bytes": 343932928, "dur_s": 0.06417, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23839.139600753, "ph": "stream", "req": "stream-168-b06089aa", "bytes": 343932928, "io_s": 0.064741, "dur_s": 0.066848}
+{"ev": "mc_lookup", "t": 23839.216985797, "ph": "stream", "req": "stream-171-8765ef39", "hit_tokens": 0, "dur_s": 0.002173}
+{"ev": "mc_put", "t": 23839.219272763, "ph": "stream", "req": "stream-170-83189612", "keys": 6, "bytes": 50331648, "dur_s": 0.011967, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23839.219297463, "ph": "stream", "req": "stream-170-83189612", "bytes": 50331648, "io_s": 0.012094, "dur_s": 0.079682}
+{"ev": "mc_store_enq", "t": 23839.26005651, "ph": "stream", "req": "stream-171-8765ef39", "tokens": 4736}
+{"ev": "mc_lookup", "t": 23841.102886087, "ph": "stream", "req": "stream-172-b8448b3b", "hit_tokens": 4480, "dur_s": 0.004379}
+{"ev": "mc_lookup", "t": 23841.103165579, "ph": "stream", "req": "stream-173-908df9e0", "hit_tokens": 0, "dur_s": 3e-06}
+{"ev": "mc_load_enq", "t": 23841.121637761, "ph": "stream", "req": "stream-172-b8448b3b", "tokens": 12096}
+{"ev": "mc_put", "t": 23841.142025839, "ph": "stream", "req": "stream-171-8765ef39", "keys": 73, "bytes": 612368384, "dur_s": 0.130136, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23841.142230846, "ph": "stream", "req": "stream-171-8765ef39", "bytes": 612368384, "io_s": 0.130847, "dur_s": 1.882044}
+{"ev": "mc_lookup", "t": 23841.173301655, "ph": "stream", "req": "stream-174-bdcca3ac", "hit_tokens": 0, "dur_s": 0.002643}
+{"ev": "mc_store_enq", "t": 23841.193508485, "ph": "stream", "req": "stream-174-bdcca3ac", "tokens": 8128}
+{"ev": "mc_load_tier", "t": 23841.512407124, "ph": "stream", "req": "stream-172-b8448b3b", "memory": 33554432, "disk": 553648128, "unknown": 0}
+{"ev": "mc_get", "t": 23841.512579815, "ph": "stream", "req": "stream-172-b8448b3b", "keys": 70, "bytes": 587202560, "dur_s": 0.388854, "status": "ok"}
+{"ev": "mc_load_done", "t": 23841.512669074, "ph": "stream", "req": "stream-172-b8448b3b", "bytes": 587202560, "io_s": 0.388854, "dur_s": 0.390875}
+{"ev": "mc_store_enq", "t": 23843.342709882, "ph": "stream", "req": "stream-174-bdcca3ac", "tokens": 10752}
+{"ev": "mc_lookup", "t": 23844.436229342, "ph": "stream", "req": "stream-175-8fd1a209", "hit_tokens": 2752, "dur_s": 0.002442}
+{"ev": "mc_put", "t": 23844.620209044, "ph": "stream", "req": "stream-174-bdcca3ac", "keys": 127, "bytes": 1065353216, "dur_s": 0.193959, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23844.620373376, "ph": "stream", "req": "stream-174-bdcca3ac", "bytes": 1065353216, "io_s": 0.194894, "dur_s": 3.426724}
+{"ev": "mc_load_enq", "t": 23844.879037117, "ph": "stream", "req": "stream-175-8fd1a209", "tokens": 2752}
+{"ev": "mc_store_enq", "t": 23845.757541847, "ph": "stream", "req": "stream-172-b8448b3b", "tokens": 12288}
+{"ev": "mc_put", "t": 23845.7618496, "ph": "stream", "req": "stream-174-bdcca3ac", "keys": 41, "bytes": 343932928, "dur_s": 0.067985, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23845.762964589, "ph": "stream", "req": "stream-174-bdcca3ac", "bytes": 343932928, "io_s": 0.068407, "dur_s": 1.142567}
+{"ev": "mc_put", "t": 23845.857315408, "ph": "stream", "req": "stream-172-b8448b3b", "keys": 3, "bytes": 25165824, "dur_s": 0.013895, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23845.857385643, "ph": "stream", "req": "stream-172-b8448b3b", "bytes": 25165824, "io_s": 0.014674, "dur_s": 0.094398}
+{"ev": "mc_lookup", "t": 23845.900836257, "ph": "stream", "req": "stream-176-aaafeb67", "hit_tokens": 0, "dur_s": 0.001349}
+{"ev": "mc_store_enq", "t": 23845.92043685, "ph": "stream", "req": "stream-176-aaafeb67", "tokens": 3904}
+{"ev": "mc_load_tier", "t": 23846.680528079, "ph": "stream", "req": "stream-175-8fd1a209", "memory": 0, "disk": 360710144, "unknown": 0}
+{"ev": "mc_get", "t": 23846.680896421, "ph": "stream", "req": "stream-175-8fd1a209", "keys": 43, "bytes": 360710144, "dur_s": 1.799618, "status": "ok"}
+{"ev": "mc_load_done", "t": 23846.681044453, "ph": "stream", "req": "stream-175-8fd1a209", "bytes": 360710144, "io_s": 1.799618, "dur_s": 1.801875}
+{"ev": "mc_lookup", "t": 23847.467872657, "ph": "stream", "req": "stream-177-94f0cae6", "hit_tokens": 0, "dur_s": 0.001684}
+{"ev": "mc_store_enq", "t": 23847.504708728, "ph": "stream", "req": "stream-177-94f0cae6", "tokens": 960}
+{"ev": "mc_put", "t": 23847.5098898, "ph": "stream", "req": "stream-176-aaafeb67", "keys": 61, "bytes": 511705088, "dur_s": 0.104354, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23847.510152396, "ph": "stream", "req": "stream-176-aaafeb67", "bytes": 511705088, "io_s": 0.104943, "dur_s": 1.589592}
+{"ev": "mc_store_enq", "t": 23847.556285893, "ph": "stream", "req": "stream-175-8fd1a209", "tokens": 3072}
+{"ev": "mc_lookup", "t": 23847.816660372, "ph": "stream", "req": "stream-178-b5cc2a67", "hit_tokens": 1728, "dur_s": 0.002886}
+{"ev": "mc_put", "t": 23847.827525534, "ph": "stream", "req": "stream-177-94f0cae6", "keys": 14, "bytes": 117440512, "dur_s": 0.023328, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23847.827605225, "ph": "stream", "req": "stream-177-94f0cae6", "bytes": 117440512, "io_s": 0.023993, "dur_s": 0.317416}
+{"ev": "mc_load_enq", "t": 23847.844345936, "ph": "stream", "req": "stream-178-b5cc2a67", "tokens": 1792}
+{"ev": "mc_put", "t": 23847.958397141, "ph": "stream", "req": "stream-175-8fd1a209", "keys": 5, "bytes": 41943040, "dur_s": 0.010124, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23847.958420477, "ph": "stream", "req": "stream-175-8fd1a209", "bytes": 41943040, "io_s": 0.010482, "dur_s": 0.130703}
+{"ev": "mc_load_tier", "t": 23848.006789304, "ph": "stream", "req": "stream-178-b5cc2a67", "memory": 0, "disk": 226492416, "unknown": 0}
+{"ev": "mc_get", "t": 23848.006998655, "ph": "stream", "req": "stream-178-b5cc2a67", "keys": 27, "bytes": 226492416, "dur_s": 0.160087, "status": "ok"}
+{"ev": "mc_load_done", "t": 23848.007048567, "ph": "stream", "req": "stream-178-b5cc2a67", "bytes": 226492416, "io_s": 0.160087, "dur_s": 0.162528}
+{"ev": "mc_lookup", "t": 23848.021878051, "ph": "stream", "req": "stream-179-8327ab3c", "hit_tokens": 0, "dur_s": 0.001596}
+{"ev": "mc_store_enq", "t": 23848.040754699, "ph": "stream", "req": "stream-179-8327ab3c", "tokens": 1728}
+{"ev": "mc_store_enq", "t": 23848.545187668, "ph": "stream", "req": "stream-178-b5cc2a67", "tokens": 7872}
+{"ev": "mc_put", "t": 23848.680974023, "ph": "stream", "req": "stream-179-8327ab3c", "keys": 26, "bytes": 218103808, "dur_s": 0.041183, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23848.681082351, "ph": "stream", "req": "stream-179-8327ab3c", "bytes": 218103808, "io_s": 0.041696, "dur_s": 0.640186}
+{"ev": "mc_lookup", "t": 23851.159719003, "ph": "stream", "req": "stream-180-a1fe783d", "hit_tokens": 0, "dur_s": 0.004128}
+{"ev": "mc_store_enq", "t": 23851.199392703, "ph": "stream", "req": "stream-180-a1fe783d", "tokens": 12416}
+{"ev": "mc_lookup", "t": 23851.202588473, "ph": "stream", "req": "stream-181-9a325d9a", "hit_tokens": 128, "dur_s": 0.001685}
+{"ev": "mc_load_enq", "t": 23851.243251206, "ph": "stream", "req": "stream-181-9a325d9a", "tokens": 256}
+{"ev": "mc_load_tier", "t": 23851.284460099, "ph": "stream", "req": "stream-181-9a325d9a", "memory": 0, "disk": 16777216, "unknown": 0}
+{"ev": "mc_get", "t": 23851.284729422, "ph": "stream", "req": "stream-181-9a325d9a", "keys": 2, "bytes": 16777216, "dur_s": 0.040719, "status": "ok"}
+{"ev": "mc_load_done", "t": 23851.284775786, "ph": "stream", "req": "stream-181-9a325d9a", "bytes": 16777216, "io_s": 0.040719, "dur_s": 0.041418}
+{"ev": "mc_put", "t": 23851.285369704, "ph": "stream", "req": "stream-178-b5cc2a67", "keys": 95, "bytes": 796917760, "dur_s": 0.151345, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23851.285595202, "ph": "stream", "req": "stream-178-b5cc2a67", "bytes": 796917760, "io_s": 0.152151, "dur_s": 2.58271}
+{"ev": "mc_put", "t": 23851.324885794, "ph": "stream", "req": "stream-180-a1fe783d", "keys": 3, "bytes": 25165824, "dur_s": 0.022295, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23851.324933051, "ph": "stream", "req": "stream-180-a1fe783d", "bytes": 25165824, "io_s": 0.02314, "dur_s": 0.039297}
+{"ev": "mc_store_enq", "t": 23851.391498047, "ph": "stream", "req": "stream-181-9a325d9a", "tokens": 1664}
+{"ev": "mc_lookup", "t": 23851.934151917, "ph": "stream", "req": "stream-182-a3f5e25a", "hit_tokens": 0, "dur_s": 0.002354}
+{"ev": "mc_put", "t": 23851.958756918, "ph": "stream", "req": "stream-181-9a325d9a", "keys": 22, "bytes": 184549376, "dur_s": 0.040178, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23851.958858934, "ph": "stream", "req": "stream-181-9a325d9a", "bytes": 184549376, "io_s": 0.041026, "dur_s": 0.567226}
+{"ev": "mc_store_enq", "t": 23851.981342052, "ph": "stream", "req": "stream-182-a3f5e25a", "tokens": 6976}
+{"ev": "mc_lookup", "t": 23851.989462767, "ph": "stream", "req": "stream-183-8d252fc7", "hit_tokens": 0, "dur_s": 0.001394}
+{"ev": "mc_store_enq", "t": 23853.496201615, "ph": "stream", "req": "stream-183-8d252fc7", "tokens": 704}
+{"ev": "mc_put", "t": 23854.866782023, "ph": "stream", "req": "stream-182-a3f5e25a", "keys": 109, "bytes": 914358272, "dur_s": 0.17004, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23854.866934295, "ph": "stream", "req": "stream-182-a3f5e25a", "bytes": 914358272, "io_s": 0.170741, "dur_s": 2.885472}
+{"ev": "mc_lookup", "t": 23855.00526275, "ph": "stream", "req": "stream-184-865ae9aa", "hit_tokens": 0, "dur_s": 0.001651}
+{"ev": "mc_put", "t": 23855.017858966, "ph": "stream", "req": "stream-183-8d252fc7", "keys": 11, "bytes": 92274688, "dur_s": 0.021377, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23855.017890208, "ph": "stream", "req": "stream-183-8d252fc7", "bytes": 92274688, "io_s": 0.02207, "dur_s": 0.150933}
+{"ev": "mc_store_enq", "t": 23855.041217627, "ph": "stream", "req": "stream-184-865ae9aa", "tokens": 576}
+{"ev": "mc_put", "t": 23855.254273366, "ph": "stream", "req": "stream-184-865ae9aa", "keys": 9, "bytes": 75497472, "dur_s": 0.017814, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23855.254316009, "ph": "stream", "req": "stream-184-865ae9aa", "bytes": 75497472, "io_s": 0.018278, "dur_s": 0.21301}
+{"ev": "mc_lookup", "t": 23855.301798246, "ph": "stream", "req": "stream-185-8863fa7b", "hit_tokens": 0, "dur_s": 0.001572}
+{"ev": "mc_store_enq", "t": 23855.320632109, "ph": "stream", "req": "stream-185-8863fa7b", "tokens": 1408}
+{"ev": "mc_lookup", "t": 23855.832626798, "ph": "stream", "req": "stream-186-ad5b06b8", "hit_tokens": 64, "dur_s": 0.001774}
+{"ev": "mc_put", "t": 23855.858863127, "ph": "stream", "req": "stream-185-8863fa7b", "keys": 22, "bytes": 184549376, "dur_s": 0.038615, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23855.8589035, "ph": "stream", "req": "stream-185-8863fa7b", "bytes": 184549376, "io_s": 0.039194, "dur_s": 0.538154}
+{"ev": "mc_load_enq", "t": 23855.882785216, "ph": "stream", "req": "stream-186-ad5b06b8", "tokens": 128}
+{"ev": "mc_lookup", "t": 23855.891726513, "ph": "stream", "req": "stream-187-81dcede2", "hit_tokens": 12288, "dur_s": 0.004137}
+{"ev": "mc_load_tier", "t": 23855.903096641, "ph": "stream", "req": "stream-186-ad5b06b8", "memory": 0, "disk": 8388608, "unknown": 0}
+{"ev": "mc_get", "t": 23855.903272769, "ph": "stream", "req": "stream-186-ad5b06b8", "keys": 1, "bytes": 8388608, "dur_s": 0.019801, "status": "ok"}
+{"ev": "mc_load_done", "t": 23855.903297986, "ph": "stream", "req": "stream-186-ad5b06b8", "bytes": 8388608, "io_s": 0.019801, "dur_s": 0.020386}
+{"ev": "mc_load_enq", "t": 23855.932708533, "ph": "stream", "req": "stream-187-81dcede2", "tokens": 12288}
+{"ev": "mc_load_tier", "t": 23855.940364555, "ph": "stream", "req": "stream-187-81dcede2", "memory": 0, "disk": 0, "unknown": 0}
+{"ev": "mc_get", "t": 23855.940520271, "ph": "stream", "req": "stream-187-81dcede2", "keys": 192, "bytes": 1610612736, "dur_s": 0.002707, "status": "partial_failure"}
+{"ev": "mc_load_done", "t": 23855.94068418, "ph": "stream", "req": "stream-187-81dcede2", "bytes": 1610612736, "io_s": 0.002707, "dur_s": 0.007874}
+{"ev": "mc_lookup", "t": 23855.9858186, "ph": "stream", "req": "stream-188-aa1f7d75", "hit_tokens": 0, "dur_s": 0.001953}
+{"ev": "mc_store_enq", "t": 23856.009847582, "ph": "stream", "req": "stream-186-ad5b06b8", "tokens": 1792}
+{"ev": "mc_store_enq", "t": 23856.009860451, "ph": "stream", "req": "stream-188-aa1f7d75", "tokens": 3328}
+{"ev": "mc_lookup", "t": 23856.014264034, "ph": "stream", "req": "stream-189-9ae3cde5", "hit_tokens": 0, "dur_s": 0.001314}
+{"ev": "mc_store_enq", "t": 23856.888625702, "ph": "stream", "req": "stream-189-9ae3cde5", "tokens": 1088}
+{"ev": "mc_put", "t": 23857.850253446, "ph": "stream", "req": "stream-186-ad5b06b8", "keys": 26, "bytes": 218103808, "dur_s": 0.041452, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23857.85031405, "ph": "stream", "req": "stream-186-ad5b06b8", "bytes": 218103808, "io_s": 0.041933, "dur_s": 1.840352}
+{"ev": "mc_put", "t": 23857.930393178, "ph": "stream", "req": "stream-188-aa1f7d75", "keys": 51, "bytes": 427819008, "dur_s": 0.078796, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23857.930462903, "ph": "stream", "req": "stream-188-aa1f7d75", "bytes": 427819008, "io_s": 0.079307, "dur_s": 0.080138}
+{"ev": "mc_put", "t": 23858.225626604, "ph": "stream", "req": "stream-189-9ae3cde5", "keys": 16, "bytes": 134217728, "dur_s": 0.0305, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23858.225726868, "ph": "stream", "req": "stream-189-9ae3cde5", "bytes": 134217728, "io_s": 0.030831, "dur_s": 0.295247}
+{"ev": "mc_lookup", "t": 23858.248782601, "ph": "stream", "req": "stream-190-be649e23", "hit_tokens": 6912, "dur_s": 0.002847}
+{"ev": "mc_load_enq", "t": 23858.27713413, "ph": "stream", "req": "stream-190-be649e23", "tokens": 6912}
+{"ev": "mc_lookup", "t": 23858.368681716, "ph": "stream", "req": "stream-191-b76421fc", "hit_tokens": 0, "dur_s": 0.001851}
+{"ev": "mc_lookup", "t": 23858.370367232, "ph": "stream", "req": "stream-192-8e610962", "hit_tokens": 0, "dur_s": 0.001502}
+{"ev": "mc_store_enq", "t": 23858.389468473, "ph": "stream", "req": "stream-191-b76421fc", "tokens": 2368}
+{"ev": "mc_store_enq", "t": 23858.389481636, "ph": "stream", "req": "stream-192-8e610962", "tokens": 512}
+{"ev": "mc_lookup", "t": 23858.397474406, "ph": "stream", "req": "stream-193-a21b6eba", "hit_tokens": 3776, "dur_s": 0.00413}
+{"ev": "mc_load_enq", "t": 23858.719696012, "ph": "stream", "req": "stream-193-a21b6eba", "tokens": 12416}
+{"ev": "mc_load_tier", "t": 23858.935119354, "ph": "stream", "req": "stream-190-be649e23", "memory": 0, "disk": 905969664, "unknown": 0}
+{"ev": "mc_get", "t": 23858.935308721, "ph": "stream", "req": "stream-190-be649e23", "keys": 108, "bytes": 905969664, "dur_s": 0.654766, "status": "ok"}
+{"ev": "mc_load_done", "t": 23858.935451643, "ph": "stream", "req": "stream-190-be649e23", "bytes": 905969664, "io_s": 0.654766, "dur_s": 0.658196}
+{"ev": "mc_load_tier", "t": 23859.218071667, "ph": "stream", "req": "stream-193-a21b6eba", "memory": 75497472, "disk": 419430400, "unknown": 0}
+{"ev": "mc_get", "t": 23859.218213779, "ph": "stream", "req": "stream-193-a21b6eba", "keys": 59, "bytes": 494927872, "dur_s": 0.28093, "status": "ok"}
+{"ev": "mc_load_done", "t": 23859.218276501, "ph": "stream", "req": "stream-193-a21b6eba", "bytes": 494927872, "io_s": 0.28093, "dur_s": 0.282812}
+{"ev": "mc_put", "t": 23859.471246964, "ph": "stream", "req": "stream-191-b76421fc", "keys": 37, "bytes": 310378496, "dur_s": 0.063188, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23859.47137611, "ph": "stream", "req": "stream-191-b76421fc", "bytes": 310378496, "io_s": 0.063732, "dur_s": 1.081789}
+{"ev": "mc_put", "t": 23859.486704423, "ph": "stream", "req": "stream-192-8e610962", "keys": 8, "bytes": 67108864, "dur_s": 0.014193, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23859.486756158, "ph": "stream", "req": "stream-192-8e610962", "bytes": 67108864, "io_s": 0.014783, "dur_s": 0.015354}
+{"ev": "mc_store_enq", "t": 23859.510581583, "ph": "stream", "req": "stream-190-be649e23", "tokens": 13952}
+{"ev": "mc_store_enq", "t": 23859.510595691, "ph": "stream", "req": "stream-193-a21b6eba", "tokens": 12480}
+{"ev": "mc_lookup", "t": 23863.29651808, "ph": "stream", "req": "stream-194-a1f99518", "hit_tokens": 0, "dur_s": 0.002019}
+{"ev": "mc_lookup", "t": 23863.299504803, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.002517}
+{"ev": "mc_store_enq", "t": 23863.319955813, "ph": "stream", "req": "stream-194-a1f99518", "tokens": 7296}
+{"ev": "mc_lookup", "t": 23863.322858615, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.002134}
+{"ev": "mc_put", "t": 23863.380851998, "ph": "stream", "req": "stream-190-be649e23", "keys": 110, "bytes": 922746880, "dur_s": 0.189041, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23863.381013499, "ph": "stream", "req": "stream-190-be649e23", "bytes": 922746880, "io_s": 0.189969, "dur_s": 3.870282}
+{"ev": "mc_put", "t": 23863.384404207, "ph": "stream", "req": "stream-193-a21b6eba", "keys": 1, "bytes": 8388608, "dur_s": 0.002019, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23863.384420905, "ph": "stream", "req": "stream-193-a21b6eba", "bytes": 8388608, "io_s": 0.002834, "dur_s": 0.003394}
+{"ev": "mc_lookup", "t": 23866.202954627, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.003595}
+{"ev": "mc_lookup", "t": 23866.23688982, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.003709}
+{"ev": "mc_lookup", "t": 23866.262301642, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.003919}
+{"ev": "mc_lookup", "t": 23866.263216594, "ph": "stream", "req": "stream-196-b3bcb579", "hit_tokens": 0, "dur_s": 0.000854}
+{"ev": "mc_lookup", "t": 23866.264076238, "ph": "stream", "req": "stream-197-b993a0e2", "hit_tokens": 1024, "dur_s": 0.000764}
+{"ev": "mc_load_enq", "t": 23866.283660546, "ph": "stream", "req": "stream-197-b993a0e2", "tokens": 1088}
+{"ev": "mc_store_enq", "t": 23866.283709836, "ph": "stream", "req": "stream-196-b3bcb579", "tokens": 192}
+{"ev": "mc_lookup", "t": 23866.290378575, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.003837}
+{"ev": "mc_lookup", "t": 23866.352154678, "ph": "stream", "req": "stream-195-ba3c7c44", "hit_tokens": 9088, "dur_s": 0.002972}
+{"ev": "mc_put", "t": 23866.37794484, "ph": "stream", "req": "stream-194-a1f99518", "keys": 113, "bytes": 947912704, "dur_s": 0.196492, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23866.37819854, "ph": "stream", "req": "stream-194-a1f99518", "bytes": 947912704, "io_s": 0.197094, "dur_s": 2.988442}
+{"ev": "mc_load_tier", "t": 23866.388625157, "ph": "stream", "req": "stream-197-b993a0e2", "memory": 0, "disk": 134217728, "unknown": 0}
+{"ev": "mc_get", "t": 23866.388767833, "ph": "stream", "req": "stream-197-b993a0e2", "keys": 16, "bytes": 134217728, "dur_s": 0.103871, "status": "ok"}
+{"ev": "mc_load_done", "t": 23866.388802156, "ph": "stream", "req": "stream-197-b993a0e2", "bytes": 134217728, "io_s": 0.103871, "dur_s": 0.105011}
+{"ev": "mc_put", "t": 23866.392465332, "ph": "stream", "req": "stream-196-b3bcb579", "keys": 3, "bytes": 25165824, "dur_s": 0.013674, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23866.392501506, "ph": "stream", "req": "stream-196-b3bcb579", "bytes": 25165824, "io_s": 0.014084, "dur_s": 0.014273}
+{"ev": "mc_load_enq", "t": 23866.394923371, "ph": "stream", "req": "stream-195-ba3c7c44", "tokens": 12416}
+{"ev": "mc_store_enq", "t": 23866.446286723, "ph": "stream", "req": "stream-197-b993a0e2", "tokens": 1344}
+{"ev": "mc_lookup", "t": 23866.449275122, "ph": "stream", "req": "stream-198-8f428377", "hit_tokens": 576, "dur_s": 0.001367}
+{"ev": "mc_load_enq", "t": 23866.487380084, "ph": "stream", "req": "stream-198-8f428377", "tokens": 576}
+{"ev": "mc_put", "t": 23866.537546889, "ph": "stream", "req": "stream-197-b993a0e2", "keys": 4, "bytes": 33554432, "dur_s": 0.008801, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23866.537615864, "ph": "stream", "req": "stream-197-b993a0e2", "bytes": 33554432, "io_s": 0.009515, "dur_s": 0.091233}
+{"ev": "mc_lookup", "t": 23866.631431189, "ph": "stream", "req": "stream-199-8200b10d", "hit_tokens": 0, "dur_s": 0.001415}
+{"ev": "mc_store_enq", "t": 23866.65039736, "ph": "stream", "req": "stream-199-8200b10d", "tokens": 832}
+{"ev": "mc_put", "t": 23866.951586878, "ph": "stream", "req": "stream-199-8200b10d", "keys": 13, "bytes": 109051904, "dur_s": 0.025073, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23866.95167093, "ph": "stream", "req": "stream-199-8200b10d", "bytes": 109051904, "io_s": 0.025601, "dur_s": 0.301136}
+{"ev": "mc_load_tier", "t": 23867.505672848, "ph": "stream", "req": "stream-195-ba3c7c44", "memory": 0, "disk": 1191182336, "unknown": 0}
+{"ev": "mc_get", "t": 23867.506080491, "ph": "stream", "req": "stream-195-ba3c7c44", "keys": 142, "bytes": 1191182336, "dur_s": 1.107628, "status": "ok"}
+{"ev": "mc_load_done", "t": 23867.506251653, "ph": "stream", "req": "stream-195-ba3c7c44", "bytes": 1191182336, "io_s": 1.107628, "dur_s": 1.111257}
+{"ev": "mc_store_enq", "t": 23867.526547335, "ph": "stream", "req": "stream-195-ba3c7c44", "tokens": 12480}
+{"ev": "mc_load_tier", "t": 23867.566486701, "ph": "stream", "req": "stream-198-8f428377", "memory": 0, "disk": 75497472, "unknown": 0}
+{"ev": "mc_get", "t": 23867.566666841, "ph": "stream", "req": "stream-198-8f428377", "keys": 9, "bytes": 75497472, "dur_s": 0.059761, "status": "ok"}
+{"ev": "mc_load_done", "t": 23867.56670548, "ph": "stream", "req": "stream-198-8f428377", "bytes": 75497472, "io_s": 0.059761, "dur_s": 0.060441}
+{"ev": "mc_put", "t": 23867.568947108, "ph": "stream", "req": "stream-195-ba3c7c44", "keys": 1, "bytes": 8388608, "dur_s": 0.002662, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23867.568967397, "ph": "stream", "req": "stream-195-ba3c7c44", "bytes": 8388608, "io_s": 0.003767, "dur_s": 0.042275}
+{"ev": "mc_store_enq", "t": 23867.643070346, "ph": "stream", "req": "stream-198-8f428377", "tokens": 2176}
+{"ev": "mc_put", "t": 23868.261881613, "ph": "stream", "req": "stream-198-8f428377", "keys": 25, "bytes": 209715200, "dur_s": 0.048292, "status": "ok"}
+{"ev": "mc_store_cmt", "t": 23868.261939322, "ph": "stream", "req": "stream-198-8f428377", "bytes": 209715200, "io_s": 0.049061, "dur_s": 0.618752}

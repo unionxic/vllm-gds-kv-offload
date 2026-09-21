@@ -1,0 +1,17 @@
+{
+ "model": "hugging-quants/Meta-Llama-3.1-8B-Instruct-GPTQ-INT4",
+ "layers": 32,
+ "kv_heads": 8,
+ "head_dim": 128,
+ "kv_bytes_per_token": 131072,
+ "kv_bytes_per_request": 2147483648,
+ "requests": 200,
+ "working_set_bytes": 429496729600,
+ "gpu_kv_bytes": 4939212390,
+ "batch_fit": 2,
+ "mem_available_bytes": 128311390208,
+ "disk_free_bytes": 68464676864,
+ "warnings": [
+  "\uce90\uc2dc \ub514\ub809\ud130\ub9ac \ub514\uc2a4\ud06c \uc5ec\uc720\uac00 \uc791\uc5c5 \uc9d1\ud569\ubcf4\ub2e4 \uc791\uc74c"
+ ]
+}

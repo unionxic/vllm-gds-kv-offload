@@ -1,0 +1,12 @@
+== mixed_link2 2026-09-21T22:53:26+09:00 sec 10 io 1M
+combo=nvmeof :: nvmeof_gib_s 7.419188  :: link_rx_GB_s= pause=0 (창 7.0 s)
+combo=rdma_cuda :: rdma_cuda_gbps 82.10  :: link_rx_GB_s= pause=0 (창 7.0 s)
+combo=nvmeof+rdma_cuda :: nvmeof_gib_s 3.726750 rdma_cuda_gbps 51.56  :: link_rx_GB_s= pause=0 (창 7.0 s)
+combo=rdma_host :: rdma_host_gbps 97.99  :: link_rx_GB_s= pause=0 (창 7.0 s)
+combo=nvmeof+rdma_host :: nvmeof_gib_s 4.740362 rdma_host_gbps 57.94  :: link_rx_GB_s= pause=0 (창 7.0 s)
+== mixed_link2 2026-09-21T23:14:41+09:00 sec 10 io 1M
+combo=nvmeof :: nvmeof_gib_s 8.944361  :: link_rx_GB_s=9.74 pause=52152 (창 7.0 s)
+combo=rdma_cuda :: rdma_cuda_gbps 82.10  :: link_rx_GB_s=10.42 pause=67316 (창 7.0 s)
+combo=nvmeof+rdma_cuda :: nvmeof_gib_s 3.889896 rdma_cuda_gbps 47.45  :: link_rx_GB_s=10.41 pause=65854 (창 7.0 s)
+combo=rdma_host :: rdma_host_gbps 97.96  :: link_rx_GB_s=12.43 pause=0 (창 7.0 s)
+combo=nvmeof+rdma_host :: nvmeof_gib_s 4.291664 rdma_host_gbps 61.56  :: link_rx_GB_s=12.33 pause=0 (창 7.0 s)
