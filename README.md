@@ -1,50 +1,32 @@
-### vLLM 가중치 스트리밍 + GDS KV 오프로드
+### 세 경로 KV 공급: host DRAM + 로컬 NVMe GDS + 원격 NVMe-oF RDMA
 
-16 GB GPU 한 장에서 145 GB 모델(Qwen2.5-72B-Instruct)을 돌린다. 가중치는 host memory와 NVMe에서 매 forward 스트리밍하고, KV는 NVMe에 저장했다가 적중 시 읽는다. 구현은 vLLM 포크(~/gds-kv/vllm, weight-ssd-offload) 안에 있고 외부 코드는 없다.
+긴 문맥 서빙에서 KV cache가 DRAM을 넘쳐 SSD까지 써야 할 때, host DRAM(H2D)·로컬 NVMe(GDS)·원격 DRAM/SSD(NVMe-oF RDMA + GDS) 세 소스로 GPU를 동시에 공급하는 방식이 Mooncake(원격 DRAM 풀 + SSD 오프로드, GPU 직접 RDMA)보다 나은지 본다. 구현은 vLLM 포크(vllm/), 워크로드는 Bailian 트레이스 200건(16k 상한), 모델은 Llama-3.1-8B GPTQ. 기준선과 우리 조건은 같은 GPU(RTX A4000 16 GB)에서 돌린다.
 
-| 항목 | 값 |
-| --- | --- |
-| GPU, RAM, SSD | Quadro RTX 5000 16 GB(BAR1 256 MiB), 125 GiB, 970 EVO(OS와 공유) |
-| 전송 대역폭 | host→GPU 12.3 GB/s, SSD→GPU 3.4 GB/s, 동시엔 host 8.5 GB/s(bounce가 PCIe 링크 공유) |
-| 모델 | Qwen2.5-72B fp16, 80 layer × 1.63 GiB, KV 토큰당 328 KB |
+#### 확인된 것
 
-#### 핵심 결론
+- 세 소스의 대역폭은 더해지지 않는다. GPU로 들어오는 P2P(로컬 NVMe, NVMe-oF, RDMA 합)는 약 10.3 GB/s에서 멈추고, H2D를 섞어야 11–11.9 GB/s(PCIe x16 상한 12.3). H2D 단독 대비 3경로의 대역폭 이득은 2–3%라 원래 가설(빈 링크 구간을 세 소스로 채운다)은 이 플랫폼에서 성립하지 않는다.
+- 남는 이득은 용량 넘침 상황의 SSD 경로다. DRAM 8 GiB 예산에서 Mooncake의 SSD 복원은 DRAM 복원보다 요청당 약 2 s 느리고(SSD→DRAM→RDMA 경유), 우리 GDS 경로는 저하가 없다. 공통 적중 요청의 엔진 내부 지연은 2.3 vs 3.5 s.
+- 그러나 전체 지표에서 앞서지 못한다. 적중 건수는 Mooncake 70 vs 57로 항상 뒤지고, 도착 기준 TTFT와 대기는 8 GiB 예산에서 같은 수준(런 간 편차 6–7 s 안), DRAM이 넉넉한 46 GB 예산에서는 Mooncake가 대기 14 vs 23 s로 앞선다.
+- 적중 손실의 원인은 write-behind다. 저장이 커밋되기 전에 재사용 요청이 도착해 miss가 나고, 커밋 지연은 디스크가 아니라 블록을 만든 GPU 작업의 이벤트 대기다. 저장이 decode에 주는 간섭 자체는 작다.
 
-- forward 하나는 가중치 131 GiB를 GPU로 옮기는 시간이다. 기본 배치는 host 복사 5.7 s 뒤 SSD 읽기 23.3 s가 차례로 일어나 decode forward 28.4 s.
-- host layer를 SSD layer 사이에 고르게 끼워 넣고(교차 배치) 다음 두 layer를 동시에 가져오면(prefetch_step 2) 두 경로가 같이 흘러 forward가 22.2 s.
-- host 비율을 대역폭 비율에 맞추면(RAM 0.72, host 55 : SSD 25 layer) 두 경로가 같이 끝나 forward 14.0 s. 이 링크의 하한은 11.7 s.
-- KV는 GPU와 NVMe 사이를 직접 오간다. 적중은 prefill 계산을 건너뛰고, 요청당 KV 2.6 GB 쓰기는 SSD 쓰기 캐시 안이라 저장 비용이 0. wave gate가 적재 완료 요청을 한 forward에 묶는다.
-- 위를 합친 정책 조합이 Bailian 32건에서 4,350 → 2,448 s(−44%), LongBench 32건에서 12,652 → 6,527 s(−48%). 출력 토큰열은 재계산과 동일.
-- 이득이 없던 것: host memory를 KV에 주기, SSD 용량 축출(LRU/LFU), seen_twice admission, LMCache 방식 host 층, compute/load split.
+| 8 GiB 예산 | queue 중앙 | TTFT(도착) 중앙 | 엔진지연 중앙 | 적중 |
+| --- | --- | --- | --- | --- |
+| mooncake | 30.0 / 36.4 s | 33.7 / 39.9 s | 2.79 / 2.88 s | 70 / 69 |
+| ours | 29.3 / 36.0 s | 31.8 / 38.9 s | 1.72 / 2.01 s | 57 / 56 |
 
-#### 측정 (Qwen2.5-72B, Bailian 32건, chunk 4096·GPU KV 18.8k)
+두 값은 같은 설정의 1차 / 반복 런. 출력 토큰열은 조건 사이에 동일.
 
-| 조건 | 두 단계 합계 | decode forward |
-| --- | --- | --- |
-| 재계산, 기본 배치 (chunk 8192, KV 21.4k 기준선) | 4,350 s | 28.4 s |
-| SSD 전부 저장, 기본 배치 | 4,541 s | 28.3 s |
-| LMCache 방식 카피(host 8 GB LRU + SSD) | 4,537 s | 28.3 s |
-| 재계산, 교차 배치 + prefetch_step 2, RAM 0.5 | 3,880 s | 22.2 s |
-| 정책 조합, RAM 0.5 | 3,078 s | 22.1 s |
-| 정책 조합, RAM 0.72 | 2,448 s | 14.0 s |
+#### 하고 있는 것
 
-LongBench-v2 32건(실제 문서, RAM 0.72): 재계산 12,652 s → 정책 조합 6,527 s.
+- 적중 손실 줄이기: 재사용 가능성 높은 앞쪽 블록부터 저장, 저장 job의 GPU 이벤트 분리. pending-wait(쓰기 중인 키를 기다리기)는 그 다음.
+- 발행 설정을 실측에 맞추기: 원격은 4 MiB 요청·8스레드·NVMe-oF 큐 8개가 최선(7.5 → 9.3 GiB/s, 큐는 적용), 로컬은 1 MiB·4스레드면 장치 상한 3.3 GiB/s. 워커 읽기 스레드를 4에서 8로 올리고 배치 비율을 P2P 예산 안에서 다시 잡는다. 루트별 in-flight 상한과 읽기 우선 정책은 이득이 없었다.
+- 판정 방법: 8 GiB 예산에서 반복 3회로 대기·처리량을 다시 비교. 원격 티어를 host 경유로 강제한 조건을 추가해 GDS 경로의 이득을 같은 예산에서 직접 확인.
 
 #### 구성
 
-| 경로 | 내용 |
-| --- | --- |
-| 포크 offloader/prefetch.py, ssd_tier.py | 가중치 3단 스트리밍, 교차 배치, SSD 읽기 진행 신호 |
-| 포크 v1/core/sched/scheduler.py | wave gate, compute/load split, 비동기 적재 admit 교착 수정 |
-| 포크 csrc/kv_offload/cufile_fs.cpp, v1/kv_offload/cufile_fs/, hybrid/, split_policy.py | cuFile C++ backend, KV manager(admission, LRU/LFU, write-behind), host+SSD 두 층, split 제어기 |
-| lib/obs | 관측(hostmon, nvidia-fs, events, nsys 캡처 구간, memguard) |
-| experiments/11-observability | 러너 run_obs.py(2단계 또는 트레이스 시간 순서 stream), 캠페인, 입력 data/ |
-| experiments/12-channels, tools/ | 전송 대역폭 측정, 결과 대조·표·nsys 겹침 분석 |
-| results/qwen72b, grid3b, channels | 결과. nsys 원본·티어·KV 파일은 git 제외 |
-| docs/detailed-log.md | 상세 기록. 이전 세대(OPT, 01~10)는 git 태그 archive/opt-era-2026-09-18 |
-
-#### 한계
-
-- BAR1 256 MiB라 cuFile은 bounce 두 홉이고 SSD 읽기가 GPU PCIe 링크를 같이 쓴다. 직접 DMA는 BAR1이 VRAM 전체인 카드에서만.
-- prefetch_step 2의 버퍼 1.6 GiB 때문에 chunk 8192가 안 들어가 chunk 4096·KV 18.8k로 맞췄다.
-- 역순 재방문 워크로드는 적중을 최대로 만드는 조건. 트레이스 시간 순서 open-loop 리플레이 128건(동시 상한 4)에서는 vLLM 기본값이 도착을 못 따라가 3시간에 93건 완료·대기 중앙값 903 s였고, 정책 조합은 128건 완료·대기 12 s·TTFT 169 → 70 s. SSD KV cache hit은 토큰의 19%(트레이스 최대 38%, 나머지는 GPU prefix cache hit).
+- vllm/: 포크. KV 파일 티어(다중 루트·용량 spill·IO 발행 정책), host+파일 hybrid 티어, cuFile C++ 워커
+- experiments/11-observability: 러너 run_obs.py, 캠페인 스크립트, 트레이스
+- experiments/12-link-layer: 대역폭 상한과 발행 설정 측정(PCIe, RoCE, 경로 조합)
+- lib/obs, tools/: 요청·키 계측(kvtrace), 결과 대조(check_stream, check_tier_reads, check_replay)
+- results/: 캠페인별 result.json·requests.jsonl·campaign.log
+- docs/: interim-summary.md(전체 표), detailed-log.md(상세 기록)
